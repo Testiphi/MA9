@@ -1,5 +1,10 @@
 {
-    "MyTask1": {},
+    "进入每日赛事": {
+        "recognition": "OCR",
+        "expected": "每日赛事",
+        "action": "Click",
+        "next": []
+    },
     "MyTask2": {},
     "MyTask3": {},
     "MyTask4": {
