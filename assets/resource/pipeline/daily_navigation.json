@@ -1,0 +1,77 @@
+{
+    "每日赛事_定位入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": ["每日赛事_已选中", "每日赛事_切换标签"]
+    },
+    "每日赛事_已选中": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/daily_selected.png",
+        "roi": [540, 635, 95, 75],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "每日赛事_切换标签": {
+        "recognition": "TemplateMatch",
+        "template": ["navigation/daily_unselected.png", "navigation/daily_unselected_reward.png"],
+        "roi": [490, 635, 145, 75],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [530, 666],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": ["每日赛事_已选中"]
+    },
+    "每日赛事_进入入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": ["每日赛事_样例页到达", "每日赛事_有奖励暂停", "每日赛事_无奖励进入", "每日赛事_进入前切换"]
+    },
+    "每日赛事_进入前切换": {
+        "recognition": "TemplateMatch",
+        "template": ["navigation/daily_unselected.png", "navigation/daily_unselected_reward.png"],
+        "roi": [490, 635, 145, 75],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [530, 666],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": ["每日赛事_有奖励暂停", "每日赛事_无奖励进入"]
+    },
+    "每日赛事_无奖励进入": {
+        "recognition": "And",
+        "all_of": [
+            {"recognition": "TemplateMatch", "template": "navigation/daily_selected.png", "roi": [540, 635, 95, 75], "threshold": 0.9},
+            {"recognition": "TemplateMatch", "template": "navigation/daily_explore.png", "roi": [960, 495, 180, 70], "threshold": 0.9}
+        ],
+        "action": "Click",
+        "target": [530, 666],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 15000,
+        "next": ["每日赛事_样例页到达"]
+    },
+    "每日赛事_有奖励暂停": {
+        "recognition": "And",
+        "all_of": [
+            {"recognition": "TemplateMatch", "template": "navigation/daily_selected.png", "roi": [540, 635, 95, 75], "threshold": 0.9},
+            {"recognition": "TemplateMatch", "template": "navigation/daily_claim.png", "roi": [1050, 495, 115, 70], "threshold": 0.9}
+        ],
+        "action": "StopTask",
+        "next": []
+    },
+    "每日赛事_样例页到达": {
+        "recognition": "And",
+        "all_of": [
+            {"recognition": "TemplateMatch", "template": "navigation/daily_sample_title.png", "roi": [75, 185, 275, 70], "threshold": 0.9},
+            {"recognition": "TemplateMatch", "template": "navigation/home.png", "roi": [1220, 0, 60, 60], "threshold": 0.9}
+        ],
+        "action": "DoNothing",
+        "next": []
+    }
+}

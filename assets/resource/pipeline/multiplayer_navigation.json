@@ -1,0 +1,212 @@
+{
+    "多人准备_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "多人准备_仅拥有已开启",
+            "多人准备_开启仅拥有",
+            "多人准备_介绍页开始",
+            "多人准备_点击经典系列赛",
+            "多人准备_切换多人标签"
+        ]
+    },
+    "多人准备_切换多人标签": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/home/multiplayer/unselected_d6c0bc4f0f5c.png"
+        ],
+        "roi": [
+            755,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            745,
+            666
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "多人准备_点击经典系列赛"
+        ]
+    },
+    "多人准备_点击经典系列赛": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/home/multiplayer/selected.png",
+                "roi": [
+                    755,
+                    637,
+                    88,
+                    72
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_card.png",
+                "roi": [
+                    250,
+                    390,
+                    220,
+                    85
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            350,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "多人准备_仅拥有已开启",
+            "多人准备_开启仅拥有",
+            "多人准备_介绍页开始"
+        ]
+    },
+    "多人准备_介绍页开始": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_title.png",
+                "roi": [
+                    60,
+                    115,
+                    235,
+                    100
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_start.png",
+                "roi": [
+                    1070,
+                    625,
+                    100,
+                    50
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1110,
+            650
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "多人准备_仅拥有已开启",
+            "多人准备_开启仅拥有"
+        ]
+    },
+    "多人准备_开启仅拥有": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_off.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1130,
+            107
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "多人准备_仅拥有已开启"
+        ]
+    },
+    "多人准备_仅拥有已开启": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    }
+}

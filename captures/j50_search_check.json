@@ -1,0 +1,406 @@
+[
+  {
+    "screenshot": "传奇通行证_主页未选中_有奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.6259,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "传奇通行证_主页未选中_未首次进入.png",
+    "list_found": false,
+    "list_identity_score": 0.5821,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "传奇通行证_主页选中_有奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.624,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_主页未选中_无奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.5789,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_主页选中_无奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.5855,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Arrinera Hussarya 33_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6248,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Aston Martin DBS 770 Ultimate_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6248,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Bugatti EB110_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6287,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Dodge Viper GTS_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6248,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Drako GTE_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6245,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_DS Automobiles DS E-Tense Performance_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6248,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Ferrari 296 GTB_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.637,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Ferrari J50_可开始_TouchDrive关.png",
+    "list_found": false,
+    "list_identity_score": 0.6248,
+    "detail_matches": [
+      "J50测试_TouchDrive_点击开"
+    ],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Ferrari J50_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6248,
+    "detail_matches": [
+      "J50测试_TouchDrive_已开启"
+    ],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Ferrari J50_无燃油_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6321,
+    "detail_matches": [],
+    "empty_fuel": true,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Lamborghini Diablo GT_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6248,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_McLaren GT_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6248,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Nissan Z GT4_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6248,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Porsche Panamera Turbo S_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6245,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Porsche Panamera Turbo S_无燃油_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.636,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Praga Bohema_可开始_TouchDrive开.png",
+    "list_found": false,
+    "list_identity_score": 0.6248,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_经典系列赛_进入后.png",
+    "list_found": false,
+    "list_identity_score": 0.6409,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "多人游戏_选车_白金起点_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.6718,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_青铜起点_仅拥有关闭.png",
+    "list_found": false,
+    "list_identity_score": 0.7046,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_青铜起点_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.7049,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Arrinera Hussarya 33完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.6467,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Aston Martin DBS 770 Ultimate完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.7265,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Bugatti EB110完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.6282,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Dodge Viper GTS完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.7053,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Drako GTE完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.7293,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.7308,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Ferrari 296 GTB完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.7411,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Ferrari J50完整可见_仅拥有开启.png",
+    "list_found": true,
+    "list_identity_score": 1.0,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Lamborghini Diablo GT完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.6574,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_McLaren GT完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.7338,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Nissan Z GT4完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.7324,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Porsche Panamera Turbo S完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.6344,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Praga Bohema完整可见_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.6211,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_滑动后_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.7413,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金起点_仅拥有开启.png",
+    "list_found": false,
+    "list_identity_score": 0.7562,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": true
+  },
+  {
+    "screenshot": "我的俱乐部_主页选中_无奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.5847,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "每日赛事_主页未选中_无奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.5952,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "每日赛事_主页未选中_有奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.6196,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "每日赛事_主页选中_无奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.6175,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "每日赛事_主页选中_有奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.6175,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "每日赛事_进入后_无奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.5769,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "赛季赛事_主页未选中_无奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.5832,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "赛季赛事_主页未选中_有奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.6162,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "赛季赛事_主页选中_无奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.6071,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  },
+  {
+    "screenshot": "赛季赛事_主页选中_有奖励.png",
+    "list_found": false,
+    "list_identity_score": 0.6071,
+    "detail_matches": [],
+    "empty_fuel": false,
+    "returned_to_list": false
+  }
+]

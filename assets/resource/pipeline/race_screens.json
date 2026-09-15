@@ -1,0 +1,297 @@
+{
+    "多人结算_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "多人结算_降级确定",
+            "多人结算_已返回系列赛",
+            "多人结算_点击错失机会",
+            "多人结算_奖励继续",
+            "多人结算_成绩继续"
+        ]
+    },
+    "多人结算_成绩继续": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/result_ranking.png",
+                "roi": [
+                    555,
+                    615,
+                    110,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/result_time.png",
+                "roi": [
+                    265,
+                    605,
+                    125,
+                    55
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/result_continue.png",
+                "roi": [
+                    980,
+                    610,
+                    170,
+                    80
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1060,
+            650
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 60000,
+        "next": [
+            "多人结算_降级确定",
+            "多人结算_点击错失机会",
+            "多人结算_奖励继续",
+            "多人结算_已返回系列赛"
+        ]
+    },
+    "多人结算_奖励继续": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/reward_title.png",
+                "roi": [
+                    265,
+                    40,
+                    200,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/reward_coins.png",
+                "roi": [
+                    50,
+                    455,
+                    180,
+                    85
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/reward_continue.png",
+                "roi": [
+                    980,
+                    615,
+                    170,
+                    80
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1055,
+            650
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 60000,
+        "next": [
+            "多人结算_降级确定",
+            "多人结算_点击错失机会",
+            "多人结算_已返回系列赛"
+        ]
+    },
+    "多人结算_点击错失机会": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/reward_title.png",
+                "roi": [
+                    265,
+                    40,
+                    200,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/missed_opportunity.png",
+                "roi": [
+                    970,
+                    615,
+                    175,
+                    80
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1055,
+            650
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "多人结算_降级确定",
+            "多人结算_已返回系列赛"
+        ]
+    },
+    "多人结算_已返回系列赛": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/return_ranking.png",
+                "roi": [
+                    130,
+                    620,
+                    115,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/return_milestone.png",
+                "roi": [
+                    360,
+                    620,
+                    115,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/return_rewards.png",
+                "roi": [
+                    600,
+                    620,
+                    100,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    320,
+                    630,
+                    200,
+                    40
+                ],
+                "method": 4,
+                "lower": [
+                    220,
+                    220,
+                    220
+                ],
+                "upper": [
+                    255,
+                    255,
+                    255
+                ],
+                "count": 3000
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人结算_降级确定": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/downgrade_title.png",
+                "roi": [
+                    540,
+                    155,
+                    180,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/downgrade_confirm.png",
+                "roi": [
+                    580,
+                    500,
+                    110,
+                    55
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            634,
+            527
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "多人结算_已返回系列赛"
+        ]
+    },
+    "赛道识别_神山垭口_坠落": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/race/track_shenshan_zhuiluo.png",
+        "roi": [
+            110,
+            45,
+            150,
+            100
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "局内识别_多人HUD": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/race_pause.png",
+                "roi": [
+                    25,
+                    17,
+                    72,
+                    73
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/race_touchdrive.png",
+                "roi": [
+                    25,
+                    90,
+                    177,
+                    48
+                ],
+                "threshold": 0.8
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    }
+}

@@ -1,0 +1,2034 @@
+{
+  "schema_version": 1,
+  "source": "国服_a9mmgj_top.csv",
+  "vehicles": [
+    {
+      "id": "car_abab42cb1bd625c9",
+      "title": "Mitsubishi Lancer Evolution",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_e6c2db9365a25154",
+      "title": "BMW Z4 LCI E89",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_15d0d2281f757188",
+      "title": "Chevrolet Camaro LT",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_d55c79c386967123",
+      "title": "Nissan 370Z Nismo",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_75a72b7b18fea65d",
+      "title": "Dodge Challenger SRT8",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_8c010e6779476e49",
+      "title": "KTM X-Bow GTX",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_ef590f2b9767ee43",
+      "title": "Volkswagen XL Sport Concept",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_e563427c2b52e0bb",
+      "title": "BMW 3.0 CSL Hommage",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_ebc68e44dd306d91",
+      "title": "Chevrolet Camaro ZL1 50th Edition",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_8a8852a3f01e9429",
+      "title": "DS Automobiles DS E-Tense",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_cf0d820b7dc66b4f",
+      "title": "Porsche Boxster 25th",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_d07892ac7f8171f0",
+      "title": "Nissan Leaf Nismo RC",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_a760f869f6647a05",
+      "title": "BMW i8 Roadster",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_5051bc543bea14a4",
+      "title": "Lotus Evora Sport 410",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_d381c9c0b5472a39",
+      "title": "Dodge Challenger 392 Hemi Scat Pack",
+      "class": "C",
+      "league": "青铜"
+    },
+    {
+      "id": "car_daef1571a6fc4e0a",
+      "title": "Porsche 911 GTS Coupe",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_7f2098a7fe26b05b",
+      "title": "ItalDesign Davinci",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_735f5ea9addeccfc",
+      "title": "Renault Dezir",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_89687e44cf3be26f",
+      "title": "Mercedes-Benz AMG GT S",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_b886dfe99925297f",
+      "title": "Peugeot SR1",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_14e6dac83d04c4aa",
+      "title": "Aston Martin DB11",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_04ad069a2b362fde",
+      "title": "Porsche 718 Cayman",
+      "class": "C",
+      "league": "青铜"
+    },
+    {
+      "id": "car_a7bf261d098e3d00",
+      "title": "Lotus Elise Sprint 220",
+      "class": "C",
+      "league": "青铜"
+    },
+    {
+      "id": "car_d33df625fef5ec4b",
+      "title": "Infiniti Project Black S",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_dcbbdc3cb2879753",
+      "title": "Lotus Emeya",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_dbe1a32232c5662e",
+      "title": "Porsche 911 Carrera RS 3.8",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_433c618132cef0f8",
+      "title": "BMW M4 GTS",
+      "class": "C",
+      "league": "白金"
+    },
+    {
+      "id": "car_6b0cc07075945a40",
+      "title": "Jaguar F-Type SVR",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_9336a4f34736354b",
+      "title": "Ford Shelby GT350R",
+      "class": "C",
+      "league": "青铜"
+    },
+    {
+      "id": "car_a6143c5995d3b2e0",
+      "title": "Hyundai IONIQ 5 N",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_5570e663df80d56e",
+      "title": "Porsche 911 Targa 4S",
+      "class": "C",
+      "league": "青铜"
+    },
+    {
+      "id": "car_1dc72a284bbae843",
+      "title": "Lotus Emira",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_a48957c910f5fc20",
+      "title": "Lamborghini Countach 25th Anniversary",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_bf0b9d4a4fcaaaa0",
+      "title": "Praga R1",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_43540ac6843616ca",
+      "title": "Honda Civic Type-R",
+      "class": "C",
+      "league": "青铜"
+    },
+    {
+      "id": "car_5531a43a5f8c457d",
+      "title": "Ginetta G60",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_190e03b529433dc4",
+      "title": "Exotic Rides W70",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_6812963967c48c98",
+      "title": "Rezvani Beast X",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_4f0c7a85f354cddc",
+      "title": "TVR Griffith",
+      "class": "C",
+      "league": "青铜"
+    },
+    {
+      "id": "car_4ba65d215ca821f9",
+      "title": "Ford Shelby GR-1",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_ee54778ad1bdb594",
+      "title": "Renault TREZOR",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_ffe42a78bb854d9a",
+      "title": "Jaguar XKR-S GT",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_bc419dd09b1ddabb",
+      "title": "Porsche Taycan Turbo S",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_d535b4297112cc59",
+      "title": "Aston Martin V12 Spedster",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_bd28df379766fbe9",
+      "title": "Bentley Continental GT3",
+      "class": "C",
+      "league": "青铜"
+    },
+    {
+      "id": "car_ffa4b7e4a2a62b3a",
+      "title": "Citroën DS Survolt",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_f987889fb39b4ae4",
+      "title": "Ford GT",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_8cafd9cbd7cf839d",
+      "title": "Dodge Viper ACR",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_db9f0083c3671bad",
+      "title": "Chevrolet Corvette C7.R",
+      "class": "C",
+      "league": "青铜"
+    },
+    {
+      "id": "car_25da413aa0cae353",
+      "title": "Ferrari F50",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_65b3346f252654ec",
+      "title": "Glickenhaus 004C",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_ccd993e27ee1a552",
+      "title": "Bolwell MK X Nagari 500",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_ccf866ad3aa40ce0",
+      "title": "Alfa Romeo Giulia GTAm",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_ae4766905f4de497",
+      "title": "Toyota GR Supra Racing Concept",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_c039b79d04bc4a53",
+      "title": "Lamborghini Asterion",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_97c8145ad087e21a",
+      "title": "Donkervoort D8 GTO Individual Series",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_2d9e7c0d09bb3de7",
+      "title": "Aston Martin Vulcan",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_034bc4bec211f3f7",
+      "title": "Ford Mustang RTR Spec 5 10th Anniv.",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_26104a616dd193f7",
+      "title": "Pininfarina H2 Speed",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_b7096c11fe028935",
+      "title": "Porsche 911 GT1 Evolution",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_a5f19143bd543f9d",
+      "title": "Ferrari Roma",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_24a32788f68aa71c",
+      "title": "Volkswagen Electric R",
+      "class": "C",
+      "league": "青铜"
+    },
+    {
+      "id": "car_c988205036ccc194",
+      "title": "Mercedes-Benz CLK-GTR",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_1a3c8b1781afb461",
+      "title": "Artega Scalo Superelletra",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_b35f560eb737446b",
+      "title": "Ford Mustang Mach-E1400",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_e1b70e78547eac9c",
+      "title": "Maserati MC12",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_b3df8ce15966934c",
+      "title": "Kimera EVO37",
+      "class": "D",
+      "league": "青铜"
+    },
+    {
+      "id": "car_a7d384252b459c0b",
+      "title": "Arash AF10",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_d34446b5976d56ac",
+      "title": "Nissan 370Z Nismo Neon Edition",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_f351eabab3563fec",
+      "title": "Nissan GT-R Nismo",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_9a2a3be9e7c943c0",
+      "title": "Saleen S1",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_f0091035289ba11e",
+      "title": "Cadillac Cien Concept",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_ff1dde866b3d99aa",
+      "title": "Aston Martin Valour",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_114f5f6bcdbf2ae1",
+      "title": "Ford GT MK II",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_a49ee3f96290d23b",
+      "title": "Acura 2017 NSX",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_fb82811a2d6e1d9b",
+      "title": "Maserati Alfieri",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_c39dcfe35e357633",
+      "title": "Porsche 911 50 Years Porsche Design",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_b1dd012bbcb6e34c",
+      "title": "Ferrari J50",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_cdbbae9123bed9d0",
+      "title": "Porsche Mission R",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_e1c0f0455a16f168",
+      "title": "Lamborghini Huracan STO",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_1f23fe570741d0e9",
+      "title": "Jaguar XJR-15",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_b84f67304ca6f417",
+      "title": "TVR Sagaris",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_80f0a08f56df5e1f",
+      "title": "Lamborghini Huracan Super Trofeo EVO",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_74f3f22ec1316ed4",
+      "title": "Toyota GR Supra 2023",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_dfadd03c25f4abd8",
+      "title": "McLaren Artura",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_654fcefa2391c78b",
+      "title": "Mercedes-Benz 2022 Showcar Vision AMG",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_d7336c9c6f659088",
+      "title": "Arash AF8 Falcon Edition",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_b3040ff4077a588a",
+      "title": "Jaguar XE SV Project 8",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_539f9b26f5b0210e",
+      "title": "Vencer Sarthe",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_d5938de67517194d",
+      "title": "Dodge Viper GTS",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_4c6b9c42bd695d73",
+      "title": "ItalDesign Zerouno",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_4a3492d7eab8666d",
+      "title": "Bentley Continental GT Speed",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_6a18a39f6ad4a524",
+      "title": "Ferrari 488 GTB",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_43d90ca64817fea4",
+      "title": "Ferrari Monza SP1",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_96256205c3b3ceb2",
+      "title": "Bentley Mulliner Bacalar",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_e0916085a2cbf495",
+      "title": "Ferrari F40",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_7677db71bafda264",
+      "title": "Ares S1",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_2abf7400ddc9b867",
+      "title": "ATS Automobili Corsa RRTurbo",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_d8e95d7c699b2bba",
+      "title": "Mercedes-Benz SLR McLaren",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_a8053ff77ce440cf",
+      "title": "Kepler Motion",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_ab1d758c2b54cd18",
+      "title": "Porsche Panamera Turbo S",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_32a110aa2c73b696",
+      "title": "Mazda Furai",
+      "class": "B",
+      "league": "青铜"
+    },
+    {
+      "id": "car_0522d1af479d4942",
+      "title": "Porsche 718 Cayman GT4 Clubsport",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_b71cb9e56fecf867",
+      "title": "Aston Martin DBS Superleggera",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_3ac6edf946988969",
+      "title": "DS Automobiles DS E-Tense Performance",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_d711970ead8502df",
+      "title": "McLaren GT",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_944f78cad1b1c771",
+      "title": "Ferrari 599XX EVO",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_341eef6c944c9c13",
+      "title": "Drako GTE",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_61de2d45674fdcc9",
+      "title": "Ferrari LaFerrari",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_fa865d4c2481fd72",
+      "title": "Brabham BT62",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_bf47b33505734a32",
+      "title": "Porsche 911 Turbo 50 Years",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_0cc8beed8f36ae89",
+      "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_a578bd2790839920",
+      "title": "Dodge Charger SRT Hellcat Redeye Widebody",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_aef2c96911496b27",
+      "title": "LEGO Technic Ferrari FXX K",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_b3ffc5c3788faad8",
+      "title": "McLaren Elva",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_ba4451ff38e651a6",
+      "title": "Glickenhaus 003S",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_20330b61a38c076d",
+      "title": "Porsche 911 GT3 R Rennsport",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_17d688ba88478367",
+      "title": "Apollo N",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_09d38baa2cf18a02",
+      "title": "Praga Bohema",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_8d2981adca3618c1",
+      "title": "Renault R.S. 01",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_5538dc763dea7089",
+      "title": "Aston Martin DB12",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_372f52f3adcedcc3",
+      "title": "Acura NSX GT3 EVO",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_f8857a7141f66b32",
+      "title": "McLaren P1™",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_3811bb20b8920785",
+      "title": "Lexus LFA Nurburgring Package",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_c7ba41553c9deaf4",
+      "title": "Nissan R390 GT1",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_6cf4d7c2fe770bc3",
+      "title": "LEGO Technic Chevrolet Corvette Stingray",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_a1fd73b9152ce743",
+      "title": "McLaren 765LT",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_e068f26ec8fe04f2",
+      "title": "BMW M4 GT3",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_e7eb894bb98b234f",
+      "title": "Pagani Zonda HP Barchetta",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_b8a6feb1e618048a",
+      "title": "Lamborghini Miura Concept",
+      "class": "B",
+      "league": "白银"
+    },
+    {
+      "id": "car_7c2e2df5a2f70fbd",
+      "title": "Lamborghini Centenario",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_28b8a70a0e51ce35",
+      "title": "Ferrari F12tdf",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_a56e349fadbf7ad1",
+      "title": "Lamborghini Gallardo LP560-4",
+      "class": "A",
+      "league": "黄金"
+    },
+    {
+      "id": "car_7ac5fadb42c90364",
+      "title": "Lamborghini Aventador SV Coupe",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_abe38a0a1422faf2",
+      "title": "Bugatti EB110",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_83f14b01602fbaf7",
+      "title": "Aston Martin One77",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_845959b93be124bd",
+      "title": "Maserati MC20",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_edfcbb52976b82b5",
+      "title": "Mercedes-Benz C 63 AMG DTM",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_3b4cad29c6ba9dfd",
+      "title": "Chevrolet Corvette Stingray",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_cd2bdd13bed48b01",
+      "title": "Ferrari FXX K",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_7eb780d3e15fb081",
+      "title": "Maserati MC20 GT2",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_eb6a501720c9ac12",
+      "title": "LEGO Technic McLaren Senna GTR",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_120875dd73062282",
+      "title": "Lamborghini Diablo GT",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_206837eca8217488",
+      "title": "Lamborghini Autentica",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_56a5edcc7a79d6ea",
+      "title": "LEGO Technic BMW M4 GT3 EVO",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_31533b32b33f4670",
+      "title": "Jaguar C-X75",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_2e5d2d00b23c63d5",
+      "title": "Chevrolet Corvette Grand Sport",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_0b8e7401c0eec455",
+      "title": "Arrinera Hussarya 33",
+      "class": "A",
+      "league": "黄金"
+    },
+    {
+      "id": "car_a6e0889cccd3243d",
+      "title": "LEGO Technic Aston Martin Valkyrie",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_70c03bf3e082f251",
+      "title": "Apex AP-0",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_6b48d9fbc6ee3891",
+      "title": "Aston Martin DBS 770 Ultimate",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_bbaabfb14cf15c0d",
+      "title": "Lamborghini Murcielago LP640 Roadster",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_369779c66294f7b1",
+      "title": "VLF Force 1 V10",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_b140f8fb5919cb17",
+      "title": "De Tomaso P900",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_373cbeb3631af1a1",
+      "title": "Ferrari 812 Superfast",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_4f8ace6a1b82742a",
+      "title": "Apollo IE",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_06f4c3b9562d75b9",
+      "title": "Sin R1 550",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_4f0796fefa15a001",
+      "title": "Ferrari F12 Berlinetta",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_632892cf2c55f8dd",
+      "title": "Icona Vulcano Titanium",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_2491e7a56e2d5e82",
+      "title": "Aston Martin Vantage GT12",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_d93ff8b578890057",
+      "title": "Lamborghini Reventon Roadster",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_c67d8d703de717b0",
+      "title": "Lamborghini Huracan Sterrato",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_c4e4f1b6bcf364a9",
+      "title": "McLaren 750S Coupe",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_f3e149fb1bca6c7f",
+      "title": "Lamborghini Aventador J",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_01dac16eb10e0538",
+      "title": "McMurtry Spéirling",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_663ddea67d1bbda0",
+      "title": "Ferrari 296 GTB",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_a0857066300dfdb4",
+      "title": "Porsche Carrera GT",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_7191f6ac69057f7b",
+      "title": "Ferrari Enzo Ferrari",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_319f06e44deda868",
+      "title": "Porsche 911 GT3 RS",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_41dd3635c44ba9a3",
+      "title": "Formula E Gen 2 Asphalt Edition",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_b4dee8fac1ff50af",
+      "title": "Techrules AT96 Track Version",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_7bd3991c75f92a35",
+      "title": "McLaren Senna GTR",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_98763e297fb62ecc",
+      "title": "Peugeot Onyx",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_4a32660b2aecc559",
+      "title": "Chevrolet Corvette ZR1",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_34908277783699d8",
+      "title": "Lamborghini Essenza SCV12",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_6499099ee01d6997",
+      "title": "BMW M Hybrid V8",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_91d2971a2d085743",
+      "title": "Puritalia Berlinetta",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_1e6b093254376c0e",
+      "title": "Lamborghini SC63",
+      "class": "B",
+      "league": "黄金"
+    },
+    {
+      "id": "car_54ab7c0c06e85f2c",
+      "title": "Aston Martin V12 Vantage 2022",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_8cb68c290ca8da80",
+      "title": "Ferrari Daytona SP3",
+      "class": "C",
+      "league": "白银"
+    },
+    {
+      "id": "car_b58e9ec6f5c043ee",
+      "title": "McLaren 600LT Spider",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_074ac4fc61a292c8",
+      "title": "McLaren Solus GT",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_4f20d2687f0bb6c2",
+      "title": "Toyota GR Super Sport Concept",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_afae1f7005ee5255",
+      "title": "Mercedes-Benz Biome 2010",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_7e9b5dc64cd0c7c1",
+      "title": "Lamborghini SC18",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_ce2ea65889e867bc",
+      "title": "Lamborghini Aventador SVJ Roadster",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_00bbb8ac1279e6f9",
+      "title": "Formula E Gen 3 EVO Championship Edition",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_ad3713da36d5a513",
+      "title": "W Motors Lykan Hypersport",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_88e9c3510dce44f2",
+      "title": "Lamborghini Invencible",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_53b4b86eadf334e6",
+      "title": "Ford GT CNY Edition",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_55b5313f37e42e85",
+      "title": "Raesr Tachyon Speed",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_eb5b2cf363d69cd5",
+      "title": "Ferrari 488 Challenge EVO",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_18950b51fd913bee",
+      "title": "Nissan Z GT4",
+      "class": "C",
+      "league": "黄金"
+    },
+    {
+      "id": "car_93f640b71d8ef5d8",
+      "title": "Citroën GT by Citroën",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_0f8ad190d987cbb1",
+      "title": "Pagani Zonda Cinque",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_0830cf5cbe5608e6",
+      "title": "Lamborghini Huracan EVO Spyder",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_f177611972a2d6ef",
+      "title": "Aston Martin DBS GT Zagato",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_555fe6f70f0fb8c4",
+      "title": "Chevrolet Corvette Grand Sport Halloween Edition",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_1d503263ef600e60",
+      "title": "Porsche 918 Spyder",
+      "class": "S",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_f6f480da8fa60c6a",
+      "title": "Vanda Electrics Dendrobium",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_bce9aa4ab8c7effb",
+      "title": "Automobili Pininfarina Battista Edizione Nino Farina",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_71bc72d2c3ab44e1",
+      "title": "FV Frangivento GT65",
+      "class": "B",
+      "league": "白金"
+    },
+    {
+      "id": "car_d493070a0e2d7cd6",
+      "title": "Nissan GTR-50 Italdesign",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_b9089dbc4f58dac2",
+      "title": "McLaren 570S Spider",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_4f6d7de4800dbce9",
+      "title": "Lamborghini Veneno",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_fa6736a470667b05",
+      "title": "ATS Automobili GT",
+      "class": "S",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_34880ed583bdf043",
+      "title": "Pagani Zonda R",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_3e780fbcb818eaa2",
+      "title": "Peugeot 9X8",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_bc96f16c1ba5c06c",
+      "title": "McLaren Sabre",
+      "class": "A",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_4108eb2db1e76cc7",
+      "title": "Jaguar XJ220S TWR",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_7ce3d6f5e1d75ad0",
+      "title": "Lamborghini Sesto Elemento",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_226a14aa4d1d233f",
+      "title": "Glickenhaus 007S",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_40d323b554a1db89",
+      "title": "Nissan GT-R Neon Edition",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_2e4d9ae779678fa2",
+      "title": "Lamborghini Egoista",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_e3357501db4ed5b1",
+      "title": "Porsche 935(2019)",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_a393d9f8139ea39e",
+      "title": "Chrysler ME412",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_93842ead7881d175",
+      "title": "Aston Martin Victor",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_29aa66ecf86da19f",
+      "title": "Porsche 918 Spyder Asphalt Edition",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_21776566af640c4b",
+      "title": "Pagani Huayra R",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_cb9081d6524bec97",
+      "title": "Ford GT MK IV",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_d40631875351f190",
+      "title": "LEGO Technic Lamborghini Revuelto",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_5de158f4a1ce8f68",
+      "title": "Apollo EVO",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_04041a454219eaa3",
+      "title": "McLaren 650S GT3",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_829cec65229a2380",
+      "title": "Ferrari SF90 XX Stradale",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_db8503844858b239",
+      "title": "Porsche 911 GT2 RS Clubsport",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_7e37e1e6b9b2cf33",
+      "title": "Pagani Huayra BC",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_c236c686e3b62d72",
+      "title": "Ferrari LaFerrari Aperta",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_f4a50449abf77573",
+      "title": "Ferrari 12 Cilindri",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_c556a70e9f52e604",
+      "title": "McLaren F1LM",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_ead2f75dd447226c",
+      "title": "Zenvo TSR-S",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_53ac414f85b28196",
+      "title": "神秘组织 拦路虎",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_b0ba82725faf5e1b",
+      "title": "Lotus E-R9",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_9c7e0eff103b7cb8",
+      "title": "Pagani Utopia Coupe",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_199464599ed8adc8",
+      "title": "Ferrari F8 Tributo",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_e6c2644c54147f4e",
+      "title": "Genty Akylone",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_3a68f15f5ba6ac5a",
+      "title": "Lamborghini SC20",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_1c66876c9f2dda80",
+      "title": "Volkswagen W12 Coupe",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_b6224eae7be82f80",
+      "title": "Trion Nemesis",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_69dd23b4db01e4b2",
+      "title": "Ford Shelby Super Snake",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_9aafc88500697523",
+      "title": "Lamborghini Temerario",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_58aeacdaa5d23e1c",
+      "title": "Lamborghini Revuelto",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_85fd63d5b7f1c343",
+      "title": "FV Frangivento Asfane",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_d96992fbfc4bfb8c",
+      "title": "Spania GTA 2015 GTA Spano",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_1306b351447e0ce3",
+      "title": "Ares Panther",
+      "class": "B",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_2565ea1abb5303f8",
+      "title": "Zenvo Aurora Agil",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_d6ef0cba36504bc6",
+      "title": "FV Frangivento Sorpasso GT3",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_1447205262e65129",
+      "title": "Lamborghini Terzo Millennio",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_fbb98b4b8174c394",
+      "title": "McLaren Senna",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_8eb4ada7b5c87ad3",
+      "title": "Bugatti Veyron 16.4 Grand Sport Vitesse",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_d7b0a9d746fac55c",
+      "title": "Lotus Evija",
+      "class": "S",
+      "league": "翡翠"
+    },
+    {
+      "id": "car_17e6c8f4f1b6be8b",
+      "title": "Jaguar XJR-9",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_a300cff262f93ba1",
+      "title": "Vision 1789",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_1e68275fdd11bfa1",
+      "title": "Noble M600 Speedster",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_8a9b5fe269594608",
+      "title": "Pininfarina Teorema",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_baf60c33b3c3e4cc",
+      "title": "W Motors Fenyr Supersport",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_3b75318a98b3b995",
+      "title": "Aston Martin Valkyrie",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_97d064e66754b5d3",
+      "title": "Rimac Concept_One",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_64411e6f1d500fba",
+      "title": "Nio EP9 Anniversary Special Edition",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_5519fce709cad40a",
+      "title": "Mercedes-Benz C11",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_7cd3ff2de04b650e",
+      "title": "Aston Martin Valhalla Concept Car",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_11472e1b5db2fc8d",
+      "title": "Zenvo TS1 GT Anniversary",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_f333f35d88c69902",
+      "title": "Rimac Concept S",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_3e851ea4c5a4b766",
+      "title": "Ferrari SF90 Stradale",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_70f43e28c4fa312c",
+      "title": "Automobili Pininfarina Battista",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_c71e9a4285f18eb6",
+      "title": "Techrules AT96 Dragon Boat Edition",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_050038cd73c23951",
+      "title": "Naran Hyper Coupe",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_eeb297c1d000a451",
+      "title": "Pagani Imola",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_c6d1d48cfc0b052a",
+      "title": "Lexus Electrified Sport Concept",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_55ab94f7ae4479db",
+      "title": "Lamborghini Countach LPI 800-4",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_ab10b86a99070299",
+      "title": "Mercedes-Benz Mercedes-AMG One",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_1905c4e39790cf72",
+      "title": "Nio EP9",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_3a59c39d2b98c6a6",
+      "title": "Ferrari 499P Modificata",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_d158a1c34398642d",
+      "title": "Arash Imperium",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_af4ed7a03275c09a",
+      "title": "Hyundai N Vision 74",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_547fc4b4f8bd1e06",
+      "title": "De Tomaso P72",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_db01e0aad4ce9a8f",
+      "title": "McLaren Speedtail",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_69ef4f53bc5732c6",
+      "title": "Mercedes-Benz Vision One-Eleven",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_20b01075d7b8c75b",
+      "title": "Faraday Future FFZERO1",
+      "class": "S",
+      "league": "钻石"
+    },
+    {
+      "id": "car_592b5418dd49680c",
+      "title": "Automobili Pininfarina B95",
+      "class": "A",
+      "league": "白金"
+    },
+    {
+      "id": "car_8b3001d24bece7a7",
+      "title": "Bugatti Divo",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_628c16fe747a6d90",
+      "title": "Koenigsegg Regera",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_029cfe87a42ea7d1",
+      "title": "Porsche GT3 RS 2023",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_ccbad34496bff8ca",
+      "title": "Porsche 919 Street",
+      "class": "A",
+      "league": "钻石"
+    },
+    {
+      "id": "car_bd541d9c84d7e8f7",
+      "title": "Saleen S7 Twin Turbo",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_3a01ec165d1b76ca",
+      "title": "W Motors Lykan Hypersport Neon Edition",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_eed4fb09ca64fe7e",
+      "title": "Pagani Codalunga",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_0ef30f81b60f223a",
+      "title": "Ultima RS",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_5fcceffe4d877af4",
+      "title": "W Motors Fenyr Supersport CNY Edition",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_2435a5b81d6c1730",
+      "title": "Zenvo TSR-S Dragonboat Edition",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_e8df360ad07558bd",
+      "title": "Ford Mustang RTR Spec 5-FD",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_20dff6942887d62f",
+      "title": "Ajlani Drakuma",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_ca55b3856f987b40",
+      "title": "Ford Team Fordzilla P1",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_ec36cac9bb5262e4",
+      "title": "SSC Ultimate Aero TT",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_f2ab55f800434bbe",
+      "title": "Inferno Automobili Inferno",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_34c4cb588e536c0e",
+      "title": "Torino Design Super Sport",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_f7f5bc5f07338b3b",
+      "title": "Bugatti Chiron",
+      "class": "S",
+      "league": "传奇"
+    },
+    {
+      "id": "car_122f3a92144abe39",
+      "title": "BXR Bailey Blade GT1",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_4e4b2e4dee7cbab3",
+      "title": "LEGO Technic Bugatti Chiron Pur Sport",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_f66ef378ef364c6d",
+      "title": "Tushek TS 900 Racer Pro",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_3d11019b9139f01a",
+      "title": "Mazzanti Evantra Millecavalli",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_cb04e4c999760c3d",
+      "title": "Porsche 917 Living Legend",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_e85eb2d25a973b59",
+      "title": "Toroidion 1MW",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_67cc452957db60ce",
+      "title": "Bugatti Chiron Pur Sport",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_7239a9e434ed5e58",
+      "title": "Koenigsegg Jesko",
+      "class": "S",
+      "league": "传奇"
+    },
+    {
+      "id": "car_b862fc6f029a1944",
+      "title": "Bugatti Centodieci",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_047377f164ce4a20",
+      "title": "Lamborghini Sián FKP 37",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_35db1d5afe1a9a93",
+      "title": "Aspark Owl",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_64f7bfa3b924ffa8",
+      "title": "Icona Vulcano Spyder",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_26d3f9e237eb35ab",
+      "title": "Raesr Aglaia",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_d51e24a1fd5f83c0",
+      "title": "Rimac Nevera",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_0cc6e978d0dff6d0",
+      "title": "SSC Tuatara",
+      "class": "S",
+      "league": "传奇"
+    },
+    {
+      "id": "car_19838220895c9666",
+      "title": "Koenigsegg Agera RS",
+      "class": "S",
+      "league": "传奇"
+    },
+    {
+      "id": "car_f2b064055e4f7db7",
+      "title": "HTT Locus Plethore LC750",
+      "class": "S",
+      "league": "精英"
+    },
+    {
+      "id": "car_b96dd004bce8c66e",
+      "title": "Hennessey Venom GT",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_0fb4d040311490d1",
+      "title": "Koenigsegg CCXR",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_3e7887fa344cc631",
+      "title": "Nilu27 Nilu",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_0b83b3089a41e1df",
+      "title": "Ferrante Design Elytron",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_46e32d01720ea995",
+      "title": "Bugatti LA Voiture Noire",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_9876477b3a4f5a8c",
+      "title": "Koenigsegg One:1",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_068474e594e61e0f",
+      "title": "Deus Vayanne",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_274a1696929910e2",
+      "title": "Koenigsegg Gemera",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_7b69f1efc71c93ef",
+      "title": "Bugatti Mistral",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_2d01b07aa756240e",
+      "title": "Zenvo Aurora Tur",
+      "class": "S",
+      "league": "传奇"
+    },
+    {
+      "id": "car_cf27d85139316917",
+      "title": "Hennessey Venom F5",
+      "class": "S",
+      "league": "传奇"
+    },
+    {
+      "id": "car_b6e90f64957fccdb",
+      "title": "Koenigsegg CC850",
+      "class": "S",
+      "league": "传奇"
+    },
+    {
+      "id": "car_322998669997b09d",
+      "title": "Czinger 21C",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_b00ff5989c50068c",
+      "title": "Mosler Super GT",
+      "class": "S",
+      "league": "传奇"
+    },
+    {
+      "id": "car_93bd4ec743f8d274",
+      "title": "Devel Sixteen",
+      "class": "R",
+      "league": "传奇"
+    },
+    {
+      "id": "car_199b60f1b8240217",
+      "title": "SSC Tuatara Striker",
+      "class": "R",
+      "league": "传奇"
+    },
+    {
+      "id": "car_a6acdd201446a26e",
+      "title": "Mercedes-Benz Silver Lightning",
+      "class": "R",
+      "league": "传奇"
+    },
+    {
+      "id": "car_f821b6ff3c1e14ff",
+      "title": "Raesr Tartarus",
+      "class": "S",
+      "league": "宗师"
+    },
+    {
+      "id": "car_005c710a33e5b250",
+      "title": "Bugatti Bolide",
+      "class": "R",
+      "league": "传奇"
+    },
+    {
+      "id": "car_596574cbe9e12553",
+      "title": "Bugatti Chiron Super Sport 300+",
+      "class": "R",
+      "league": "传奇"
+    },
+    {
+      "id": "car_d64a2fe90e3e24c7",
+      "title": "Rimac Nevera R",
+      "class": "R",
+      "league": "传奇"
+    },
+    {
+      "id": "car_2b594c0526416d01",
+      "title": "Hennessey Venom F5 Revolution",
+      "class": "R",
+      "league": "传奇"
+    },
+    {
+      "id": "car_10d54088228a5464",
+      "title": "Koenigsegg Jesko Absolut",
+      "class": "R",
+      "league": "传奇"
+    },
+    {
+      "id": "car_63b10b854c8a7611",
+      "title": "Bugatti Tourbillon",
+      "class": "R",
+      "league": "传奇"
+    },
+    {
+      "id": "car_3fd45e910571a8a8",
+      "title": "Tushek Aeon E",
+      "class": "S",
+      "league": "传奇"
+    }
+  ]
+}

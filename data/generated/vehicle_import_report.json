@@ -1,0 +1,189 @@
+{
+  "catalog_records": 338,
+  "rotation_entries": 136,
+  "counts_by_league": {
+    "青铜": 6,
+    "白银": 10,
+    "黄金": 15,
+    "白金": 15,
+    "翡翠": 15,
+    "钻石": 25,
+    "精英": 25,
+    "宗师": 14,
+    "传奇": 11
+  },
+  "league_migrations": [],
+  "issues": [
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "青铜",
+      "title": "Kimera EVO37",
+      "workbook_class": "B",
+      "catalog_class": "D",
+      "catalog_league": "青铜"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "白银",
+      "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
+      "workbook_class": "B",
+      "catalog_class": "C",
+      "catalog_league": "白银"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "白银",
+      "title": "Maserati MC20 GT2",
+      "workbook_class": "B",
+      "catalog_class": "C",
+      "catalog_league": "白银"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "黄金",
+      "title": "DS Automobiles DS E-Tense Performance",
+      "workbook_class": "B",
+      "catalog_class": "C",
+      "catalog_league": "黄金"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "黄金",
+      "title": "Praga Bohema",
+      "workbook_class": "B",
+      "catalog_class": "C",
+      "catalog_league": "黄金"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "黄金",
+      "title": "Porsche Panamera Turbo S",
+      "workbook_class": "B",
+      "catalog_class": "C",
+      "catalog_league": "黄金"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "黄金",
+      "title": "De Tomaso P900",
+      "workbook_class": "B",
+      "catalog_class": "C",
+      "catalog_league": "黄金"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "黄金",
+      "title": "Ferrari 296 GTB",
+      "workbook_class": "B",
+      "catalog_class": "C",
+      "catalog_league": "黄金"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "白金",
+      "title": "Puritalia Berlinetta",
+      "workbook_class": "B",
+      "catalog_class": "A",
+      "catalog_league": "白金"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "白金",
+      "title": "Apollo IE",
+      "workbook_class": "B",
+      "catalog_class": "A",
+      "catalog_league": "白金"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "白金",
+      "title": "Lamborghini Essenza SCV12",
+      "workbook_class": "B",
+      "catalog_class": "A",
+      "catalog_league": "白金"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "翡翠",
+      "title": "Lamborghini SC18",
+      "workbook_class": "B",
+      "catalog_class": "A",
+      "catalog_league": "翡翠"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "翡翠",
+      "title": "LEGO Technic Lamborghini Revuelto",
+      "workbook_class": "A",
+      "catalog_class": "B",
+      "catalog_league": "翡翠"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "钻石",
+      "title": "McLaren F1LM",
+      "workbook_class": "A",
+      "catalog_class": "S",
+      "catalog_league": "钻石"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "钻石",
+      "title": "Porsche 911 GT2 RS Clubsport",
+      "workbook_class": "A",
+      "catalog_class": "S",
+      "catalog_league": "钻石"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "钻石",
+      "title": "Genty Akylone",
+      "workbook_class": "A",
+      "catalog_class": "S",
+      "catalog_league": "钻石"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "钻石",
+      "title": "McLaren 570S Spider",
+      "workbook_class": "A",
+      "catalog_class": "S",
+      "catalog_league": "钻石"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "钻石",
+      "title": "Icona Vulcano Titanium",
+      "workbook_class": "A",
+      "catalog_class": "S",
+      "catalog_league": "钻石"
+    },
+    {
+      "kind": "catalog_difference",
+      "resolution": "use_catalog",
+      "league": "钻石",
+      "title": "Zenvo TSR-S",
+      "workbook_class": "A",
+      "catalog_class": "S",
+      "catalog_league": "钻石"
+    }
+  ]
+}

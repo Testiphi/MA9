@@ -1,0 +1,1910 @@
+{
+    "两车_J50测试_多人准备_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "两车_J50测试_多人准备_仅拥有已开启",
+            "两车_J50测试_多人准备_开启仅拥有",
+            "两车_J50测试_多人准备_介绍页开始",
+            "两车_J50测试_多人准备_点击经典系列赛",
+            "两车_J50测试_多人准备_切换多人标签"
+        ]
+    },
+    "两车_J50测试_多人准备_切换多人标签": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/home/multiplayer/unselected_d6c0bc4f0f5c.png"
+        ],
+        "roi": [
+            755,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            745,
+            666
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "两车_J50测试_多人准备_点击经典系列赛"
+        ]
+    },
+    "两车_J50测试_多人准备_点击经典系列赛": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/home/multiplayer/selected.png",
+                "roi": [
+                    755,
+                    637,
+                    88,
+                    72
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_card.png",
+                "roi": [
+                    250,
+                    390,
+                    220,
+                    85
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            350,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "两车_J50测试_多人准备_仅拥有已开启",
+            "两车_J50测试_多人准备_开启仅拥有",
+            "两车_J50测试_多人准备_介绍页开始"
+        ]
+    },
+    "两车_J50测试_多人准备_介绍页开始": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_title.png",
+                "roi": [
+                    60,
+                    115,
+                    235,
+                    100
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_start.png",
+                "roi": [
+                    1070,
+                    625,
+                    100,
+                    50
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1110,
+            650
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "两车_J50测试_多人准备_仅拥有已开启",
+            "两车_J50测试_多人准备_开启仅拥有"
+        ]
+    },
+    "两车_J50测试_多人准备_开启仅拥有": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_off.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1130,
+            107
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "两车_J50测试_多人准备_仅拥有已开启"
+        ]
+    },
+    "两车_J50测试_多人准备_仅拥有已开启": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [
+            "两车_J50测试_黄金定位_点击黄金"
+        ]
+    },
+    "两车_J50测试_TouchDrive_确认入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": [
+            "两车_J50测试_TouchDrive_已开启",
+            "两车_J50测试_TouchDrive_点击开"
+        ]
+    },
+    "两车_J50测试_TouchDrive_已开启": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/j50_detail.png",
+                "roi": [
+                    165,
+                    102,
+                    115,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "两车_J50测试_TouchDrive_点击开": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/j50_detail.png",
+                "roi": [
+                    165,
+                    102,
+                    115,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "两车_J50测试_TouchDrive_已开启"
+        ]
+    },
+    "两车_J50测试_黄金定位_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "两车_J50测试_黄金定位_点击黄金",
+            "两车_J50测试_黄金定位_开启仅拥有",
+            "两车_J50测试_黄金定位_介绍页开始"
+        ]
+    },
+    "两车_J50测试_黄金定位_开启仅拥有": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_off.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1130,
+            107
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "两车_J50测试_黄金定位_点击黄金"
+        ]
+    },
+    "两车_J50测试_黄金定位_介绍页开始": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_title.png",
+                "roi": [
+                    60,
+                    115,
+                    235,
+                    100
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_start.png",
+                "roi": [
+                    1070,
+                    625,
+                    100,
+                    50
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1110,
+            650
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "两车_J50测试_黄金定位_点击黄金",
+            "两车_J50测试_黄金定位_开启仅拥有"
+        ]
+    },
+    "两车_J50测试_黄金定位_点击黄金": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            671,
+            107
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "两车_J50测试_黄金定位_已选中"
+        ]
+    },
+    "两车_J50测试_黄金定位_已选中": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/gold_selected.png",
+                "roi": [
+                    637,
+                    85,
+                    70,
+                    54
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [
+            "两车_J50测试_列表点击",
+            "两车_J50测试_滑动搜索"
+        ]
+    },
+    "两车_J50测试_缺油返回列表": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/j50_detail.png",
+                "roi": [
+                    165,
+                    102,
+                    115,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/fuel_zero.png",
+                "roi": [
+                    510,
+                    642,
+                    53,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/fuel_skip.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_back.png",
+                "roi": [
+                    15,
+                    3,
+                    48,
+                    58
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            40,
+            30
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "两车_J50测试_缺油已返回"
+        ]
+    },
+    "两车_J50测试_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "两车_J50测试_缺油返回列表",
+            "两车_J50测试_TouchDrive_已开启",
+            "两车_J50测试_TouchDrive_点击开",
+            "两车_J50测试_多人准备_仅拥有已开启",
+            "两车_J50测试_多人准备_开启仅拥有",
+            "两车_J50测试_多人准备_介绍页开始",
+            "两车_J50测试_多人准备_点击经典系列赛",
+            "两车_J50测试_多人准备_切换多人标签"
+        ]
+    },
+    "两车_J50测试_缺油已返回": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [
+            "两车_Panamera_黄金定位_入口"
+        ]
+    },
+    "两车_J50测试_列表点击": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/j50_list.png",
+                "roi": [
+                    210,
+                    200,
+                    1040,
+                    460
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/multiplayer/selection_title.png",
+                        "roi": [
+                            90,
+                            75,
+                            150,
+                            45
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": [
+                            "navigation/multiplayer/league_icons.png",
+                            "navigation/multiplayer/league_icons_gold.png",
+                            "navigation/vehicle/platinum_league_icons.png"
+                        ],
+                        "roi": [
+                            532,
+                            82,
+                            498,
+                            50
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/multiplayer/owned_on.png",
+                        "roi": [
+                            1100,
+                            78,
+                            59,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/vehicle/gold_selected.png",
+                        "roi": [
+                            637,
+                            85,
+                            70,
+                            54
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "box_index": 0,
+        "action": "Click",
+        "target": true,
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "两车_J50测试_缺油返回列表",
+            "两车_J50测试_TouchDrive_已开启",
+            "两车_J50测试_TouchDrive_点击开"
+        ]
+    },
+    "两车_J50测试_滑动搜索": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/gold_selected.png",
+                "roi": [
+                    637,
+                    85,
+                    70,
+                    54
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Swipe",
+        "begin": [
+            1000,
+            420
+        ],
+        "end": [
+            600,
+            420
+        ],
+        "duration": 320,
+        "pre_delay": 0,
+        "post_delay": 350,
+        "timeout": 5000,
+        "max_hit": 12,
+        "next": [
+            "两车_J50测试_列表点击",
+            "两车_J50测试_滑动搜索"
+        ]
+    },
+    "两车_Panamera_多人准备_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera_多人准备_仅拥有已开启",
+            "两车_Panamera_多人准备_开启仅拥有",
+            "两车_Panamera_多人准备_介绍页开始",
+            "两车_Panamera_多人准备_点击经典系列赛",
+            "两车_Panamera_多人准备_切换多人标签"
+        ]
+    },
+    "两车_Panamera_多人准备_切换多人标签": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/home/multiplayer/unselected_d6c0bc4f0f5c.png"
+        ],
+        "roi": [
+            755,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            745,
+            666
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "两车_Panamera_多人准备_点击经典系列赛"
+        ]
+    },
+    "两车_Panamera_多人准备_点击经典系列赛": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/home/multiplayer/selected.png",
+                "roi": [
+                    755,
+                    637,
+                    88,
+                    72
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_card.png",
+                "roi": [
+                    250,
+                    390,
+                    220,
+                    85
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            350,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera_多人准备_仅拥有已开启",
+            "两车_Panamera_多人准备_开启仅拥有",
+            "两车_Panamera_多人准备_介绍页开始"
+        ]
+    },
+    "两车_Panamera_多人准备_介绍页开始": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_title.png",
+                "roi": [
+                    60,
+                    115,
+                    235,
+                    100
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_start.png",
+                "roi": [
+                    1070,
+                    625,
+                    100,
+                    50
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1110,
+            650
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera_多人准备_仅拥有已开启",
+            "两车_Panamera_多人准备_开启仅拥有"
+        ]
+    },
+    "两车_Panamera_多人准备_开启仅拥有": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_off.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1130,
+            107
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "两车_Panamera_多人准备_仅拥有已开启"
+        ]
+    },
+    "两车_Panamera_多人准备_仅拥有已开启": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [
+            "两车_Panamera_黄金定位_点击黄金"
+        ]
+    },
+    "两车_Panamera_TouchDrive_确认入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": [
+            "两车_Panamera_TouchDrive_已开启",
+            "两车_Panamera_TouchDrive_点击开"
+        ]
+    },
+    "两车_Panamera_TouchDrive_已开启": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/panamera_detail_card.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "两车_Panamera_TouchDrive_点击开": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/panamera_detail_card.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "两车_Panamera_TouchDrive_已开启"
+        ]
+    },
+    "两车_Panamera_黄金定位_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera_黄金定位_点击黄金",
+            "两车_Panamera_黄金定位_开启仅拥有",
+            "两车_Panamera_黄金定位_介绍页开始"
+        ]
+    },
+    "两车_Panamera_黄金定位_开启仅拥有": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_off.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1130,
+            107
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "两车_Panamera_黄金定位_点击黄金"
+        ]
+    },
+    "两车_Panamera_黄金定位_介绍页开始": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_title.png",
+                "roi": [
+                    60,
+                    115,
+                    235,
+                    100
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/classic_start.png",
+                "roi": [
+                    1070,
+                    625,
+                    100,
+                    50
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1110,
+            650
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera_黄金定位_点击黄金",
+            "两车_Panamera_黄金定位_开启仅拥有"
+        ]
+    },
+    "两车_Panamera_黄金定位_点击黄金": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            671,
+            107
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "两车_Panamera_黄金定位_已选中"
+        ]
+    },
+    "两车_Panamera_黄金定位_已选中": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/gold_selected.png",
+                "roi": [
+                    637,
+                    85,
+                    70,
+                    54
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [
+            "两车_Panamera_列表点击",
+            "两车_Panamera_滑动搜索",
+            "两车_Panamera_滑动搜索_反查定位起点"
+        ]
+    },
+    "两车_Panamera_缺油返回列表": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/panamera_detail_card.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/fuel_zero.png",
+                "roi": [
+                    510,
+                    642,
+                    53,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/fuel_skip.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_back.png",
+                "roi": [
+                    15,
+                    3,
+                    48,
+                    58
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            40,
+            30
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera缺油_已返回_测试结束"
+        ]
+    },
+    "两车_Panamera缺油_已返回_测试结束": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "两车_Panamera_列表点击": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/panamera_list.png",
+                "roi": [
+                    0,
+                    190,
+                    1280,
+                    480
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/multiplayer/selection_title.png",
+                        "roi": [
+                            90,
+                            75,
+                            150,
+                            45
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": [
+                            "navigation/multiplayer/league_icons.png",
+                            "navigation/multiplayer/league_icons_gold.png",
+                            "navigation/vehicle/platinum_league_icons.png"
+                        ],
+                        "roi": [
+                            532,
+                            82,
+                            498,
+                            50
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/multiplayer/owned_on.png",
+                        "roi": [
+                            1100,
+                            78,
+                            59,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/vehicle/gold_selected.png",
+                        "roi": [
+                            637,
+                            85,
+                            70,
+                            54
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "box_index": 0,
+        "action": "Click",
+        "target": true,
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera_缺油返回列表",
+            "两车_Panamera_TouchDrive_已开启",
+            "两车_Panamera_TouchDrive_点击开"
+        ]
+    },
+    "两车_Panamera_滑动搜索": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/multiplayer/league_icons.png",
+                    "navigation/multiplayer/league_icons_gold.png",
+                    "navigation/vehicle/platinum_league_icons.png"
+                ],
+                "roi": [
+                    532,
+                    82,
+                    498,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/gold_selected.png",
+                "roi": [
+                    637,
+                    85,
+                    70,
+                    54
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Swipe",
+        "begin": [
+            1000,
+            420
+        ],
+        "end": [
+            600,
+            420
+        ],
+        "duration": 320,
+        "pre_delay": 0,
+        "post_delay": 350,
+        "max_hit": 12,
+        "timeout": 5000,
+        "next": [
+            "两车_Panamera_列表点击",
+            "两车_Panamera_滑动搜索",
+            "两车_Panamera_滑动搜索_反查定位起点"
+        ]
+    },
+    "两车_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera_缺油返回列表",
+            "两车_Panamera_TouchDrive_已开启",
+            "两车_Panamera_TouchDrive_点击开",
+            "两车_J50测试_缺油返回列表",
+            "两车_J50测试_TouchDrive_已开启",
+            "两车_J50测试_TouchDrive_点击开",
+            "两车_J50测试_多人准备_仅拥有已开启",
+            "两车_J50测试_多人准备_开启仅拥有",
+            "两车_J50测试_多人准备_介绍页开始",
+            "两车_J50测试_多人准备_点击经典系列赛",
+            "两车_J50测试_多人准备_切换多人标签"
+        ]
+    },
+    "两车_Panamera_原地识别入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": [
+            "两车_Panamera_列表点击"
+        ]
+    },
+    "两车_Panamera_滑动搜索_反查定位起点": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            726,
+            107
+        ],
+        "max_hit": 1,
+        "post_delay": 1500,
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera_滑动搜索_反查起点已确认"
+        ]
+    },
+    "两车_Panamera_滑动搜索_反查起点已确认": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/multiplayer/selection_title.png",
+                        "roi": [
+                            90,
+                            75,
+                            150,
+                            45
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/multiplayer/owned_on.png",
+                        "roi": [
+                            1100,
+                            78,
+                            59,
+                            60
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/platinum_selected.png",
+                "roi": [
+                    692,
+                    85,
+                    70,
+                    54
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/platinum_start.png",
+                "roi": [
+                    485,
+                    310,
+                    195,
+                    65
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "timeout": 60000,
+        "max_hit": 1,
+        "next": [
+            "两车_Panamera_滑动搜索_反查点击车型",
+            "两车_Panamera_滑动搜索_反查滑动",
+            "两车_Panamera_滑动搜索_反查未找到_测试停止"
+        ]
+    },
+    "两车_Panamera_滑动搜索_反查点击车型": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/panamera_list.png",
+                "roi": [
+                    0,
+                    190,
+                    1280,
+                    480
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/multiplayer/selection_title.png",
+                        "roi": [
+                            90,
+                            75,
+                            150,
+                            45
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/multiplayer/owned_on.png",
+                        "roi": [
+                            1100,
+                            78,
+                            59,
+                            60
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "box_index": 0,
+        "action": "Click",
+        "target": true,
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera_缺油返回列表",
+            "两车_Panamera_TouchDrive_已开启",
+            "两车_Panamera_TouchDrive_点击开"
+        ]
+    },
+    "两车_Panamera_滑动搜索_反查滑动": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Swipe",
+        "begin": [
+            600,
+            420
+        ],
+        "end": [
+            1000,
+            420
+        ],
+        "duration": 320,
+        "pre_delay": 0,
+        "post_delay": 350,
+        "max_hit": 24,
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera_滑动搜索_反查点击车型",
+            "两车_Panamera_滑动搜索_反查滑动",
+            "两车_Panamera_滑动搜索_反查未找到_测试停止"
+        ]
+    },
+    "两车_Panamera_滑动搜索_反查未找到_测试停止": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "两车_Panamera_反向搜索入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "两车_Panamera_滑动搜索_反查定位起点"
+        ]
+    }
+}

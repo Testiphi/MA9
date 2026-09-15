@@ -1,0 +1,758 @@
+[
+  {
+    "screenshot": "传奇通行证_主页未选中_有奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "传奇通行证_主页未选中_未首次进入.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "传奇通行证_主页选中_有奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_主页未选中_无奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_主页选中_无奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_匹配中.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_比赛中_神山垭口_坠落_进度18.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": true
+    }
+  },
+  {
+    "screenshot": "多人游戏_比赛中_神山垭口_坠落_进度50.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": true
+    }
+  },
+  {
+    "screenshot": "多人游戏_比赛中_神山垭口_坠落_进度67.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": true
+    }
+  },
+  {
+    "screenshot": "多人游戏_比赛中_神山垭口_坠落_进度78.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": true
+    }
+  },
+  {
+    "screenshot": "多人游戏_比赛中_神山垭口_坠落_进度91.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": true
+    }
+  },
+  {
+    "screenshot": "多人游戏_经典系列赛_进入后.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": true,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_结算_奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": true,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_结算_成绩.png",
+    "matches": {
+      "多人结算_成绩继续": true,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_结算_跳过广告.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": true,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_结算_返回后.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": true,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_结算_降级.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": true,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_赛道加载_沙漠高速_沙漠狂奔.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_赛道加载_神山垭口_坠落.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": true,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Arrinera Hussarya 33_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Aston Martin DBS 770 Ultimate_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Bugatti EB110_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Dodge Viper GTS_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Drako GTE_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_DS Automobiles DS E-Tense Performance_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Ferrari 296 GTB_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Ferrari J50_可开始_TouchDrive关.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Ferrari J50_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Ferrari J50_无燃油_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Lamborghini Diablo GT_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_McLaren GT_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Nissan Z GT4_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Porsche Panamera Turbo S_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Porsche Panamera Turbo S_无燃油_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Praga Bohema_可开始_TouchDrive开.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白金起点_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_青铜起点_仅拥有关闭.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_青铜起点_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Arrinera Hussarya 33完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Aston Martin DBS 770 Ultimate完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Bugatti EB110完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Dodge Viper GTS完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Drako GTE完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Ferrari 296 GTB完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Ferrari J50完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Lamborghini Diablo GT完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_McLaren GT完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Nissan Z GT4完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Porsche Panamera Turbo S完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Praga Bohema完整可见_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_滑动后_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金起点_仅拥有开启.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "我的俱乐部_主页选中_无奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "每日赛事_主页未选中_无奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "每日赛事_主页未选中_有奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "每日赛事_主页选中_无奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "每日赛事_主页选中_有奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "每日赛事_进入后_无奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "赛季赛事_主页未选中_无奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "赛季赛事_主页未选中_有奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "赛季赛事_主页选中_无奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  },
+  {
+    "screenshot": "赛季赛事_主页选中_有奖励.png",
+    "matches": {
+      "多人结算_成绩继续": false,
+      "多人结算_奖励继续": false,
+      "多人结算_点击错失机会": false,
+      "多人结算_已返回系列赛": false,
+      "多人结算_降级确定": false,
+      "赛道识别_神山垭口_坠落": false,
+      "局内识别_多人HUD": false
+    }
+  }
+]

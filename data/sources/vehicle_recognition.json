@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "vehicles": {
+    "car_ab1d758c2b54cd18": {
+      "title": "Porsche Panamera Turbo S",
+      "list_source": "多人游戏_选车_黄金_Porsche Panamera Turbo S完整可见_仅拥有开启.png",
+      "list_crop": [
+        919,
+        580,
+        1035,
+        597
+      ],
+      "detail_source": "多人游戏_车辆详情_Porsche Panamera Turbo S_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ],
+      "empty_source": "多人游戏_车辆详情_Porsche Panamera Turbo S_无燃油_TouchDrive开.png",
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_Porsche Panamera Turbo S完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png"
+      ],
+      "list_variants": [
+        {
+          "source": "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png",
+          "crop": [
+            134,
+            580,
+            250,
+            597
+          ]
+        }
+      ]
+    },
+    "car_b1dd012bbcb6e34c": {
+      "title": "Ferrari J50",
+      "list_source": "多人游戏_选车_黄金_Ferrari J50完整可见_仅拥有开启.png",
+      "list_crop": [
+        985,
+        327,
+        1040,
+        359
+      ],
+      "detail_source": "多人游戏_车辆详情_Ferrari J50_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ],
+      "empty_source": "多人游戏_车辆详情_Ferrari J50_无燃油_TouchDrive开.png"
+    },
+    "car_0b8e7401c0eec455": {
+      "title": "Arrinera Hussarya 33",
+      "list_source": "多人游戏_选车_黄金_Arrinera Hussarya 33完整可见_仅拥有开启.png",
+      "list_crop": [
+        794,
+        341,
+        890,
+        358
+      ],
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_Arrinera Hussarya 33完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_Aston Martin DBS 770 Ultimate完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_Ferrari 296 GTB完整可见_仅拥有开启.png"
+      ],
+      "detail_source": "多人游戏_车辆详情_Arrinera Hussarya 33_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ]
+    },
+    "car_6b48d9fbc6ee3891": {
+      "title": "Aston Martin DBS 770 Ultimate",
+      "list_source": "多人游戏_选车_黄金_Aston Martin DBS 770 Ultimate完整可见_仅拥有开启.png",
+      "list_crop": [
+        651,
+        580,
+        755,
+        596
+      ],
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_Arrinera Hussarya 33完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_Aston Martin DBS 770 Ultimate完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_Ferrari 296 GTB完整可见_仅拥有开启.png"
+      ],
+      "detail_source": "多人游戏_车辆详情_Aston Martin DBS 770 Ultimate_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ],
+      "list_variants": [
+        {
+          "source": "多人游戏_选车_黄金_Ferrari 296 GTB完整可见_仅拥有开启.png",
+          "crop": [
+            322,
+            580,
+            426,
+            596
+          ]
+        }
+      ]
+    },
+    "car_120875dd73062282": {
+      "title": "Lamborghini Diablo GT",
+      "list_source": "多人游戏_选车_黄金_Lamborghini Diablo GT完整可见_仅拥有开启.png",
+      "list_crop": [
+        732,
+        579,
+        818,
+        596
+      ],
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_Arrinera Hussarya 33完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_Aston Martin DBS 770 Ultimate完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_Lamborghini Diablo GT完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_Bugatti EB110完整可见_仅拥有开启.png"
+      ],
+      "detail_source": "多人游戏_车辆详情_Lamborghini Diablo GT_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ]
+    },
+    "car_abe38a0a1422faf2": {
+      "title": "Bugatti EB110",
+      "list_source": "多人游戏_选车_黄金_Bugatti EB110完整可见_仅拥有开启.png",
+      "list_crop": [
+        700,
+        341,
+        754,
+        357
+      ],
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_Bugatti EB110完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_Lamborghini Diablo GT完整可见_仅拥有开启.png"
+      ],
+      "detail_source": "多人游戏_车辆详情_Bugatti EB110_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ]
+    },
+    "car_d5938de67517194d": {
+      "title": "Dodge Viper GTS",
+      "list_source": "多人游戏_选车_黄金_Dodge Viper GTS完整可见_仅拥有开启.png",
+      "list_crop": [
+        913,
+        342,
+        988,
+        358
+      ],
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_Dodge Viper GTS完整可见_仅拥有开启.png"
+      ],
+      "detail_source": "多人游戏_车辆详情_Dodge Viper GTS_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ]
+    },
+    "car_18950b51fd913bee": {
+      "title": "Nissan Z GT4",
+      "list_source": "多人游戏_选车_黄金_Nissan Z GT4完整可见_仅拥有开启.png",
+      "list_crop": [
+        774,
+        342,
+        823,
+        358
+      ],
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_Nissan Z GT4完整可见_仅拥有开启.png"
+      ],
+      "detail_source": "多人游戏_车辆详情_Nissan Z GT4_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ]
+    },
+    "car_d711970ead8502df": {
+      "title": "McLaren GT",
+      "list_source": "多人游戏_选车_黄金_McLaren GT完整可见_仅拥有开启.png",
+      "list_crop": [
+        633,
+        325,
+        681,
+        358
+      ],
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_McLaren GT完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_Drako GTE完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png"
+      ],
+      "detail_source": "多人游戏_车辆详情_McLaren GT_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ]
+    },
+    "car_3ac6edf946988969": {
+      "title": "DS Automobiles DS E-Tense Performance",
+      "list_source": "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png",
+      "list_crop": [
+        605,
+        582,
+        710,
+        596
+      ],
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_McLaren GT完整可见_仅拥有开启.png"
+      ],
+      "detail_source": "多人游戏_车辆详情_DS Automobiles DS E-Tense Performance_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ]
+    },
+    "car_09d38baa2cf18a02": {
+      "title": "Praga Bohema",
+      "list_source": "多人游戏_选车_黄金_Praga Bohema完整可见_仅拥有开启.png",
+      "list_crop": [
+        738,
+        341,
+        810,
+        358
+      ],
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_Praga Bohema完整可见_仅拥有开启.png"
+      ],
+      "detail_source": "多人游戏_车辆详情_Praga Bohema_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ]
+    },
+    "car_663ddea67d1bbda0": {
+      "title": "Ferrari 296 GTB",
+      "list_source": "多人游戏_选车_黄金_Ferrari 296 GTB完整可见_仅拥有开启.png",
+      "list_crop": [
+        789,
+        579,
+        853,
+        596
+      ],
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_Ferrari 296 GTB完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_Aston Martin DBS 770 Ultimate完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_Nissan Z GT4完整可见_仅拥有开启.png"
+      ],
+      "detail_source": "多人游戏_车辆详情_Ferrari 296 GTB_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ]
+    },
+    "car_341eef6c944c9c13": {
+      "title": "Drako GTE",
+      "list_source": "多人游戏_选车_黄金_Drako GTE完整可见_仅拥有开启.png",
+      "list_crop": [
+        780,
+        325,
+        823,
+        358
+      ],
+      "list_positive_sources": [
+        "多人游戏_选车_黄金_Drako GTE完整可见_仅拥有开启.png",
+        "多人游戏_选车_黄金_McLaren GT完整可见_仅拥有开启.png"
+      ],
+      "detail_source": "多人游戏_车辆详情_Drako GTE_可开始_TouchDrive开.png",
+      "detail_crop": [
+        79,
+        98,
+        153,
+        189
+      ]
+    }
+  }
+}

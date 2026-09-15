@@ -1,4 +1,9 @@
 {
+    "MyTask1": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": ["每日赛事_定位入口"]
+    },
     "进入每日赛事": {
         "recognition": "OCR",
         "expected": "每日赛事",

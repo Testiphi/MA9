@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "tracks": [
+    {
+      "id": "shenshan_zhuiluo",
+      "region": "神山垭口",
+      "layout": "坠落",
+      "loading_source": "多人游戏_赛道加载_神山垭口_坠落.png",
+      "loading_node": "赛道识别_神山垭口_坠落",
+      "laps": 1,
+      "progress_roi": [
+        188,
+        54,
+        62,
+        33
+      ],
+      "progress_reader": "ocr_pending",
+      "race_sources": [
+        "多人游戏_比赛中_神山垭口_坠落_进度18.png",
+        "多人游戏_比赛中_神山垭口_坠落_进度50.png",
+        "多人游戏_比赛中_神山垭口_坠落_进度67.png",
+        "多人游戏_比赛中_神山垭口_坠落_进度78.png",
+        "多人游戏_比赛中_神山垭口_坠落_进度91.png"
+      ],
+      "actions": [],
+      "status": "recognition_only_no_driving_actions"
+    }
+  ]
+}

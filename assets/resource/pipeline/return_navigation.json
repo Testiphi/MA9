@@ -1,0 +1,122 @@
+{
+    "主页返回_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": [
+            "主页返回_已到达",
+            "主页返回_点击房子"
+        ]
+    },
+    "主页返回_已到达": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/settings.png",
+                "roi": [
+                    1220,
+                    0,
+                    60,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "Or",
+                "any_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/pass/selected.png",
+                        "roi": [
+                            100,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/season/selected.png",
+                        "roi": [
+                            310,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/daily/selected.png",
+                        "roi": [
+                            545,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/multiplayer/selected.png",
+                        "roi": [
+                            755,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/club/selected.png",
+                        "roi": [
+                            965,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/solo/selected.png",
+                        "roi": [
+                            1175,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "主页返回_点击房子": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/home.png",
+        "roi": [
+            1220,
+            0,
+            60,
+            60
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            1250,
+            30
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 15000,
+        "next": [
+            "主页返回_已到达"
+        ]
+    }
+}

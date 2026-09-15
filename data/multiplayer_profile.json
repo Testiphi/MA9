@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "mode": "经典系列赛",
+  "current_league": "黄金",
+  "league_selection": "manual",
+  "compatible_leagues": ["黄金", "白银", "青铜"],
+  "rotation_file": "generated/multiplayer_rotation.json",
+  "selection_policy": "first_available_in_order",
+  "skip_reasons": ["not_owned", "league_unavailable", "no_fuel"],
+  "on_all_unavailable": "stop",
+  "stop_before_race": true,
+  "require_touchdrive": true
+}

@@ -1,0 +1,294 @@
+{
+    "主页_传奇通行证_已选中": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/home/pass/selected.png",
+        "roi": [
+            100,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "主页_传奇通行证_定位入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": [
+            "主页_传奇通行证_已选中",
+            "主页_传奇通行证_切换"
+        ]
+    },
+    "主页_传奇通行证_切换": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/home/pass/unselected_3bb92a69ef46.png",
+            "navigation/home/pass/unselected_df6ae46fe2b7.png",
+            "navigation/home/pass/unselected_cd3b0a34952b.png"
+        ],
+        "roi": [
+            100,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            120,
+            666
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "主页_传奇通行证_已选中"
+        ]
+    },
+    "主页_赛季赛事_已选中": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/home/season/selected.png",
+        "roi": [
+            310,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "主页_赛季赛事_定位入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": [
+            "主页_赛季赛事_已选中",
+            "主页_赛季赛事_切换"
+        ]
+    },
+    "主页_赛季赛事_切换": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/home/season/unselected_e5ef4d5ca2b4.png",
+            "navigation/home/season/unselected_f83314dcc255.png",
+            "navigation/home/season/unselected_9df3afb9ecc1.png",
+            "navigation/home/season/unselected_bfe2b4e49360.png",
+            "navigation/home/season/unselected_f0f23e42443e.png",
+            "navigation/home/season/unselected_744dcb776380.png",
+            "navigation/home/season/unselected_d0f73c70a9b3.png",
+            "navigation/home/season/unselected_a4faab093cb5.png",
+            "navigation/home/season/unselected_d0ea0de73604.png",
+            "navigation/home/season/unselected_2256d75595b6.png",
+            "navigation/home/season/unselected_b78495ef440d.png",
+            "navigation/home/season/unselected_6accb6bb7f21.png"
+        ],
+        "roi": [
+            310,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            325,
+            666
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "主页_赛季赛事_已选中"
+        ]
+    },
+    "主页_每日赛事_已选中": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/home/daily/selected.png",
+        "roi": [
+            545,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "主页_每日赛事_定位入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": [
+            "主页_每日赛事_已选中",
+            "主页_每日赛事_切换"
+        ]
+    },
+    "主页_每日赛事_切换": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/home/daily/unselected_c86b28fd1606.png",
+            "navigation/home/daily/unselected_105100329343.png",
+            "navigation/home/daily/unselected_061663e22a73.png"
+        ],
+        "roi": [
+            545,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            530,
+            666
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "主页_每日赛事_已选中"
+        ]
+    },
+    "主页_多人游戏_已选中": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/home/multiplayer/selected.png",
+        "roi": [
+            755,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "主页_多人游戏_定位入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": [
+            "主页_多人游戏_已选中",
+            "主页_多人游戏_切换"
+        ]
+    },
+    "主页_多人游戏_切换": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/home/multiplayer/unselected_d6c0bc4f0f5c.png"
+        ],
+        "roi": [
+            755,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            745,
+            666
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "主页_多人游戏_已选中"
+        ]
+    },
+    "主页_我的俱乐部_已选中": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/home/club/selected.png",
+        "roi": [
+            965,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "主页_我的俱乐部_定位入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": [
+            "主页_我的俱乐部_已选中",
+            "主页_我的俱乐部_切换"
+        ]
+    },
+    "主页_我的俱乐部_切换": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/home/club/unselected_c3d18b6d5ba6.png",
+            "navigation/home/club/unselected_28d565f8be81.png"
+        ],
+        "roi": [
+            965,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            950,
+            666
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "主页_我的俱乐部_已选中"
+        ]
+    },
+    "主页_单人模式_已选中": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/home/solo/selected.png",
+        "roi": [
+            1175,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "主页_单人模式_定位入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 10000,
+        "next": [
+            "主页_单人模式_已选中",
+            "主页_单人模式_切换"
+        ]
+    },
+    "主页_单人模式_切换": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/home/solo/unselected_a81652d5570b.png"
+        ],
+        "roi": [
+            1175,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            1160,
+            666
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "主页_单人模式_已选中"
+        ]
+    }
+}

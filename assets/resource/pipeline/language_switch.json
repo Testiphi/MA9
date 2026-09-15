@@ -1,0 +1,1108 @@
+{
+    "语言切换_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "语言切换_弹窗_连接错误重试",
+            "语言切换_弹窗_关闭广告",
+            "语言切换_弹窗_车库外观领取",
+            "语言切换_确认重启",
+            "语言切换_已到中文主页",
+            "语言切换_中文语言页返回",
+            "语言切换_选择简体中文",
+            "语言切换_打开语言",
+            "语言切换_进入游戏设置",
+            "语言切换_英文主页设置"
+        ]
+    },
+    "语言切换_英文主页设置": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/settings.png",
+                "roi": [
+                    1220,
+                    0,
+                    60,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "Or",
+                "any_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/language/home_en_pass.png",
+                        "roi": [
+                            0,
+                            610,
+                            1280,
+                            110
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/language/home_en_season.png",
+                        "roi": [
+                            0,
+                            610,
+                            1280,
+                            110
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/language/home_en_daily.png",
+                        "roi": [
+                            0,
+                            610,
+                            1280,
+                            110
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/language/home_en_multiplayer.png",
+                        "roi": [
+                            0,
+                            610,
+                            1280,
+                            110
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/language/home_en_club.png",
+                        "roi": [
+                            0,
+                            610,
+                            1280,
+                            110
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/language/home_en_single.png",
+                        "roi": [
+                            0,
+                            610,
+                            1280,
+                            110
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1250,
+            30
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "语言切换_弹窗_连接错误重试",
+            "语言切换_弹窗_关闭广告",
+            "语言切换_弹窗_车库外观领取",
+            "语言切换_打开语言",
+            "语言切换_进入游戏设置"
+        ]
+    },
+    "语言切换_进入游戏设置": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/options.png",
+                "roi": [
+                    55,
+                    70,
+                    300,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/care.png",
+                "roi": [
+                    290,
+                    305,
+                    260,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/settings_tab.png",
+                "roi": [
+                    565,
+                    140,
+                    150,
+                    80
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            640,
+            180
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "语言切换_弹窗_连接错误重试",
+            "语言切换_弹窗_关闭广告",
+            "语言切换_弹窗_车库外观领取",
+            "语言切换_打开语言"
+        ]
+    },
+    "语言切换_打开语言": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/options.png",
+                "roi": [
+                    55,
+                    70,
+                    300,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/language_button.png",
+                "roi": [
+                    315,
+                    485,
+                    195,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/controls_button.png",
+                "roi": [
+                    315,
+                    400,
+                    195,
+                    70
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            412,
+            518
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "语言切换_弹窗_连接错误重试",
+            "语言切换_弹窗_关闭广告",
+            "语言切换_弹窗_车库外观领取",
+            "语言切换_选择简体中文"
+        ]
+    },
+    "语言切换_选择简体中文": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/language_en.png",
+                "roi": [
+                    45,
+                    150,
+                    390,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/current_en.png",
+                "roi": [
+                    45,
+                    195,
+                    205,
+                    55
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/chinese_choice.png",
+                "roi": [
+                    560,
+                    330,
+                    155,
+                    70
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            640,
+            365
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "语言切换_弹窗_连接错误重试",
+            "语言切换_弹窗_关闭广告",
+            "语言切换_弹窗_车库外观领取",
+            "语言切换_确认重启",
+            "语言切换_中文语言页返回"
+        ]
+    },
+    "语言切换_中文语言页返回": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/language_cn.png",
+                "roi": [
+                    45,
+                    150,
+                    185,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/current_cn.png",
+                "roi": [
+                    45,
+                    195,
+                    165,
+                    55
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1250,
+            30
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "语言切换_弹窗_连接错误重试",
+            "语言切换_弹窗_关闭广告",
+            "语言切换_弹窗_车库外观领取",
+            "语言切换_确认重启",
+            "语言切换_已到中文主页"
+        ]
+    },
+    "语言切换_确认重启": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/restart_body.png",
+                "roi": [
+                    420,
+                    365,
+                    430,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/restart_close.png",
+                "roi": [
+                    1060,
+                    210,
+                    65,
+                    70
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1092,
+            244
+        ],
+        "max_hit": 1,
+        "post_delay": 1000,
+        "timeout": 180000,
+        "next": [
+            "语言切换_弹窗_连接错误重试",
+            "语言切换_弹窗_关闭广告",
+            "语言切换_弹窗_车库外观领取",
+            "语言切换_已到中文主页"
+        ]
+    },
+    "语言切换_已到中文主页": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/settings.png",
+                "roi": [
+                    1220,
+                    0,
+                    60,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "Or",
+                "any_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/pass/selected.png",
+                        "roi": [
+                            100,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/season/selected.png",
+                        "roi": [
+                            310,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/daily/selected.png",
+                        "roi": [
+                            545,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/multiplayer/selected.png",
+                        "roi": [
+                            755,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/club/selected.png",
+                        "roi": [
+                            965,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/home/solo/selected.png",
+                        "roi": [
+                            1175,
+                            637,
+                            88,
+                            72
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "通用弹窗_车库外观领取": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/garage_title.png",
+                "roi": [
+                    340,
+                    95,
+                    600,
+                    95
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/garage_claim.png",
+                "roi": [
+                    860,
+                    535,
+                    210,
+                    75
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            966,
+            572
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "通用弹窗_连接错误重试",
+            "通用弹窗_关闭广告",
+            "通用弹窗_车库外观领取",
+            "通用弹窗_已到主页",
+            "通用弹窗_逐级返回"
+        ]
+    },
+    "通用弹窗_关闭广告": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/language/ad_close_white.png",
+            "navigation/language/ad_close_pink.png"
+        ],
+        "roi": [
+            1000,
+            70,
+            160,
+            110
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": true,
+        "max_hit": 10,
+        "post_delay": 500,
+        "timeout": 180000,
+        "next": [
+            "通用弹窗_连接错误重试",
+            "通用弹窗_关闭广告",
+            "通用弹窗_车库外观领取",
+            "通用弹窗_已到主页",
+            "通用弹窗_逐级返回"
+        ]
+    },
+    "通用弹窗_连接错误重试": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/connection_title.png",
+                "roi": [
+                    555,
+                    175,
+                    170,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/connection_retry.png",
+                "roi": [
+                    590,
+                    465,
+                    100,
+                    65
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            640,
+            497
+        ],
+        "max_hit": 10,
+        "post_delay": 2000,
+        "timeout": 180000,
+        "next": [
+            "通用弹窗_连接错误重试",
+            "通用弹窗_关闭广告",
+            "通用弹窗_车库外观领取",
+            "通用弹窗_已到主页",
+            "通用弹窗_逐级返回"
+        ]
+    },
+    "通用弹窗_已到主页": {
+        "recognition": "Or",
+        "any_of": [
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/settings.png",
+                        "roi": [
+                            1220,
+                            0,
+                            60,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "Or",
+                        "any_of": [
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/pass/selected.png",
+                                "roi": [
+                                    100,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/season/selected.png",
+                                "roi": [
+                                    310,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/daily/selected.png",
+                                "roi": [
+                                    545,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/multiplayer/selected.png",
+                                "roi": [
+                                    755,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/club/selected.png",
+                                "roi": [
+                                    965,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/solo/selected.png",
+                                "roi": [
+                                    1175,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            }
+                        ]
+                    }
+                ],
+                "action": "DoNothing",
+                "next": []
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/settings.png",
+                        "roi": [
+                            1220,
+                            0,
+                            60,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "Or",
+                        "any_of": [
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_pass.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_season.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_daily.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_multiplayer.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_club.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_single.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            }
+                        ]
+                    }
+                ],
+                "action": "DoNothing",
+                "next": []
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "通用弹窗_逐级返回": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/language/back_arrow.png",
+        "roi": [
+            15,
+            3,
+            48,
+            58
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            40,
+            30
+        ],
+        "max_hit": 20,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "通用弹窗_连接错误重试",
+            "通用弹窗_关闭广告",
+            "通用弹窗_车库外观领取",
+            "通用弹窗_已到主页",
+            "通用弹窗_逐级返回"
+        ]
+    },
+    "通用弹窗_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 180000,
+        "next": [
+            "通用弹窗_连接错误重试",
+            "通用弹窗_关闭广告",
+            "通用弹窗_车库外观领取",
+            "通用弹窗_已到主页"
+        ]
+    },
+    "语言切换_弹窗_车库外观领取": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/garage_title.png",
+                "roi": [
+                    340,
+                    95,
+                    600,
+                    95
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/garage_claim.png",
+                "roi": [
+                    860,
+                    535,
+                    210,
+                    75
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            966,
+            572
+        ],
+        "max_hit": 3,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "语言切换_弹窗_连接错误重试",
+            "语言切换_弹窗_关闭广告",
+            "语言切换_弹窗_车库外观领取",
+            "语言切换_弹窗_已到主页",
+            "语言切换_弹窗_逐级返回"
+        ]
+    },
+    "语言切换_弹窗_关闭广告": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/language/ad_close_white.png",
+            "navigation/language/ad_close_pink.png"
+        ],
+        "roi": [
+            1000,
+            70,
+            160,
+            110
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": true,
+        "max_hit": 10,
+        "post_delay": 500,
+        "timeout": 180000,
+        "next": [
+            "语言切换_入口"
+        ]
+    },
+    "语言切换_弹窗_连接错误重试": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/connection_title.png",
+                "roi": [
+                    555,
+                    175,
+                    170,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/connection_retry.png",
+                "roi": [
+                    590,
+                    465,
+                    100,
+                    65
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            640,
+            497
+        ],
+        "max_hit": 10,
+        "post_delay": 2000,
+        "timeout": 180000,
+        "next": [
+            "语言切换_入口"
+        ]
+    },
+    "语言切换_弹窗_已到主页": {
+        "recognition": "Or",
+        "any_of": [
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/settings.png",
+                        "roi": [
+                            1220,
+                            0,
+                            60,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "Or",
+                        "any_of": [
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/pass/selected.png",
+                                "roi": [
+                                    100,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/season/selected.png",
+                                "roi": [
+                                    310,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/daily/selected.png",
+                                "roi": [
+                                    545,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/multiplayer/selected.png",
+                                "roi": [
+                                    755,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/club/selected.png",
+                                "roi": [
+                                    965,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/home/solo/selected.png",
+                                "roi": [
+                                    1175,
+                                    637,
+                                    88,
+                                    72
+                                ],
+                                "threshold": 0.9
+                            }
+                        ]
+                    }
+                ],
+                "action": "DoNothing",
+                "next": []
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/settings.png",
+                        "roi": [
+                            1220,
+                            0,
+                            60,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "Or",
+                        "any_of": [
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_pass.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_season.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_daily.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_multiplayer.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_club.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/language/home_en_single.png",
+                                "roi": [
+                                    0,
+                                    610,
+                                    1280,
+                                    110
+                                ],
+                                "threshold": 0.9
+                            }
+                        ]
+                    }
+                ],
+                "action": "DoNothing",
+                "next": []
+            }
+        ],
+        "action": "DoNothing",
+        "next": [
+            "语言切换_入口"
+        ]
+    },
+    "语言切换_弹窗_逐级返回": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/language/back_arrow.png",
+        "roi": [
+            15,
+            3,
+            48,
+            58
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            40,
+            30
+        ],
+        "max_hit": 20,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "语言切换_弹窗_连接错误重试",
+            "语言切换_弹窗_关闭广告",
+            "语言切换_弹窗_车库外观领取",
+            "语言切换_弹窗_已到主页",
+            "语言切换_弹窗_逐级返回"
+        ]
+    },
+    "语言切换_弹窗_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 180000,
+        "next": [
+            "语言切换_弹窗_连接错误重试",
+            "语言切换_弹窗_关闭广告",
+            "语言切换_弹窗_车库外观领取",
+            "语言切换_弹窗_已到主页"
+        ]
+    }
+}

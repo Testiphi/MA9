@@ -1,0 +1,191 @@
+{
+  "renamed_images": [
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Arrinera Hussarya 33_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Arrinera Hussarya 33_可开始_TouchDrive开.png",
+      "sha256": "ed45c9e58aa3150a84f3e50f4f63fef25e4eb98df7c3c4e69cbfcc6cc65b835c"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Aston Martin DBS 770 Ultimate_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Aston Martin DBS 770 Ultimate_可开始_TouchDrive开.png",
+      "sha256": "a5e479db6e2ac33bbac3ab1936488ddd2ef63ce9dc8dd86d49f2ef5797c1effc"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Bugatti EB110_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Bugatti EB110_可开始_TouchDrive开.png",
+      "sha256": "f9395e3cb33e00128e95b236380d72a92e924839fc5228b01a5d2060d69b90d8"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Dodge Viper GTS_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Dodge Viper GTS_可开始_TouchDrive开.png",
+      "sha256": "680ffa11d559bddb7420a7004779fe100229264457b897347e8a98051ba91473"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Drako GTE_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Drako GTE_可开始_TouchDrive开.png",
+      "sha256": "daf0a4df7c7772ae549e3148b0c0987a131e548c65b8b674a09fa505e06d310f"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_DS Automobiles DS E-Tense Performance_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_DS Automobiles DS E-Tense Performance_可开始_TouchDrive开.png",
+      "sha256": "a4eaf427bdc8cd6c1f2c1102fc3664c777079a724bb7f2b870eff10526650ade"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Ferrari 296 GTB_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Ferrari 296 GTB_可开始_TouchDrive开.png",
+      "sha256": "cba322c76553e8bec631f5467d27392764a769401f3ef4be4ac475de5739f497"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Ferrari J50_可开始_TouchDrive关.png",
+      "after": "多人游戏_车辆详情_Ferrari J50_可开始_TouchDrive关.png",
+      "sha256": "3d4b583682f1e7fabad5e60ab74d22f9d4afeb6e8d4337b5ac1e28ceca1d8af6"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Ferrari J50_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Ferrari J50_可开始_TouchDrive开.png",
+      "sha256": "9a98145b45bb971f6de15ffbb05a41b81897d22109bb04ef36e18cce64e4f367"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Ferrari J50_无燃油_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Ferrari J50_无燃油_TouchDrive开.png",
+      "sha256": "22f48b7ca001f49e5ce3e5296a03c915ecc2a43aa46436e21d2e1dc6e5da21a7"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Lamborghini Diablo GT_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Lamborghini Diablo GT_可开始_TouchDrive开.png",
+      "sha256": "2693ddd4801ff4d9d11f0f96e7d070ac57864725b855ecd1902ab3eb611bfe05"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_McLaren GT_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_McLaren GT_可开始_TouchDrive开.png",
+      "sha256": "7e6540b9ed02a2484bc072302c223c564beecaec7e2e6d5ea3a8e20b54fdacbf"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Nissan Z GT4_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Nissan Z GT4_可开始_TouchDrive开.png",
+      "sha256": "38a48e08b56bcb40267d377623c0ba34333622825a639548783e1fc91f1589d3"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Porsche Panamera Turbo S_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Porsche Panamera Turbo S_可开始_TouchDrive开.png",
+      "sha256": "3a6351b9d3ebdbf5ac0c8185a89d0e860ab3f30e24ef75be7431e726d46a1369"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Porsche Panamera Turbo S_无燃油_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Porsche Panamera Turbo S_无燃油_TouchDrive开.png",
+      "sha256": "0f658cbb3a57f64636490d15b019cfec953c78aa2ef25efd8e018726c6b00efc"
+    },
+    {
+      "before": "多人游戏_经典系列赛_车辆详情_Praga Bohema_可开始_TouchDrive开.png",
+      "after": "多人游戏_车辆详情_Praga Bohema_可开始_TouchDrive开.png",
+      "sha256": "86927165bc8c69b52f151b5166f442a974ae0091374ba523f887b0b768bdc3f8"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_白金起点_仅拥有开启.png",
+      "after": "多人游戏_选车_白金起点_仅拥有开启.png",
+      "sha256": "066a60393aac16ba7f668aa7fc760414fae3aeb315524cf1c689a596f1552c51"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_青铜起点_仅拥有关闭.png",
+      "after": "多人游戏_选车_青铜起点_仅拥有关闭.png",
+      "sha256": "069f92de5aea6d161de7f99634a9cc29c62cf6d0f1eaa4fbf1bcb32de7dd6d4a"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_青铜起点_仅拥有开启.png",
+      "after": "多人游戏_选车_青铜起点_仅拥有开启.png",
+      "sha256": "9b278468106b4a06a7a2cbba9aa4d336c9d53d72453906cae0d55f5d28f0cabe"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_Arrinera Hussarya 33完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_Arrinera Hussarya 33完整可见_仅拥有开启.png",
+      "sha256": "5d76f775573c0b4b345f2f2068088693114f786813e7b830122b947fa3be891e"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_Aston Martin DBS 770 Ultimate完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_Aston Martin DBS 770 Ultimate完整可见_仅拥有开启.png",
+      "sha256": "e990f51edcb075dda6cd3b06b36398ea00252b55c8f05a41fde7497f0714ed06"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_Bugatti EB110完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_Bugatti EB110完整可见_仅拥有开启.png",
+      "sha256": "92d657565ee2f563f558fb8da800e2353d10588e82350e0db9b446329045e995"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_Dodge Viper GTS完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_Dodge Viper GTS完整可见_仅拥有开启.png",
+      "sha256": "fd19612cb5474ffaa50ad20d71b636619457f53051adb8161a43be4a4ccfc3c8"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_Drako GTE完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_Drako GTE完整可见_仅拥有开启.png",
+      "sha256": "32ab90fdb5b28c6cc29b99a95300e5d15c4522a982724facce59f1cc5993f3a0"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png",
+      "sha256": "35868722fd934fc2a0a03de89c941b0120fa9e04f375b24bb8ac0b76dbbb24be"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_Ferrari 296 GTB完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_Ferrari 296 GTB完整可见_仅拥有开启.png",
+      "sha256": "dce846983ccd1fa182714ee78c1625c03ce3939ba05d44976b46fa6b89b56074"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_Ferrari J50完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_Ferrari J50完整可见_仅拥有开启.png",
+      "sha256": "038732f0a3405134bd49303efab1cec16564da3e0b43fee928081c0346c567d5"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_Lamborghini Diablo GT完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_Lamborghini Diablo GT完整可见_仅拥有开启.png",
+      "sha256": "ce6d9f4146646080e972dac7ea5370510badf9e014fe9905f54bc72c54e1d83d"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_McLaren GT完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_McLaren GT完整可见_仅拥有开启.png",
+      "sha256": "93ee4aba9d766eec6d72c880cc6aa75e9a3eddbdc40e90cc1b7ae0d7f0eae450"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_Nissan Z GT4完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_Nissan Z GT4完整可见_仅拥有开启.png",
+      "sha256": "9464001c327412fb8676eea2c2971e67772dca948e5e9d3dd462735324a1ac1b"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_Porsche Panamera Turbo S完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_Porsche Panamera Turbo S完整可见_仅拥有开启.png",
+      "sha256": "58ed03b77db0a72439bb6e660af6917b2d475d8b3f1082aa730fe0e1b0164c85"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_Praga Bohema完整可见_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_Praga Bohema完整可见_仅拥有开启.png",
+      "sha256": "0ff5a44053da5430f9d3d6d0997d55baf62fb481b50160beb0d828fe3f0a6003"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金_滑动后_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金_滑动后_仅拥有开启.png",
+      "sha256": "090972090ee6971369c5447fa6919180a93a5e49a9bc0befc367e6fbef8ede27"
+    },
+    {
+      "before": "多人游戏_经典系列赛_选车_黄金起点_仅拥有开启.png",
+      "after": "多人游戏_选车_黄金起点_仅拥有开启.png",
+      "sha256": "24c943d3be2ff3d85caf14e3af56d0896a8657e42dbc636c3ab81ec8a4422663"
+    }
+  ],
+  "updated_files": [
+    "tools\\prepare_gold_rotation.py",
+    "tools\\prepare_j50_search.py",
+    "tools\\prepare_multiplayer_navigation.py",
+    "tools\\prepare_two_car_rotation.py",
+    "tools\\prepare_vehicle_controls.py",
+    "tools\\register_gold_captures.py",
+    "data\\generated\\gold_rotation_capture_plan.md",
+    "data\\sources\\vehicle_recognition.json",
+    "docs\\zh_cn\\develop\\home_multiplayer_navigation.md",
+    "captures\\j50_search_check.json",
+    "captures\\multiplayer_navigation_check.json",
+    "captures\\return_navigation_check.json",
+    "captures\\two_car_rotation_check.json",
+    "captures\\vehicle_controls_check.json"
+  ],
+  "retained_entry_capture": "多人游戏_经典系列赛_进入后.png"
+}
