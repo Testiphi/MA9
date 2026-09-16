@@ -9,6 +9,19 @@ from prepare_race_screens import hit
 from vehicle_search import swipe_timing
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def write_pipeline(path: Path, nodes: dict) -> None:
+    """Write large generated pipelines with one compact node per line."""
+    items = list(nodes.items())
+    with path.open("w", encoding="utf-8", newline="\n") as stream:
+        stream.write("{\n")
+        for index, (name, node) in enumerate(items):
+            comma = "," if index + 1 < len(items) else ""
+            encoded_name = json.dumps(name, ensure_ascii=False)
+            encoded_node = json.dumps(node, ensure_ascii=False, separators=(",", ":"))
+            stream.write(f"{encoded_name}:{encoded_node}{comma}\n")
+        stream.write("}\n")
 CROPS = {
     "Cadillac Cien Concept": [660, 340, 755, 360],
     "Ferrari Daytona SP3": [788, 339, 897, 360],
@@ -319,7 +332,7 @@ def main():
                 positives.append(source.name)
                 assert "_选车_" in source.name, (vehicle["title"], source.name)
         scores.append({"title": vehicle["title"], "positives": positives})
-    (ROOT / os.environ.get("MA9_LOOP_OUTPUT", "assets/resource/pipeline/multiplayer_loop.json")).write_text(json.dumps(all_nodes, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+    write_pipeline(ROOT / os.environ.get("MA9_LOOP_OUTPUT", "assets/resource/pipeline/multiplayer_loop.json"), all_nodes)
     manifest = {"schema_version": 1, "league": profile["current_league"], "trials": trial_manifest,
                 "recommended_order": [v[0]["title"] for v in available], "missing": missing,
                 "selection_policy": profile["selection_policy"],

@@ -11,6 +11,19 @@ from check_daily_navigation import read_image, hit
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def write_pipeline(path: Path, nodes: dict) -> None:
+    """Write large generated pipelines with one compact node per line."""
+    items = list(nodes.items())
+    with path.open("w", encoding="utf-8", newline="\n") as stream:
+        stream.write("{\n")
+        for index, (name, node) in enumerate(items):
+            comma = "," if index + 1 < len(items) else ""
+            encoded_name = json.dumps(name, ensure_ascii=False)
+            encoded_node = json.dumps(node, ensure_ascii=False, separators=(",", ":"))
+            stream.write(f"{encoded_name}:{encoded_node}{comma}\n")
+        stream.write("}\n")
+
+
 def read(path):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
@@ -130,7 +143,7 @@ def main():
         node["next"] = [ad, *[t for t in node["next"] if t != ad]]
     assert all(target in nodes for node in nodes.values() for field in ["next", "on_error"]
                for target in node.get(field, []))
-    (ROOT / "assets/resource/pipeline/multiplayer_loop.json").write_text(json.dumps(nodes, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+    write_pipeline(ROOT / "assets/resource/pipeline/multiplayer_loop.json", nodes)
     manifest = {"schema_version": 2, "league_detection": "series_player_badge", "supported_leagues": list(badges),
                 "variants": manifests, "league_template_checks": checks, "node_count": len(nodes),
                 "note": "每局重新确认；黄金不可用立即重读；服务器恢复保持当前局；设备长时运行待验证。"}
