@@ -30,3 +30,5 @@ python -X utf8 tools/validate_schema.py --schema-dir deps/tools
 黄金推荐与白银切换、各页面段位含义详见 [动态段位](dynamic_league.md)。
 
 未满星车辆的点击与图纸误入恢复见 [安全选车](blueprint_safe_selection.md)。
+
+结算支持 `名人堂奖励.png`：匹配名人堂标题与右下继续，点击 (1154,660) 后继续检查升降级提示及系列赛首页。奖励数额不参与匹配；名人堂页不计本局完成，确认回到系列赛后才计数。广告关闭位于所有页面识别动作之前，随后处理服务器错误、图纸恢复及结算。

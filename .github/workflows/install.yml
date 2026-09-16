@@ -4,8 +4,8 @@ env:
   # 版本控制：
   # - 设置 VERSION 为空字符串时，下载 latest 版本
   # - 设置 VERSION 为具体版本号时（如 v1.2.3），下载指定版本
-  MAAFW_VERSION: ""
-  MFAA_VERSION: ""
+  MAAFW_VERSION: "v5.13.0"
+  MFAA_VERSION: "v2.12.0"
 
 on:
   push:
@@ -16,6 +16,9 @@ on:
     paths:
       - ".github/workflows/install.yml"
       - "assets/**"
+      - "agent/**"
+      - "tools/**"
+      - "data/**"
       - "**.py"
   pull_request:
     branches:
@@ -23,6 +26,9 @@ on:
     paths:
       - ".github/workflows/install.yml"
       - "assets/**"
+      - "agent/**"
+      - "tools/**"
+      - "data/**"
       - "**.py"
   workflow_dispatch:
 
@@ -69,11 +75,11 @@ jobs:
 
   install:
     needs: meta
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       matrix:
-        os: [win, macos, linux, android]
-        arch: [aarch64, x86_64]
+        os: [win]
+        arch: [x86_64]
       fail-fast: false
 
     steps:
@@ -96,7 +102,7 @@ jobs:
         id: download_mfa
         uses: robinraju/release-downloader@v1
         with:
-          repository: SweetSmellFox/MFAAvalonia
+          repository: MaaXYZ/MFAAvalonia
           fileName: "MFAAvalonia-*-${{ (matrix.os == 'win' && 'win') || (matrix.os == 'macos' && 'osx') || (matrix.os == 'linux' && 'linux') }}-${{ (matrix.arch == 'x86_64' && 'x64') || (matrix.arch == 'aarch64' && 'arm64') }}*"
           latest: ${{ env.MFAA_VERSION == '' }}
           tag: ${{ env.MFAA_VERSION }}
@@ -104,43 +110,34 @@ jobs:
           extract: true
 
       - name: Clean up MFAAvalonia archive
-        if: matrix.os != 'android'
-        shell: bash
-        run: |
-          ARCHIVE_FILE_PATH="${{ fromJson(steps.download_mfa.outputs.downloaded_files)[0] }}"
-          rm -f "${ARCHIVE_FILE_PATH}"
-          echo "Archive cleanup command executed for MFAAvalonia."
+        shell: pwsh
+        run: Remove-Item -LiteralPath '${{ fromJson(steps.download_mfa.outputs.downloaded_files)[0] }}' -Force
 
       - name: Remove built-in runtime in MFA
-        if: matrix.os != 'android'
-        shell: bash
+        shell: pwsh
+        run: Remove-Item -LiteralPath 'MFA/runtimes' -Recurse -Force -ErrorAction SilentlyContinue
+
+      - name: Install Python build environment
+        shell: pwsh
         run: |
-          rm -rf MFA/runtimes
+          python -m pip install --upgrade pip
+          python -m pip install -r agent/requirements-dev.txt
+
+      - name: Build standalone Agent
+        shell: pwsh
+        run: python tools/build_agent.py --clean
       
       - name: Install
-        shell: bash
+        shell: pwsh
         run: |
-          if [[ "${{ matrix.os }}" != "android" ]]; then
-            if [ -d "MFA" ]; then
-              echo "Copying MFA files to install directory..."
-              mkdir -p install
-              rsync -av --ignore-existing MFA/ install/
-              echo "MFA files copied successfully."
-            else
-              echo "MFA directory not found, skipping copy."
-            fi
-          else
-            echo "Skipping copy MFA for Android."
-          fi
-
-          cd tools/
-          python -m pip install -r ./requirements.txt
-          python ./install.py ${{ needs.meta.outputs.tag }} ${{ matrix.os }} ${{ matrix.arch }}
-          cd ..
+          New-Item -ItemType Directory -Path install -Force | Out-Null
+          Copy-Item -Path 'MFA\*' -Destination install -Recurse -Force
+          python -m pip install -r tools/requirements.txt
+          python tools/install.py '${{ needs.meta.outputs.tag }}' '${{ matrix.os }}' '${{ matrix.arch }}'
 
       - uses: actions/upload-artifact@v4
         with:
-          name: MaaXXX-${{ matrix.os }}-${{ matrix.arch }}
+          name: MA9-${{ matrix.os }}-${{ matrix.arch }}
           path: "install"
 
   changelog:

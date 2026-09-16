@@ -12,8 +12,8 @@
 - 推荐车全部不可用时倒序遍历车辆详情，找到有油且能参赛的车；到青铜首车仍不可用时停止，避免环绕死循环。
 - 以车名定位、点击左侧车身，避开未满星车辆的整张图纸区域。误入图纸获取页时关闭 ×，返回后重新选择同一候选，恢复次数有上限。
 - 开赛前确认 TouchDrive 开启。局内采用通用双击氮气兜底：两次间隔 0.75 秒，组合间等待 10 秒。
-- 成绩→奖励→跳过广告机会→返回系列赛；处理升级“继续”、降级“确定”，下一局重新确认段位。
-- 处理多人服务器错误、连接错误重试和通用广告关闭；服务器错误返回选车列表后用独立计数重新查找推荐车。
+- 成绩→奖励→跳过广告机会→名人堂奖励（若出现，点击继续）→返回系列赛；处理升级“继续”、降级“确定”，下一局重新确认段位。
+- 广告关闭具有最高识别优先级。处理多人服务器错误、连接错误重试和通用广告关闭；服务器错误返回选车列表后用独立计数重新查找推荐车。
 - 英文界面切换为中文并应用重启设置，以及车库外观弹窗处理。
 
 选车顶部高亮表示列表位置，车辆详情段位图标表示参赛要求，两者都不作为玩家当前段位依据。黄金车辆因段位不可用时会返回系列赛首页重新确认。
@@ -47,7 +47,11 @@ python -X utf8 tools/prepare_dynamic_multiplayer_loop.py
 python -X utf8 tools/check_dynamic_multiplayer_loop.py
 ```
 
-需要 Python、Pillow、NumPy 和 OpenCV。不要用旧的静态 `prepare_multiplayer_loop.py` 直接覆盖动态循环结果。推荐源重新匹配后须先人工审核，再使用 `approve_champion_rotation.py` 保存审核快照。
+Windows 开发环境可运行 `.\tools\setup_dev.ps1` 一键建立；固定依赖见 `agent/requirements*.txt`。不要用旧的静态 `prepare_multiplayer_loop.py` 直接覆盖动态循环结果。推荐源重新匹配后须先人工审核，再使用 `approve_champion_rotation.py` 保存审核快照。
+
+多人循环正在迁移为 Pipeline 与 Python Agent 混合结构。第一阶段已经加入可测试的车辆过滤/排序、列表停滞与环绕判断、比赛动作调度和运行数据校验；正式 3/20 局入口暂时仍使用原 Pipeline，待屏幕识别和模拟器点击验证完成后切换。开发说明见 [多人运行时改造](docs/zh_cn/develop/runtime_refactor.md)。
+
+发布目标为 Windows x64 免 Python 环境包：MFAAvalonia 界面、MaaFramework 原生运行库和约 65 MiB 的独立 MA9 Agent 会被放进同一目录。运行 `.\tools\prepare_release_deps.ps1` 后即可用 `.\tools\build_windows_package.ps1` 组装本地包，详细说明见上述开发文档。
 
 ## 目前限制
 
@@ -67,4 +71,6 @@ python -X utf8 tools/check_dynamic_multiplayer_loop.py
 
 ## 鸣谢与许可
 
-本项目基于 [MaaPracticeBoilerplate](https://github.com/MaaXYZ/MaaPracticeBoilerplate)，由 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 驱动。代码许可见 [LICENSE](LICENSE)。
+本项目基于 [MaaPracticeBoilerplate](https://github.com/MaaXYZ/MaaPracticeBoilerplate)，由 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 驱动，并参考 [MaaAssistantArknights](https://github.com/MaaAssistantArknights/MaaAssistantArknights) 的运行时状态管理、战斗动作调度和基建选择器设计。
+
+MA9 以 [GNU AGPL-3.0-or-later](LICENSE) 发布。源自 MaaPracticeBoilerplate 的部分保留原 MIT 版权和许可声明，详见 [NOTICE](NOTICE) 与 [LICENSES/MIT-MaaPracticeBoilerplate.txt](LICENSES/MIT-MaaPracticeBoilerplate.txt)。

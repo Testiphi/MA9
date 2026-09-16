@@ -18,10 +18,19 @@ def main():
         ("Lamborghini Huracan Sterrato_图纸获取.png", "图纸页面关闭并重新确认"),
         ("Lexus LFA Nurburgring Package_图纸获取.png", "图纸页面关闭并重新确认"),
         ("Praga Bohema_图纸获取.png", "图纸页面关闭并重新确认"),
+        ("名人堂奖励.png", "HALL"),
     ]:
         image = read_image(ROOT / "captures" / filename)
         first = next(k for k in nodes[dispatch]["next"] if hit(nodes[k], image))
-        assert first == "多人循环3局_第01局_" + suffix, (filename, first)
+        expected = "多人循环3局_黄金_第01局_多人结算_名人堂奖励继续" if suffix == "HALL" else "多人循环3局_第01局_" + suffix
+        assert first == expected, (filename, first)
+    # 名堂奖励仍可识别时，叠加真实广告 × 区域应优先关闭广告。
+    overlay = read_image(ROOT / "captures/名人堂奖励.png").copy()
+    advertisement = read_image(ROOT / "captures/BXR氮气特效广告.png")
+    overlay[70:180,1000:1160] = advertisement[70:180,1000:1160]
+    assert hit(nodes["多人循环3局_黄金_第01局_多人结算_名人堂奖励继续"], overlay)
+    first = next(k for k in nodes[dispatch]["next"] if hit(nodes[k], overlay))
+    assert first == "多人循环3局_第01局_广告关闭"
     for league, variant in manifest["variants"].items():
         vehicles = [v for rank in variant["compatible_leagues"] for group in rotation["groups"]
                     if group["league"] == rank for v in group["vehicles"] if v["title"] not in variant["missing"]]
@@ -41,9 +50,9 @@ def main():
                 close = c + "图纸误入关闭"
                 retry = c + "图纸返回后重选"
                 assert close in nodes[c+"点击车型"]["next"]
-                assert nodes[c+"点击车型"]["next"][0] == close
+                assert nodes[c+"点击车型"]["next"][0].endswith("广告关闭")
                 assert retry in nodes[close]["next"]
-                assert nodes[close]["next"] == [retry]
+                assert nodes[close]["next"][0].endswith("广告关闭")
                 assert nodes[close]["max_hit"] == nodes[retry]["max_hit"] == 2
                 assert nodes[c+"反向定位起点"]["target"] == {"黄金":[726,107],"白银":[671,107],"青铜":[616,107]}[vehicle["league"]]
                 assert nodes[c+"反向搜索"]["max_hit"] == 24
@@ -51,16 +60,23 @@ def main():
         for rounds in [3,20]:
             for index in range(rounds):
                 p=f"多人循环{rounds}局_{league}_第{index+1:02}局_"
-                assert nodes[p+"多人段位_降级确定"]["next"] == [p+"多人结算_已返回系列赛"]
+                assert nodes[p+"多人段位_降级确定"]["next"] == [p+"广告关闭",p+"多人结算_名人堂奖励继续",p+"多人结算_已返回系列赛"]
+                hall = p + "多人结算_名人堂奖励继续"
+                assert hall in nodes[p+"等待匹配与局内"]["next"]
+                assert hall in nodes[p+"多人结算_点击错失机会"]["next"]
+                assert nodes[hall]["target"] == [1154,660]
+                assert p+"多人结算_已返回系列赛" in nodes[hall]["next"]
+                assert nodes[p+"页面调度"]["next"][0] == p+"广告关闭"
                 assert nodes[p+"倒序兜底_定位相邻段位起点"]["target"] == ([726,107] if league=="黄金" else [671,107])
                 nxt=nodes[p+"本局完成"]["next"]
                 assert nxt == ([f"多人循环{rounds}局_第{index+2:02}局_自动段位调度"] if index+1<rounds else [])
                 restores=nodes[p+"服务器错误关闭"]["next"]
+                restores=[r for r in restores if r.endswith("确认选车列表")]
                 assert len(restores)==3 and len(set(restores))==3
                 for restore in restores:
                     assert nodes[restore]["max_hit"]==1
                 if league=="黄金":
-                    assert nodes[p+"倒序兜底_黄金段位不可用"]["next"]==[f"多人循环{rounds}局_第{index+1:02}局_返回列表确认段位"]
+                    assert nodes[p+"倒序兜底_黄金段位不可用"]["next"]==[p+"广告关闭",f"多人循环{rounds}局_第{index+1:02}局_返回列表确认段位"]
     assert all(t in nodes for v in nodes.values() for field in ["next","on_error"] for t in v.get(field,[]))
     print("PASS 46 round variants, 138 isolated server recoveries, rank switching and reverse anchors")
 

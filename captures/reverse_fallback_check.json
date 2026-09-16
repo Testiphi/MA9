@@ -96,6 +96,18 @@
     "touchdrive_off": false
   },
   {
+    "source": "名人堂奖励.png",
+    "skip": {
+      "缺钥匙": false,
+      "缺图纸": false,
+      "黄金段位不可用": false,
+      "白金段位不可用": false,
+      "缺油": false
+    },
+    "ready": false,
+    "touchdrive_off": false
+  },
+  {
     "source": "多人游戏_主页未选中_无奖励.png",
     "skip": {
       "缺钥匙": false,

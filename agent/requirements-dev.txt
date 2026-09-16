@@ -1,0 +1,9 @@
+-r requirements.txt
+
+json-with-comments
+json5
+jsonschema==4.26.0
+referencing==0.37.0
+pyinstaller==6.22.3
+opencv-python-headless==4.13.0.92
+PyYAML==6.0.3

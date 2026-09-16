@@ -16,6 +16,10 @@ def read(path):
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--reuse-list-checks", action="store_true", help="仅在车型模板未变更时复用其交叉检查；新结算页仍检查")
+    args = parser.parse_args()
     nodes, manifests = {}, {}
     for league in ["黄金", "白银"]:
         env = dict(os.environ, MA9_BUILD_LEAGUE=league, MA9_VARIANT_PREFIX=league + "_",
@@ -23,7 +27,10 @@ def main():
                    MA9_LOOP_OUTPUT=f"debug/loop_{league}.json",
                    MA9_LOOP_MANIFEST=f"debug/loop_{league}_manifest.json")
         for tool in ["prepare_reverse_fallback.py", "prepare_multiplayer_loop.py"]:
-            subprocess.run([sys.executable, "-X", "utf8", str(ROOT / "tools" / tool)], env=env, check=True)
+            command = [sys.executable, "-X", "utf8", str(ROOT / "tools" / tool)]
+            if tool == "prepare_multiplayer_loop.py" and args.reuse_list_checks:
+                command.append("--reuse-list-checks")
+            subprocess.run(command, env=env, check=True)
         nodes.update(read(env["MA9_LOOP_OUTPUT"]))
         manifests[league] = read(env["MA9_LOOP_MANIFEST"])
     mp = read("assets/resource/pipeline/multiplayer_navigation.json")
@@ -66,7 +73,7 @@ def main():
                 nodes[name] = copy.deepcopy(nodes[seed + suffix])
                 nodes[name].update(next=[dispatch], max_hit=10)
                 targets.append(name)
-            targets += [seed + suffix for suffix in ["多人段位_降级确定", "多人段位_升级继续",
+            targets += [seed + suffix for suffix in ["多人结算_名人堂奖励继续", "多人段位_降级确定", "多人段位_升级继续",
                 "多人结算_点击错失机会", "多人结算_奖励继续", "多人结算_成绩继续", "多人局内_氮气兜底"]]
             for league, guard in badges.items():
                 name = p + "当前段位_" + league
@@ -95,7 +102,7 @@ def main():
                 vp = f"多人循环{rounds}局_{league}_第{index+1:02}局_"
                 nodes[vp + "本局完成"]["next"] = ([f"多人循环{rounds}局_第{index+2:02}局_自动段位调度"]
                                                      if index+1 < rounds else [])
-                nodes[vp + "多人段位_降级确定"]["next"] = [vp + "多人结算_已返回系列赛"]
+                nodes[vp + "多人段位_降级确定"]["next"] = [vp + "多人结算_名人堂奖励继续", vp + "多人结算_已返回系列赛"]
                 nodes.pop(vp + "降段暂停_请更新段位", None)
                 # 实际掉段时立即返回首页重读，避免遍历整段不可用黄金车。
                 if league == "黄金":
@@ -113,6 +120,14 @@ def main():
                 nodes[key].setdefault("on_error", [stop])
         nodes[f"多人循环{rounds}局_入口"] = {"recognition": "DirectHit", "action": "DoNothing",
             "next": [f"多人循环{rounds}局_第01局_自动段位调度"]}
+    # 关闭广告具有最高优先级，包括组合生成时改写的升降级和跨段位分支。
+    import re
+    for key, node in nodes.items():
+        match = re.match(r"多人循环(?:3|20)局_(?:(?:黄金|白银)_)?第\d{2}局_", key)
+        if not match or not node.get("next") or key.endswith(("广告关闭", "本局完成", "多人结算_已返回系列赛")):
+            continue
+        ad = match.group() + "广告关闭"
+        node["next"] = [ad, *[t for t in node["next"] if t != ad]]
     assert all(target in nodes for node in nodes.values() for field in ["next", "on_error"]
                for target in node.get(field, []))
     (ROOT / "assets/resource/pipeline/multiplayer_loop.json").write_text(json.dumps(nodes, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")

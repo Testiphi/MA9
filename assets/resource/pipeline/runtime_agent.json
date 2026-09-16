@@ -1,0 +1,10 @@
+{
+    "多人运行时_数据自检": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_runtime_validate",
+        "custom_action_param": {
+            "mode": "configuration_only"
+        }
+    }
+}

@@ -16,6 +16,54 @@
     }
   },
   {
+    "screenshot": "Lamborghini Huracan Sterrato_图纸获取.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "Lexus LFA Nurburgring Package_图纸获取.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "Praga Bohema_图纸获取.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
     "screenshot": "主页面_英语.png",
     "matches": {
       "语言切换_英文主页设置": true,
@@ -80,6 +128,22 @@
     }
   },
   {
+    "screenshot": "名人堂奖励.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
     "screenshot": "多人游戏_主页未选中_无奖励.png",
     "matches": {
       "语言切换_英文主页设置": false,
@@ -113,6 +177,70 @@
   },
   {
     "screenshot": "多人游戏_匹配中.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_局内加载页面_狂野赛车场.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_服务器错误.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_段位_升级_到黄金.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_段位_降级_到白银.png",
     "matches": {
       "语言切换_英文主页设置": false,
       "语言切换_进入游戏设置": false,
@@ -208,7 +336,23 @@
     }
   },
   {
-    "screenshot": "多人游戏_经典系列赛_进入后.png",
+    "screenshot": "多人游戏_经典系列赛_首页_白银.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_经典系列赛_首页_黄金.png",
     "matches": {
       "语言切换_英文主页设置": false,
       "语言切换_进入游戏设置": false,
@@ -288,22 +432,6 @@
     }
   },
   {
-    "screenshot": "多人游戏_结算_降级.png",
-    "matches": {
-      "语言切换_英文主页设置": false,
-      "语言切换_进入游戏设置": false,
-      "语言切换_打开语言": false,
-      "语言切换_选择简体中文": false,
-      "语言切换_中文语言页返回": false,
-      "语言切换_确认重启": false,
-      "语言切换_已到中文主页": false,
-      "通用弹窗_车库外观领取": false,
-      "通用弹窗_关闭广告": false,
-      "通用弹窗_连接错误重试": false,
-      "通用弹窗_已到主页": false
-    }
-  },
-  {
     "screenshot": "多人游戏_赛道加载_沙漠高速_沙漠狂奔.png",
     "matches": {
       "语言切换_英文主页设置": false,
@@ -353,6 +481,22 @@
   },
   {
     "screenshot": "多人游戏_车辆详情_Aston Martin DBS 770 Ultimate_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Bentley Mulliner Bacalar_可开始_TouchDrive开.png",
     "matches": {
       "语言切换_英文主页设置": false,
       "语言切换_进入游戏设置": false,
@@ -448,6 +592,38 @@
     }
   },
   {
+    "screenshot": "多人游戏_车辆详情_Ferrari 599XX EVO_段位不可用_黄金.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Ferrari Daytona SP3_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
     "screenshot": "多人游戏_车辆详情_Ferrari J50_可开始_TouchDrive关.png",
     "matches": {
       "语言切换_英文主页设置": false,
@@ -496,7 +672,151 @@
     }
   },
   {
+    "screenshot": "多人游戏_车辆详情_Ferrari Monza SP1_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Hyundai IONIQ 5 N_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Jaguar XE SV Project 8_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Kimera EVO37_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Lamborghini Asterion_段位不可用_黄金.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
     "screenshot": "多人游戏_车辆详情_Lamborghini Diablo GT_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Lamborghini Huracan Super Trofeo EVO_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Lamborghini Miura Concept_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Lotus Evora Sport 410_白银起点_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Maserati MC20 GT2_可开始_TouchDrive开.png",
     "matches": {
       "语言切换_英文主页设置": false,
       "语言切换_进入游戏设置": false,
@@ -528,7 +848,87 @@
     }
   },
   {
+    "screenshot": "多人游戏_车辆详情_Mercedes-Benz Mercedes-AMG GT Black Series_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Mitsubishi Lancer Evolution_青铜起点_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Nissan 370Z Nismo Neon Edition_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Nissan GT-R Nismo_段位不可用_白金.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
     "screenshot": "多人游戏_车辆详情_Nissan Z GT4_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Porsche Mission R_可开始_TouchDrive开.png",
     "matches": {
       "语言切换_英文主页设置": false,
       "语言切换_进入游戏设置": false,
@@ -592,7 +992,583 @@
     }
   },
   {
+    "screenshot": "多人游戏_车辆详情_Praga R1_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Renault R.S. 01_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Renault TREZOR_不可开始_缺图纸.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Saleen S1_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_TVR Sagaris_可开始_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_TVR Sagaris_可开始_未满油_TouchDrive开.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Volkswagen Electric R_不可开始_缺钥匙.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
     "screenshot": "多人游戏_选车_白金起点_仅拥有开启.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Arash AF10完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Aston Martin Valour完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Bolwell MK X Nagari 500完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Cadillac Cien Concept完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Donkervoort D8 GTO Individual Series完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Ferrari Daytona SP3完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Ferrari F50完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Ferrari Monza SP1完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Ferrari Roma完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Ford Mustang RTR Spec 5 10th Anniv.完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Jaguar XE SV Project 8完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Lamborghini Huracan STO完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Lamborghini Huracan Super Trofeo EVO完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Lamborghini Miura Concept完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Maserati Alfieri完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Maserati MC20 GT2完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Mercedes-Benz 2022 Showcar Vision AMG完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Mercedes-Benz Mercedes-AMG GT Black Series完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Nissan 370Z Nismo Neon Edition完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Porsche 911 50 Years Porsche Design完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Porsche Mission R完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Renault R.S. 01完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_Saleen S1完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银_TVR Sagaris完整可见_仅拥有关闭.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_白银起点_仅拥有开启.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_青铜_Hyundai IONIQ 5 N完整可见_仅拥有开启.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_青铜_Kimera EVO37完整可见_仅拥有开启.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_青铜_Praga R1完整可见_仅拥有开启.png",
     "matches": {
       "语言切换_英文主页设置": false,
       "语言切换_进入游戏设置": false,
@@ -737,6 +1713,22 @@
   },
   {
     "screenshot": "多人游戏_选车_黄金_Ferrari 296 GTB完整可见_仅拥有开启.png",
+    "matches": {
+      "语言切换_英文主页设置": false,
+      "语言切换_进入游戏设置": false,
+      "语言切换_打开语言": false,
+      "语言切换_选择简体中文": false,
+      "语言切换_中文语言页返回": false,
+      "语言切换_确认重启": false,
+      "语言切换_已到中文主页": false,
+      "通用弹窗_车库外观领取": false,
+      "通用弹窗_关闭广告": false,
+      "通用弹窗_连接错误重试": false,
+      "通用弹窗_已到主页": false
+    }
+  },
+  {
+    "screenshot": "多人游戏_选车_黄金_Ferrari 599XX EVO完整可见_仅拥有开启.png",
     "matches": {
       "语言切换_英文主页设置": false,
       "语言切换_进入游戏设置": false,

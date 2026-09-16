@@ -1,14 +1,13 @@
 import sys
 
 from maa.agent.agent_server import AgentServer
-from maa.toolkit import Toolkit
+from maa.tasker import Tasker
 
-import my_action
-import my_reco
+import runtime_action  # noqa: F401 - registers MA9 custom actions
 
 
 def main():
-    Toolkit.init_option("./")
+    Tasker.set_log_dir("./debug")
 
     if len(sys.argv) < 2:
         print("Usage: python main.py <socket_id>")

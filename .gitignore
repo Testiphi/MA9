@@ -446,6 +446,8 @@ deps/tools/*
 !deps/tools/*.schema.json
 build
 install
+.venv/
+dist/
 
 # Tools
 tools/ImageCropper/**/*.png

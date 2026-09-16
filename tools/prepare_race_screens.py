@@ -13,6 +13,7 @@ LOAD = "多人游戏_赛道加载_神山垭口_坠落.png"
 RETURN = "多人游戏_结算_返回后.png"
 DOWNGRADE = "多人游戏_段位_降级_到白银.png"
 UPGRADE = "多人游戏_段位_升级_到黄金.png"
+HALL = "名人堂奖励.png"
 SPECS = {
     "result_ranking": (RESULT, (578, 635, 641, 663), [555, 615, 110, 65]),
     "result_time": (RESULT, (282, 620, 370, 646), [265, 605, 125, 55]),
@@ -31,6 +32,8 @@ SPECS = {
     "downgrade_confirm": (DOWNGRADE, (604, 513, 665, 542), [580, 500, 110, 55]),
     "upgrade_title": (UPGRADE, (236, 108, 407, 139), [220, 95, 200, 60]),
     "upgrade_continue": (UPGRADE, (1105, 638, 1163, 671), [1085, 620, 105, 70]),
+    "hall_title": (HALL, (174, 39, 275, 74), [160, 25, 140, 70]),
+    "hall_continue": (HALL, (1126, 644, 1181, 674), [1105, 625, 100, 65]),
 }
 
 
@@ -71,6 +74,10 @@ def main():
                                   "action": "Click", "target": [1055, 650], "max_hit": 1, "post_delay": 500,
                                   "timeout": 60000, "next": ["多人结算_已返回系列赛"]},
         "多人结算_已返回系列赛": returned,
+        "多人结算_名人堂奖励继续": {"recognition": "And", "all_of": [template("hall_title"), template("hall_continue")],
+                              "action": "Click", "target": [1154, 660], "max_hit": 1, "post_delay": 500,
+                              "timeout": 60000, "next": ["多人段位_降级确定", "多人段位_升级继续",
+                                  "多人结算_点击错失机会", "多人结算_奖励继续", "多人结算_已返回系列赛"]},
         "多人段位_降级确定": {"recognition": "And", "all_of": [template("downgrade_title"), template("downgrade_confirm")],
                               "action": "Click", "target": [634, 527], "max_hit": 1, "post_delay": 500,
                               "timeout": 60000, "next": ["多人结算_已返回系列赛"]},
@@ -82,6 +89,9 @@ def main():
         "局内识别_多人HUD": {"recognition": "And", "all_of": [template("race_pause"), template("race_touchdrive")],
                             "action": "DoNothing", "next": []},
     }
+    for name in ["多人结算_入口", "多人结算_成绩继续", "多人结算_奖励继续", "多人结算_点击错失机会",
+                 "多人段位_降级确定", "多人段位_升级继续"]:
+        pipeline[name]["next"][0:0] = ["多人结算_名人堂奖励继续"]
     for name in ["多人结算_入口", "多人结算_成绩继续", "多人结算_奖励继续", "多人结算_点击错失机会"]:
         pipeline[name]["next"][0:0] = ["多人段位_降级确定", "多人段位_升级继续"]
     # 每轮重新确认 HUD；结算分支优先，避免定时盲点到奖励或广告页面。
@@ -95,6 +105,14 @@ def main():
                           "repeat": 2, "repeat_delay": 750,
                           "pre_delay": 0, "post_delay": 10000,
                           "timeout": 60000, "rate_limit": 100, "next": race_next}
+    language = json.loads((ROOT / "assets/resource/pipeline/language_switch.json").read_text(encoding="utf-8"))
+    import copy
+    ad_close = "多人结算_关闭广告"
+    pipeline[ad_close] = copy.deepcopy(language["通用弹窗_关闭广告"])
+    pipeline[ad_close]["next"] = ["多人结算_入口"]
+    for name, node in pipeline.items():
+        if name != ad_close and node.get("next"):
+            node["next"] = [ad_close, *[t for t in node["next"] if t != ad_close]]
     report = []
     for source in sorted((ROOT / "captures").glob("*.png")):
         image = read_image(source)
@@ -105,6 +123,7 @@ def main():
             "多人结算_已返回系列赛": source.name in ["多人游戏_经典系列赛_首页_黄金.png", "多人游戏_经典系列赛_首页_白银.png", RETURN],
             "多人段位_降级确定": source.name == DOWNGRADE,
             "多人段位_升级继续": source.name == UPGRADE,
+            "多人结算_名人堂奖励继续": source.name == HALL,
             "赛道识别_神山垭口_坠落": source.name == LOAD,
             "局内识别_多人HUD": source.name.startswith("多人游戏_比赛中_"),
             fallback: source.name.startswith("多人游戏_比赛中_"),

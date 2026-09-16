@@ -93,7 +93,7 @@ def main():
     for prefix, after_home in [("通用弹窗_", []), ("语言切换_弹窗_", ["语言切换_入口"])]:
         claim, home, back = prefix + "车库外观领取", prefix + "已到主页", prefix + "逐级返回"
         close, retry = prefix + "关闭广告", prefix + "连接错误重试"
-        following = [retry, close, claim, home, back]
+        following = [close, retry, claim, home, back]
         pipeline[claim] = guarded(["garage_title", "garage_claim"], [966, 572], following)
         pipeline[close] = {"recognition": "TemplateMatch",
                            "template": [template("ad_close_white")["template"], template("ad_close_pink")["template"]],
@@ -109,14 +109,14 @@ def main():
         pipeline[back] = {**template("back_arrow"), "action": "Click", "target": [40, 30],
                           "max_hit": 20, "post_delay": 500, "timeout": 60000, "next": following}
         pipeline[prefix + "入口"] = {"recognition": "DirectHit", "action": "DoNothing", "timeout": 180000,
-                                      "next": [retry, close, claim, home]}
+                                      "next": [close, retry, claim, home]}
     language_claim = "语言切换_弹窗_车库外观领取"
     pipeline[language_claim]["max_hit"] = 3
     # 重载后可能再次出现推广弹窗，因此重启后的等待也允许处理它。
     for name in list(pipeline):
         if name.startswith("语言切换_") and name != language_claim and not name.startswith("语言切换_弹窗_"):
             if pipeline[name].get("next"):
-                pipeline[name]["next"][0:0] = ["语言切换_弹窗_连接错误重试", "语言切换_弹窗_关闭广告", language_claim]
+                pipeline[name]["next"][0:0] = ["语言切换_弹窗_关闭广告", "语言切换_弹窗_连接错误重试", language_claim]
     report = []
     for source in sorted((ROOT / "captures").glob("*.png")):
         image = read_image(source)

@@ -54,6 +54,17 @@ def get_dotnet_platform_tag():
     return platform_tag
 
 
+def get_agent_platform_tag():
+    """Return the folder tag produced by tools/build_agent.py."""
+    if os_name == "android":
+        return None
+    os_tag = {"win": "win", "macos": "macos", "linux": "linux"}.get(os_name)
+    arch_tag = {"x86_64": "x64", "aarch64": "arm64"}.get(arch)
+    if os_tag is None or arch_tag is None:
+        return None
+    return f"{os_tag}-{arch_tag}"
+
+
 def install_deps():
     if not (working_dir / "deps" / "bin").exists():
         print('Please download the MaaFramework to "deps" first.')
@@ -112,11 +123,37 @@ def install_resource():
         working_dir / "assets" / "interface.json",
         install_path,
     )
+    for relative in (
+        Path("data/multiplayer_profile.json"),
+        Path("data/generated/champion_rotation.json"),
+        Path("data/sources/multiplayer_tracks.json"),
+    ):
+        destination = install_path / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(working_dir / relative, destination)
 
     with open(install_path / "interface.json", "r", encoding="utf-8") as f:
         interface = jsonc.load(f)
 
     interface["version"] = version
+
+    # 开发时从 .venv 启动；发布包优先使用 PyInstaller 生成的独立 Agent。
+    agent_tag = get_agent_platform_tag()
+    agent_bundle = working_dir / "build" / "agent" / str(agent_tag) / "dist" / "ma9-agent"
+    agent_executable = agent_bundle / ("ma9-agent.exe" if os_name == "win" else "ma9-agent")
+    if agent_tag is None:
+        interface.pop("agent", None)
+    elif agent_executable.exists():
+        executable_name = agent_executable.name
+        interface["agent"] = {
+            "child_exec": f"./agent/ma9-agent/{executable_name}",
+            "child_args": [],
+        }
+    else:
+        interface["agent"] = {
+            "child_exec": "python",
+            "child_args": ["./agent/main.py"],
+        }
 
     with open(install_path / "interface.json", "w", encoding="utf-8") as f:
         jsonc.dump(interface, f, ensure_ascii=False, indent=4)
@@ -131,14 +168,32 @@ def install_chores():
         working_dir / "LICENSE",
         install_path,
     )
+    shutil.copy2(
+        working_dir / "NOTICE",
+        install_path,
+    )
+    shutil.copytree(
+        working_dir / "LICENSES",
+        install_path / "LICENSES",
+        dirs_exist_ok=True,
+    )
 
 
 def install_agent():
-    shutil.copytree(
-        working_dir / "agent",
-        install_path / "agent",
-        dirs_exist_ok=True,
-    )
+    agent_tag = get_agent_platform_tag()
+    if agent_tag is None:
+        return
+    bundle = working_dir / "build" / "agent" / agent_tag / "dist" / "ma9-agent"
+    if bundle.exists():
+        shutil.copytree(bundle, install_path / "agent" / "ma9-agent", dirs_exist_ok=True)
+    else:
+        print("Warning: bundled Agent not found; packaging Python sources and requiring a system Python runtime.")
+        shutil.copytree(
+            working_dir / "agent",
+            install_path / "agent",
+            ignore=shutil.ignore_patterns("__pycache__", "tests", "requirements-dev.txt"),
+            dirs_exist_ok=True,
+        )
 
 
 if __name__ == "__main__":

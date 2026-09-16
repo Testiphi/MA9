@@ -1,0 +1,13 @@
+MA9
+Copyright (C) 2026 Testiphi and MA9 contributors
+
+MA9 is distributed under the GNU Affero General Public License,
+version 3 or (at your option) any later version. See LICENSE.
+
+This project was created from MaaPracticeBoilerplate. The boilerplate portions
+remain covered by their original MIT license and copyright notice, reproduced
+in LICENSES/MIT-MaaPracticeBoilerplate.txt. The MIT license permits those
+portions to be incorporated into this AGPL-licensed combined work.
+
+MaaFramework is a separate dependency. Its own license and copyright notices
+continue to apply.

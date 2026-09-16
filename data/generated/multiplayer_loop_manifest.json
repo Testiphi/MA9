@@ -13,12 +13,12 @@
         {
           "rounds": 3,
           "entry": "多人循环3局_黄金_入口",
-          "nodes": 2782
+          "nodes": 2785
         },
         {
           "rounds": 20,
           "entry": "多人循环20局_黄金_入口",
-          "nodes": 18541
+          "nodes": 18561
         }
       ],
       "recommended_order": [
@@ -164,12 +164,12 @@
         {
           "rounds": 3,
           "entry": "多人循环3局_白银_入口",
-          "nodes": 1882
+          "nodes": 1885
         },
         {
           "rounds": 20,
           "entry": "多人循环20局_白银_入口",
-          "nodes": 12541
+          "nodes": 12561
         }
       ],
       "recommended_order": [
@@ -280,6 +280,6 @@
       "league": "白银"
     }
   ],
-  "node_count": 36024,
+  "node_count": 36070,
   "note": "每局重新确认；黄金不可用立即重读；服务器恢复保持当前局；设备长时运行待验证。"
 }

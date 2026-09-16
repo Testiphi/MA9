@@ -123,7 +123,10 @@ def main():
             def n(suffix):
                 return p + suffix
             base = {**mp, **fallback, **race}
+            # 循环使用本轮广告分支；独立结算任务的广告关闭映射到同一分支。
+            base.pop("多人结算_关闭广告", None)
             renamed = {key: n(key) for key in base}
+            renamed["多人结算_关闭广告"] = n("广告关闭")
             nodes = {}
             for key, original in base.items():
                 node = copy.deepcopy(original)
@@ -142,7 +145,7 @@ def main():
                             "max_hit": 1, "pre_delay": 0, "post_delay": 500,
                             "timeout": 180000, "next": [wait]}
             nodes[n("原地开启TouchDrive")] = {**copy.deepcopy(generic_off), "max_hit": 3, "next": [start]}
-            settlement_targets = [n("多人段位_降级确定"), n("多人段位_升级继续"), n("多人结算_点击错失机会"),
+            settlement_targets = [n("多人结算_名人堂奖励继续"), n("多人段位_降级确定"), n("多人段位_升级继续"), n("多人结算_点击错失机会"),
                                   n("多人结算_奖励继续"), n("多人结算_成绩继续")]
             nodes[wait] = {"recognition": "DirectHit", "action": "DoNothing", "timeout": 180000,
                            "next": [*settlement_targets, n("多人局内_氮气兜底")]}
@@ -256,7 +259,7 @@ def main():
                 nodes[target] = copy.deepcopy(language[source])
                 nodes[target].update(next=[dispatch], max_hit=10)
             nodes[dispatch] = {"recognition": "DirectHit", "action": "DoNothing", "max_hit": 15,
-                               "timeout": 180000, "next": [server_close, close, retry, garage, *dispatch_targets]}
+                               "timeout": 180000, "next": [close, server_close, retry, garage, *dispatch_targets]}
             for key, node in nodes.items():
                 node.setdefault("rate_limit", 100)
                 node.setdefault("pre_delay", 0)
@@ -265,11 +268,13 @@ def main():
                 node.setdefault("on_error", [stop])
                 if node.get("next") and key not in [dispatch, close, retry, garage, server_close] and not key.endswith("图纸误入关闭"):
                     node["next"][0:0] = [server_close, close, retry, garage]
-                    # 通用广告也找 ×；图纸页面先走保留当前候选的专用恢复。
+                    # 广告关闭优先；随后保留图纸页面的当前候选恢复。
                     specialized = [t for t in node["next"] if t.endswith("图纸误入关闭")]
                     for t in specialized:
                         node["next"].remove(t)
                     node["next"][0:0] = specialized
+                if node.get("next") and key != close:
+                    node["next"] = [close, *[t for t in node["next"] if t != close]]
             # 独立轮次名称隔离 max_hit，无需 Agent 或清理全局计数。
             trial_nodes.update(nodes)
         entry = trial + "入口"
@@ -295,6 +300,7 @@ def main():
         if source == server_source:
             assert not template_hit(generic_ready, image), "错误遮罩不能触发开始"
     if args.reuse_list_checks:
+        assert templates_unchanged, "车型模板变化，不能复用检查"
         previous = read("data/generated/multiplayer_loop_manifest.json")
         previous = previous.get("variants", {}).get(profile["current_league"], previous)
         assert previous["recommended_order"] == [v[0]["title"] for v in available], "名单变更需完整检查"
@@ -303,6 +309,9 @@ def main():
         scores = cached_scores
     for vehicle, identity in available:
         if args.reuse_list_checks or cached_scores is not None:
+            for source, image in screenshots:
+                if source.name == "名人堂奖励.png" or source.name.endswith("_图纸获取.png"):
+                    assert not template_hit(identity, image), (vehicle["title"], source.name)
             continue
         positives = []
         for source, image in screenshots:
