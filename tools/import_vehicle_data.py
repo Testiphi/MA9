@@ -28,7 +28,7 @@ def sequence(value):
         raise ValueError(f"重复位置: {value!r}")
     return values
 
-def build(source_dir):
+def build(source_dir, workbook_name="多人选车_new.xlsx", sequence_column="B"):
     with (source_dir / "国服_a9mmgj_top.csv").open(encoding="utf-8-sig", newline="") as stream:
         catalog = [{"id": vehicle_id(r["title"]), "title": r["title"], "class": r["class"], "league": r["league"]}
                    for r in csv.DictReader(stream)]
@@ -48,8 +48,8 @@ def build(source_dir):
         if key(target) not in by_name:
             raise ValueError(f"别名目标不在基础目录: {target}")
 
-    workbook = openpyxl.load_workbook(source_dir / "多人选车.xlsx", data_only=True, read_only=True)
-    issues, groups = [], []
+    workbook = openpyxl.load_workbook(source_dir / workbook_name, data_only=True, read_only=True)
+    issues, groups, sequence_differences = [], [], []
     try:
         order_rows = list(workbook[ORDER_SHEET].iter_rows(values_only=True))
         if list(order_rows[0][:2]) != ["段位", "序号"]:
@@ -72,9 +72,14 @@ def build(source_dir):
                     raise ValueError(f"{league} 位置重复或非法: {position}")
                 positions[position] = (row_number, row)
             order_row_number, order = league_rows[league]
-            values = sequence(order[2] if order[2] else order[1])
-            if order[1] and sequence(order[1]) != values:
-                raise ValueError(f"{league}: 公式缓存与仅文本序列不同，请在 Excel 中更新")
+            values = sequence(order[1 if sequence_column == "B" else 2])
+            if order[1] and order[2] and sequence(order[1]) != sequence(order[2]):
+                sequence_differences.append({"league": league, "selected_column": sequence_column,
+                                             "B": sequence(order[1]), "C": sequence(order[2])})
+            if sequence_column == "B":
+                # B 引用各段位 M2；同时检查缓存，避免使用未更新的引用值。
+                if sequence(sheet_rows[1][12]) != values:
+                    raise ValueError(f"{league}: B 列与段位页 M2 缓存不同，请重新计算后保存")
             entries = []
             for rank, position in enumerate(values, 1):
                 if position not in positions:
@@ -97,7 +102,7 @@ def build(source_dir):
                     issues.append({"kind": "catalog_difference", "resolution": "use_catalog", "league": league, "title": title,
                                    "workbook_class": row[1], "catalog_class": match["class"], "catalog_league": match["league"]})
                 entries.append(entry)
-            groups.append({"league": league, "source_sequence_cell": f"{ORDER_SHEET}!C{order_row_number}",
+            groups.append({"league": league, "source_sequence_cell": f"{ORDER_SHEET}!{sequence_column}{order_row_number}",
                            "source_positions": values, "vehicles": entries})
     finally:
         workbook.close()
@@ -125,13 +130,14 @@ def build(source_dir):
         group["vehicles"] = destinations[group["league"]]
         for rank, entry in enumerate(group["vehicles"], 1):
             entry["order"] = rank
-    rotation = {"schema_version": 2, "source": "多人选车.xlsx", "mode": "经典系列赛",
+    rotation = {"schema_version": 2, "source": workbook_name, "mode": "经典系列赛",
+                "sequence_column": sequence_column,
                 "ordering": "per_league_source_sequence", "position_usage": "reference_only",
                 "league_authority": "catalog", "class_authority": "catalog", "migration_ordering": "append_to_destination",
                 "source_groups": source_groups, "groups": groups}
     report = {"catalog_records": len(catalog), "rotation_entries": sum(len(g["vehicles"]) for g in groups),
               "counts_by_league": {g["league"]: len(g["vehicles"]) for g in groups},
-              "league_migrations": migrations, "issues": issues}
+              "league_migrations": migrations, "sequence_differences": sequence_differences, "issues": issues}
     return {"vehicle_catalog.json": {"schema_version": 1, "source": "国服_a9mmgj_top.csv", "vehicles": catalog},
             "multiplayer_rotation.json": rotation, "vehicle_import_report.json": report}
 
@@ -139,8 +145,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-dir", type=Path, default=ROOT / "data/sources")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "data/generated")
+    parser.add_argument("--workbook", default="多人选车_new.xlsx")
+    parser.add_argument("--sequence-column", choices=["B", "C"], default="B")
     args = parser.parse_args()
-    outputs = build(args.source_dir)
+    outputs = build(args.source_dir, args.workbook, args.sequence_column)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     for name, value in outputs.items():
         text = json.dumps(value, ensure_ascii=False, indent=2) + "\n"
@@ -148,6 +156,10 @@ def main():
         (args.output_dir / name).write_text(text, encoding="utf-8")
     report = outputs["vehicle_import_report.json"]
     review = "# 车辆数据差异处理记录\n\n定位段位与车辆等级均以已审核 CSV 为准。下面保留 Excel 原值与 CSV 的差异供追溯；已匹配条目均采用 CSV 值。迁入车辆追加到目标段位队尾。\n\n"
+    review += f"选车来源：{args.workbook}，采用顺序页 {args.sequence_column} 列。\n\n"
+    for difference in report["sequence_differences"]:
+        review += f"- {difference['league']}：B/C 列不一致，采用 {difference['selected_column']} 列；两份序列保存在 JSON 报告中。\n"
+    review += "\n"
     review += "| 车型 | Excel 段位 / 等级 | CSV 段位 / 等级 | 问题 |\n|---|---|---|---|\n"
     for issue in report["issues"]:
         if issue["kind"] == "unmatched_title":

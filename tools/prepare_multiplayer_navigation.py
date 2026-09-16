@@ -10,9 +10,9 @@ IMAGE_ROOT = ROOT / "assets/resource/image"
 PAGE_LOAD_TIMEOUT_MS = 60000
 SPECS = {
     "classic_card": ("多人游戏_主页选中_无奖励.png", (264, 401, 448, 466), [250, 390, 220, 85]),
-    "classic_title": ("多人游戏_经典系列赛_进入后.png", (69, 126, 281, 202), [60, 115, 235, 100]),
-    "classic_start": ("多人游戏_经典系列赛_进入后.png", (1091, 638, 1151, 665), [1070, 625, 100, 50]),
+    "classic_start": ("多人游戏_经典系列赛_首页_黄金.png", (1091, 638, 1151, 665), [1070, 625, 100, 50]),
     "selection_title": ("多人游戏_选车_青铜起点_仅拥有关闭.png", (100, 83, 230, 113), [90, 75, 150, 45]),
+    "selection_tools": ("多人游戏_选车_青铜起点_仅拥有关闭.png", (1045, 83, 1093, 131), [1040, 78, 60, 60]),
     "league_icons": ("多人游戏_选车_青铜起点_仅拥有关闭.png", (541, 90, 1021, 123), [532, 82, 498, 50]),
     "league_icons_gold": ("多人游戏_选车_黄金起点_仅拥有开启.png", (541, 90, 1021, 123), [532, 82, 498, 50]),
     "owned_off": ("多人游戏_选车_青铜起点_仅拥有关闭.png", (1105, 83, 1154, 131), [1100, 78, 59, 60]),
@@ -33,7 +33,7 @@ def main():
                 "roi": SPECS[key][2], "threshold": 0.9}
 
     def selection(key):
-        return {"recognition": "And", "all_of": [template("selection_title"), template("league_icons"), template(key)]}
+        return {"recognition": "And", "all_of": [template("selection_title"), template("selection_tools"), template(key)]}
 
     home = json.loads((ROOT / "assets/resource/pipeline/home_navigation.json").read_text(encoding="utf-8"))
     selected = copy.deepcopy(home["主页_多人游戏_已选中"])
@@ -41,6 +41,8 @@ def main():
     selected.pop("next")
     switch = copy.deepcopy(home["主页_多人游戏_切换"])
     switch["next"] = ["多人准备_点击经典系列赛"]
+    race = json.loads((ROOT / "assets/resource/pipeline/race_screens.json").read_text(encoding="utf-8"))
+    intro_guard = copy.deepcopy(race["多人结算_已返回系列赛"])
     pipeline = {
         "多人准备_入口": {
             "recognition": "DirectHit", "action": "DoNothing", "timeout": PAGE_LOAD_TIMEOUT_MS,
@@ -54,7 +56,7 @@ def main():
             "next": ["多人准备_仅拥有已开启", "多人准备_开启仅拥有", "多人准备_介绍页开始"],
         },
         "多人准备_介绍页开始": {
-            "recognition": "And", "all_of": [template("classic_title"), template("classic_start")],
+            "recognition": "And", "all_of": [*copy.deepcopy(intro_guard["all_of"]), template("classic_start")],
             "action": "Click", "target": [1110, 650], "max_hit": 1,
             "post_delay": 500, "timeout": PAGE_LOAD_TIMEOUT_MS,
             "next": ["多人准备_仅拥有已开启", "多人准备_开启仅拥有"],
@@ -72,12 +74,17 @@ def main():
     path.write_text(json.dumps(pipeline, ensure_ascii=False, indent=4) + "\n", encoding="utf-8")
     pipeline = json.loads(path.read_text(encoding="utf-8"))
     cases = {
-        "多人游戏_经典系列赛_进入后.png": "多人准备_介绍页开始",
+        "多人游戏_经典系列赛_首页_黄金.png": "多人准备_介绍页开始",
+        "多人游戏_经典系列赛_首页_白银.png": "多人准备_介绍页开始",
         "多人游戏_选车_青铜起点_仅拥有关闭.png": "多人准备_开启仅拥有",
         "多人游戏_选车_青铜起点_仅拥有开启.png": "多人准备_仅拥有已开启",
         "每日赛事_进入后_无奖励.png": None,
     }
     for source in (ROOT / "captures").glob("多人游戏_选车_黄金*.png"):
+        cases[source.name] = "多人准备_仅拥有已开启"
+    for source in (ROOT / "captures").glob("多人游戏_选车_*仅拥有关闭.png"):
+        cases[source.name] = "多人准备_开启仅拥有"
+    for source in (ROOT / "captures").glob("多人游戏_选车_*仅拥有开启.png"):
         cases[source.name] = "多人准备_仅拥有已开启"
     for source in (ROOT / "captures").glob("*_车辆详情_*.png"):
         cases[source.name] = None

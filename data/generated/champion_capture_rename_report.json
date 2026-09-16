@@ -1,0 +1,42 @@
+[
+  {
+    "source": "599XX Evo完整可见.png",
+    "target": "多人游戏_选车_黄金_Ferrari 599XX EVO完整可见_仅拥有开启.png",
+    "sha256": "680cecd99853745de58bf6b2ff8d669fe115f33ff558f0c0e0ed8d0990889349"
+  },
+  {
+    "source": "599XX Evo车辆详情_段位不可用.png",
+    "target": "多人游戏_车辆详情_Ferrari 599XX EVO_段位不可用_黄金.png",
+    "sha256": "fed8782e398b58c25169de2b21a78e9524ef394765189e3fcc6bb4e93f8b5298"
+  },
+  {
+    "source": "5n完整可见.png",
+    "target": "多人游戏_选车_青铜_Hyundai IONIQ 5 N完整可见_仅拥有开启.png",
+    "sha256": "0bcd2c5aa53bed3eaceb688e9e4172644fbcdae962a5124946fc5bf4e4b58686"
+  },
+  {
+    "source": "5n详细信息.png",
+    "target": "多人游戏_车辆详情_Hyundai IONIQ 5 N_可开始_TouchDrive开.png",
+    "sha256": "2236a300defc863873d22006e717905a5fc748c7d487f4b3f54dd0cba4a4c437"
+  },
+  {
+    "source": "evo37完整可见.png",
+    "target": "多人游戏_选车_青铜_Kimera EVO37完整可见_仅拥有开启.png",
+    "sha256": "65002b9521893c0b4cbff6c08bd43a303242b9e8929a651a610716d6946dad1d"
+  },
+  {
+    "source": "evo37详细信息.png",
+    "target": "多人游戏_车辆详情_Kimera EVO37_可开始_TouchDrive开.png",
+    "sha256": "a741f05b5fcc41c74011226917655135ef9f992508ad3b0fad81194ac8cb1d7d"
+  },
+  {
+    "source": "Praga R1完整可见.png",
+    "target": "多人游戏_选车_青铜_Praga R1完整可见_仅拥有开启.png",
+    "sha256": "9a8bb8249d190febc62c1691b2968040fd17039c625b48729042d2c9f06cb89b"
+  },
+  {
+    "source": "Praga R1详细信息.png",
+    "target": "多人游戏_车辆详情_Praga R1_可开始_TouchDrive开.png",
+    "sha256": "eb60f838111cb2320afae79a47a17c18b0e8e5395d8d5b2679751fc19df7c64c"
+  }
+]

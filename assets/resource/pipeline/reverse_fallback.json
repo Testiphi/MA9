@@ -1,0 +1,2881 @@
+{
+    "倒序兜底_可用车已准备": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_可用车开启TouchDrive": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 5,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_有油且TouchDrive已开"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_0b8e7401c0eec455_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_0b8e7401c0eec455_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_0b8e7401c0eec455_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_0b8e7401c0eec455_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_0b8e7401c0eec455_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_6b48d9fbc6ee3891_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_6b48d9fbc6ee3891_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_6b48d9fbc6ee3891_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_6b48d9fbc6ee3891_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_6b48d9fbc6ee3891_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_120875dd73062282_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_120875dd73062282_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_120875dd73062282_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_120875dd73062282_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_120875dd73062282_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_abe38a0a1422faf2_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_abe38a0a1422faf2_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_abe38a0a1422faf2_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_abe38a0a1422faf2_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_abe38a0a1422faf2_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_d5938de67517194d_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_d5938de67517194d_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_d5938de67517194d_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_d5938de67517194d_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_d5938de67517194d_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_18950b51fd913bee_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_18950b51fd913bee_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_18950b51fd913bee_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_18950b51fd913bee_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_18950b51fd913bee_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_d711970ead8502df_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_d711970ead8502df_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_d711970ead8502df_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_d711970ead8502df_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_d711970ead8502df_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_3ac6edf946988969_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_3ac6edf946988969_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_3ac6edf946988969_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_3ac6edf946988969_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_3ac6edf946988969_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_09d38baa2cf18a02_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_09d38baa2cf18a02_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_09d38baa2cf18a02_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_09d38baa2cf18a02_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_09d38baa2cf18a02_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_ab1d758c2b54cd18_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_ab1d758c2b54cd18_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_ab1d758c2b54cd18_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_ab1d758c2b54cd18_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_ab1d758c2b54cd18_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_663ddea67d1bbda0_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_663ddea67d1bbda0_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_663ddea67d1bbda0_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_663ddea67d1bbda0_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_663ddea67d1bbda0_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_341eef6c944c9c13_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_341eef6c944c9c13_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_341eef6c944c9c13_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_341eef6c944c9c13_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_341eef6c944c9c13_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_car_b1dd012bbcb6e34c_ready": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_b1dd012bbcb6e34c_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_car_b1dd012bbcb6e34c_enable": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/car_b1dd012bbcb6e34c_detail.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_off.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            853,
+            670
+        ],
+        "max_hit": 1,
+        "post_delay": 300,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_car_b1dd012bbcb6e34c_ready"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_有油且TouchDrive已开": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_label.png",
+                "roi": [
+                    812,
+                    607,
+                    155,
+                    43
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_upgrade.png",
+                "roi": [
+                    147,
+                    616,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/detail_start.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/touchdrive_on.png",
+                "roi": [
+                    815,
+                    648,
+                    148,
+                    43
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [
+            "倒序兜底_car_0b8e7401c0eec455_ready",
+            "倒序兜底_car_0b8e7401c0eec455_enable",
+            "倒序兜底_car_6b48d9fbc6ee3891_ready",
+            "倒序兜底_car_6b48d9fbc6ee3891_enable",
+            "倒序兜底_car_120875dd73062282_ready",
+            "倒序兜底_car_120875dd73062282_enable",
+            "倒序兜底_car_abe38a0a1422faf2_ready",
+            "倒序兜底_car_abe38a0a1422faf2_enable",
+            "倒序兜底_car_d5938de67517194d_ready",
+            "倒序兜底_car_d5938de67517194d_enable",
+            "倒序兜底_car_18950b51fd913bee_ready",
+            "倒序兜底_car_18950b51fd913bee_enable",
+            "倒序兜底_car_d711970ead8502df_ready",
+            "倒序兜底_car_d711970ead8502df_enable",
+            "倒序兜底_car_3ac6edf946988969_ready",
+            "倒序兜底_car_3ac6edf946988969_enable",
+            "倒序兜底_car_09d38baa2cf18a02_ready",
+            "倒序兜底_car_09d38baa2cf18a02_enable",
+            "倒序兜底_car_ab1d758c2b54cd18_ready",
+            "倒序兜底_car_ab1d758c2b54cd18_enable",
+            "倒序兜底_car_663ddea67d1bbda0_ready",
+            "倒序兜底_car_663ddea67d1bbda0_enable",
+            "倒序兜底_car_341eef6c944c9c13_ready",
+            "倒序兜底_car_341eef6c944c9c13_enable",
+            "倒序兜底_car_b1dd012bbcb6e34c_ready",
+            "倒序兜底_car_b1dd012bbcb6e34c_enable",
+            "倒序兜底_可用车已准备"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0,
+        "rate_limit": 100
+    },
+    "倒序兜底_青铜首车不可用_停止": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/bronze_first.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "Or",
+                "any_of": [
+                    {
+                        "recognition": "And",
+                        "all_of": [
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/fallback/key.png",
+                                "roi": [
+                                    970,
+                                    600,
+                                    265,
+                                    85
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "And",
+                                "all_of": [
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/left.png",
+                                        "roi": [
+                                            465,
+                                            330,
+                                            60,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    },
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/right.png",
+                                        "roi": [
+                                            1165,
+                                            330,
+                                            65,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "recognition": "And",
+                        "all_of": [
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/fallback/blueprint.png",
+                                "roi": [
+                                    970,
+                                    600,
+                                    265,
+                                    85
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "And",
+                                "all_of": [
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/left.png",
+                                        "roi": [
+                                            465,
+                                            330,
+                                            60,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    },
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/right.png",
+                                        "roi": [
+                                            1165,
+                                            330,
+                                            65,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "recognition": "And",
+                        "all_of": [
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/fallback/gold_unavailable.png",
+                                "roi": [
+                                    1045,
+                                    600,
+                                    120,
+                                    70
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "And",
+                                "all_of": [
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/left.png",
+                                        "roi": [
+                                            465,
+                                            330,
+                                            60,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    },
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/right.png",
+                                        "roi": [
+                                            1165,
+                                            330,
+                                            65,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "recognition": "And",
+                        "all_of": [
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/fallback/platinum_unavailable.png",
+                                "roi": [
+                                    1045,
+                                    600,
+                                    120,
+                                    70
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "And",
+                                "all_of": [
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/left.png",
+                                        "roi": [
+                                            465,
+                                            330,
+                                            60,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    },
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/right.png",
+                                        "roi": [
+                                            1165,
+                                            330,
+                                            65,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "recognition": "And",
+                        "all_of": [
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/vehicle/fuel_zero.png",
+                                "roi": [
+                                    510,
+                                    642,
+                                    53,
+                                    45
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "TemplateMatch",
+                                "template": "navigation/vehicle/fuel_skip.png",
+                                "roi": [
+                                    1067,
+                                    619,
+                                    82,
+                                    65
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "And",
+                                "all_of": [
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/left.png",
+                                        "roi": [
+                                            465,
+                                            330,
+                                            60,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    },
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/right.png",
+                                        "roi": [
+                                            1165,
+                                            330,
+                                            65,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_缺钥匙": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/key.png",
+                "roi": [
+                    970,
+                    600,
+                    265,
+                    85
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/left.png",
+                        "roi": [
+                            465,
+                            330,
+                            60,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/right.png",
+                        "roi": [
+                            1165,
+                            330,
+                            65,
+                            60
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "action": "DoNothing",
+        "pre_delay": 0,
+        "post_delay": 0,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_向左切车",
+            "倒序兜底_切车次数耗尽_停止"
+        ],
+        "rate_limit": 100
+    },
+    "倒序兜底_缺图纸": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/blueprint.png",
+                "roi": [
+                    970,
+                    600,
+                    265,
+                    85
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/left.png",
+                        "roi": [
+                            465,
+                            330,
+                            60,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/right.png",
+                        "roi": [
+                            1165,
+                            330,
+                            65,
+                            60
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "action": "DoNothing",
+        "pre_delay": 0,
+        "post_delay": 0,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_向左切车",
+            "倒序兜底_切车次数耗尽_停止"
+        ],
+        "rate_limit": 100
+    },
+    "倒序兜底_黄金段位不可用": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/gold_unavailable.png",
+                "roi": [
+                    1045,
+                    600,
+                    120,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/left.png",
+                        "roi": [
+                            465,
+                            330,
+                            60,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/right.png",
+                        "roi": [
+                            1165,
+                            330,
+                            65,
+                            60
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "action": "DoNothing",
+        "pre_delay": 0,
+        "post_delay": 0,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_向左切车",
+            "倒序兜底_切车次数耗尽_停止"
+        ],
+        "rate_limit": 100
+    },
+    "倒序兜底_白金段位不可用": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/platinum_unavailable.png",
+                "roi": [
+                    1045,
+                    600,
+                    120,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/left.png",
+                        "roi": [
+                            465,
+                            330,
+                            60,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/right.png",
+                        "roi": [
+                            1165,
+                            330,
+                            65,
+                            60
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "action": "DoNothing",
+        "pre_delay": 0,
+        "post_delay": 0,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_高段位返回列表"
+        ],
+        "rate_limit": 100
+    },
+    "倒序兜底_缺油": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/fuel_zero.png",
+                "roi": [
+                    510,
+                    642,
+                    53,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/fuel_skip.png",
+                "roi": [
+                    1067,
+                    619,
+                    82,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/left.png",
+                        "roi": [
+                            465,
+                            330,
+                            60,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/right.png",
+                        "roi": [
+                            1165,
+                            330,
+                            65,
+                            60
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "action": "DoNothing",
+        "pre_delay": 0,
+        "post_delay": 0,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_向左切车",
+            "倒序兜底_切车次数耗尽_停止"
+        ],
+        "rate_limit": 100
+    },
+    "倒序兜底_向左切车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/left.png",
+                "roi": [
+                    465,
+                    330,
+                    60,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/right.png",
+                "roi": [
+                    1165,
+                    330,
+                    65,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "next": [
+            "倒序兜底_青铜首车不可用_停止",
+            "倒序兜底_缺钥匙",
+            "倒序兜底_缺图纸",
+            "倒序兜底_黄金段位不可用",
+            "倒序兜底_白金段位不可用",
+            "倒序兜底_缺油",
+            "倒序兜底_有油且TouchDrive已开",
+            "倒序兜底_可用车开启TouchDrive"
+        ],
+        "target": [
+            495,
+            360
+        ],
+        "max_hit": 338,
+        "pre_delay": 0,
+        "post_delay": 450,
+        "timeout": 15000,
+        "rate_limit": 100
+    },
+    "倒序兜底_切车次数耗尽_停止": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/left.png",
+                "roi": [
+                    465,
+                    330,
+                    60,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/right.png",
+                "roi": [
+                    1165,
+                    330,
+                    65,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": [],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_定位相邻段位起点": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_tools.png",
+                "roi": [
+                    1040,
+                    78,
+                    60,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_on.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "next": [
+            "倒序兜底_确认相邻段位起点"
+        ],
+        "target": [
+            726,
+            107
+        ],
+        "max_hit": 2,
+        "pre_delay": 0,
+        "post_delay": 800,
+        "timeout": 60000,
+        "rate_limit": 100
+    },
+    "倒序兜底_确认相邻段位起点": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/multiplayer/selection_title.png",
+                        "roi": [
+                            90,
+                            75,
+                            150,
+                            45
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/multiplayer/owned_on.png",
+                        "roi": [
+                            1100,
+                            78,
+                            59,
+                            60
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/platinum_selected.png",
+                "roi": [
+                    692,
+                    85,
+                    70,
+                    54
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/vehicle/platinum_start.png",
+                "roi": [
+                    485,
+                    310,
+                    195,
+                    65
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "timeout": 60000,
+        "max_hit": 1,
+        "next": [
+            "倒序兜底_锚点向左切车"
+        ],
+        "target": [
+            380,
+            280
+        ],
+        "post_delay": 800,
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_锚点向左切车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/anchor_card.png",
+                "roi": [
+                    70,
+                    88,
+                    95,
+                    112
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/left.png",
+                        "roi": [
+                            465,
+                            330,
+                            60,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/right.png",
+                        "roi": [
+                            1165,
+                            330,
+                            65,
+                            60
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "action": "Click",
+        "target": [
+            495,
+            360
+        ],
+        "max_hit": 1,
+        "pre_delay": 0,
+        "post_delay": 450,
+        "timeout": 15000,
+        "next": [
+            "倒序兜底_青铜首车不可用_停止",
+            "倒序兜底_缺钥匙",
+            "倒序兜底_缺图纸",
+            "倒序兜底_黄金段位不可用",
+            "倒序兜底_白金段位不可用",
+            "倒序兜底_缺油",
+            "倒序兜底_有油且TouchDrive已开",
+            "倒序兜底_可用车开启TouchDrive"
+        ],
+        "rate_limit": 100
+    },
+    "倒序兜底_开启仅拥有": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_title.png",
+                "roi": [
+                    90,
+                    75,
+                    150,
+                    45
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/selection_tools.png",
+                "roi": [
+                    1040,
+                    78,
+                    60,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/multiplayer/owned_off.png",
+                "roi": [
+                    1100,
+                    78,
+                    59,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1130,
+            107
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_定位相邻段位起点"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "倒序兜底_入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "倒序兜底_定位相邻段位起点",
+            "倒序兜底_开启仅拥有"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "倒序兜底_高段位返回列表": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/vehicle/detail_back.png",
+        "roi": [
+            15,
+            3,
+            48,
+            58
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            40,
+            30
+        ],
+        "max_hit": 1,
+        "pre_delay": 0,
+        "post_delay": 450,
+        "timeout": 15000,
+        "next": [
+            "倒序兜底_入口"
+        ],
+        "rate_limit": 100
+    },
+    "倒序兜底_详情原地测试入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 15000,
+        "next": [
+            "倒序兜底_青铜首车不可用_停止",
+            "倒序兜底_缺钥匙",
+            "倒序兜底_缺图纸",
+            "倒序兜底_黄金段位不可用",
+            "倒序兜底_白金段位不可用",
+            "倒序兜底_缺油",
+            "倒序兜底_有油且TouchDrive已开",
+            "倒序兜底_可用车开启TouchDrive"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    }
+}

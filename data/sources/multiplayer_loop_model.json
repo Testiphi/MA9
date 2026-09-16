@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "status": "design_only_not_an_executable_pipeline",
+  "current_league": "黄金",
+  "compatible_leagues": [
+    "黄金",
+    "白银",
+    "青铜"
+  ],
+  "initial_test_limits": {
+    "session_minutes": 60,
+    "completed_races": 20
+  },
+  "limits": {
+    "loading_timeout_ms": 180000,
+    "race_timeout_ms": 300000,
+    "settlement_stage_timeout_ms": 60000,
+    "unknown_screen_timeout_ms": 15000,
+    "recoveries_per_race": 2,
+    "connection_retries": 10,
+    "reverse_vehicle_steps": 338,
+    "nitro_interval_ms": 10000,
+    "nitro_pair_delay_ms": 750
+  },
+  "execution_contract": {
+    "fresh_task_instance_per_race": true,
+    "recovery_requires_new_screen_dispatch": true,
+    "nitro_requires_current_race_hud": true,
+    "start_requires_available_vehicle_and_touchdrive_on": true,
+    "manual_league_change_stops_session": false,
+    "all_vehicles_unavailable": "stop",
+    "never_click_ad_purchase": true
+  },
+  "entry": "dispatch",
+  "states": {
+    "dispatch": {
+      "label": "根据当前页面恢复位置",
+      "next": [
+        "initialize",
+        "series",
+        "select",
+        "prepare",
+        "loading",
+        "race",
+        "settlement",
+        "recover",
+        "stop"
+      ]
+    },
+    "initialize": {
+      "label": "主页语言检查、进入多人及系列赛",
+      "next": [
+        "series",
+        "recover",
+        "stop"
+      ]
+    },
+    "series": {
+      "label": "读取我的评级分徽章，选择黄金或白银分支",
+      "next": [
+        "select",
+        "recover",
+        "stop"
+      ]
+    },
+    "select": {
+      "label": "当前段位及以下推荐名单按序倒序查找",
+      "next": [
+        "prepare",
+        "reverse",
+        "recover",
+        "stop"
+      ]
+    },
+    "reverse": {
+      "label": "相邻高段位起点向左进入当前段位末尾，详情向左遍历",
+      "next": [
+        "prepare",
+        "recover",
+        "stop"
+      ]
+    },
+    "prepare": {
+      "label": "确认有油、可参赛、TouchDrive 开启，点击开始一次",
+      "next": [
+        "loading",
+        "select",
+        "recover",
+        "stop"
+      ]
+    },
+    "loading": {
+      "label": "等待匹配和加载，登记已识别赛道；未知赛道也可走氮气兜底",
+      "next": [
+        "race",
+        "settlement",
+        "recover",
+        "stop"
+      ]
+    },
+    "race": {
+      "label": "确认 HUD 后双击氮气，间隔750毫秒；组合间等待10秒，结算优先",
+      "next": [
+        "race",
+        "settlement",
+        "recover",
+        "stop"
+      ]
+    },
+    "settlement": {
+      "label": "成绩继续、奖励继续、等待错失机会并跳过",
+      "next": [
+        "rank_change",
+        "complete",
+        "recover",
+        "stop"
+      ]
+    },
+    "rank_change": {
+      "label": "确认升降段提示，保存截图并暂停人工更新段位",
+      "next": [
+        "stop"
+      ]
+    },
+    "complete": {
+      "label": "确认返回系列赛、记录一局完成、检查运行上限",
+      "next": [
+        "new_round",
+        "stop"
+      ]
+    },
+    "new_round": {
+      "label": "创建下一局任务，重置节点次数与本局恢复次数",
+      "next": [
+        "series"
+      ]
+    },
+    "recover": {
+      "label": "广告关闭或连接重试后重新截图定位；未知页面有限恢复",
+      "next": [
+        "dispatch",
+        "stop"
+      ]
+    },
+    "stop": {
+      "label": "记录原因与最后截图，停止点击",
+      "next": []
+    }
+  },
+  "integration_gaps": [
+    "白银推荐名单素材登记与轮换生成；原黄金轮换不能直接作为白银任务",
+    "准备节点接点击开始、等待加载，再接氮气与结算",
+    "结算返回节点接下一局，使用独立任务实例重置 max_hit",
+    "异常恢复接当前页面调度，不能调用会统一返回主页的通用弹窗任务替代",
+    "跨局日志、计时、恢复次数与停止条件的运行控制器",
+    "升段提示识别和人工段位暂停；当前仅有降级样例"
+  ],
+  "league_selection": "series_player_badge",
+  "supported_leagues": [
+    "黄金",
+    "白银"
+  ]
+}

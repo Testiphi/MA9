@@ -1,4 +1,4 @@
-"""生成多人结算与赛道样例识别；局内进度仅登记 ROI，不伪造连续读取。"""
+"""生成多人结算、赛道识别及双击氮气兜底；进度仅登记 ROI。"""
 import json
 from pathlib import Path
 from PIL import Image
@@ -11,7 +11,8 @@ REWARD = "多人游戏_结算_奖励.png"
 AD = "多人游戏_结算_跳过广告.png"
 LOAD = "多人游戏_赛道加载_神山垭口_坠落.png"
 RETURN = "多人游戏_结算_返回后.png"
-DOWNGRADE = "多人游戏_结算_降级.png"
+DOWNGRADE = "多人游戏_段位_降级_到白银.png"
+UPGRADE = "多人游戏_段位_升级_到黄金.png"
 SPECS = {
     "result_ranking": (RESULT, (578, 635, 641, 663), [555, 615, 110, 65]),
     "result_time": (RESULT, (282, 620, 370, 646), [265, 605, 125, 55]),
@@ -28,6 +29,8 @@ SPECS = {
     "return_rewards": (RETURN, (626, 639, 670, 665), [600, 620, 100, 65]),
     "downgrade_title": (DOWNGRADE, (560, 167, 700, 201), [540, 155, 180, 60]),
     "downgrade_confirm": (DOWNGRADE, (604, 513, 665, 542), [580, 500, 110, 55]),
+    "upgrade_title": (UPGRADE, (236, 108, 407, 139), [220, 95, 200, 60]),
+    "upgrade_continue": (UPGRADE, (1105, 638, 1163, 671), [1085, 620, 105, 70]),
 }
 
 
@@ -68,15 +71,30 @@ def main():
                                   "action": "Click", "target": [1055, 650], "max_hit": 1, "post_delay": 500,
                                   "timeout": 60000, "next": ["多人结算_已返回系列赛"]},
         "多人结算_已返回系列赛": returned,
-        "多人结算_降级确定": {"recognition": "And", "all_of": [template("downgrade_title"), template("downgrade_confirm")],
+        "多人段位_降级确定": {"recognition": "And", "all_of": [template("downgrade_title"), template("downgrade_confirm")],
                               "action": "Click", "target": [634, 527], "max_hit": 1, "post_delay": 500,
                               "timeout": 60000, "next": ["多人结算_已返回系列赛"]},
+        "多人段位_升级继续": {"recognition": "And", "all_of": [template("upgrade_title"), template("upgrade_continue")],
+                              "action": "Click", "target": [1132, 653], "max_hit": 1, "post_delay": 500,
+                              "timeout": 60000, "next": ["多人段位_降级确定", "多人结算_点击错失机会",
+                                                         "多人结算_奖励继续", "多人结算_已返回系列赛"]},
         "赛道识别_神山垭口_坠落": {**template("track_shenshan_zhuiluo"), "action": "DoNothing", "next": []},
         "局内识别_多人HUD": {"recognition": "And", "all_of": [template("race_pause"), template("race_touchdrive")],
                             "action": "DoNothing", "next": []},
     }
     for name in ["多人结算_入口", "多人结算_成绩继续", "多人结算_奖励继续", "多人结算_点击错失机会"]:
-        pipeline[name]["next"].insert(0, "多人结算_降级确定")
+        pipeline[name]["next"][0:0] = ["多人段位_降级确定", "多人段位_升级继续"]
+    # 每轮重新确认 HUD；结算分支优先，避免定时盲点到奖励或广告页面。
+    fallback = "多人局内_氮气兜底"
+    race_next = [*pipeline["多人结算_入口"]["next"], fallback]
+    pipeline["多人局内_兜底入口"] = {"recognition": "DirectHit", "action": "DoNothing",
+                                     "pre_delay": 0, "post_delay": 0,
+                                     "timeout": 180000, "rate_limit": 100, "next": race_next}
+    pipeline[fallback] = {**pipeline["局内识别_多人HUD"],
+                          "action": "Click", "target": [1080, 560],
+                          "repeat": 2, "repeat_delay": 750,
+                          "pre_delay": 0, "post_delay": 10000,
+                          "timeout": 60000, "rate_limit": 100, "next": race_next}
     report = []
     for source in sorted((ROOT / "captures").glob("*.png")):
         image = read_image(source)
@@ -84,10 +102,12 @@ def main():
             "多人结算_成绩继续": source.name == RESULT,
             "多人结算_奖励继续": source.name == REWARD,
             "多人结算_点击错失机会": source.name == AD,
-            "多人结算_已返回系列赛": source.name in ["多人游戏_经典系列赛_进入后.png", RETURN],
-            "多人结算_降级确定": source.name == DOWNGRADE,
+            "多人结算_已返回系列赛": source.name in ["多人游戏_经典系列赛_首页_黄金.png", "多人游戏_经典系列赛_首页_白银.png", RETURN],
+            "多人段位_降级确定": source.name == DOWNGRADE,
+            "多人段位_升级继续": source.name == UPGRADE,
             "赛道识别_神山垭口_坠落": source.name == LOAD,
             "局内识别_多人HUD": source.name.startswith("多人游戏_比赛中_"),
+            fallback: source.name.startswith("多人游戏_比赛中_"),
         }
         matches = {name: hit(pipeline[name], image) for name in expected}
         assert matches == expected, (source.name, matches, expected)
@@ -103,6 +123,7 @@ def main():
     image[620:720, 950:1280] = 0
     assert hit(pipeline["多人结算_已返回系列赛"], image)
     assert not hit(pipeline["多人结算_已返回系列赛"], read_image(ROOT / "captures" / DOWNGRADE))
+    assert not hit(pipeline["多人结算_已返回系列赛"], read_image(ROOT / "captures" / UPGRADE))
     assert all(n in pipeline for node in pipeline.values() for n in node.get("next", []))
     (ROOT / "assets/resource/pipeline/race_screens.json").write_text(json.dumps(pipeline, ensure_ascii=False, indent=4) + "\n", encoding="utf-8")
     (ROOT / "captures/race_screens_check.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -112,7 +133,7 @@ def main():
               "race_sources": [s.name for s in (ROOT / "captures").glob("多人游戏_比赛中_神山垭口_坠落_进度*.png")],
               "actions": [], "status": "recognition_only_no_driving_actions"}]}
     (ROOT / "data/sources/multiplayer_tracks.json").write_text(json.dumps(tracks, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"PASS {len(report) * 7} screen checks, downgrade overlay and return regression; live execution not tested")
+    print(f"PASS {len(report) * len(expected)} screen checks, league transitions and return regression; live execution not tested")
 
 
 if __name__ == "__main__":

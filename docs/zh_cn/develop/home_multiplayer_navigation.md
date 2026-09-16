@@ -22,7 +22,8 @@ python -X utf8 tools/validate_schema.py --schema-dir deps/tools
 
 按实际出现页面保存到 captures，保持 1280x720 完整 PNG：
 
-- 多人游戏_经典系列赛_进入后.png
+- 多人游戏_经典系列赛_首页_黄金.png
+- 多人游戏_经典系列赛_首页_白银.png
 - 多人游戏_选车.png（如果与进入后相同，无需重复）
 - 多人游戏_车辆已选.png（拍到燃油、车辆状态和开始按钮）
 - 多人游戏_匹配中.png（后续实际开赛时再补）

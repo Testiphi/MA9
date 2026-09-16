@@ -80,14 +80,57 @@
         "all_of": [
             {
                 "recognition": "TemplateMatch",
-                "template": "navigation/multiplayer/classic_title.png",
+                "template": "navigation/race/return_ranking.png",
                 "roi": [
-                    60,
+                    130,
+                    620,
                     115,
-                    235,
-                    100
+                    65
                 ],
                 "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/return_milestone.png",
+                "roi": [
+                    360,
+                    620,
+                    115,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/return_rewards.png",
+                "roi": [
+                    600,
+                    620,
+                    100,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    320,
+                    630,
+                    200,
+                    40
+                ],
+                "method": 4,
+                "lower": [
+                    220,
+                    220,
+                    220
+                ],
+                "upper": [
+                    255,
+                    255,
+                    255
+                ],
+                "count": 3000
             },
             {
                 "recognition": "TemplateMatch",
@@ -130,15 +173,12 @@
             },
             {
                 "recognition": "TemplateMatch",
-                "template": [
-                    "navigation/multiplayer/league_icons.png",
-                    "navigation/multiplayer/league_icons_gold.png"
-                ],
+                "template": "navigation/multiplayer/selection_tools.png",
                 "roi": [
-                    532,
-                    82,
-                    498,
-                    50
+                    1040,
+                    78,
+                    60,
+                    60
                 ],
                 "threshold": 0.9
             },
@@ -182,15 +222,12 @@
             },
             {
                 "recognition": "TemplateMatch",
-                "template": [
-                    "navigation/multiplayer/league_icons.png",
-                    "navigation/multiplayer/league_icons_gold.png"
-                ],
+                "template": "navigation/multiplayer/selection_tools.png",
                 "roi": [
-                    532,
-                    82,
-                    498,
-                    50
+                    1040,
+                    78,
+                    60,
+                    60
                 ],
                 "threshold": 0.9
             },

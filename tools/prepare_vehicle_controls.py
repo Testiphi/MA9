@@ -97,7 +97,7 @@ def main():
     for source in (ROOT / "captures").glob("*.png"):
         image = read_image(source)
         matches = [node for node in pipeline["黄金定位_入口"]["next"] if hit(pipeline[node], image)]
-        expected = ["黄金定位_点击黄金"] if "_选车_" in source.name and "仅拥有开启" in source.name else ["黄金定位_开启仅拥有"] if "_选车_" in source.name and "仅拥有关闭" in source.name else ["黄金定位_介绍页开始"] if source.name == "多人游戏_经典系列赛_进入后.png" else []
+        expected = ["黄金定位_点击黄金"] if "_选车_" in source.name and "仅拥有开启" in source.name else ["黄金定位_开启仅拥有"] if "_选车_" in source.name and "仅拥有关闭" in source.name else ["黄金定位_介绍页开始"] if source.name in ["多人游戏_经典系列赛_首页_黄金.png", "多人游戏_经典系列赛_首页_白银.png"] else []
         assert matches == expected, (source.name, matches, expected)
     print(f"PASS {len(report)} screenshot checks; device execution not tested")
 

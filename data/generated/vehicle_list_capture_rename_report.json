@@ -1,0 +1,206 @@
+{
+  "renamed": [
+    {
+      "source": "2022 Showcar Vision AMG.png",
+      "target": "多人游戏_选车_白银_Mercedes-Benz 2022 Showcar Vision AMG完整可见_仅拥有关闭.png",
+      "catalog_id": "car_654fcefa2391c78b",
+      "title": "Mercedes-Benz 2022 Showcar Vision AMG",
+      "league": "白银",
+      "sha256": "c1e08921afe32a488cbe2b59d4eaf80ea5176cc475a4f2c12403da318cb22bc4"
+    },
+    {
+      "source": "370z Nismo Neon Edition.png",
+      "target": "多人游戏_选车_白银_Nissan 370Z Nismo Neon Edition完整可见_仅拥有关闭.png",
+      "catalog_id": "car_d34446b5976d56ac",
+      "title": "Nissan 370Z Nismo Neon Edition",
+      "league": "白银",
+      "sha256": "564eb46d58dd59bf0b502da52579c5d34eb9f20cb71357541526eca96142cace"
+    },
+    {
+      "source": "911 50 Years Porsche Design.png",
+      "target": "多人游戏_选车_白银_Porsche 911 50 Years Porsche Design完整可见_仅拥有关闭.png",
+      "catalog_id": "car_c39dcfe35e357633",
+      "title": "Porsche 911 50 Years Porsche Design",
+      "league": "白银",
+      "sha256": "564eb46d58dd59bf0b502da52579c5d34eb9f20cb71357541526eca96142cace"
+    },
+    {
+      "source": "Af10.png",
+      "target": "多人游戏_选车_白银_Arash AF10完整可见_仅拥有关闭.png",
+      "catalog_id": "car_a7d384252b459c0b",
+      "title": "Arash AF10",
+      "league": "白银",
+      "sha256": "50ec63181e197186915bd5b770f45093a6aa78ccbc1b13c3c329bd86432686ab"
+    },
+    {
+      "source": "Alfieri.png",
+      "target": "多人游戏_选车_白银_Maserati Alfieri完整可见_仅拥有关闭.png",
+      "catalog_id": "car_fb82811a2d6e1d9b",
+      "title": "Maserati Alfieri",
+      "league": "白银",
+      "sha256": "564eb46d58dd59bf0b502da52579c5d34eb9f20cb71357541526eca96142cace"
+    },
+    {
+      "source": "Bacalar.png",
+      "target": "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
+      "catalog_id": "car_96256205c3b3ceb2",
+      "title": "Bentley Mulliner Bacalar",
+      "league": "白银",
+      "sha256": "b780c6dccfd6327ddd80914413f74f904bec37ff3f16cf59a89032d146ebcfec"
+    },
+    {
+      "source": "Black Series.png",
+      "target": "多人游戏_选车_白银_Mercedes-Benz Mercedes-AMG GT Black Series完整可见_仅拥有关闭.png",
+      "catalog_id": "car_0cc8beed8f36ae89",
+      "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
+      "league": "白银",
+      "sha256": "b780c6dccfd6327ddd80914413f74f904bec37ff3f16cf59a89032d146ebcfec"
+    },
+    {
+      "source": "Cien Concept.png",
+      "target": "多人游戏_选车_白银_Cadillac Cien Concept完整可见_仅拥有关闭.png",
+      "catalog_id": "car_f0091035289ba11e",
+      "title": "Cadillac Cien Concept",
+      "league": "白银",
+      "sha256": "564eb46d58dd59bf0b502da52579c5d34eb9f20cb71357541526eca96142cace"
+    },
+    {
+      "source": "D8 Gto.png",
+      "target": "多人游戏_选车_白银_Donkervoort D8 GTO Individual Series完整可见_仅拥有关闭.png",
+      "catalog_id": "car_97c8145ad087e21a",
+      "title": "Donkervoort D8 GTO Individual Series",
+      "league": "白银",
+      "sha256": "50ec63181e197186915bd5b770f45093a6aa78ccbc1b13c3c329bd86432686ab"
+    },
+    {
+      "source": "Ferrari F50.png",
+      "target": "多人游戏_选车_白银_Ferrari F50完整可见_仅拥有关闭.png",
+      "catalog_id": "car_25da413aa0cae353",
+      "title": "Ferrari F50",
+      "league": "白银",
+      "sha256": "50ec63181e197186915bd5b770f45093a6aa78ccbc1b13c3c329bd86432686ab"
+    },
+    {
+      "source": "Huracan Sto.png",
+      "target": "多人游戏_选车_白银_Lamborghini Huracan STO完整可见_仅拥有关闭.png",
+      "catalog_id": "car_e1c0f0455a16f168",
+      "title": "Lamborghini Huracan STO",
+      "league": "白银",
+      "sha256": "c1e08921afe32a488cbe2b59d4eaf80ea5176cc475a4f2c12403da318cb22bc4"
+    },
+    {
+      "source": "Huracan Super Trofeo Evo.png",
+      "target": "多人游戏_选车_白银_Lamborghini Huracan Super Trofeo EVO完整可见_仅拥有关闭.png",
+      "catalog_id": "car_80f0a08f56df5e1f",
+      "title": "Lamborghini Huracan Super Trofeo EVO",
+      "league": "白银",
+      "sha256": "c1e08921afe32a488cbe2b59d4eaf80ea5176cc475a4f2c12403da318cb22bc4"
+    },
+    {
+      "source": "Mc20 GT2.png",
+      "target": "多人游戏_选车_白银_Maserati MC20 GT2完整可见_仅拥有关闭.png",
+      "catalog_id": "car_7eb780d3e15fb081",
+      "title": "Maserati MC20 GT2",
+      "league": "白银",
+      "sha256": "ed310ca16a0630a94e5517f87a7a8ae48efae65ab34fff2f2357e30a6355c429"
+    },
+    {
+      "source": "Mission R.png",
+      "target": "多人游戏_选车_白银_Porsche Mission R完整可见_仅拥有关闭.png",
+      "catalog_id": "car_cdbbae9123bed9d0",
+      "title": "Porsche Mission R",
+      "league": "白银",
+      "sha256": "c1e08921afe32a488cbe2b59d4eaf80ea5176cc475a4f2c12403da318cb22bc4"
+    },
+    {
+      "source": "Miura Concept.png",
+      "target": "多人游戏_选车_白银_Lamborghini Miura Concept完整可见_仅拥有关闭.png",
+      "catalog_id": "car_b8a6feb1e618048a",
+      "title": "Lamborghini Miura Concept",
+      "league": "白银",
+      "sha256": "ed310ca16a0630a94e5517f87a7a8ae48efae65ab34fff2f2357e30a6355c429"
+    },
+    {
+      "source": "Mk X Nagari 500.png",
+      "target": "多人游戏_选车_白银_Bolwell MK X Nagari 500完整可见_仅拥有关闭.png",
+      "catalog_id": "car_ccd993e27ee1a552",
+      "title": "Bolwell MK X Nagari 500",
+      "league": "白银",
+      "sha256": "50ec63181e197186915bd5b770f45093a6aa78ccbc1b13c3c329bd86432686ab"
+    },
+    {
+      "source": "Monza Sp1.png",
+      "target": "多人游戏_选车_白银_Ferrari Monza SP1完整可见_仅拥有关闭.png",
+      "catalog_id": "car_43d90ca64817fea4",
+      "title": "Ferrari Monza SP1",
+      "league": "白银",
+      "sha256": "b780c6dccfd6327ddd80914413f74f904bec37ff3f16cf59a89032d146ebcfec"
+    },
+    {
+      "source": "Mustang Rtr.png",
+      "target": "多人游戏_选车_白银_Ford Mustang RTR Spec 5 10th Anniv.完整可见_仅拥有关闭.png",
+      "catalog_id": "car_034bc4bec211f3f7",
+      "title": "Ford Mustang RTR Spec 5 10th Anniv.",
+      "league": "白银",
+      "sha256": "50ec63181e197186915bd5b770f45093a6aa78ccbc1b13c3c329bd86432686ab"
+    },
+    {
+      "source": "R S 01.png",
+      "target": "多人游戏_选车_白银_Renault R.S. 01完整可见_仅拥有关闭.png",
+      "catalog_id": "car_8d2981adca3618c1",
+      "title": "Renault R.S. 01",
+      "league": "白银",
+      "sha256": "b780c6dccfd6327ddd80914413f74f904bec37ff3f16cf59a89032d146ebcfec"
+    },
+    {
+      "source": "Roma.png",
+      "target": "多人游戏_选车_白银_Ferrari Roma完整可见_仅拥有关闭.png",
+      "catalog_id": "car_a5f19143bd543f9d",
+      "title": "Ferrari Roma",
+      "league": "白银",
+      "sha256": "50ec63181e197186915bd5b770f45093a6aa78ccbc1b13c3c329bd86432686ab"
+    },
+    {
+      "source": "Sagaris.png",
+      "target": "多人游戏_选车_白银_TVR Sagaris完整可见_仅拥有关闭.png",
+      "catalog_id": "car_b84f67304ca6f417",
+      "title": "TVR Sagaris",
+      "league": "白银",
+      "sha256": "c1e08921afe32a488cbe2b59d4eaf80ea5176cc475a4f2c12403da318cb22bc4"
+    },
+    {
+      "source": "Saleen S1.png",
+      "target": "多人游戏_选车_白银_Saleen S1完整可见_仅拥有关闭.png",
+      "catalog_id": "car_9a2a3be9e7c943c0",
+      "title": "Saleen S1",
+      "league": "白银",
+      "sha256": "564eb46d58dd59bf0b502da52579c5d34eb9f20cb71357541526eca96142cace"
+    },
+    {
+      "source": "sp3.png",
+      "target": "多人游戏_选车_白银_Ferrari Daytona SP3完整可见_仅拥有关闭.png",
+      "catalog_id": "car_8cb68c290ca8da80",
+      "title": "Ferrari Daytona SP3",
+      "league": "白银",
+      "sha256": "ed310ca16a0630a94e5517f87a7a8ae48efae65ab34fff2f2357e30a6355c429"
+    },
+    {
+      "source": "SV Project 8.png",
+      "target": "多人游戏_选车_白银_Jaguar XE SV Project 8完整可见_仅拥有关闭.png",
+      "catalog_id": "car_b3040ff4077a588a",
+      "title": "Jaguar XE SV Project 8",
+      "league": "白银",
+      "sha256": "4a8e0a934ffe8b73bd48d1cf872786a7be23bb059bbdb7c610778db0676f459d"
+    },
+    {
+      "source": "Valour.png",
+      "target": "多人游戏_选车_白银_Aston Martin Valour完整可见_仅拥有关闭.png",
+      "catalog_id": "car_ff1dde866b3d99aa",
+      "title": "Aston Martin Valour",
+      "league": "白银",
+      "sha256": "564eb46d58dd59bf0b502da52579c5d34eb9f20cb71357541526eca96142cace"
+    }
+  ],
+  "skipped": [],
+  "state_basis": "user_confirmed_list_owned_关闭"
+}

@@ -3,7 +3,8 @@
 `sources/` 存放人工维护的原始文件：
 
 - `国服_a9mmgj_top.csv`：已整理的 338 辆车基础目录，包含后补的 Tushek Aeon E（S 等级来自 Excel）。已确认 One77 白金、Aglaia 宗师、Aeon E 传奇、5N 青铜。
-- `多人选车.xlsx`：原始选车工作簿，完整保留，不修改内容。
+- `多人选车_new.xlsx`：当前选车顺序来源，完整保留，不修改内容。
+- `多人选车.xlsx`：旧版选车工作簿，保留备份。
 - `vehicle_name_aliases.json`：人工确认的车型别名，如 loniq 5 N → IONIQ 5 N。
 
 `generated/` 存放从数据源生成的文件：
@@ -13,7 +14,7 @@
 - `vehicle_import_report.json`：数量和车型未匹配、段位/等级差异。
 - `vehicle_import_review.md`：便于人工审核的数据差异表。
 
-`multiplayer_profile.json` 是单独维护的运行偏好，不由导入器覆盖。当前段位手动配置为黄金，向下兼容，默认按黄金、白银、青铜顺序查找，组内沿用轮换队列次序，未拥有/段位不可用/缺油时跳过，全部不可用则停止。当前阶段停在车辆准备界面。此配置尚未接入自动选车，升降段后需要更新 current_league 和 compatible_leagues。
+`multiplayer_profile.json` 是单独维护的运行偏好，不由导入器覆盖。当前段位手动配置为白银，向下兼容白银和青铜，组内沿用轮换队列次序，未拥有/段位不可用/缺油时跳过，全部不可用则停止。当前阶段停在车辆准备界面。当前倒序兜底生成器读取此配置决定相邻段位起点；原黄金推荐任务仍为独立黄金测试。升降段后需要更新 current_league 和 compatible_leagues，再重新生成倒序任务。
 
 ## 更新
 
@@ -23,7 +24,14 @@
 python -X utf8 tools/import_vehicle_data.py
 ```
 
-编辑顺序后应在 Excel/WPS 中重新计算并更新“！复制到脚本选车页”的 C 列仅文本序列，再保存。导入器检查 B 列公式缓存和 C 列一致，并严格按序列生成 order；不按可能并列的“优先级”重新排序。
+默认读取 `多人选车_new.xlsx` 的“！复制到脚本选车页”B 列，并检查其公式缓存与各段位 M2 序列一致，严格按序列生成 order。编辑后应在 Excel/WPS 中重新计算并保存。B/C 不一致记录到报告，不采用未更新的 C 列。需要明确改用其他工作簿或 C 列时，可传入 `--workbook 文件名 --sequence-column C`。
+
+重建当前白银多人循环：
+
+```powershell
+python -X utf8 tools/prepare_multiplayer_loop.py
+python -X utf8 tools/check_server_recovery.py
+```
 
 导入按名称忽略大小写、空格、标点和重音符号匹配基础目录，并应用人工别名。无法匹配的条目保留原名称并标记 catalog_id 为 null，不丢弃、不模糊猜测。
 
@@ -35,4 +43,6 @@ python -X utf8 tools/import_vehicle_data.py
 
 辅助符号、逗号拼接公式、性能参数、奖励自选包和升级计划未混入轮换配置，原工作簿仍保留这些内容。
 
-当前 JSON 尚未接入游戏选车动作。数据位于 resource 外部，不会被 Maa 当成 Pipeline，也尚未自动打包到发行目录；接入运行时后再增加配置加载与打包路径。
+当前多人循环读取 `multiplayer_profile.json` 的 rotation_file：`generated/champion_rotation.json`，由用户通过的“各级别霸主.docx”与人工修正生成。旧 `multiplayer_rotation.json` 仅保留 Excel 历史数据。当前每局读取系列赛首页玩家徽章，黄金使用黄金/白银/青铜推荐，白银使用白银/青铜推荐；生成独立的 3/20 局及各次服务器恢复分支，缺模板的候选记录到循环 manifest，不阻挡其他候选。
+
+车名修正与插入位置单独维护于 `sources/champion_overrides.json`。重新匹配使用 `tools/match_champion_names.py`；人工通过后再运行 `tools/approve_champion_rotation.py` 保存审核快照，然后运行 `tools/prepare_dynamic_multiplayer_loop.py`。数据位于 resource 外部，运行时使用已生成任务。

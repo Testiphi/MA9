@@ -1,0 +1,110 @@
+{
+  "renamed": [
+    {
+      "source": "370z Nismo Neon Edition.png",
+      "target": "多人游戏_车辆详情_Nissan 370Z Nismo Neon Edition_可开始_TouchDrive开.png",
+      "catalog_id": "car_d34446b5976d56ac",
+      "title": "Nissan 370Z Nismo Neon Edition",
+      "league": "白银",
+      "sha256": "b9cb7cd49bfaf8d21a1ca5e0cbba50aab1b415e5946d491a6adc0702dc43db35"
+    },
+    {
+      "source": "AMG GT Black Series.png",
+      "target": "多人游戏_车辆详情_Mercedes-Benz Mercedes-AMG GT Black Series_可开始_TouchDrive开.png",
+      "catalog_id": "car_0cc8beed8f36ae89",
+      "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
+      "league": "白银",
+      "sha256": "b882339bf3ce51869bfabd3fe72877f8d899aa8c3b837e63e452fec867f52580"
+    },
+    {
+      "source": "Bacalar.png",
+      "target": "多人游戏_车辆详情_Bentley Mulliner Bacalar_可开始_TouchDrive开.png",
+      "catalog_id": "car_96256205c3b3ceb2",
+      "title": "Bentley Mulliner Bacalar",
+      "league": "白银",
+      "sha256": "ca0c58d3a3263b31fe3bb1cee3d49621b8c15451801438ad459812436357dbe7"
+    },
+    {
+      "source": "Daytona.png",
+      "target": "多人游戏_车辆详情_Ferrari Daytona SP3_可开始_TouchDrive开.png",
+      "catalog_id": "car_8cb68c290ca8da80",
+      "title": "Ferrari Daytona SP3",
+      "league": "白银",
+      "sha256": "419ef3d24fa6da6fdcea2fe0464fadbaabe0e822538ef57dc622f1b0c5485afc"
+    },
+    {
+      "source": "Huracan Super Trofeo Evo.png",
+      "target": "多人游戏_车辆详情_Lamborghini Huracan Super Trofeo EVO_可开始_TouchDrive开.png",
+      "catalog_id": "car_80f0a08f56df5e1f",
+      "title": "Lamborghini Huracan Super Trofeo EVO",
+      "league": "白银",
+      "sha256": "0fe1972a4ebd55d4fee6f56135d34815e8bc96f27efc6ce3e903df28f2bd0558"
+    },
+    {
+      "source": "MC20 GT2.png",
+      "target": "多人游戏_车辆详情_Maserati MC20 GT2_可开始_TouchDrive开.png",
+      "catalog_id": "car_7eb780d3e15fb081",
+      "title": "Maserati MC20 GT2",
+      "league": "白银",
+      "sha256": "1e0ed0f8fb05246841a9c537d25eeaa3731933d02bb6b24bd0e584cab2d29a6a"
+    },
+    {
+      "source": "Mission R.png",
+      "target": "多人游戏_车辆详情_Porsche Mission R_可开始_TouchDrive开.png",
+      "catalog_id": "car_cdbbae9123bed9d0",
+      "title": "Porsche Mission R",
+      "league": "白银",
+      "sha256": "7a9f90e9158f0b46619377df6d4f901811b2e57666346af9ece04ac829338c54"
+    },
+    {
+      "source": "Miura Concept.png",
+      "target": "多人游戏_车辆详情_Lamborghini Miura Concept_可开始_TouchDrive开.png",
+      "catalog_id": "car_b8a6feb1e618048a",
+      "title": "Lamborghini Miura Concept",
+      "league": "白银",
+      "sha256": "e51d347bd04ceee8f30eb547840223c763a345e65696b79c4ae66280e313fa6e"
+    },
+    {
+      "source": "Monza Sp1.png",
+      "target": "多人游戏_车辆详情_Ferrari Monza SP1_可开始_TouchDrive开.png",
+      "catalog_id": "car_43d90ca64817fea4",
+      "title": "Ferrari Monza SP1",
+      "league": "白银",
+      "sha256": "511853b2935840c5c6fad76180f48e90aa66c387dafc798a0fea5f6ec0b0bbef"
+    },
+    {
+      "source": "Renault R S 01.png",
+      "target": "多人游戏_车辆详情_Renault R.S. 01_可开始_TouchDrive开.png",
+      "catalog_id": "car_8d2981adca3618c1",
+      "title": "Renault R.S. 01",
+      "league": "白银",
+      "sha256": "c3d218ad8848f4191e8e2710c5ed6d9a3674a17889448687c0a11831fc157ab5"
+    },
+    {
+      "source": "Sagaris.png",
+      "target": "多人游戏_车辆详情_TVR Sagaris_可开始_TouchDrive开.png",
+      "catalog_id": "car_b84f67304ca6f417",
+      "title": "TVR Sagaris",
+      "league": "白银",
+      "sha256": "4d80eda5c2a44b293b929918cbed4341d749cd25c0a608e3f3e24d85c96053be"
+    },
+    {
+      "source": "Saleen S1.png",
+      "target": "多人游戏_车辆详情_Saleen S1_可开始_TouchDrive开.png",
+      "catalog_id": "car_9a2a3be9e7c943c0",
+      "title": "Saleen S1",
+      "league": "白银",
+      "sha256": "494919aa2f95d8413e7697a7562fce540718530dcd0aaaf436c72343143fd038"
+    },
+    {
+      "source": "SV Project 8.png",
+      "target": "多人游戏_车辆详情_Jaguar XE SV Project 8_可开始_TouchDrive开.png",
+      "catalog_id": "car_b3040ff4077a588a",
+      "title": "Jaguar XE SV Project 8",
+      "league": "白银",
+      "sha256": "783b975f7c0b4d7da6aa86c355ea5cf18fde09062be8b9d2a8656643b8a056bf"
+    }
+  ],
+  "skipped": [],
+  "state_basis": "user_confirmed_detail_ready_touchdrive_on"
+}

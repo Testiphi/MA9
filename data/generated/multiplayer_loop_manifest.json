@@ -1,0 +1,285 @@
+{
+  "schema_version": 2,
+  "league_detection": "series_player_badge",
+  "supported_leagues": [
+    "黄金",
+    "白银"
+  ],
+  "variants": {
+    "黄金": {
+      "schema_version": 1,
+      "league": "黄金",
+      "trials": [
+        {
+          "rounds": 3,
+          "entry": "多人循环3局_黄金_入口",
+          "nodes": 2782
+        },
+        {
+          "rounds": 20,
+          "entry": "多人循环20局_黄金_入口",
+          "nodes": 18541
+        }
+      ],
+      "recommended_order": [
+        "Nissan Z GT4",
+        "Porsche Panamera Turbo S",
+        "Ferrari 599XX EVO",
+        "DS Automobiles DS E-Tense Performance",
+        "Ferrari J50",
+        "Mercedes-Benz Mercedes-AMG GT Black Series",
+        "Renault R.S. 01",
+        "Lamborghini Miura Concept",
+        "Lamborghini Huracan STO",
+        "TVR Sagaris",
+        "Kimera EVO37",
+        "Hyundai IONIQ 5 N",
+        "Praga R1"
+      ],
+      "missing": [
+        "Aston Martin DB12",
+        "De Tomaso P900",
+        "Volkswagen Electric R"
+      ],
+      "selection_policy": "first_available_in_order",
+      "rotation_file": "generated/champion_rotation.json",
+      "compatible_leagues": [
+        "黄金",
+        "白银",
+        "青铜"
+      ],
+      "search_policy": "reverse_24_then_forward_24",
+      "vehicle_click_region": "car_body_left_of_matched_name",
+      "list_template_checks": [
+        {
+          "title": "Nissan Z GT4",
+          "positives": [
+            "多人游戏_选车_黄金_Nissan Z GT4完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Porsche Panamera Turbo S",
+          "positives": [
+            "多人游戏_选车_黄金_Porsche Panamera Turbo S完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Ferrari 599XX EVO",
+          "positives": [
+            "多人游戏_选车_黄金_Drako GTE完整可见_仅拥有开启.png",
+            "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png",
+            "多人游戏_选车_黄金_Ferrari 599XX EVO完整可见_仅拥有开启.png",
+            "多人游戏_选车_黄金_McLaren GT完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "DS Automobiles DS E-Tense Performance",
+          "positives": [
+            "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png",
+            "多人游戏_选车_黄金_Ferrari 599XX EVO完整可见_仅拥有开启.png",
+            "多人游戏_选车_黄金_McLaren GT完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Ferrari J50",
+          "positives": [
+            "多人游戏_选车_黄金_Ferrari J50完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
+          "positives": [
+            "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Ferrari Monza SP1完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz Mercedes-AMG GT Black Series完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Renault R.S. 01完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Renault R.S. 01",
+          "positives": [
+            "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Ferrari Monza SP1完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz Mercedes-AMG GT Black Series完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Renault R.S. 01完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Lamborghini Miura Concept",
+          "positives": [
+            "多人游戏_选车_白银_Ferrari Daytona SP3完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Miura Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati MC20 GT2完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Lamborghini Huracan STO",
+          "positives": [
+            "多人游戏_选车_白银_Jaguar XE SV Project 8完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan STO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan Super Trofeo EVO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz 2022 Showcar Vision AMG完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche Mission R完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_TVR Sagaris完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "TVR Sagaris",
+          "positives": [
+            "多人游戏_选车_白银_Jaguar XE SV Project 8完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan STO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan Super Trofeo EVO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz 2022 Showcar Vision AMG完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche Mission R完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_TVR Sagaris完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Kimera EVO37",
+          "positives": [
+            "多人游戏_选车_白银起点_仅拥有开启.png",
+            "多人游戏_选车_青铜_Kimera EVO37完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Hyundai IONIQ 5 N",
+          "positives": [
+            "多人游戏_选车_青铜_Hyundai IONIQ 5 N完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Praga R1",
+          "positives": [
+            "多人游戏_选车_青铜_Praga R1完整可见_仅拥有开启.png"
+          ]
+        }
+      ],
+      "session_time_limit": null,
+      "note": "有界局数试跑；无60分钟计时器。段位变化或异常停止，设备流程待试跑。"
+    },
+    "白银": {
+      "schema_version": 1,
+      "league": "白银",
+      "trials": [
+        {
+          "rounds": 3,
+          "entry": "多人循环3局_白银_入口",
+          "nodes": 1882
+        },
+        {
+          "rounds": 20,
+          "entry": "多人循环20局_白银_入口",
+          "nodes": 12541
+        }
+      ],
+      "recommended_order": [
+        "Mercedes-Benz Mercedes-AMG GT Black Series",
+        "Renault R.S. 01",
+        "Lamborghini Miura Concept",
+        "Lamborghini Huracan STO",
+        "TVR Sagaris",
+        "Kimera EVO37",
+        "Hyundai IONIQ 5 N",
+        "Praga R1"
+      ],
+      "missing": [
+        "Volkswagen Electric R"
+      ],
+      "selection_policy": "first_available_in_order",
+      "rotation_file": "generated/champion_rotation.json",
+      "compatible_leagues": [
+        "白银",
+        "青铜"
+      ],
+      "search_policy": "reverse_24_then_forward_24",
+      "vehicle_click_region": "car_body_left_of_matched_name",
+      "list_template_checks": [
+        {
+          "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
+          "positives": [
+            "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Ferrari Monza SP1完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz Mercedes-AMG GT Black Series完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Renault R.S. 01完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Renault R.S. 01",
+          "positives": [
+            "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Ferrari Monza SP1完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz Mercedes-AMG GT Black Series完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Renault R.S. 01完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Lamborghini Miura Concept",
+          "positives": [
+            "多人游戏_选车_白银_Ferrari Daytona SP3完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Miura Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati MC20 GT2完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Lamborghini Huracan STO",
+          "positives": [
+            "多人游戏_选车_白银_Jaguar XE SV Project 8完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan STO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan Super Trofeo EVO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz 2022 Showcar Vision AMG完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche Mission R完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_TVR Sagaris完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "TVR Sagaris",
+          "positives": [
+            "多人游戏_选车_白银_Jaguar XE SV Project 8完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan STO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan Super Trofeo EVO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz 2022 Showcar Vision AMG完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche Mission R完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_TVR Sagaris完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Kimera EVO37",
+          "positives": [
+            "多人游戏_选车_白银起点_仅拥有开启.png",
+            "多人游戏_选车_青铜_Kimera EVO37完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Hyundai IONIQ 5 N",
+          "positives": [
+            "多人游戏_选车_青铜_Hyundai IONIQ 5 N完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Praga R1",
+          "positives": [
+            "多人游戏_选车_青铜_Praga R1完整可见_仅拥有开启.png"
+          ]
+        }
+      ],
+      "session_time_limit": null,
+      "note": "有界局数试跑；无60分钟计时器。段位变化或异常停止，设备流程待试跑。"
+    }
+  },
+  "league_template_checks": [
+    {
+      "source": "多人游戏_经典系列赛_首页_白银.png",
+      "league": "白银"
+    },
+    {
+      "source": "多人游戏_经典系列赛_首页_黄金.png",
+      "league": "黄金"
+    },
+    {
+      "source": "多人游戏_结算_返回后.png",
+      "league": "白银"
+    }
+  ],
+  "node_count": 36024,
+  "note": "每局重新确认；黄金不可用立即重读；服务器恢复保持当前局；设备长时运行待验证。"
+}

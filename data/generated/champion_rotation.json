@@ -1,0 +1,494 @@
+{
+  "schema_version": 1,
+  "source": "各级别霸主.docx + champion_overrides.json",
+  "status": "approved",
+  "ordering": "per_league_left_to_right",
+  "groups": [
+    {
+      "league": "青铜",
+      "vehicles": [
+        {
+          "order": 1,
+          "title": "Kimera EVO37",
+          "catalog_id": "car_b3df8ce15966934c",
+          "class": "D",
+          "league": "青铜",
+          "category": "自动霸主",
+          "source_name": "evo37"
+        },
+        {
+          "order": 2,
+          "title": "Volkswagen Electric R",
+          "catalog_id": "car_24a32788f68aa71c",
+          "class": "C",
+          "league": "青铜",
+          "category": "自动挡/脚本",
+          "source_name": "大众electric r"
+        },
+        {
+          "order": 3,
+          "title": "Hyundai IONIQ 5 N",
+          "catalog_id": "car_a6143c5995d3b2e0",
+          "class": "D",
+          "league": "青铜",
+          "category": "自动挡/脚本",
+          "source_name": "现代5n"
+        },
+        {
+          "order": 4,
+          "title": "Praga R1",
+          "catalog_id": "car_bf0b9d4a4fcaaaa0",
+          "class": "D",
+          "league": "青铜",
+          "category": "自动挡/脚本",
+          "source_name": "praga r1"
+        }
+      ]
+    },
+    {
+      "league": "白银",
+      "vehicles": [
+        {
+          "order": 1,
+          "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
+          "catalog_id": "car_0cc8beed8f36ae89",
+          "class": "C",
+          "league": "白银",
+          "category": "自动霸主",
+          "source_name": "黑梅奔"
+        },
+        {
+          "order": 2,
+          "title": "Renault R.S. 01",
+          "catalog_id": "car_8d2981adca3618c1",
+          "class": "B",
+          "league": "白银",
+          "category": "自动挡/脚本",
+          "source_name": "雷诺rs01"
+        },
+        {
+          "order": 3,
+          "title": "Lamborghini Miura Concept",
+          "catalog_id": "car_b8a6feb1e618048a",
+          "class": "B",
+          "league": "白银",
+          "category": "自动挡/脚本",
+          "source_name": "兰博基尼miura"
+        },
+        {
+          "order": 4,
+          "title": "Lamborghini Huracan STO",
+          "catalog_id": "car_e1c0f0455a16f168",
+          "class": "B",
+          "league": "白银",
+          "category": "自动挡/脚本",
+          "source_name": "兰博基尼sto"
+        },
+        {
+          "order": 5,
+          "title": "TVR Sagaris",
+          "catalog_id": "car_b84f67304ca6f417",
+          "class": "C",
+          "league": "白银",
+          "category": "自动挡/脚本",
+          "source_name": "TVR Sagaris"
+        }
+      ]
+    },
+    {
+      "league": "黄金",
+      "vehicles": [
+        {
+          "order": 1,
+          "title": "Nissan Z GT4",
+          "catalog_id": "car_18950b51fd913bee",
+          "class": "C",
+          "league": "黄金",
+          "category": "自动霸主",
+          "source_name": "zgt4"
+        },
+        {
+          "order": 2,
+          "title": "Aston Martin DB12",
+          "catalog_id": "car_5538dc763dea7089",
+          "class": "B",
+          "league": "黄金",
+          "category": "自动霸主",
+          "source_name": "db12"
+        },
+        {
+          "order": 3,
+          "title": "Porsche Panamera Turbo S",
+          "catalog_id": "car_ab1d758c2b54cd18",
+          "class": "C",
+          "league": "黄金",
+          "category": "自动挡/脚本",
+          "source_name": "帕梅"
+        },
+        {
+          "order": 4,
+          "title": "Ferrari 599XX EVO",
+          "catalog_id": "car_944f78cad1b1c771",
+          "class": "B",
+          "league": "黄金",
+          "category": "自动挡/脚本",
+          "source_name": "Ferrari 599XX EVO"
+        },
+        {
+          "order": 5,
+          "title": "De Tomaso P900",
+          "catalog_id": "car_b140f8fb5919cb17",
+          "class": "C",
+          "league": "黄金",
+          "category": "自动挡/脚本",
+          "source_name": "p900"
+        },
+        {
+          "order": 6,
+          "title": "DS Automobiles DS E-Tense Performance",
+          "catalog_id": "car_3ac6edf946988969",
+          "class": "C",
+          "league": "黄金",
+          "category": "自动挡/脚本",
+          "source_name": "大ds"
+        },
+        {
+          "order": 7,
+          "title": "Ferrari J50",
+          "catalog_id": "car_b1dd012bbcb6e34c",
+          "class": "B",
+          "league": "黄金",
+          "category": "自动挡/脚本",
+          "source_name": "j50"
+        }
+      ]
+    },
+    {
+      "league": "白金",
+      "vehicles": [
+        {
+          "order": 1,
+          "title": "Puritalia Berlinetta",
+          "catalog_id": "car_91d2971a2d085743",
+          "class": "A",
+          "league": "白金",
+          "category": "自动霸主",
+          "source_name": "巴林塔"
+        },
+        {
+          "order": 2,
+          "title": "Ferrari 488 Challenge EVO",
+          "catalog_id": "car_eb5b2cf363d69cd5",
+          "class": "A",
+          "league": "白金",
+          "category": "自动霸主",
+          "source_name": "法拉利488"
+        },
+        {
+          "order": 3,
+          "title": "Aston Martin DBS Superleggera",
+          "catalog_id": "car_b71cb9e56fecf867",
+          "class": "B",
+          "league": "白金",
+          "category": "自动挡/脚本",
+          "source_name": "dbs"
+        },
+        {
+          "order": 4,
+          "title": "Mercedes-Benz SLR McLaren",
+          "catalog_id": "car_d8e95d7c699b2bba",
+          "class": "B",
+          "league": "白金",
+          "category": "自动挡/脚本",
+          "source_name": "slr"
+        },
+        {
+          "order": 5,
+          "title": "Lamborghini Invencible",
+          "catalog_id": "car_88e9c3510dce44f2",
+          "class": "B",
+          "league": "白金",
+          "category": "自动挡/脚本",
+          "source_name": "无敌牛"
+        },
+        {
+          "order": 6,
+          "title": "Lamborghini SC63",
+          "catalog_id": "car_1e6b093254376c0e",
+          "class": "B",
+          "league": "白金",
+          "category": "自动挡/脚本",
+          "source_name": "sc63"
+        },
+        {
+          "order": 7,
+          "title": "Apollo IE",
+          "catalog_id": "car_4f8ace6a1b82742a",
+          "class": "A",
+          "league": "白金",
+          "category": "自动挡/脚本",
+          "source_name": "阿波罗ie"
+        }
+      ]
+    },
+    {
+      "league": "翡翠",
+      "vehicles": [
+        {
+          "order": 1,
+          "title": "Lotus E-R9",
+          "catalog_id": "car_b0ba82725faf5e1b",
+          "class": "B",
+          "league": "翡翠",
+          "category": "自动霸主",
+          "source_name": "er9"
+        },
+        {
+          "order": 2,
+          "title": "Lamborghini Revuelto",
+          "catalog_id": "car_58aeacdaa5d23e1c",
+          "class": "B",
+          "league": "翡翠",
+          "category": "自动挡/脚本",
+          "source_name": "r牛"
+        },
+        {
+          "order": 3,
+          "title": "Automobili Pininfarina Battista Edizione Nino Farina",
+          "catalog_id": "car_bce9aa4ab8c7effb",
+          "class": "A",
+          "league": "翡翠",
+          "category": "自动挡/脚本",
+          "source_name": "红秋王"
+        },
+        {
+          "order": 4,
+          "title": "Porsche 918 Spyder",
+          "catalog_id": "car_1d503263ef600e60",
+          "class": "S",
+          "league": "翡翠",
+          "category": "自动挡/脚本",
+          "source_name": "918"
+        },
+        {
+          "order": 5,
+          "title": "Lamborghini Sesto Elemento",
+          "catalog_id": "car_7ce3d6f5e1d75ad0",
+          "class": "B",
+          "league": "翡翠",
+          "category": "自动挡/脚本",
+          "source_name": "六子"
+        },
+        {
+          "order": 6,
+          "title": "McMurtry Spéirling",
+          "catalog_id": "car_01dac16eb10e0538",
+          "class": "A",
+          "league": "翡翠",
+          "category": "自动挡/脚本",
+          "source_name": "小风扇"
+        }
+      ]
+    },
+    {
+      "league": "钻石",
+      "vehicles": [
+        {
+          "order": 1,
+          "title": "Porsche 919 Street",
+          "catalog_id": "car_ccbad34496bff8ca",
+          "class": "A",
+          "league": "钻石",
+          "category": "自动霸主",
+          "source_name": "保时捷919"
+        },
+        {
+          "order": 2,
+          "title": "Mercedes-Benz Vision One-Eleven",
+          "catalog_id": "car_69ef4f53bc5732c6",
+          "class": "A",
+          "league": "钻石",
+          "category": "自动霸主",
+          "source_name": "奔驰111"
+        },
+        {
+          "order": 3,
+          "title": "Noble M600 Speedster",
+          "catalog_id": "car_1e68275fdd11bfa1",
+          "class": "A",
+          "league": "钻石",
+          "category": "自动挡/脚本",
+          "source_name": "m600"
+        },
+        {
+          "order": 4,
+          "title": "Rimac Concept_One",
+          "catalog_id": "car_97d064e66754b5d3",
+          "class": "S",
+          "league": "钻石",
+          "category": "自动挡/脚本",
+          "source_name": "c1"
+        },
+        {
+          "order": 5,
+          "title": "De Tomaso P72",
+          "catalog_id": "car_547fc4b4f8bd1e06",
+          "class": "A",
+          "league": "钻石",
+          "category": "自动挡/脚本",
+          "source_name": "p72"
+        },
+        {
+          "order": 6,
+          "title": "Aston Martin Valhalla Concept Car",
+          "catalog_id": "car_7cd3ff2de04b650e",
+          "class": "A",
+          "league": "钻石",
+          "category": "自动挡/脚本",
+          "source_name": "英灵殿"
+        },
+        {
+          "order": 7,
+          "title": "Ferrari 499P Modificata",
+          "catalog_id": "car_3a59c39d2b98c6a6",
+          "class": "A",
+          "league": "钻石",
+          "category": "自动挡/脚本",
+          "source_name": "499p"
+        },
+        {
+          "order": 8,
+          "title": "Peugeot 9X8",
+          "catalog_id": "car_3e780fbcb818eaa2",
+          "class": "A",
+          "league": "钻石",
+          "category": "自动挡/脚本",
+          "source_name": "98"
+        }
+      ]
+    },
+    {
+      "league": "精英",
+      "vehicles": [
+        {
+          "order": 1,
+          "title": "HTT Locus Plethore LC750",
+          "catalog_id": "car_f2b064055e4f7db7",
+          "class": "S",
+          "league": "精英",
+          "category": "自动霸主",
+          "source_name": "htt"
+        },
+        {
+          "order": 2,
+          "title": "Bugatti Chiron Pur Sport",
+          "catalog_id": "car_67cc452957db60ce",
+          "class": "S",
+          "league": "精英",
+          "category": "自动霸主",
+          "source_name": "ps龙"
+        },
+        {
+          "order": 3,
+          "title": "Tushek TS 900 Racer Pro",
+          "catalog_id": "car_f66ef378ef364c6d",
+          "class": "S",
+          "league": "精英",
+          "category": "自动霸主",
+          "source_name": "ts900"
+        },
+        {
+          "order": 4,
+          "title": "Lamborghini Sián FKP 37",
+          "catalog_id": "car_047377f164ce4a20",
+          "class": "S",
+          "league": "精英",
+          "category": "自动挡/脚本",
+          "source_name": "西安"
+        },
+        {
+          "order": 5,
+          "title": "Ford Team Fordzilla P1",
+          "catalog_id": "car_ca55b3856f987b40",
+          "class": "S",
+          "league": "精英",
+          "category": "自动挡/脚本",
+          "source_name": "fp1"
+        },
+        {
+          "order": 6,
+          "title": "Automobili Pininfarina Battista",
+          "catalog_id": "car_70f43e28c4fa312c",
+          "class": "S",
+          "league": "精英",
+          "category": "自动挡/脚本",
+          "source_name": "秋王"
+        },
+        {
+          "order": 7,
+          "title": "Ferrari SF90 Stradale",
+          "catalog_id": "car_3e851ea4c5a4b766",
+          "class": "S",
+          "league": "精英",
+          "category": "自动挡/脚本",
+          "source_name": "sf90"
+        }
+      ]
+    },
+    {
+      "league": "宗师",
+      "vehicles": [
+        {
+          "order": 1,
+          "title": "Hennessey Venom GT",
+          "catalog_id": "car_b96dd004bce8c66e",
+          "class": "S",
+          "league": "宗师",
+          "category": "自动霸主",
+          "source_name": "vgt"
+        },
+        {
+          "order": 2,
+          "title": "Koenigsegg Regera",
+          "catalog_id": "car_628c16fe747a6d90",
+          "class": "S",
+          "league": "宗师",
+          "category": "自动挡/脚本",
+          "source_name": "杰弟"
+        },
+        {
+          "order": 3,
+          "title": "Koenigsegg Gemera",
+          "catalog_id": "car_274a1696929910e2",
+          "class": "S",
+          "league": "宗师",
+          "category": "自动挡/脚本",
+          "source_name": "冬王"
+        },
+        {
+          "order": 4,
+          "title": "Icona Vulcano Spyder",
+          "catalog_id": "car_64f7bfa3b924ffa8",
+          "class": "S",
+          "league": "宗师",
+          "category": "自动挡/脚本",
+          "source_name": "冰山"
+        }
+      ]
+    },
+    {
+      "league": "传奇",
+      "vehicles": [
+        {
+          "order": 1,
+          "title": "Devel Sixteen",
+          "catalog_id": "car_93bd4ec743f8d274",
+          "class": "R",
+          "league": "传奇",
+          "category": "自动霸主",
+          "source_name": "恶魔"
+        }
+      ]
+    }
+  ]
+}

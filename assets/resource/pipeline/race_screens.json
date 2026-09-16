@@ -4,7 +4,8 @@
         "action": "DoNothing",
         "timeout": 60000,
         "next": [
-            "多人结算_降级确定",
+            "多人段位_降级确定",
+            "多人段位_升级继续",
             "多人结算_已返回系列赛",
             "多人结算_点击错失机会",
             "多人结算_奖励继续",
@@ -57,7 +58,8 @@
         "post_delay": 300,
         "timeout": 60000,
         "next": [
-            "多人结算_降级确定",
+            "多人段位_降级确定",
+            "多人段位_升级继续",
             "多人结算_点击错失机会",
             "多人结算_奖励继续",
             "多人结算_已返回系列赛"
@@ -109,7 +111,8 @@
         "post_delay": 300,
         "timeout": 60000,
         "next": [
-            "多人结算_降级确定",
+            "多人段位_降级确定",
+            "多人段位_升级继续",
             "多人结算_点击错失机会",
             "多人结算_已返回系列赛"
         ]
@@ -149,7 +152,8 @@
         "post_delay": 500,
         "timeout": 60000,
         "next": [
-            "多人结算_降级确定",
+            "多人段位_降级确定",
+            "多人段位_升级继续",
             "多人结算_已返回系列赛"
         ]
     },
@@ -214,7 +218,7 @@
         "action": "DoNothing",
         "next": []
     },
-    "多人结算_降级确定": {
+    "多人段位_降级确定": {
         "recognition": "And",
         "all_of": [
             {
@@ -249,6 +253,47 @@
         "post_delay": 500,
         "timeout": 60000,
         "next": [
+            "多人结算_已返回系列赛"
+        ]
+    },
+    "多人段位_升级继续": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/upgrade_title.png",
+                "roi": [
+                    220,
+                    95,
+                    200,
+                    60
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/upgrade_continue.png",
+                "roi": [
+                    1085,
+                    620,
+                    105,
+                    70
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1132,
+            653
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "多人段位_降级确定",
+            "多人结算_点击错失机会",
+            "多人结算_奖励继续",
             "多人结算_已返回系列赛"
         ]
     },
@@ -293,5 +338,69 @@
         ],
         "action": "DoNothing",
         "next": []
+    },
+    "多人局内_兜底入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "pre_delay": 0,
+        "post_delay": 0,
+        "timeout": 180000,
+        "rate_limit": 100,
+        "next": [
+            "多人段位_降级确定",
+            "多人段位_升级继续",
+            "多人结算_已返回系列赛",
+            "多人结算_点击错失机会",
+            "多人结算_奖励继续",
+            "多人结算_成绩继续",
+            "多人局内_氮气兜底"
+        ]
+    },
+    "多人局内_氮气兜底": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/race_pause.png",
+                "roi": [
+                    25,
+                    17,
+                    72,
+                    73
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/race_touchdrive.png",
+                "roi": [
+                    25,
+                    90,
+                    177,
+                    48
+                ],
+                "threshold": 0.8
+            }
+        ],
+        "action": "Click",
+        "next": [
+            "多人段位_降级确定",
+            "多人段位_升级继续",
+            "多人结算_已返回系列赛",
+            "多人结算_点击错失机会",
+            "多人结算_奖励继续",
+            "多人结算_成绩继续",
+            "多人局内_氮气兜底"
+        ],
+        "target": [
+            1080,
+            560
+        ],
+        "repeat": 2,
+        "repeat_delay": 750,
+        "pre_delay": 0,
+        "post_delay": 10000,
+        "timeout": 60000,
+        "rate_limit": 100
     }
 }

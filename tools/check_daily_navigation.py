@@ -32,6 +32,10 @@ def hit(node, image):
         return all(hit(child, image) for child in node["all_of"])
     if node["recognition"] == "Or":
         return any(hit(child, image) for child in node["any_of"])
+    if node["recognition"] == "ColorMatch":
+        x, y, w, h = node["roi"]
+        region = cv2.cvtColor(image[y:y+h, x:x+w], node.get("method", 4))
+        return cv2.countNonZero(cv2.inRange(region, tuple(node["lower"]), tuple(node["upper"]))) >= node["count"]
     return score(node, image) >= node["threshold"]
 
 def main():
