@@ -1,0 +1,171 @@
+{
+    "多人选车_车型_car_b3df8ce15966934c": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_b3df8ce15966934c_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_a6143c5995d3b2e0": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_a6143c5995d3b2e0_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_bf0b9d4a4fcaaaa0": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_bf0b9d4a4fcaaaa0_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_0cc8beed8f36ae89": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_0cc8beed8f36ae89_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_8d2981adca3618c1": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_8d2981adca3618c1_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_b8a6feb1e618048a": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_b8a6feb1e618048a_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_e1c0f0455a16f168": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_e1c0f0455a16f168_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_b84f67304ca6f417": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_b84f67304ca6f417_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_18950b51fd913bee": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_18950b51fd913bee_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_ab1d758c2b54cd18": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_ab1d758c2b54cd18_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_944f78cad1b1c771": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_944f78cad1b1c771_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_3ac6edf946988969": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_3ac6edf946988969_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    },
+    "多人选车_车型_car_b1dd012bbcb6e34c": {
+        "recognition": "TemplateMatch",
+        "template": "navigation/loop/car_b1dd012bbcb6e34c_list.png",
+        "roi": [
+            0,
+            190,
+            1280,
+            480
+        ],
+        "threshold": 0.9,
+        "action": "DoNothing",
+        "next": []
+    }
+}

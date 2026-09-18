@@ -14,7 +14,7 @@ class SelectionStatus(str, Enum):
     SELECTED = "selected"
     NO_ELIGIBLE_ON_PAGE = "no_eligible_on_page"
     PAGE_STALLED = "page_stalled"
-    LIST_WRAPPED = "list_wrapped"
+    PAGE_REVISITED = "page_revisited"
 
 
 @dataclass(frozen=True, slots=True)
@@ -26,7 +26,7 @@ class SelectionDecision:
 
 
 class PageTracker:
-    """Detect a stalled swipe and a list wrap without fixed swipe counts."""
+    """Detect stalled swipes or unexpected page resets on a linear list."""
 
     def __init__(self, repeat_limit: int = 2) -> None:
         if repeat_limit < 1:
@@ -60,7 +60,7 @@ class PageTracker:
         if self._consecutive > self.repeat_limit:
             return SelectionStatus.PAGE_STALLED
         if self._moved_from_first and current == self._first and self._seen[current] > 1:
-            return SelectionStatus.LIST_WRAPPED
+            return SelectionStatus.PAGE_REVISITED
         return None
 
     def reset(self) -> None:
@@ -77,7 +77,8 @@ class VehicleSelector:
         self._priority = {vehicle_id: index for index, vehicle_id in enumerate(priority)}
 
     @classmethod
-    def from_rotation(cls, current_league: League, groups: Sequence[dict]) -> "VehicleSelector":
+    def from_rotation(cls, current_league: League, groups: Sequence[dict],
+                      owned_ids: set[str] | None = None) -> "VehicleSelector":
         compatible = sorted(
             (
                 (League.from_label(group["league"]), group)
@@ -91,6 +92,7 @@ class VehicleSelector:
             vehicle["catalog_id"]
             for _, group in compatible
             for vehicle in sorted(group.get("vehicles", []), key=lambda item: item["order"])
+            if owned_ids is None or vehicle["catalog_id"] in owned_ids
         ]
         return cls(current_league, priority)
 

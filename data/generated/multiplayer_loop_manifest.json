@@ -2,48 +2,298 @@
   "schema_version": 2,
   "league_detection": "series_player_badge",
   "supported_leagues": [
+    "白金",
     "黄金",
     "白银"
   ],
   "variants": {
-    "黄金": {
+    "白金": {
       "schema_version": 1,
-      "league": "黄金",
+      "league": "白金",
       "trials": [
         {
           "rounds": 3,
-          "entry": "多人循环3局_黄金_入口",
-          "nodes": 2785
+          "entry": "多人循环3局_白金_入口",
+          "nodes": 4303
         },
         {
           "rounds": 20,
-          "entry": "多人循环20局_黄金_入口",
-          "nodes": 18561
+          "entry": "多人循环20局_白金_入口",
+          "nodes": 28681
         }
       ],
       "recommended_order": [
-        "Nissan Z GT4",
         "Porsche Panamera Turbo S",
         "Ferrari 599XX EVO",
         "DS Automobiles DS E-Tense Performance",
         "Ferrari J50",
         "Mercedes-Benz Mercedes-AMG GT Black Series",
+        "Hyundai IONIQ 5 N",
+        "Nissan Z GT4",
         "Renault R.S. 01",
         "Lamborghini Miura Concept",
         "Lamborghini Huracan STO",
         "TVR Sagaris",
         "Kimera EVO37",
-        "Hyundai IONIQ 5 N",
-        "Praga R1"
+        "Praga R1",
+        "Nissan 370Z Nismo Neon Edition",
+        "Saleen S1",
+        "Cadillac Cien Concept",
+        "Lamborghini Huracan Super Trofeo EVO",
+        "Bentley Mulliner Bacalar",
+        "Maserati MC20 GT2",
+        "Ferrari Daytona SP3"
       ],
       "missing": [
-        "Aston Martin DB12",
-        "De Tomaso P900",
-        "Volkswagen Electric R"
+        "Aston Martin DBS Superleggera",
+        "Mercedes-Benz SLR McLaren",
+        "Apollo IE",
+        "Puritalia Berlinetta",
+        "Ferrari 488 Challenge EVO",
+        "Lamborghini Invencible",
+        "Lamborghini SC63",
+        "BMW M4 GTS",
+        "Nissan GT-R Nismo",
+        "Ford GT MK II",
+        "Bentley Continental GT Speed",
+        "Ferrari LaFerrari",
+        "Brabham BT62",
+        "LEGO Technic Ferrari FXX K",
+        "Glickenhaus 003S",
+        "Nissan R390 GT1",
+        "LEGO Technic Chevrolet Corvette Stingray",
+        "McLaren 765LT",
+        "Pagani Zonda HP Barchetta",
+        "Ferrari F12tdf",
+        "Aston Martin One77",
+        "Maserati MC20",
+        "Lamborghini Autentica",
+        "Chevrolet Corvette Grand Sport",
+        "VLF Force 1 V10",
+        "Ferrari 812 Superfast",
+        "Sin R1 550",
+        "Ferrari F12 Berlinetta",
+        "Aston Martin Vantage GT12",
+        "Lamborghini Reventon Roadster",
+        "McLaren 750S Coupe",
+        "Porsche Carrera GT",
+        "Ferrari Enzo Ferrari",
+        "Lamborghini Essenza SCV12",
+        "Toyota GR Super Sport Concept",
+        "Citroën GT by Citroën",
+        "FV Frangivento GT65",
+        "Pagani Zonda R",
+        "Lamborghini Asterion",
+        "Aston Martin Vulcan",
+        "Pininfarina H2 Speed",
+        "Porsche 911 GT1 Evolution",
+        "Mercedes-Benz CLK-GTR",
+        "Artega Scalo Superelletra",
+        "Maserati MC12",
+        "Acura 2017 NSX",
+        "Jaguar XJR-15",
+        "Arash AF8 Falcon Edition",
+        "Vencer Sarthe",
+        "Dodge Viper GTS",
+        "ItalDesign Zerouno",
+        "Ferrari 488 GTB",
+        "Ferrari F40",
+        "Ares S1",
+        "ATS Automobili Corsa RRTurbo",
+        "Kepler Motion",
+        "Porsche 718 Cayman GT4 Clubsport",
+        "McLaren GT",
+        "Drako GTE",
+        "Porsche 911 Turbo 50 Years",
+        "Dodge Charger SRT Hellcat Redeye Widebody",
+        "McLaren Elva",
+        "Porsche 911 GT3 R Rennsport",
+        "Praga Bohema",
+        "Acura NSX GT3 EVO",
+        "Lexus LFA Nurburgring Package",
+        "BMW M4 GT3",
+        "Lamborghini Gallardo LP560-4",
+        "Bugatti EB110",
+        "Mercedes-Benz C 63 AMG DTM",
+        "Chevrolet Corvette Stingray",
+        "Lamborghini Diablo GT",
+        "LEGO Technic BMW M4 GT3 EVO",
+        "Arrinera Hussarya 33",
+        "Aston Martin DBS 770 Ultimate",
+        "Lamborghini Huracan Sterrato",
+        "Ferrari 296 GTB",
+        "Formula E Gen 2 Asphalt Edition",
+        "Lotus Evora Sport 410",
+        "Porsche 911 GTS Coupe",
+        "Mercedes-Benz AMG GT S",
+        "Aston Martin DB11",
+        "Jaguar F-Type SVR",
+        "Exotic Rides W70",
+        "Rezvani Beast X",
+        "Ford Shelby GR-1",
+        "Jaguar XKR-S GT",
+        "Porsche Taycan Turbo S",
+        "Aston Martin V12 Spedster",
+        "Citroën DS Survolt",
+        "Ford GT",
+        "Dodge Viper ACR",
+        "Ferrari F50",
+        "Bolwell MK X Nagari 500",
+        "Donkervoort D8 GTO Individual Series",
+        "Ford Mustang RTR Spec 5 10th Anniv.",
+        "Ferrari Roma",
+        "Arash AF10",
+        "Aston Martin Valour",
+        "Maserati Alfieri",
+        "Porsche 911 50 Years Porsche Design",
+        "Porsche Mission R",
+        "Mercedes-Benz 2022 Showcar Vision AMG",
+        "Jaguar XE SV Project 8",
+        "Ferrari Monza SP1",
+        "Mitsubishi Lancer Evolution",
+        "BMW Z4 LCI E89",
+        "Chevrolet Camaro LT",
+        "Nissan 370Z Nismo",
+        "Dodge Challenger SRT8",
+        "KTM X-Bow GTX",
+        "Volkswagen XL Sport Concept",
+        "BMW 3.0 CSL Hommage",
+        "Chevrolet Camaro ZL1 50th Edition",
+        "DS Automobiles DS E-Tense",
+        "Porsche Boxster 25th",
+        "Nissan Leaf Nismo RC",
+        "BMW i8 Roadster",
+        "Dodge Challenger 392 Hemi Scat Pack",
+        "ItalDesign Davinci",
+        "Renault Dezir",
+        "Peugeot SR1",
+        "Porsche 718 Cayman",
+        "Lotus Elise Sprint 220",
+        "Infiniti Project Black S",
+        "Porsche 911 Carrera RS 3.8",
+        "Ford Shelby GT350R",
+        "Porsche 911 Targa 4S",
+        "Lotus Emira",
+        "Lamborghini Countach 25th Anniversary",
+        "Honda Civic Type-R",
+        "Ginetta G60",
+        "TVR Griffith",
+        "Bentley Continental GT3",
+        "Chevrolet Corvette C7.R",
+        "Glickenhaus 004C",
+        "Alfa Romeo Giulia GTAm",
+        "Toyota GR Supra Racing Concept",
+        "Ford Mustang Mach-E1400",
+        "Mazda Furai"
       ],
       "selection_policy": "first_available_in_order",
       "rotation_file": "generated/champion_rotation.json",
+      "strategy_file": "config/selection_strategy.json",
+      "selection_engine": "runtime_ocr",
+      "recommended_vehicles": [
+        {
+          "catalog_id": "car_ab1d758c2b54cd18",
+          "title": "Porsche Panamera Turbo S",
+          "league": "黄金"
+        },
+        {
+          "catalog_id": "car_944f78cad1b1c771",
+          "title": "Ferrari 599XX EVO",
+          "league": "黄金"
+        },
+        {
+          "catalog_id": "car_3ac6edf946988969",
+          "title": "DS Automobiles DS E-Tense Performance",
+          "league": "黄金"
+        },
+        {
+          "catalog_id": "car_b1dd012bbcb6e34c",
+          "title": "Ferrari J50",
+          "league": "黄金"
+        },
+        {
+          "catalog_id": "car_0cc8beed8f36ae89",
+          "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_a6143c5995d3b2e0",
+          "title": "Hyundai IONIQ 5 N",
+          "league": "青铜"
+        },
+        {
+          "catalog_id": "car_18950b51fd913bee",
+          "title": "Nissan Z GT4",
+          "league": "黄金"
+        },
+        {
+          "catalog_id": "car_8d2981adca3618c1",
+          "title": "Renault R.S. 01",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_b8a6feb1e618048a",
+          "title": "Lamborghini Miura Concept",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_e1c0f0455a16f168",
+          "title": "Lamborghini Huracan STO",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_b84f67304ca6f417",
+          "title": "TVR Sagaris",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_b3df8ce15966934c",
+          "title": "Kimera EVO37",
+          "league": "青铜"
+        },
+        {
+          "catalog_id": "car_bf0b9d4a4fcaaaa0",
+          "title": "Praga R1",
+          "league": "青铜"
+        },
+        {
+          "catalog_id": "car_d34446b5976d56ac",
+          "title": "Nissan 370Z Nismo Neon Edition",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_9a2a3be9e7c943c0",
+          "title": "Saleen S1",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_f0091035289ba11e",
+          "title": "Cadillac Cien Concept",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_80f0a08f56df5e1f",
+          "title": "Lamborghini Huracan Super Trofeo EVO",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_96256205c3b3ceb2",
+          "title": "Bentley Mulliner Bacalar",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_7eb780d3e15fb081",
+          "title": "Maserati MC20 GT2",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_8cb68c290ca8da80",
+          "title": "Ferrari Daytona SP3",
+          "league": "白银"
+        }
+      ],
       "compatible_leagues": [
+        "白金",
         "黄金",
         "白银",
         "青铜"
@@ -51,12 +301,6 @@
       "search_policy": "reverse_24_then_forward_24",
       "vehicle_click_region": "car_body_left_of_matched_name",
       "list_template_checks": [
-        {
-          "title": "Nissan Z GT4",
-          "positives": [
-            "多人游戏_选车_黄金_Nissan Z GT4完整可见_仅拥有开启.png"
-          ]
-        },
         {
           "title": "Porsche Panamera Turbo S",
           "positives": [
@@ -96,6 +340,18 @@
           ]
         },
         {
+          "title": "Hyundai IONIQ 5 N",
+          "positives": [
+            "多人游戏_选车_青铜_Hyundai IONIQ 5 N完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Nissan Z GT4",
+          "positives": [
+            "多人游戏_选车_黄金_Nissan Z GT4完整可见_仅拥有开启.png"
+          ]
+        },
+        {
           "title": "Renault R.S. 01",
           "positives": [
             "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
@@ -142,58 +398,378 @@
           ]
         },
         {
-          "title": "Hyundai IONIQ 5 N",
-          "positives": [
-            "多人游戏_选车_青铜_Hyundai IONIQ 5 N完整可见_仅拥有开启.png"
-          ]
-        },
-        {
           "title": "Praga R1",
           "positives": [
             "多人游戏_选车_青铜_Praga R1完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Nissan 370Z Nismo Neon Edition",
+          "positives": [
+            "多人游戏_选车_白银_Aston Martin Valour完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Cadillac Cien Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati Alfieri完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Nissan 370Z Nismo Neon Edition完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche 911 50 Years Porsche Design完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Saleen S1完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Saleen S1",
+          "positives": [
+            "多人游戏_选车_白银_Aston Martin Valour完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Cadillac Cien Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati Alfieri完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Nissan 370Z Nismo Neon Edition完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche 911 50 Years Porsche Design完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Saleen S1完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Cadillac Cien Concept",
+          "positives": [
+            "多人游戏_选车_白银_Aston Martin Valour完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Cadillac Cien Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati Alfieri完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Nissan 370Z Nismo Neon Edition完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche 911 50 Years Porsche Design完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Saleen S1完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Lamborghini Huracan Super Trofeo EVO",
+          "positives": [
+            "多人游戏_选车_白银_Jaguar XE SV Project 8完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan STO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan Super Trofeo EVO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz 2022 Showcar Vision AMG完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche Mission R完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_TVR Sagaris完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Bentley Mulliner Bacalar",
+          "positives": [
+            "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Ferrari Monza SP1完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz Mercedes-AMG GT Black Series完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Renault R.S. 01完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Maserati MC20 GT2",
+          "positives": [
+            "多人游戏_选车_白银_Ferrari Daytona SP3完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Miura Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati MC20 GT2完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Ferrari Daytona SP3",
+          "positives": [
+            "多人游戏_选车_白银_Ferrari Daytona SP3完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Miura Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati MC20 GT2完整可见_仅拥有关闭.png"
           ]
         }
       ],
       "session_time_limit": null,
       "note": "有界局数试跑；无60分钟计时器。段位变化或异常停止，设备流程待试跑。"
     },
-    "白银": {
+    "黄金": {
       "schema_version": 1,
-      "league": "白银",
+      "league": "黄金",
       "trials": [
         {
           "rounds": 3,
-          "entry": "多人循环3局_白银_入口",
-          "nodes": 1885
+          "entry": "多人循环3局_黄金_入口",
+          "nodes": 4303
         },
         {
           "rounds": 20,
-          "entry": "多人循环20局_白银_入口",
-          "nodes": 12561
+          "entry": "多人循环20局_黄金_入口",
+          "nodes": 28681
         }
       ],
       "recommended_order": [
+        "Porsche Panamera Turbo S",
+        "Ferrari 599XX EVO",
+        "DS Automobiles DS E-Tense Performance",
+        "Ferrari J50",
+        "Kimera EVO37",
+        "Hyundai IONIQ 5 N",
         "Mercedes-Benz Mercedes-AMG GT Black Series",
         "Renault R.S. 01",
         "Lamborghini Miura Concept",
         "Lamborghini Huracan STO",
         "TVR Sagaris",
-        "Kimera EVO37",
-        "Hyundai IONIQ 5 N",
-        "Praga R1"
+        "Nissan Z GT4",
+        "Praga R1",
+        "Nissan 370Z Nismo Neon Edition",
+        "Saleen S1",
+        "Cadillac Cien Concept",
+        "Lamborghini Huracan Super Trofeo EVO",
+        "Bentley Mulliner Bacalar",
+        "Maserati MC20 GT2",
+        "Ferrari Daytona SP3"
       ],
       "missing": [
-        "Volkswagen Electric R"
+        "Pininfarina H2 Speed",
+        "Lamborghini Asterion",
+        "Aston Martin Vulcan",
+        "Porsche 911 GT1 Evolution",
+        "Mercedes-Benz CLK-GTR",
+        "Artega Scalo Superelletra",
+        "Maserati MC12",
+        "Acura 2017 NSX",
+        "Jaguar XJR-15",
+        "Arash AF8 Falcon Edition",
+        "Vencer Sarthe",
+        "Dodge Viper GTS",
+        "ItalDesign Zerouno",
+        "Ferrari 488 GTB",
+        "Ferrari F40",
+        "Ares S1",
+        "ATS Automobili Corsa RRTurbo",
+        "Kepler Motion",
+        "Porsche 718 Cayman GT4 Clubsport",
+        "McLaren GT",
+        "Drako GTE",
+        "Porsche 911 Turbo 50 Years",
+        "Dodge Charger SRT Hellcat Redeye Widebody",
+        "Porsche 911 GT3 R Rennsport",
+        "Praga Bohema",
+        "Acura NSX GT3 EVO",
+        "Lexus LFA Nurburgring Package",
+        "Lamborghini Gallardo LP560-4",
+        "Bugatti EB110",
+        "Mercedes-Benz C 63 AMG DTM",
+        "Chevrolet Corvette Stingray",
+        "Lamborghini Diablo GT",
+        "Arrinera Hussarya 33",
+        "Aston Martin DBS 770 Ultimate",
+        "Lamborghini Huracan Sterrato",
+        "Ferrari 296 GTB",
+        "Lotus Evora Sport 410",
+        "Porsche 911 GTS Coupe",
+        "Mercedes-Benz AMG GT S",
+        "Aston Martin DB11",
+        "Jaguar F-Type SVR",
+        "Exotic Rides W70",
+        "Rezvani Beast X",
+        "Ford Shelby GR-1",
+        "Jaguar XKR-S GT",
+        "Porsche Taycan Turbo S",
+        "Aston Martin V12 Spedster",
+        "Citroën DS Survolt",
+        "Ford GT",
+        "Dodge Viper ACR",
+        "Ferrari F50",
+        "Bolwell MK X Nagari 500",
+        "Donkervoort D8 GTO Individual Series",
+        "Ford Mustang RTR Spec 5 10th Anniv.",
+        "Ferrari Roma",
+        "Arash AF10",
+        "Aston Martin Valour",
+        "Maserati Alfieri",
+        "Porsche 911 50 Years Porsche Design",
+        "Porsche Mission R",
+        "Mercedes-Benz 2022 Showcar Vision AMG",
+        "Jaguar XE SV Project 8",
+        "Ferrari Monza SP1",
+        "Mitsubishi Lancer Evolution",
+        "BMW Z4 LCI E89",
+        "Chevrolet Camaro LT",
+        "Nissan 370Z Nismo",
+        "Dodge Challenger SRT8",
+        "KTM X-Bow GTX",
+        "Volkswagen XL Sport Concept",
+        "BMW 3.0 CSL Hommage",
+        "Chevrolet Camaro ZL1 50th Edition",
+        "DS Automobiles DS E-Tense",
+        "Porsche Boxster 25th",
+        "Nissan Leaf Nismo RC",
+        "BMW i8 Roadster",
+        "Dodge Challenger 392 Hemi Scat Pack",
+        "ItalDesign Davinci",
+        "Renault Dezir",
+        "Peugeot SR1",
+        "Porsche 718 Cayman",
+        "Lotus Elise Sprint 220",
+        "Infiniti Project Black S",
+        "Porsche 911 Carrera RS 3.8",
+        "Ford Shelby GT350R",
+        "Porsche 911 Targa 4S",
+        "Lotus Emira",
+        "Lamborghini Countach 25th Anniversary",
+        "Honda Civic Type-R",
+        "Ginetta G60",
+        "TVR Griffith",
+        "Bentley Continental GT3",
+        "Chevrolet Corvette C7.R",
+        "Glickenhaus 004C",
+        "Alfa Romeo Giulia GTAm",
+        "Toyota GR Supra Racing Concept",
+        "Ford Mustang Mach-E1400",
+        "Mazda Furai",
+        "BMW M4 GTS"
       ],
       "selection_policy": "first_available_in_order",
       "rotation_file": "generated/champion_rotation.json",
+      "strategy_file": "config/selection_strategy.json",
+      "selection_engine": "runtime_ocr",
+      "recommended_vehicles": [
+        {
+          "catalog_id": "car_ab1d758c2b54cd18",
+          "title": "Porsche Panamera Turbo S",
+          "league": "黄金"
+        },
+        {
+          "catalog_id": "car_944f78cad1b1c771",
+          "title": "Ferrari 599XX EVO",
+          "league": "黄金"
+        },
+        {
+          "catalog_id": "car_3ac6edf946988969",
+          "title": "DS Automobiles DS E-Tense Performance",
+          "league": "黄金"
+        },
+        {
+          "catalog_id": "car_b1dd012bbcb6e34c",
+          "title": "Ferrari J50",
+          "league": "黄金"
+        },
+        {
+          "catalog_id": "car_b3df8ce15966934c",
+          "title": "Kimera EVO37",
+          "league": "青铜"
+        },
+        {
+          "catalog_id": "car_a6143c5995d3b2e0",
+          "title": "Hyundai IONIQ 5 N",
+          "league": "青铜"
+        },
+        {
+          "catalog_id": "car_0cc8beed8f36ae89",
+          "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_8d2981adca3618c1",
+          "title": "Renault R.S. 01",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_b8a6feb1e618048a",
+          "title": "Lamborghini Miura Concept",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_e1c0f0455a16f168",
+          "title": "Lamborghini Huracan STO",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_b84f67304ca6f417",
+          "title": "TVR Sagaris",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_18950b51fd913bee",
+          "title": "Nissan Z GT4",
+          "league": "黄金"
+        },
+        {
+          "catalog_id": "car_bf0b9d4a4fcaaaa0",
+          "title": "Praga R1",
+          "league": "青铜"
+        },
+        {
+          "catalog_id": "car_d34446b5976d56ac",
+          "title": "Nissan 370Z Nismo Neon Edition",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_9a2a3be9e7c943c0",
+          "title": "Saleen S1",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_f0091035289ba11e",
+          "title": "Cadillac Cien Concept",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_80f0a08f56df5e1f",
+          "title": "Lamborghini Huracan Super Trofeo EVO",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_96256205c3b3ceb2",
+          "title": "Bentley Mulliner Bacalar",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_7eb780d3e15fb081",
+          "title": "Maserati MC20 GT2",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_8cb68c290ca8da80",
+          "title": "Ferrari Daytona SP3",
+          "league": "白银"
+        }
+      ],
       "compatible_leagues": [
+        "黄金",
         "白银",
         "青铜"
       ],
       "search_policy": "reverse_24_then_forward_24",
       "vehicle_click_region": "car_body_left_of_matched_name",
       "list_template_checks": [
+        {
+          "title": "Porsche Panamera Turbo S",
+          "positives": [
+            "多人游戏_选车_黄金_Porsche Panamera Turbo S完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Ferrari 599XX EVO",
+          "positives": [
+            "多人游戏_选车_黄金_Drako GTE完整可见_仅拥有开启.png",
+            "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png",
+            "多人游戏_选车_黄金_Ferrari 599XX EVO完整可见_仅拥有开启.png",
+            "多人游戏_选车_黄金_McLaren GT完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "DS Automobiles DS E-Tense Performance",
+          "positives": [
+            "多人游戏_选车_黄金_DS Automobiles DS E-Tense Performance完整可见_仅拥有开启.png",
+            "多人游戏_选车_黄金_Ferrari 599XX EVO完整可见_仅拥有开启.png",
+            "多人游戏_选车_黄金_McLaren GT完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Ferrari J50",
+          "positives": [
+            "多人游戏_选车_黄金_Ferrari J50完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Kimera EVO37",
+          "positives": [
+            "多人游戏_选车_白银起点_仅拥有开启.png",
+            "多人游戏_选车_青铜_Kimera EVO37完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Hyundai IONIQ 5 N",
+          "positives": [
+            "多人游戏_选车_青铜_Hyundai IONIQ 5 N完整可见_仅拥有开启.png"
+          ]
+        },
         {
           "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
           "positives": [
@@ -243,6 +819,313 @@
           ]
         },
         {
+          "title": "Nissan Z GT4",
+          "positives": [
+            "多人游戏_选车_黄金_Nissan Z GT4完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Praga R1",
+          "positives": [
+            "多人游戏_选车_青铜_Praga R1完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Nissan 370Z Nismo Neon Edition",
+          "positives": [
+            "多人游戏_选车_白银_Aston Martin Valour完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Cadillac Cien Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati Alfieri完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Nissan 370Z Nismo Neon Edition完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche 911 50 Years Porsche Design完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Saleen S1完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Saleen S1",
+          "positives": [
+            "多人游戏_选车_白银_Aston Martin Valour完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Cadillac Cien Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati Alfieri完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Nissan 370Z Nismo Neon Edition完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche 911 50 Years Porsche Design完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Saleen S1完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Cadillac Cien Concept",
+          "positives": [
+            "多人游戏_选车_白银_Aston Martin Valour完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Cadillac Cien Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati Alfieri完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Nissan 370Z Nismo Neon Edition完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche 911 50 Years Porsche Design完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Saleen S1完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Lamborghini Huracan Super Trofeo EVO",
+          "positives": [
+            "多人游戏_选车_白银_Jaguar XE SV Project 8完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan STO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan Super Trofeo EVO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz 2022 Showcar Vision AMG完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche Mission R完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_TVR Sagaris完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Bentley Mulliner Bacalar",
+          "positives": [
+            "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Ferrari Monza SP1完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz Mercedes-AMG GT Black Series完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Renault R.S. 01完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Maserati MC20 GT2",
+          "positives": [
+            "多人游戏_选车_白银_Ferrari Daytona SP3完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Miura Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati MC20 GT2完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Ferrari Daytona SP3",
+          "positives": [
+            "多人游戏_选车_白银_Ferrari Daytona SP3完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Miura Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati MC20 GT2完整可见_仅拥有关闭.png"
+          ]
+        }
+      ],
+      "session_time_limit": null,
+      "note": "有界局数试跑；无60分钟计时器。段位变化或异常停止，设备流程待试跑。"
+    },
+    "白银": {
+      "schema_version": 1,
+      "league": "白银",
+      "trials": [
+        {
+          "rounds": 3,
+          "entry": "多人循环3局_白银_入口",
+          "nodes": 3343
+        },
+        {
+          "rounds": 20,
+          "entry": "多人循环20局_白银_入口",
+          "nodes": 22281
+        }
+      ],
+      "recommended_order": [
+        "Mercedes-Benz Mercedes-AMG GT Black Series",
+        "Renault R.S. 01",
+        "Lamborghini Miura Concept",
+        "Lamborghini Huracan STO",
+        "Kimera EVO37",
+        "Hyundai IONIQ 5 N",
+        "TVR Sagaris",
+        "Praga R1",
+        "Nissan 370Z Nismo Neon Edition",
+        "Saleen S1",
+        "Cadillac Cien Concept",
+        "Lamborghini Huracan Super Trofeo EVO",
+        "Bentley Mulliner Bacalar",
+        "Maserati MC20 GT2",
+        "Ferrari Daytona SP3"
+      ],
+      "missing": [
+        "Ford Shelby GR-1",
+        "Dodge Viper ACR",
+        "Rezvani Beast X",
+        "Lotus Evora Sport 410",
+        "Porsche 911 GTS Coupe",
+        "Mercedes-Benz AMG GT S",
+        "Aston Martin DB11",
+        "Jaguar F-Type SVR",
+        "Exotic Rides W70",
+        "Jaguar XKR-S GT",
+        "Porsche Taycan Turbo S",
+        "Aston Martin V12 Spedster",
+        "Citroën DS Survolt",
+        "Ford GT",
+        "Ferrari F50",
+        "Bolwell MK X Nagari 500",
+        "Donkervoort D8 GTO Individual Series",
+        "Ford Mustang RTR Spec 5 10th Anniv.",
+        "Ferrari Roma",
+        "Arash AF10",
+        "Aston Martin Valour",
+        "Maserati Alfieri",
+        "Porsche 911 50 Years Porsche Design",
+        "Porsche Mission R",
+        "Mercedes-Benz 2022 Showcar Vision AMG",
+        "Jaguar XE SV Project 8",
+        "Ferrari Monza SP1",
+        "Mitsubishi Lancer Evolution",
+        "BMW Z4 LCI E89",
+        "Chevrolet Camaro LT",
+        "Nissan 370Z Nismo",
+        "Dodge Challenger SRT8",
+        "KTM X-Bow GTX",
+        "Volkswagen XL Sport Concept",
+        "BMW 3.0 CSL Hommage",
+        "Chevrolet Camaro ZL1 50th Edition",
+        "DS Automobiles DS E-Tense",
+        "Porsche Boxster 25th",
+        "Nissan Leaf Nismo RC",
+        "BMW i8 Roadster",
+        "Dodge Challenger 392 Hemi Scat Pack",
+        "ItalDesign Davinci",
+        "Renault Dezir",
+        "Peugeot SR1",
+        "Porsche 718 Cayman",
+        "Lotus Elise Sprint 220",
+        "Infiniti Project Black S",
+        "Porsche 911 Carrera RS 3.8",
+        "Ford Shelby GT350R",
+        "Porsche 911 Targa 4S",
+        "Lotus Emira",
+        "Lamborghini Countach 25th Anniversary",
+        "Honda Civic Type-R",
+        "Ginetta G60",
+        "TVR Griffith",
+        "Bentley Continental GT3",
+        "Chevrolet Corvette C7.R",
+        "Glickenhaus 004C",
+        "Alfa Romeo Giulia GTAm",
+        "Toyota GR Supra Racing Concept",
+        "Ford Mustang Mach-E1400",
+        "Mazda Furai",
+        "BMW M4 GTS"
+      ],
+      "selection_policy": "first_available_in_order",
+      "rotation_file": "generated/champion_rotation.json",
+      "strategy_file": "config/selection_strategy.json",
+      "selection_engine": "runtime_ocr",
+      "recommended_vehicles": [
+        {
+          "catalog_id": "car_0cc8beed8f36ae89",
+          "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_8d2981adca3618c1",
+          "title": "Renault R.S. 01",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_b8a6feb1e618048a",
+          "title": "Lamborghini Miura Concept",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_e1c0f0455a16f168",
+          "title": "Lamborghini Huracan STO",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_b3df8ce15966934c",
+          "title": "Kimera EVO37",
+          "league": "青铜"
+        },
+        {
+          "catalog_id": "car_a6143c5995d3b2e0",
+          "title": "Hyundai IONIQ 5 N",
+          "league": "青铜"
+        },
+        {
+          "catalog_id": "car_b84f67304ca6f417",
+          "title": "TVR Sagaris",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_bf0b9d4a4fcaaaa0",
+          "title": "Praga R1",
+          "league": "青铜"
+        },
+        {
+          "catalog_id": "car_d34446b5976d56ac",
+          "title": "Nissan 370Z Nismo Neon Edition",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_9a2a3be9e7c943c0",
+          "title": "Saleen S1",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_f0091035289ba11e",
+          "title": "Cadillac Cien Concept",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_80f0a08f56df5e1f",
+          "title": "Lamborghini Huracan Super Trofeo EVO",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_96256205c3b3ceb2",
+          "title": "Bentley Mulliner Bacalar",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_7eb780d3e15fb081",
+          "title": "Maserati MC20 GT2",
+          "league": "白银"
+        },
+        {
+          "catalog_id": "car_8cb68c290ca8da80",
+          "title": "Ferrari Daytona SP3",
+          "league": "白银"
+        }
+      ],
+      "compatible_leagues": [
+        "白银",
+        "青铜"
+      ],
+      "search_policy": "reverse_24_then_forward_24",
+      "vehicle_click_region": "car_body_left_of_matched_name",
+      "list_template_checks": [
+        {
+          "title": "Mercedes-Benz Mercedes-AMG GT Black Series",
+          "positives": [
+            "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Ferrari Monza SP1完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz Mercedes-AMG GT Black Series完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Renault R.S. 01完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Renault R.S. 01",
+          "positives": [
+            "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Ferrari Monza SP1完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz Mercedes-AMG GT Black Series完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Renault R.S. 01完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Lamborghini Miura Concept",
+          "positives": [
+            "多人游戏_选车_白银_Ferrari Daytona SP3完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Miura Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati MC20 GT2完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Lamborghini Huracan STO",
+          "positives": [
+            "多人游戏_选车_白银_Jaguar XE SV Project 8完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan STO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan Super Trofeo EVO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz 2022 Showcar Vision AMG完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche Mission R完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_TVR Sagaris完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
           "title": "Kimera EVO37",
           "positives": [
             "多人游戏_选车_白银起点_仅拥有开启.png",
@@ -256,9 +1139,89 @@
           ]
         },
         {
+          "title": "TVR Sagaris",
+          "positives": [
+            "多人游戏_选车_白银_Jaguar XE SV Project 8完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan STO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan Super Trofeo EVO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz 2022 Showcar Vision AMG完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche Mission R完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_TVR Sagaris完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
           "title": "Praga R1",
           "positives": [
             "多人游戏_选车_青铜_Praga R1完整可见_仅拥有开启.png"
+          ]
+        },
+        {
+          "title": "Nissan 370Z Nismo Neon Edition",
+          "positives": [
+            "多人游戏_选车_白银_Aston Martin Valour完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Cadillac Cien Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati Alfieri完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Nissan 370Z Nismo Neon Edition完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche 911 50 Years Porsche Design完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Saleen S1完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Saleen S1",
+          "positives": [
+            "多人游戏_选车_白银_Aston Martin Valour完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Cadillac Cien Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati Alfieri完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Nissan 370Z Nismo Neon Edition完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche 911 50 Years Porsche Design完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Saleen S1完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Cadillac Cien Concept",
+          "positives": [
+            "多人游戏_选车_白银_Aston Martin Valour完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Cadillac Cien Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati Alfieri完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Nissan 370Z Nismo Neon Edition完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche 911 50 Years Porsche Design完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Saleen S1完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Lamborghini Huracan Super Trofeo EVO",
+          "positives": [
+            "多人游戏_选车_白银_Jaguar XE SV Project 8完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan STO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Huracan Super Trofeo EVO完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz 2022 Showcar Vision AMG完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Porsche Mission R完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_TVR Sagaris完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Bentley Mulliner Bacalar",
+          "positives": [
+            "多人游戏_选车_白银_Bentley Mulliner Bacalar完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Ferrari Monza SP1完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Mercedes-Benz Mercedes-AMG GT Black Series完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Renault R.S. 01完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Maserati MC20 GT2",
+          "positives": [
+            "多人游戏_选车_白银_Ferrari Daytona SP3完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Miura Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati MC20 GT2完整可见_仅拥有关闭.png"
+          ]
+        },
+        {
+          "title": "Ferrari Daytona SP3",
+          "positives": [
+            "多人游戏_选车_白银_Ferrari Daytona SP3完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Lamborghini Miura Concept完整可见_仅拥有关闭.png",
+            "多人游戏_选车_白银_Maserati MC20 GT2完整可见_仅拥有关闭.png"
           ]
         }
       ],
@@ -267,6 +1230,10 @@
     }
   },
   "league_template_checks": [
+    {
+      "source": "多人游戏_经典系列赛_首页_白金.png",
+      "league": "白金"
+    },
     {
       "source": "多人游戏_经典系列赛_首页_白银.png",
       "league": "白银"
@@ -280,6 +1247,6 @@
       "league": "白银"
     }
   ],
-  "node_count": 36070,
-  "note": "每局重新确认；黄金不可用立即重读；服务器恢复保持当前局；设备长时运行待验证。"
+  "node_count": 91962,
+  "note": "每局重新确认；原段位不可用立即重读；服务器恢复保持当前局；设备长时运行待验证。"
 }

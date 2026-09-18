@@ -126,6 +126,8 @@ def install_resource():
     for relative in (
         Path("data/multiplayer_profile.json"),
         Path("data/generated/champion_rotation.json"),
+        Path("data/generated/vehicle_catalog.json"),
+        Path("data/generated/duel_auto_candidates.json"),
         Path("data/sources/multiplayer_tracks.json"),
     ):
         destination = install_path / relative
@@ -177,6 +179,9 @@ def install_chores():
         install_path / "LICENSES",
         dirs_exist_ok=True,
     )
+    editor_executable = working_dir / "build" / "selection_gui" / "current" / "dist" / "ma9-selection.exe"
+    if os_name == "win" and editor_executable.is_file():
+        shutil.copy2(editor_executable, install_path / editor_executable.name)
 
 
 def install_agent():

@@ -51,7 +51,10 @@
             },
             {
                 "recognition": "TemplateMatch",
-                "template": "navigation/multiplayer/classic_card.png",
+                "template": [
+                    "navigation/multiplayer/classic_card.png",
+                    "navigation/multiplayer/classic_card_platinum.png"
+                ],
                 "roi": [
                     250,
                     390,

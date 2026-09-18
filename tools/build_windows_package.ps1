@@ -21,6 +21,8 @@ if (-not (Test-Path -LiteralPath $Mfa)) {
 
 & $Python (Join-Path $Root "tools\build_agent.py") --clean
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+& $Python (Join-Path $Root "tools\build_selection_gui.py")
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 $RootFull = [System.IO.Path]::GetFullPath($Root).TrimEnd('\')
 $InstallFull = [System.IO.Path]::GetFullPath($Install)

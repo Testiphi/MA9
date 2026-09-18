@@ -32,6 +32,14 @@ def build(source_dir, workbook_name="多人选车_new.xlsx", sequence_column="B"
     with (source_dir / "国服_a9mmgj_top.csv").open(encoding="utf-8-sig", newline="") as stream:
         catalog = [{"id": vehicle_id(r["title"]), "title": r["title"], "class": r["class"], "league": r["league"]}
                    for r in csv.DictReader(stream)]
+    league_overrides_path = source_dir / "vehicle_league_overrides.json"
+    if league_overrides_path.is_file():
+        overrides = json.loads(league_overrides_path.read_text(encoding="utf-8"))
+        known_titles = {row["title"] for row in catalog}
+        if set(overrides) - known_titles or any(rank not in LEAGUES for rank in overrides.values()):
+            raise ValueError("vehicle league overrides contain an unknown title or league")
+        for row in catalog:
+            row["league"] = overrides.get(row["title"], row["league"])
     by_name = {}
     for record in catalog:
         if record["league"] not in LEAGUES or record["class"] not in set("DCBASR"):

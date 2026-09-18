@@ -15,6 +15,7 @@ RESTART = "语言更改_重启.png"
 RESTART_VARIANT = "语言更改_重启_新游戏设置.png"
 GARAGE = "车库外观广告.png"
 ADS = ["BXR氮气特效广告.png", "每日超能礼包广告.png"]
+PASS_LEVEL = "多人游戏_结算_通行证升级.png"
 CONNECTION_ERROR = "连接错误.png"
 SPECS = {
     "options": (CONNECT, (71, 82, 337, 115), [55, 70, 300, 60]),
@@ -35,6 +36,7 @@ SPECS = {
     "back_arrow": (CONNECT, (25, 12, 53, 49), [15, 3, 48, 58]),
     "ad_close_white": (ADS[0], (1067, 92, 1105, 130), [1000, 70, 160, 110]),
     "ad_close_pink": (ADS[1], (1061, 99, 1100, 138), [1000, 70, 160, 110]),
+    "pass_level_close": (PASS_LEVEL, (1097, 122, 1145, 171), [1000, 70, 160, 110]),
     "connection_title": (CONNECTION_ERROR, (575, 192, 705, 230), [555, 175, 170, 70]),
     "connection_retry": (CONNECTION_ERROR, (610, 482, 671, 516), [590, 465, 100, 65]),
 }
@@ -96,7 +98,8 @@ def main():
         following = [close, retry, claim, home, back]
         pipeline[claim] = guarded(["garage_title", "garage_claim"], [966, 572], following)
         pipeline[close] = {"recognition": "TemplateMatch",
-                           "template": [template("ad_close_white")["template"], template("ad_close_pink")["template"]],
+                           "template": [template(name)["template"] for name in
+                                        ("ad_close_white", "ad_close_pink", "pass_level_close")],
                            "roi": SPECS["ad_close_white"][2], "threshold": 0.9,
                            "action": "Click", "target": True, "max_hit": 10,
                            "post_delay": 500, "timeout": 180000,
@@ -129,7 +132,7 @@ def main():
             restart: source.name in [RESTART, RESTART_VARIANT],
             done: "_主页" in source.name,
             "通用弹窗_车库外观领取": source.name == GARAGE,
-            "通用弹窗_关闭广告": source.name in ADS,
+            "通用弹窗_关闭广告": source.name in [*ADS, PASS_LEVEL],
             "通用弹窗_连接错误重试": source.name == CONNECTION_ERROR,
             "通用弹窗_已到主页": "_主页" in source.name or source.name == HOME,
         }

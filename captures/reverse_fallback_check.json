@@ -6,6 +6,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -18,6 +19,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -30,6 +32,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -42,6 +45,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -54,6 +58,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -66,6 +71,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -78,6 +84,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -90,6 +97,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -102,6 +110,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -114,6 +123,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -126,6 +136,20 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
+      "缺油": false
+    },
+    "ready": false,
+    "touchdrive_off": false
+  },
+  {
+    "source": "多人游戏_主页选中_白金.png",
+    "skip": {
+      "缺钥匙": false,
+      "缺图纸": false,
+      "黄金段位不可用": false,
+      "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -138,6 +162,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -150,6 +175,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -162,6 +188,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -174,6 +201,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -186,6 +214,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -198,6 +227,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -210,6 +240,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -222,6 +253,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -234,6 +266,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -246,6 +279,20 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
+      "缺油": false
+    },
+    "ready": false,
+    "touchdrive_off": false
+  },
+  {
+    "source": "多人游戏_经典系列赛_首页_白金.png",
+    "skip": {
+      "缺钥匙": false,
+      "缺图纸": false,
+      "黄金段位不可用": false,
+      "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -258,6 +305,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -270,6 +318,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -282,6 +331,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -294,6 +344,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -306,6 +357,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -318,6 +370,20 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
+      "缺油": false
+    },
+    "ready": false,
+    "touchdrive_off": false
+  },
+  {
+    "source": "多人游戏_结算_通行证升级.png",
+    "skip": {
+      "缺钥匙": false,
+      "缺图纸": false,
+      "黄金段位不可用": false,
+      "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -330,6 +396,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -342,6 +409,20 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
+      "缺油": false
+    },
+    "ready": false,
+    "touchdrive_off": false
+  },
+  {
+    "source": "多人游戏_车辆详情_Apollo N_段位不可用_翡翠.png",
+    "skip": {
+      "缺钥匙": false,
+      "缺图纸": false,
+      "黄金段位不可用": false,
+      "白金段位不可用": false,
+      "翡翠段位不可用": true,
       "缺油": false
     },
     "ready": false,
@@ -354,6 +435,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -366,6 +448,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -378,6 +461,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -390,6 +474,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -402,6 +487,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -414,6 +500,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -426,6 +513,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -438,6 +526,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -450,6 +539,7 @@
       "缺图纸": false,
       "黄金段位不可用": true,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -462,6 +552,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -474,6 +565,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -486,6 +578,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -498,6 +591,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": true
     },
     "ready": false,
@@ -510,6 +604,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -522,6 +617,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -534,6 +630,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -546,6 +643,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -558,6 +656,7 @@
       "缺图纸": false,
       "黄金段位不可用": true,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -570,6 +669,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -582,6 +682,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -594,6 +695,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -606,6 +708,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -618,6 +721,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -630,6 +734,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -642,6 +747,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -654,6 +760,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -666,6 +773,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -678,6 +786,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": true,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -690,6 +799,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -702,6 +812,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -714,6 +825,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -726,6 +838,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": true
     },
     "ready": false,
@@ -738,6 +851,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -750,6 +864,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -762,6 +877,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -774,6 +890,7 @@
       "缺图纸": true,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -786,6 +903,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -798,6 +916,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -810,6 +929,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": true,
@@ -822,6 +942,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -834,6 +955,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -846,6 +968,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -858,6 +981,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -870,6 +994,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -882,6 +1007,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -894,6 +1020,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -906,6 +1033,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -918,6 +1046,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -930,6 +1059,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -942,6 +1072,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -954,6 +1085,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -966,6 +1098,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -978,6 +1111,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -990,6 +1124,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1002,6 +1137,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1014,6 +1150,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1026,6 +1163,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1038,6 +1176,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1050,6 +1189,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1062,6 +1202,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1074,6 +1215,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1086,6 +1228,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1098,6 +1241,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1110,6 +1254,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1122,6 +1267,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1134,6 +1280,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1146,6 +1293,20 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
+      "缺油": false
+    },
+    "ready": false,
+    "touchdrive_off": false
+  },
+  {
+    "source": "多人游戏_选车_翡翠起点_仅拥有开启.png",
+    "skip": {
+      "缺钥匙": false,
+      "缺图纸": false,
+      "黄金段位不可用": false,
+      "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1158,6 +1319,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1170,6 +1332,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1182,6 +1345,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1194,6 +1358,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1206,6 +1371,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1218,6 +1384,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1230,6 +1397,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1242,6 +1410,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1254,6 +1423,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1266,6 +1436,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1278,6 +1449,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1290,6 +1462,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1302,6 +1475,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1314,6 +1488,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1326,6 +1501,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1338,6 +1514,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1350,6 +1527,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1362,6 +1540,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1374,6 +1553,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1386,6 +1566,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1398,6 +1579,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1410,6 +1592,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1422,6 +1605,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1434,6 +1618,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1446,6 +1631,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1458,6 +1644,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1470,6 +1657,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1482,6 +1670,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1494,6 +1683,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1506,6 +1696,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1518,6 +1709,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1530,6 +1722,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1542,6 +1735,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1554,6 +1748,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1566,6 +1761,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1578,6 +1774,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1590,6 +1787,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1602,6 +1800,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1614,6 +1813,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,
@@ -1626,6 +1826,7 @@
       "缺图纸": false,
       "黄金段位不可用": false,
       "白金段位不可用": false,
+      "翡翠段位不可用": false,
       "缺油": false
     },
     "ready": false,

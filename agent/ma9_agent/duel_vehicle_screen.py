@@ -1,0 +1,113 @@
+"""Read visible Duel car cards; this layout is separate from multiplayer."""
+
+from __future__ import annotations
+
+import re
+from typing import Any, Callable
+
+import cv2
+import numpy as np
+
+from .vehicle_screen import match_vehicle
+
+
+CARD_WIDTH = 420
+CARD_HEIGHT = 212
+ROW_TOPS = (168, 395)
+
+
+def normalize(image: np.ndarray) -> np.ndarray:
+    height, width = image.shape[:2]
+    if abs(width / height - 16 / 9) > .03:
+        raise ValueError(f"expected a 16:9 Duel frame, got {width}x{height}")
+    return image if (width, height) == (1280, 720) else cv2.resize(image, (1280, 720))
+
+
+def _fraction(text: str) -> tuple[int, int] | None:
+    value = text.translate(str.maketrans("，／．", ",/."))
+    match = re.search(r"([\d,.]+)\s*/\s*([\d,.]+)", value)
+    if not match:
+        return None
+    try:
+        current, maximum = (int(part.replace(",", "").replace(".", ""))
+                            for part in match.groups())
+    except ValueError:
+        return None
+    # A clipped leading digit is common in this narrow badge. Keep it unknown.
+    if not (1000 <= current <= maximum <= 10000):
+        return None
+    return current, maximum
+
+
+def _stars(frame: np.ndarray, left: int, top: int) -> tuple[int | None, int | None]:
+    lit = slots = 0
+    for index in range(6):
+        x, y = left + 15 + 18 * index, top + 15
+        if not (0 <= x < 1280):
+            break
+        blue, green, red = map(int, frame[y, x])
+        gold = red >= 190 and green >= 150 and blue < 160
+        gray = 95 <= red <= 160 and max(abs(red - green), abs(green - blue)) < 15
+        if not (gold or gray):
+            break
+        slots += 1
+        lit += gold
+    return (lit, slots) if slots >= 4 else (None, None)
+
+
+def _inside(item: dict[str, Any], box: tuple[int, int, int, int]) -> bool:
+    x, y, width, height = item["box"]
+    center_x, center_y = x + width / 2, y + height / 2
+    left, top, right, bottom = box
+    return left <= center_x <= right and top <= center_y <= bottom
+
+
+def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
+                       catalog: list[dict[str, Any]],
+                       retry_ocr: Callable[[tuple[int, int, int, int]], list[dict[str, Any]]] | None = None
+                       ) -> list[dict[str, Any]]:
+    """Return fully visible cards only; incomplete OCR fields remain None."""
+    frame = normalize(image)
+    result = []
+    for top in ROW_TOPS:
+        names = [item for item in ocr
+                 if item["confidence"] >= .7 and re.search(r"[A-Za-z]{2}", item["text"])
+                 and top + 155 <= item["box"][1] <= top + 190]
+        groups: list[list[dict[str, Any]]] = []
+        for item in sorted(names, key=lambda row: row["box"][0]):
+            group = next((group for group in groups
+                          if abs(group[0]["box"][0] - item["box"][0]) <= 30), None)
+            if group is None:
+                groups.append([item])
+            else:
+                group.append(item)
+        for group in groups:
+            if len(group) < 2:
+                continue
+            left = min(item["box"][0] for item in group) - 4
+            if left < 0 or left + CARD_WIDTH > 1280:
+                continue
+            vehicle = match_vehicle(group, catalog)
+            if vehicle is None:
+                continue
+            performance_items = [item for item in ocr if _inside(
+                item, (left + 5, top + 20, left + 240, top + 85))]
+            performance = next((pair for item in performance_items
+                                if (pair := _fraction(item["text"]))), None)
+            if performance is None and retry_ocr is not None:
+                field = (left + 8, top + 24, 200, 55)
+                performance = next((pair for item in retry_ocr(field)
+                                    if (pair := _fraction(item["text"]))), None)
+            stars_lit, star_slots = _stars(frame, left, top)
+            result.append({
+                "vehicle": vehicle,
+                "class": next((row["class"] for row in catalog if row["id"] == vehicle["id"]), None),
+                "performance": list(performance) if performance else None,
+                "stars_lit": stars_lit,
+                "star_slots": star_slots,
+                "card": [left, top, CARD_WIDTH, CARD_HEIGHT],
+                "target": [left + 185, top + 105],
+            })
+    # The screen sorts column-wise: upper and lower cars in one column precede
+    # the next column, unlike multiplayer's page order.
+    return sorted(result, key=lambda row: (row["card"][0], row["card"][1]))

@@ -10,6 +10,7 @@ IMAGE_ROOT = ROOT / "assets/resource/image"
 PAGE_LOAD_TIMEOUT_MS = 60000
 SPECS = {
     "classic_card": ("多人游戏_主页选中_无奖励.png", (264, 401, 448, 466), [250, 390, 220, 85]),
+    "classic_card_platinum": ("多人游戏_主页选中_白金.png", (264, 401, 448, 466), [250, 390, 220, 85]),
     "classic_start": ("多人游戏_经典系列赛_首页_黄金.png", (1091, 638, 1151, 665), [1070, 625, 100, 50]),
     "selection_title": ("多人游戏_选车_青铜起点_仅拥有关闭.png", (100, 83, 230, 113), [90, 75, 150, 45]),
     "selection_tools": ("多人游戏_选车_青铜起点_仅拥有关闭.png", (1045, 83, 1093, 131), [1040, 78, 60, 60]),
@@ -28,7 +29,10 @@ def main():
             image.convert("RGB").crop(box).save(output / f"{key}.png")
 
     def template(key):
-        paths = ["navigation/multiplayer/league_icons.png", "navigation/multiplayer/league_icons_gold.png"] if key == "league_icons" else f"navigation/multiplayer/{key}.png"
+        paths = (["navigation/multiplayer/league_icons.png", "navigation/multiplayer/league_icons_gold.png"]
+                 if key == "league_icons" else
+                 ["navigation/multiplayer/classic_card.png", "navigation/multiplayer/classic_card_platinum.png"]
+                 if key == "classic_card" else f"navigation/multiplayer/{key}.png")
         return {"recognition": "TemplateMatch", "template": paths,
                 "roi": SPECS[key][2], "threshold": 0.9}
 
@@ -89,7 +93,9 @@ def main():
     for source in (ROOT / "captures").glob("*_车辆详情_*.png"):
         cases[source.name] = None
     for source in (ROOT / "captures").glob("*_主页*.png"):
-        cases[source.name] = "多人准备_点击经典系列赛" if source.name == "多人游戏_主页选中_无奖励.png" else "多人准备_切换多人标签"
+        cases[source.name] = ("多人准备_点击经典系列赛"
+                              if source.name in {"多人游戏_主页选中_无奖励.png", "多人游戏_主页选中_白金.png"}
+                              else "多人准备_切换多人标签")
     report = []
     for source, expected in cases.items():
         image = read_image(ROOT / "captures" / source)

@@ -1,0 +1,222 @@
+{
+    "对决_防守状态识别入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_防守_已选车可开始",
+            "对决_防守_第1赛道展开未选车",
+            "对决_防守_第2赛道展开未选车",
+            "对决_防守_第3赛道展开未选车",
+            "对决_防守_第4赛道展开未选车",
+            "对决_防守_第5赛道展开未选车",
+            "对决_防守_页面已到达"
+        ]
+    },
+    "对决_防守_第1赛道展开未选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_select_1.png",
+                "roi": [
+                    539,
+                    490,
+                    122,
+                    62
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "对决_防守_第2赛道展开未选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_select_2.png",
+                "roi": [
+                    651,
+                    490,
+                    122,
+                    62
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "对决_防守_第3赛道展开未选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_select_3.png",
+                "roi": [
+                    766,
+                    488,
+                    122,
+                    62
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "对决_防守_第4赛道展开未选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_select_4.png",
+                "roi": [
+                    880,
+                    491,
+                    122,
+                    62
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "对决_防守_第5赛道展开未选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_select_5.png",
+                "roi": [
+                    995,
+                    488,
+                    122,
+                    62
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "对决_防守_已选车可开始": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_ready_start.png",
+                "roi": [
+                    980,
+                    625,
+                    280,
+                    80
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "对决_防守_页面已到达": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": [
+                    "navigation/duel/defense_auto_select_1.png",
+                    "navigation/duel/defense_auto_select_5.png"
+                ],
+                "roi": [
+                    130,
+                    630,
+                    130,
+                    60
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    }
+}

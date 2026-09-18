@@ -1,0 +1,78 @@
+{
+  "source": "captures\\多人游戏_对决_资格赛_选择车辆_R级起点.png",
+  "cards": [
+    {
+      "vehicle": {
+        "id": "car_10d54088228a5464",
+        "title": "Koenigsegg Jesko Absolut",
+        "confidence": 1.0
+      },
+      "class": "R",
+      "performance": [
+        5368,
+        5664
+      ],
+      "stars_lit": 6,
+      "star_slots": 6,
+      "card": [
+        197,
+        168,
+        420,
+        212
+      ],
+      "target": [
+        382,
+        273
+      ]
+    },
+    {
+      "vehicle": {
+        "id": "car_005c710a33e5b250",
+        "title": "Bugatti Bolide",
+        "confidence": 1.0
+      },
+      "class": "R",
+      "performance": [
+        4627,
+        5011
+      ],
+      "stars_lit": 5,
+      "star_slots": 6,
+      "card": [
+        197,
+        395,
+        420,
+        212
+      ],
+      "target": [
+        382,
+        500
+      ]
+    },
+    {
+      "vehicle": {
+        "id": "car_93bd4ec743f8d274",
+        "title": "Devel Sixteen",
+        "confidence": 1.0
+      },
+      "class": "R",
+      "performance": [
+        4185,
+        4185
+      ],
+      "stars_lit": 1,
+      "star_slots": 6,
+      "card": [
+        637,
+        168,
+        420,
+        212
+      ],
+      "target": [
+        822,
+        273
+      ]
+    }
+  ],
+  "fully_visible_cards": 3
+}

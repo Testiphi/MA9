@@ -14,11 +14,15 @@ SPECS = {
     "blueprint": ("多人游戏_车辆详情_Renault TREZOR_不可开始_缺图纸.png", (986, 619, 1220, 668), [970, 600, 265, 85]),
     "gold_unavailable": ("多人游戏_车辆详情_Lamborghini Asterion_段位不可用_黄金.png", (1060, 617, 1145, 655), [1045, 600, 120, 70]),
     "platinum_unavailable": ("多人游戏_车辆详情_Nissan GT-R Nismo_段位不可用_白金.png", (1059, 617, 1145, 655), [1045, 600, 120, 70]),
+    "emerald_unavailable": ("多人游戏_车辆详情_Apollo N_段位不可用_翡翠.png", (1059, 617, 1145, 655), [1045, 600, 120, 70]),
     "bronze_first": ("多人游戏_车辆详情_Mitsubishi Lancer Evolution_青铜起点_TouchDrive开.png", (79, 98, 153, 189), [70, 88, 95, 112]),
     "anchor_card": ("多人游戏_车辆详情_Nissan GT-R Nismo_段位不可用_白金.png", (79, 98, 153, 189), [70, 88, 95, 112]),
     "gold_anchor_card": ("多人游戏_车辆详情_Lamborghini Asterion_段位不可用_黄金.png", (79, 98, 153, 189), [70, 88, 95, 112]),
+    "emerald_anchor_card": ("多人游戏_车辆详情_Apollo N_段位不可用_翡翠.png", (79, 98, 153, 189), [70, 88, 95, 112]),
     "gold_anchor_list": ("多人游戏_选车_黄金起点_仅拥有开启.png", (537, 338, 650, 360), [200, 190, 1000, 230]),
     "gold_selected": ("多人游戏_选车_黄金起点_仅拥有开启.png", (644, 91, 700, 136), [637, 85, 70, 54]),
+    "emerald_anchor_list": ("多人游戏_选车_翡翠起点_仅拥有开启.png", (537, 338, 650, 360), [200, 190, 1000, 230]),
+    "emerald_selected": ("多人游戏_选车_翡翠起点_仅拥有开启.png", (755, 91, 811, 136), [748, 85, 70, 54]),
 }
 
 
@@ -30,8 +34,8 @@ def main():
     import os
     profile = read("data/multiplayer_profile.json")
     league = os.environ.get("MA9_BUILD_LEAGUE", profile["current_league"])
-    assert league in ["黄金", "白银"], "当前测试支持黄金、白银手动段位"
-    anchor_league = "黄金" if league == "白银" else "白金"
+    assert league in ["白金", "黄金", "白银"], "当前测试支持白金、黄金、白银手动段位"
+    anchor_league = {"白银": "黄金", "黄金": "白金", "白金": "翡翠"}[league]
     anchor_source = f"多人游戏_选车_{anchor_league}起点_仅拥有开启.png"
     folder = ROOT / "assets/resource/image/navigation/fallback"
     folder.mkdir(parents=True, exist_ok=True)
@@ -61,6 +65,7 @@ def main():
         "缺图纸": guard(template("blueprint"), arrows),
         "黄金段位不可用": guard(template("gold_unavailable"), arrows),
         "白金段位不可用": guard(template("platinum_unavailable"), arrows),
+        "翡翠段位不可用": guard(template("emerald_unavailable"), arrows),
         "缺油": empty_guard,
     }
     pipeline = {name("可用车已准备"): ready, name("可用车开启TouchDrive"): enable}
@@ -95,16 +100,19 @@ def main():
                                      max_hit=338, pre_delay=0, post_delay=450,
                                      timeout=15000, next=checks_next)
     list_guard = copy.deepcopy(mp["多人准备_仅拥有已开启"])
-    list_guard.update(action="Click", target=[671 if league == "白银" else 726, 107], max_hit=2,
+    list_guard.update(action="Click", target=[{"白银": 671, "黄金": 726, "白金": 782}[league], 107], max_hit=2,
                       pre_delay=0, post_delay=800, timeout=60000, next=[name("确认相邻段位起点")])
     pipeline[name("定位相邻段位起点")] = list_guard
     anchor = copy.deepcopy(two["两车_Panamera_滑动搜索_反查起点已确认"])
     if league == "白银":
         anchor = guard(*copy.deepcopy(list_guard["all_of"]), template("gold_selected"), template("gold_anchor_list"))
+    elif league == "白金":
+        anchor = guard(*copy.deepcopy(list_guard["all_of"]), template("emerald_selected"), template("emerald_anchor_list"))
     anchor.update(action="Click", target=[380, 280], max_hit=1, post_delay=800,
                   timeout=60000, next=[name("锚点向左切车")])
     pipeline[name("确认相邻段位起点")] = anchor
-    pipeline[name("锚点向左切车")] = {**guard(template("gold_anchor_card" if league == "白银" else "anchor_card"), arrows),
+    anchor_card = {"白银": "gold_anchor_card", "黄金": "anchor_card", "白金": "emerald_anchor_card"}[league]
+    pipeline[name("锚点向左切车")] = {**guard(template(anchor_card), arrows),
                                        "action": "Click", "target": [495, 360], "max_hit": 1,
                                        "pre_delay": 0, "post_delay": 450, "timeout": 15000,
                                        "next": checks_next}
@@ -118,7 +126,10 @@ def main():
         "template": "navigation/vehicle/detail_back.png", "roi": [15, 3, 48, 58], "threshold": 0.9,
         "action": "Click", "target": [40, 30], "max_hit": 1,
         "pre_delay": 0, "post_delay": 450, "timeout": 15000, "next": [name("入口")]}
-    for suffix in (["黄金段位不可用", "白金段位不可用"] if league == "白银" else ["白金段位不可用"]):
+    higher_unavailable = {"白银": ["黄金段位不可用", "白金段位不可用"],
+                          "黄金": ["白金段位不可用"],
+                          "白金": ["翡翠段位不可用"]}[league]
+    for suffix in higher_unavailable:
         pipeline[name(suffix)]["next"] = [name("高段位返回列表")]
     pipeline[name("详情原地测试入口")] = {"recognition": "DirectHit", "action": "DoNothing",
                                           "timeout": 15000, "next": checks_next}
@@ -128,11 +139,14 @@ def main():
         matches = {suffix: hit(node, image) for suffix, node in skips.items()}
         expected = {suffix: False for suffix in skips}
         for suffix, spec_key in [("缺钥匙", "key"), ("缺图纸", "blueprint"),
-                                 ("黄金段位不可用", "gold_unavailable"), ("白金段位不可用", "platinum_unavailable")]:
+                                 ("黄金段位不可用", "gold_unavailable"),
+                                 ("白金段位不可用", "platinum_unavailable"),
+                                 ("翡翠段位不可用", "emerald_unavailable")]:
             expected[suffix] = source.name == SPECS[spec_key][0]
         expected["缺油"] = "_无燃油_" in source.name
         expected["黄金段位不可用"] = "_段位不可用_黄金.png" in source.name
         expected["白金段位不可用"] = "_段位不可用_白金.png" in source.name
+        expected["翡翠段位不可用"] = "_段位不可用_翡翠.png" in source.name
         assert matches == expected, (source.name, matches, expected)
         found_ready = hit(ready, image)
         found_off = hit(enable, image)
@@ -156,7 +170,7 @@ def main():
         node.setdefault("pre_delay", 0)
         node.setdefault("post_delay", 0)
     (ROOT / os.environ.get("MA9_FALLBACK_FILE", "assets/resource/pipeline/reverse_fallback.json")).write_text(json.dumps(pipeline, ensure_ascii=False, indent=4) + "\n", encoding="utf-8")
-    print(f"PASS {len(report)*7} state checks; current={league}, anchor={anchor_league}; device clicks not tested")
+    print(f"PASS {len(report)*len(skips)} state checks; current={league}, anchor={anchor_league}; device clicks not tested")
 
 
 if __name__ == "__main__":

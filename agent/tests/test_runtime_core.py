@@ -54,13 +54,13 @@ class VehicleSelectorTest(unittest.TestCase):
         self.assertIn("league_unavailable", decision.rejected["gold"])
         self.assertIn("already_attempted", decision.rejected["silver"])
 
-    def test_page_tracker_detects_stall_and_wrap(self) -> None:
+    def test_page_tracker_detects_stall_and_unexpected_revisit(self) -> None:
         tracker = PageTracker(repeat_limit=2)
         page_a = [vehicle("a"), vehicle("b")]
         page_b = [vehicle("c"), vehicle("d")]
         self.assertIsNone(tracker.observe(page_a))
         self.assertIsNone(tracker.observe(page_b))
-        self.assertEqual(tracker.observe(page_a), SelectionStatus.LIST_WRAPPED)
+        self.assertEqual(tracker.observe(page_a), SelectionStatus.PAGE_REVISITED)
 
         tracker.reset()
         self.assertIsNone(tracker.observe(page_a))

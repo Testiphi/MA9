@@ -6,5 +6,39 @@
         "custom_action_param": {
             "mode": "configuration_only"
         }
+    },
+    "多人运行时_选车状态诊断": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_selection_diagnose"
+    },
+    "多人运行时_可见车辆识别": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_vehicle_recognize"
+    },
+    "多人运行时_指定车辆定位测试": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_vehicle_location_test",
+        "timeout": 900000
+    },
+    "多人运行时_车辆详情通用": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/left.png",
+                "roi": [460, 325, 75, 75],
+                "threshold": 0.86
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/right.png",
+                "roi": [1155, 325, 80, 75],
+                "threshold": 0.86
+            }
+        ],
+        "action": "DoNothing"
     }
 }

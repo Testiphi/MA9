@@ -1,0 +1,261 @@
+{
+    "对决_资格赛入口": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_确认重开资格赛",
+            "对决_重开零进度资格赛",
+            "对决_防守_已选车可开始",
+            "对决_防守_第1赛道展开未选车",
+            "对决_防守_第2赛道展开未选车",
+            "对决_防守_第3赛道展开未选车",
+            "对决_防守_第4赛道展开未选车",
+            "对决_防守_第5赛道展开未选车",
+            "对决_防守_页面已到达",
+            "对决_点击资格赛",
+            "对决_点击首页卡片",
+            "对决_切换多人标签"
+        ]
+    },
+    "对决_切换多人标签": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "navigation/home/multiplayer/unselected_d6c0bc4f0f5c.png"
+        ],
+        "roi": [
+            755,
+            637,
+            88,
+            72
+        ],
+        "threshold": 0.9,
+        "action": "Click",
+        "target": [
+            745,
+            666
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 10000,
+        "next": [
+            "对决_点击首页卡片"
+        ]
+    },
+    "对决_点击首页卡片": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/home/multiplayer/selected.png",
+                "roi": [
+                    755,
+                    637,
+                    88,
+                    72
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/home_duel_title.png",
+                "roi": [
+                    880,
+                    380,
+                    105,
+                    65
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            930,
+            330
+        ],
+        "max_hit": 1,
+        "post_delay": 800,
+        "timeout": 60000,
+        "next": [
+            "对决_确认重开资格赛",
+            "对决_重开零进度资格赛",
+            "对决_防守_已选车可开始",
+            "对决_防守_第1赛道展开未选车",
+            "对决_防守_第2赛道展开未选车",
+            "对决_防守_第3赛道展开未选车",
+            "对决_防守_第4赛道展开未选车",
+            "对决_防守_第5赛道展开未选车",
+            "对决_防守_页面已到达",
+            "对决_点击资格赛"
+        ]
+    },
+    "对决_重开零进度资格赛": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/qualifier_failed_title.png",
+                "roi": [
+                    70,
+                    88,
+                    165,
+                    50
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/qualifier_restart_button.png",
+                "roi": [
+                    870,
+                    630,
+                    230,
+                    75
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/qualifier_zero_time.png",
+                "roi": [
+                    140,
+                    230,
+                    140,
+                    35
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/qualifier_zero_time.png",
+                "roi": [
+                    374,
+                    230,
+                    140,
+                    35
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/qualifier_zero_time.png",
+                "roi": [
+                    608,
+                    230,
+                    140,
+                    35
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/qualifier_zero_time.png",
+                "roi": [
+                    842,
+                    230,
+                    140,
+                    35
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/qualifier_zero_time.png",
+                "roi": [
+                    1076,
+                    230,
+                    140,
+                    35
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            970,
+            665
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "对决_确认重开资格赛"
+        ]
+    },
+    "对决_确认重开资格赛": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/qualifier_restart_popup_title.png",
+                "roi": [
+                    550,
+                    160,
+                    190,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/qualifier_restart_popup_button.png",
+                "roi": [
+                    500,
+                    520,
+                    265,
+                    80
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            635,
+            558
+        ],
+        "max_hit": 1,
+        "post_delay": 700,
+        "timeout": 60000,
+        "next": [
+            "对决_防守状态识别入口"
+        ]
+    },
+    "对决_点击资格赛": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/qualifier_title.png",
+                "roi": [
+                    285,
+                    140,
+                    125,
+                    65
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/qualifier_button.png",
+                "roi": [
+                    1025,
+                    640,
+                    145,
+                    75
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1100,
+            680
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "timeout": 60000,
+        "next": [
+            "对决_防守状态识别入口"
+        ]
+    }
+}

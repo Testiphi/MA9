@@ -1,0 +1,2422 @@
+{
+    "对决_防守_第1赛道已展开": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    589,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "对决_防守_第1赛道点击选择车辆": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    589,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            596,
+            519
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": []
+    },
+    "对决_防守_从第2切到第1赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    701,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            120,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第1赛道已展开"
+        ]
+    },
+    "对决_防守_从第2切到第1赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    701,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            120,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第1赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第3切到第1赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    816,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            120,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第1赛道已展开"
+        ]
+    },
+    "对决_防守_从第3切到第1赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    816,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            120,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第1赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第4切到第1赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    930,
+                    503,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            120,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第1赛道已展开"
+        ]
+    },
+    "对决_防守_从第4切到第1赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    930,
+                    503,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            120,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第1赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第5切到第1赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1045,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            120,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第1赛道已展开"
+        ]
+    },
+    "对决_防守_从第5切到第1赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1045,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            120,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第1赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_查看第1赛道": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_防守_第1赛道已展开",
+            "对决_防守_从第2切到第1赛道",
+            "对决_防守_从第3切到第1赛道",
+            "对决_防守_从第4切到第1赛道",
+            "对决_防守_从第5切到第1赛道"
+        ]
+    },
+    "对决_防守_进入第1赛道选车": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_防守_第1赛道点击选择车辆",
+            "对决_防守_从第2切到第1赛道并选车",
+            "对决_防守_从第3切到第1赛道并选车",
+            "对决_防守_从第4切到第1赛道并选车",
+            "对决_防守_从第5切到第1赛道并选车"
+        ]
+    },
+    "对决_防守_第2赛道已展开": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    701,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "对决_防守_第2赛道点击选择车辆": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    701,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            708,
+            519
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": []
+    },
+    "对决_防守_从第1切到第2赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    589,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            846,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第2赛道已展开"
+        ]
+    },
+    "对决_防守_从第1切到第2赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    589,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            846,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第2赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第3切到第2赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    816,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            233,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第2赛道已展开"
+        ]
+    },
+    "对决_防守_从第3切到第2赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    816,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            233,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第2赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第4切到第2赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    930,
+                    503,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            233,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第2赛道已展开"
+        ]
+    },
+    "对决_防守_从第4切到第2赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    930,
+                    503,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            233,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第2赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第5切到第2赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1045,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            233,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第2赛道已展开"
+        ]
+    },
+    "对决_防守_从第5切到第2赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1045,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            233,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第2赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_查看第2赛道": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_防守_第2赛道已展开",
+            "对决_防守_从第1切到第2赛道",
+            "对决_防守_从第3切到第2赛道",
+            "对决_防守_从第4切到第2赛道",
+            "对决_防守_从第5切到第2赛道"
+        ]
+    },
+    "对决_防守_进入第2赛道选车": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_防守_第2赛道点击选择车辆",
+            "对决_防守_从第1切到第2赛道并选车",
+            "对决_防守_从第3切到第2赛道并选车",
+            "对决_防守_从第4切到第2赛道并选车",
+            "对决_防守_从第5切到第2赛道并选车"
+        ]
+    },
+    "对决_防守_第3赛道已展开": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    816,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "对决_防守_第3赛道点击选择车辆": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    816,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            823,
+            517
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": []
+    },
+    "对决_防守_从第1切到第3赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    589,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            959,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第3赛道已展开"
+        ]
+    },
+    "对决_防守_从第1切到第3赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    589,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            959,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第3赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第2切到第3赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    701,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            959,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第3赛道已展开"
+        ]
+    },
+    "对决_防守_从第2切到第3赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    701,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            959,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第3赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第4切到第3赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    930,
+                    503,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            346,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第3赛道已展开"
+        ]
+    },
+    "对决_防守_从第4切到第3赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    930,
+                    503,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            346,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第3赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第5切到第3赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1045,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            346,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第3赛道已展开"
+        ]
+    },
+    "对决_防守_从第5切到第3赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1045,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            346,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第3赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_查看第3赛道": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_防守_第3赛道已展开",
+            "对决_防守_从第1切到第3赛道",
+            "对决_防守_从第2切到第3赛道",
+            "对决_防守_从第4切到第3赛道",
+            "对决_防守_从第5切到第3赛道"
+        ]
+    },
+    "对决_防守_进入第3赛道选车": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_防守_第3赛道点击选择车辆",
+            "对决_防守_从第1切到第3赛道并选车",
+            "对决_防守_从第2切到第3赛道并选车",
+            "对决_防守_从第4切到第3赛道并选车",
+            "对决_防守_从第5切到第3赛道并选车"
+        ]
+    },
+    "对决_防守_第4赛道已展开": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    930,
+                    503,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "对决_防守_第4赛道点击选择车辆": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    930,
+                    503,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            937,
+            520
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": []
+    },
+    "对决_防守_从第1切到第4赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    589,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1072,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第4赛道已展开"
+        ]
+    },
+    "对决_防守_从第1切到第4赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    589,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1072,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第4赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第2切到第4赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    701,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1072,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第4赛道已展开"
+        ]
+    },
+    "对决_防守_从第2切到第4赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    701,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1072,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第4赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第3切到第4赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    816,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1072,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第4赛道已展开"
+        ]
+    },
+    "对决_防守_从第3切到第4赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    816,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1072,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第4赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第5切到第4赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1045,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            459,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第4赛道已展开"
+        ]
+    },
+    "对决_防守_从第5切到第4赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1045,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            459,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第4赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_查看第4赛道": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_防守_第4赛道已展开",
+            "对决_防守_从第1切到第4赛道",
+            "对决_防守_从第2切到第4赛道",
+            "对决_防守_从第3切到第4赛道",
+            "对决_防守_从第5切到第4赛道"
+        ]
+    },
+    "对决_防守_进入第4赛道选车": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_防守_第4赛道点击选择车辆",
+            "对决_防守_从第1切到第4赛道并选车",
+            "对决_防守_从第2切到第4赛道并选车",
+            "对决_防守_从第3切到第4赛道并选车",
+            "对决_防守_从第5切到第4赛道并选车"
+        ]
+    },
+    "对决_防守_第5赛道已展开": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1045,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "DoNothing",
+        "next": []
+    },
+    "对决_防守_第5赛道点击选择车辆": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    1045,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1052,
+            517
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": []
+    },
+    "对决_防守_从第1切到第5赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    589,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1185,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第5赛道已展开"
+        ]
+    },
+    "对决_防守_从第1切到第5赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    589,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1185,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第5赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第2切到第5赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    701,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1185,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第5赛道已展开"
+        ]
+    },
+    "对决_防守_从第2切到第5赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    701,
+                    502,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1185,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第5赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第3切到第5赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    816,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1185,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第5赛道已展开"
+        ]
+    },
+    "对决_防守_从第3切到第5赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    816,
+                    500,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1185,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第5赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_从第4切到第5赛道": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    930,
+                    503,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1185,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第5赛道已展开"
+        ]
+    },
+    "对决_防守_从第4切到第5赛道并选车": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/duel/defense_qualifier_title.png",
+                "roi": [
+                    62,
+                    86,
+                    110,
+                    52
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "ColorMatch",
+                "roi": [
+                    930,
+                    503,
+                    20,
+                    13
+                ],
+                "method": 4,
+                "lower": [
+                    180,
+                    240,
+                    0
+                ],
+                "upper": [
+                    210,
+                    255,
+                    40
+                ],
+                "count": 120
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1185,
+            350
+        ],
+        "max_hit": 1,
+        "post_delay": 500,
+        "next": [
+            "对决_防守_第5赛道点击选择车辆"
+        ]
+    },
+    "对决_防守_查看第5赛道": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_防守_第5赛道已展开",
+            "对决_防守_从第1切到第5赛道",
+            "对决_防守_从第2切到第5赛道",
+            "对决_防守_从第3切到第5赛道",
+            "对决_防守_从第4切到第5赛道"
+        ]
+    },
+    "对决_防守_进入第5赛道选车": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "timeout": 60000,
+        "next": [
+            "对决_防守_第5赛道点击选择车辆",
+            "对决_防守_从第1切到第5赛道并选车",
+            "对决_防守_从第2切到第5赛道并选车",
+            "对决_防守_从第3切到第5赛道并选车",
+            "对决_防守_从第4切到第5赛道并选车"
+        ]
+    }
+}

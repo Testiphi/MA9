@@ -26,7 +26,8 @@
         "template": [
             "navigation/home/pass/unselected_3bb92a69ef46.png",
             "navigation/home/pass/unselected_df6ae46fe2b7.png",
-            "navigation/home/pass/unselected_cd3b0a34952b.png"
+            "navigation/home/pass/unselected_cd3b0a34952b.png",
+            "navigation/home/pass/unselected_c2bae9d35821.png"
         ],
         "roi": [
             100,
@@ -77,6 +78,7 @@
             "navigation/home/season/unselected_9df3afb9ecc1.png",
             "navigation/home/season/unselected_bfe2b4e49360.png",
             "navigation/home/season/unselected_f0f23e42443e.png",
+            "navigation/home/season/unselected_e91ec411b0ae.png",
             "navigation/home/season/unselected_744dcb776380.png",
             "navigation/home/season/unselected_d0f73c70a9b3.png",
             "navigation/home/season/unselected_a4faab093cb5.png",
@@ -130,6 +132,7 @@
         "recognition": "TemplateMatch",
         "template": [
             "navigation/home/daily/unselected_c86b28fd1606.png",
+            "navigation/home/daily/unselected_d673d18313a7.png",
             "navigation/home/daily/unselected_105100329343.png",
             "navigation/home/daily/unselected_061663e22a73.png"
         ],
@@ -224,6 +227,7 @@
         "recognition": "TemplateMatch",
         "template": [
             "navigation/home/club/unselected_c3d18b6d5ba6.png",
+            "navigation/home/club/unselected_17877823681f.png",
             "navigation/home/club/unselected_28d565f8be81.png"
         ],
         "roi": [
@@ -270,7 +274,8 @@
     "主页_单人模式_切换": {
         "recognition": "TemplateMatch",
         "template": [
-            "navigation/home/solo/unselected_a81652d5570b.png"
+            "navigation/home/solo/unselected_a81652d5570b.png",
+            "navigation/home/solo/unselected_721e2fe99f36.png"
         ],
         "roi": [
             1175,

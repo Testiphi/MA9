@@ -14,6 +14,7 @@ RETURN = "多人游戏_结算_返回后.png"
 DOWNGRADE = "多人游戏_段位_降级_到白银.png"
 UPGRADE = "多人游戏_段位_升级_到黄金.png"
 HALL = "名人堂奖励.png"
+PASS_LEVEL = "多人游戏_结算_通行证升级.png"
 SPECS = {
     "result_ranking": (RESULT, (578, 635, 641, 663), [555, 615, 110, 65]),
     "result_time": (RESULT, (282, 620, 370, 646), [265, 605, 125, 55]),
@@ -34,6 +35,11 @@ SPECS = {
     "upgrade_continue": (UPGRADE, (1105, 638, 1163, 671), [1085, 620, 105, 70]),
     "hall_title": (HALL, (174, 39, 275, 74), [160, 25, 140, 70]),
     "hall_continue": (HALL, (1126, 644, 1181, 674), [1105, 625, 100, 65]),
+    # Split the title around its variable level number. Each word gets an
+    # independent search region so 9, 50 and 100 do not require new images.
+    "pass_level_prefix": (PASS_LEVEL, (484, 137, 551, 181), [430, 110, 180, 90]),
+    "pass_level_suffix": (PASS_LEVEL, (648, 137, 799, 181), [610, 110, 245, 90]),
+    "pass_claim": (PASS_LEVEL, (351, 542, 412, 580), [220, 505, 340, 110]),
 }
 
 
@@ -68,8 +74,8 @@ def main():
                               "action": "Click", "target": [1060, 650], "max_hit": 1, "post_delay": 300,
                               "timeout": 60000, "next": ["多人结算_点击错失机会", "多人结算_奖励继续", "多人结算_已返回系列赛"]},
         "多人结算_奖励继续": {"recognition": "And", "all_of": [template("reward_title"), template("reward_coins"), template("reward_continue")],
-                              "action": "Click", "target": [1055, 650], "max_hit": 1, "post_delay": 300,
-                              "timeout": 60000, "next": ["多人结算_点击错失机会", "多人结算_已返回系列赛"]},
+                              "action": "Click", "target": [1055, 650], "max_hit": 3, "post_delay": 1500,
+                              "timeout": 60000, "next": ["多人结算_点击错失机会", "多人结算_已返回系列赛", "多人结算_奖励继续"]},
         "多人结算_点击错失机会": {"recognition": "And", "all_of": [template("reward_title"), template("missed_opportunity")],
                                   "action": "Click", "target": [1055, 650], "max_hit": 1, "post_delay": 500,
                                   "timeout": 60000, "next": ["多人结算_已返回系列赛"]},
@@ -82,9 +88,9 @@ def main():
                               "action": "Click", "target": [634, 527], "max_hit": 1, "post_delay": 500,
                               "timeout": 60000, "next": ["多人结算_已返回系列赛"]},
         "多人段位_升级继续": {"recognition": "And", "all_of": [template("upgrade_title"), template("upgrade_continue")],
-                              "action": "Click", "target": [1132, 653], "max_hit": 1, "post_delay": 500,
+                              "action": "Click", "target": [1132, 653], "max_hit": 3, "post_delay": 1500,
                               "timeout": 60000, "next": ["多人段位_降级确定", "多人结算_点击错失机会",
-                                                         "多人结算_奖励继续", "多人结算_已返回系列赛"]},
+                                                         "多人结算_奖励继续", "多人结算_已返回系列赛", "多人段位_升级继续"]},
         "赛道识别_神山垭口_坠落": {**template("track_shenshan_zhuiluo"), "action": "DoNothing", "next": []},
         "局内识别_多人HUD": {"recognition": "And", "all_of": [template("race_pause"), template("race_touchdrive")],
                             "action": "DoNothing", "next": []},
@@ -103,16 +109,26 @@ def main():
     pipeline[fallback] = {**pipeline["局内识别_多人HUD"],
                           "action": "Click", "target": [1080, 560],
                           "repeat": 2, "repeat_delay": 750,
-                          "pre_delay": 0, "post_delay": 10000,
+                          "pre_delay": 0, "post_delay": 6000,
                           "timeout": 60000, "rate_limit": 100, "next": race_next}
     language = json.loads((ROOT / "assets/resource/pipeline/language_switch.json").read_text(encoding="utf-8"))
     import copy
     ad_close = "多人结算_关闭广告"
     pipeline[ad_close] = copy.deepcopy(language["通用弹窗_关闭广告"])
     pipeline[ad_close]["next"] = ["多人结算_入口"]
+    pass_close = "多人结算_通行证升级关闭"
+    pipeline[pass_close] = {
+        "recognition": "And", "all_of": [template("pass_level_prefix"),
+            template("pass_level_suffix"), template("pass_claim"),
+            {"recognition": "TemplateMatch", "template": "navigation/language/pass_level_close.png",
+             "roi": [1000, 70, 160, 110], "threshold": 0.9}],
+        "action": "Click", "target": [1120, 145], "max_hit": 3,
+        "post_delay": 500, "timeout": 180000, "next": ["多人结算_入口"],
+    }
     for name, node in pipeline.items():
-        if name != ad_close and node.get("next"):
-            node["next"] = [ad_close, *[t for t in node["next"] if t != ad_close]]
+        if name not in (ad_close, pass_close) and node.get("next"):
+            node["next"] = [pass_close, ad_close,
+                            *[t for t in node["next"] if t not in (pass_close, ad_close)]]
     report = []
     for source in sorted((ROOT / "captures").glob("*.png")):
         image = read_image(source)
@@ -120,7 +136,7 @@ def main():
             "多人结算_成绩继续": source.name == RESULT,
             "多人结算_奖励继续": source.name == REWARD,
             "多人结算_点击错失机会": source.name == AD,
-            "多人结算_已返回系列赛": source.name in ["多人游戏_经典系列赛_首页_黄金.png", "多人游戏_经典系列赛_首页_白银.png", RETURN],
+            "多人结算_已返回系列赛": source.name in ["多人游戏_经典系列赛_首页_白金.png", "多人游戏_经典系列赛_首页_黄金.png", "多人游戏_经典系列赛_首页_白银.png", RETURN],
             "多人段位_降级确定": source.name == DOWNGRADE,
             "多人段位_升级继续": source.name == UPGRADE,
             "多人结算_名人堂奖励继续": source.name == HALL,
@@ -130,12 +146,26 @@ def main():
         }
         matches = {name: hit(pipeline[name], image) for name in expected}
         assert matches == expected, (source.name, matches, expected)
+        if source.name == PASS_LEVEL:
+            assert template_hit(pipeline["多人结算_关闭广告"], image)
+            assert hit(pipeline[pass_close], image)
+        else:
+            assert not hit(pipeline[pass_close], image), source.name
         report.append({"screenshot": source.name, "matches": matches})
     # 延迟出现的跳过按钮未显示时不能触发，也不能再次点击奖励继续。
     image = read_image(ROOT / "captures" / AD).copy()
     image[608:700, 870:1240] = 0
     assert not hit(pipeline["多人结算_点击错失机会"], image)
     assert not hit(pipeline["多人结算_奖励继续"], image)
+    assert pipeline["多人结算_奖励继续"]["max_hit"] == 3
+    assert pipeline["多人结算_奖励继续"]["post_delay"] == 1500
+    assert pipeline["多人结算_奖励继续"]["next"][-1] == "多人结算_奖励继续"
+    assert pipeline[fallback]["repeat_delay"] == 750
+    assert pipeline[fallback]["post_delay"] == 6000
+    # The changing number is deliberately outside all three text templates.
+    image = read_image(ROOT / "captures" / PASS_LEVEL).copy()
+    image[122:184, 552:648] = 0
+    assert hit(pipeline[pass_close], image)
     # 不依赖段位着色、车模、评级分或开始按钮；遮掉这些仍能确认返回。
     image = read_image(ROOT / "captures" / RETURN).copy()
     image[60:620] = 0

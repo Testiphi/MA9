@@ -493,7 +493,8 @@
         "recognition": "TemplateMatch",
         "template": [
             "navigation/language/ad_close_white.png",
-            "navigation/language/ad_close_pink.png"
+            "navigation/language/ad_close_pink.png",
+            "navigation/language/pass_level_close.png"
         ],
         "roi": [
             1000,
@@ -825,7 +826,8 @@
         "recognition": "TemplateMatch",
         "template": [
             "navigation/language/ad_close_white.png",
-            "navigation/language/ad_close_pink.png"
+            "navigation/language/ad_close_pink.png",
+            "navigation/language/pass_level_close.png"
         ],
         "roi": [
             1000,

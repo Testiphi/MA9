@@ -286,6 +286,12 @@
     ]
   },
   {
+    "screenshot": "多人游戏_选车_翡翠起点_仅拥有开启.png",
+    "matches": [
+      "多人准备_仅拥有已开启"
+    ]
+  },
+  {
     "screenshot": "多人游戏_选车_青铜_Hyundai IONIQ 5 N完整可见_仅拥有开启.png",
     "matches": [
       "多人准备_仅拥有已开启"
@@ -302,6 +308,10 @@
     "matches": [
       "多人准备_仅拥有已开启"
     ]
+  },
+  {
+    "screenshot": "多人游戏_车辆详情_Apollo N_段位不可用_翡翠.png",
+    "matches": []
   },
   {
     "screenshot": "多人游戏_车辆详情_Arrinera Hussarya 33_可开始_TouchDrive开.png",
@@ -489,6 +499,12 @@
   },
   {
     "screenshot": "多人游戏_主页选中_无奖励.png",
+    "matches": [
+      "多人准备_点击经典系列赛"
+    ]
+  },
+  {
+    "screenshot": "多人游戏_主页选中_白金.png",
     "matches": [
       "多人准备_点击经典系列赛"
     ]

@@ -2185,6 +2185,49 @@
                         "all_of": [
                             {
                                 "recognition": "TemplateMatch",
+                                "template": "navigation/fallback/emerald_unavailable.png",
+                                "roi": [
+                                    1045,
+                                    600,
+                                    120,
+                                    70
+                                ],
+                                "threshold": 0.9
+                            },
+                            {
+                                "recognition": "And",
+                                "all_of": [
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/left.png",
+                                        "roi": [
+                                            465,
+                                            330,
+                                            60,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    },
+                                    {
+                                        "recognition": "TemplateMatch",
+                                        "template": "navigation/fallback/right.png",
+                                        "roi": [
+                                            1165,
+                                            330,
+                                            65,
+                                            60
+                                        ],
+                                        "threshold": 0.9
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "recognition": "And",
+                        "all_of": [
+                            {
+                                "recognition": "TemplateMatch",
                                 "template": "navigation/vehicle/fuel_zero.png",
                                 "roi": [
                                     510,
@@ -2450,6 +2493,58 @@
         ],
         "rate_limit": 100
     },
+    "倒序兜底_翡翠段位不可用": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/fallback/emerald_unavailable.png",
+                "roi": [
+                    1045,
+                    600,
+                    120,
+                    70
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "And",
+                "all_of": [
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/left.png",
+                        "roi": [
+                            465,
+                            330,
+                            60,
+                            60
+                        ],
+                        "threshold": 0.9
+                    },
+                    {
+                        "recognition": "TemplateMatch",
+                        "template": "navigation/fallback/right.png",
+                        "roi": [
+                            1165,
+                            330,
+                            65,
+                            60
+                        ],
+                        "threshold": 0.9
+                    }
+                ]
+            }
+        ],
+        "action": "DoNothing",
+        "pre_delay": 0,
+        "post_delay": 0,
+        "timeout": 10000,
+        "next": [
+            "倒序兜底_向左切车",
+            "倒序兜底_切车次数耗尽_停止"
+        ],
+        "rate_limit": 100
+    },
     "倒序兜底_缺油": {
         "recognition": "And",
         "all_of": [
@@ -2546,6 +2641,7 @@
             "倒序兜底_缺图纸",
             "倒序兜底_黄金段位不可用",
             "倒序兜底_白金段位不可用",
+            "倒序兜底_翡翠段位不可用",
             "倒序兜底_缺油",
             "倒序兜底_有油且TouchDrive已开",
             "倒序兜底_可用车开启TouchDrive"
@@ -2767,6 +2863,7 @@
             "倒序兜底_缺图纸",
             "倒序兜底_黄金段位不可用",
             "倒序兜底_白金段位不可用",
+            "倒序兜底_翡翠段位不可用",
             "倒序兜底_缺油",
             "倒序兜底_有油且TouchDrive已开",
             "倒序兜底_可用车开启TouchDrive"
@@ -2870,6 +2967,7 @@
             "倒序兜底_缺图纸",
             "倒序兜底_黄金段位不可用",
             "倒序兜底_白金段位不可用",
+            "倒序兜底_翡翠段位不可用",
             "倒序兜底_缺油",
             "倒序兜底_有油且TouchDrive已开",
             "倒序兜底_可用车开启TouchDrive"

@@ -9,6 +9,10 @@ from prepare_race_screens import hit
 from vehicle_search import swipe_timing
 
 ROOT = Path(__file__).resolve().parents[1]
+import sys
+sys.path.insert(0, str(ROOT / "agent"))
+from ma9_agent.garage_profile import load_profile  # noqa: E402
+from ma9_agent.selection_strategy import load_strategy, planned_vehicles  # noqa: E402
 
 
 def write_pipeline(path: Path, nodes: dict) -> None:
@@ -57,11 +61,15 @@ def main():
     profile = read("data/multiplayer_profile.json")
     import os
     profile["current_league"] = os.environ.get("MA9_BUILD_LEAGUE", profile["current_league"])
-    assert profile["current_league"] in ["白银", "黄金"]
-    profile["compatible_leagues"] = (["黄金"] if profile["current_league"] == "黄金" else []) + ["白银", "青铜"]
+    assert profile["current_league"] in ["白银", "黄金", "白金"]
+    league_order = ["青铜", "白银", "黄金", "白金"]
+    profile["compatible_leagues"] = list(reversed(league_order[:league_order.index(profile["current_league"]) + 1]))
     rotation = read("data/" + profile["rotation_file"])
-    vehicles = [dict(v, league=league) for league in profile["compatible_leagues"]
-                for group in rotation["groups"] if group["league"] == league for v in group["vehicles"]]
+    catalog = read("data/generated/vehicle_catalog.json")
+    garage_path = ROOT / "config/garage.json"
+    garage = load_profile(garage_path) if garage_path.is_file() else None
+    strategy = load_strategy(ROOT / "config/selection_strategy.json", catalog, rotation, garage)
+    vehicles = planned_vehicles(profile["current_league"], catalog, rotation, strategy)
     pending_review = profile["selection_policy"] == "reverse_fallback_pending_review"
     if pending_review:
         vehicles = []
@@ -100,7 +108,8 @@ def main():
                     "roi": [0, 190, 1280, 480], "threshold": 0.9}
         assert template_hit(identity, read_image(source)), title
         available.append((vehicle, identity))
-    assert available or pending_review
+    # An empty account priority or missing templates goes straight to the
+    # existing bounded reverse fallback; it must never end a round as success.
     mp = read("assets/resource/pipeline/multiplayer_navigation.json")
     controls = read("assets/resource/pipeline/vehicle_controls.json")
     fallback = read(os.environ.get("MA9_FALLBACK_FILE", "assets/resource/pipeline/reverse_fallback.json"))
@@ -110,7 +119,8 @@ def main():
     generic_off = copy.deepcopy(controls["TouchDrive_点击开"])
     list_guard = copy.deepcopy(mp["多人准备_仅拥有已开启"])
     reverse_anchors = {}
-    for league, anchor_league, target in [("黄金", "白金", [726, 107]), ("白银", "黄金", [671, 107]), ("青铜", "白银", [616, 107])]:
+    for league, anchor_league, target in [("白金", "翡翠", [782, 107]), ("黄金", "白金", [726, 107]),
+                                         ("白银", "黄金", [671, 107]), ("青铜", "白银", [616, 107])]:
         source = ROOT / "captures" / f"多人游戏_选车_{anchor_league}起点_仅拥有开启.png"
         x = target[0]
         filename = f"reverse_anchor_{anchor_league}.png"
@@ -155,17 +165,33 @@ def main():
             nodes[stop] = {"recognition": "DirectHit", "action": "StopTask", "next": []}
             # 开始严格受通用可开始、TouchDrive 开状态保护。
             nodes[start] = {**copy.deepcopy(generic_ready), "action": "Click", "target": [1110, 650],
-                            "max_hit": 1, "pre_delay": 0, "post_delay": 500,
+                            "max_hit": 3, "pre_delay": 0, "post_delay": 1500,
                             "timeout": 180000, "next": [wait]}
             nodes[n("原地开启TouchDrive")] = {**copy.deepcopy(generic_off), "max_hit": 3, "next": [start]}
-            settlement_targets = [n("多人结算_名人堂奖励继续"), n("多人段位_降级确定"), n("多人段位_升级继续"), n("多人结算_点击错失机会"),
+            pass_close = n("多人结算_通行证升级关闭")
+            settlement_targets = [pass_close, n("多人结算_名人堂奖励继续"), n("多人段位_降级确定"), n("多人段位_升级继续"),
+                                  n("多人结算_点击错失机会"),
                                   n("多人结算_奖励继续"), n("多人结算_成绩继续")]
             nodes[wait] = {"recognition": "DirectHit", "action": "DoNothing", "timeout": 180000,
-                           "next": [*settlement_targets, n("多人局内_氮气兜底")]}
-            nodes[n("多人局内_氮气兜底")].update(max_hit=28,
+                           "next": [*settlement_targets, start, n("多人局内_氮气兜底")]}
+            nodes[n("多人局内_氮气兜底")].update(max_hit=42,
                 next=[*settlement_targets, n("多人局内_氮气兜底")])
             # 未经历结算不能把刚进入的系列赛误记为完成。
             nodes[n("多人结算_已返回系列赛")]["next"] = [done]
+            # A missed settlement screen must not make Maa report a completed
+            # round. Keep polling briefly, then explicitly stop on unknown UI.
+            settlement_wait = n("结算等待新页面")
+            known_settlement = [*settlement_targets, n("广告关闭"), n("多人结算_已返回系列赛")]
+            # After this popup, resume settlement confirmation. The generic ad
+            # close returns to page dispatch and could start another race early.
+            nodes[pass_close]["next"] = [settlement_wait]
+            nodes[settlement_wait] = {"recognition": "DirectHit", "action": "DoNothing",
+                                      "max_hit": 30, "post_delay": 1000,
+                                      "next": [*known_settlement, settlement_wait, stop]}
+            for suffix in ("多人结算_成绩继续", "多人结算_奖励继续", "多人结算_点击错失机会",
+                           "多人结算_名人堂奖励继续", "多人段位_升级继续"):
+                node = nodes[n(suffix)]
+                node["next"] = [*node["next"], settlement_wait, stop]
             nodes[n("多人段位_降级确定")]["next"] = [n("降段暂停_请更新段位")]
             nodes[n("降段暂停_请更新段位")] = {"recognition": "DirectHit", "action": "StopTask", "next": []}
             nodes[done] = {"recognition": "DirectHit", "action": "DoNothing", "max_hit": 1,
@@ -176,6 +202,12 @@ def main():
                             "next": [n("多人准备_仅拥有已开启"), n("多人准备_开启仅拥有")]}
             nodes[n("多人准备_介绍页开始")]["next"] = [n("多人准备_仅拥有已开启"), n("多人准备_开启仅拥有")]
             nodes[n("多人准备_仅拥有已开启")]["next"] = [choose]
+            # 过场动画中首次点击可能被游戏吞掉。每次先检查是否已开启，
+            # 仍关闭时最多再点两次，避免等待开启模板超时后误报任务完成。
+            owned_off = nodes[n("多人准备_开启仅拥有")]
+            owned_off["max_hit"] = 3
+            owned_off["post_delay"] = 1500
+            owned_off["next"] = [n("多人准备_仅拥有已开启"), n("多人准备_开启仅拥有")]
             # 倒序兜底找到车后直接开始，终止分支仍停止整个试跑。
             for key, node in list(nodes.items()):
                 if key.startswith(n("倒序兜底_")) and not node.get("next"):
@@ -185,7 +217,8 @@ def main():
                         node["action"] = "StopTask"
             candidates = []
             skip_conditions = [copy.deepcopy(fallback["倒序兜底_" + suffix]) for suffix in
-                               ["缺钥匙", "缺图纸", "黄金段位不可用", "白金段位不可用", "缺油"]]
+                               ["缺钥匙", "缺图纸", "黄金段位不可用", "白金段位不可用",
+                                "翡翠段位不可用", "缺油"]]
             for j, (vehicle, identity) in enumerate(available):
                 c = n(f"推荐{j+1:02}_{vehicle['catalog_id']}_")
                 entry, locate, found, swipe, back = [c+s for s in ["入口", "定位白银", "点击车型", "正向搜索", "不可用返回"]]
@@ -211,7 +244,8 @@ def main():
                 nodes[reverse_swipe] = {**copy.deepcopy(list_guard), "action": "Swipe", "begin": [600, 420], "end": [1000, 420],
                                        **swipe_timing(), "max_hit": 24, "timeout": 15000, "next": [found, reverse_swipe, locate]}
                 nodes[locate] = {**copy.deepcopy(list_guard), "action": "Click",
-                                 "target": {"黄金": [671, 107], "白银": [616, 107], "青铜": [561, 107]}[vehicle["league"]],
+                                 "target": {"白金": [726, 107], "黄金": [671, 107],
+                                            "白银": [616, 107], "青铜": [561, 107]}[vehicle["league"]],
                                  "max_hit": 1, "post_delay": 800, "timeout": 60000, "next": [found, swipe, following]}
                 nodes[found] = {"recognition": "And", "all_of": [copy.deepcopy(identity), copy.deepcopy(list_guard)],
                                 # 图纸整张都可能跳转。以车名定位，将点击移到左侧车身。
@@ -228,8 +262,15 @@ def main():
                 nodes[swipe] = {**copy.deepcopy(list_guard), "action": "Swipe", "begin": [1000, 420], "end": [600, 420],
                                 **swipe_timing(), "max_hit": 24, "timeout": 15000, "next": [found, swipe, following]}
                 candidates.append(entry)
-            nodes[choose] = {"recognition": "DirectHit", "action": "DoNothing",
-                             "next": [candidates[0] if candidates else n("倒序兜底_入口")]}
+            static_first = candidates[0] if candidates else n("倒序兜底_入口")
+            nodes[choose] = {"recognition": "DirectHit",
+                             "action": "Custom" if strategy is not None else "DoNothing",
+                             "next": [static_first],
+                             "on_error": [stop] if strategy is not None else [static_first]}
+            if strategy is not None:
+                nodes[choose].update(custom_action="ma9_select_recommended",
+                                     custom_action_param={"player_league": profile["current_league"]},
+                                     timeout=600000)
             # 从车辆详情启动时返回列表重排，避免跳过推荐顺序。
             nodes[n("详情返回重排")] = {**copy.deepcopy(arrows), "action": "Click", "target": [40, 30],
                                         "max_hit": 2, "post_delay": 450,
@@ -257,16 +298,16 @@ def main():
                 resume = rp + "确认选车列表"
                 off, on = rp + "开启仅拥有", rp + "仅拥有已开启"
                 owned_off = copy.deepcopy(mp["多人准备_开启仅拥有"])
-                nodes[off] = {**owned_off, "next": [on], "max_hit": 1}
+                nodes[off] = {**owned_off, "next": [on, off], "max_hit": 3, "post_delay": 1500}
                 nodes[on] = {**copy.deepcopy(list_guard), "action": "DoNothing", "max_hit": 1,
                              "next": [mapping[choose]]}
                 nodes[resume] = {"recognition": "Or", "any_of": [copy.deepcopy(list_guard), owned_off],
                                  "action": "DoNothing", "max_hit": 1, "timeout": 15000,
                                  "next": [off, on]}
                 resume_nodes.append(resume)
-            nodes[server_close] = {**copy.deepcopy(server_guard), "action": "Click", "target": True,
-                                   "max_hit": 3, "pre_delay": 0, "post_delay": 2000, "timeout": 15000,
-                                   "next": resume_nodes}
+            nodes[server_close] = {**copy.deepcopy(server_guard), "action": "Click", "target": [1092, 244],
+                                   "max_hit": 8, "pre_delay": 0, "post_delay": 2500, "timeout": 30000,
+                                   "next": [server_close, *resume_nodes]}
             for target, source in [(close, "通用弹窗_关闭广告"), (retry, "通用弹窗_连接错误重试"),
                                    (garage, "通用弹窗_车库外观领取")]:
                 nodes[target] = copy.deepcopy(language[source])
@@ -279,15 +320,17 @@ def main():
                 node.setdefault("post_delay", 0)
                 node.setdefault("timeout", 15000)
                 node.setdefault("on_error", [stop])
-                if node.get("next") and key not in [dispatch, close, retry, garage, server_close] and not key.endswith("图纸误入关闭"):
+                if node.get("next") and key not in [dispatch, close, pass_close, retry, garage, server_close] and not key.endswith("图纸误入关闭"):
                     node["next"][0:0] = [server_close, close, retry, garage]
                     # 广告关闭优先；随后保留图纸页面的当前候选恢复。
                     specialized = [t for t in node["next"] if t.endswith("图纸误入关闭")]
                     for t in specialized:
                         node["next"].remove(t)
                     node["next"][0:0] = specialized
-                if node.get("next") and key != close:
+                if node.get("next") and key not in [close, pass_close]:
                     node["next"] = [close, *[t for t in node["next"] if t != close]]
+                    if pass_close in node["next"]:
+                        node["next"] = [pass_close, *[t for t in node["next"] if t != pass_close]]
             # 独立轮次名称隔离 max_hit，无需 Agent 或清理全局计数。
             trial_nodes.update(nodes)
         entry = trial + "入口"
@@ -316,8 +359,10 @@ def main():
         assert templates_unchanged, "车型模板变化，不能复用检查"
         previous = read("data/generated/multiplayer_loop_manifest.json")
         previous = previous.get("variants", {}).get(profile["current_league"], previous)
-        assert previous["recommended_order"] == [v[0]["title"] for v in available], "名单变更需完整检查"
-        scores = previous["list_template_checks"]
+        checked = {row["title"]: row for row in previous["list_template_checks"]}
+        current_titles = [vehicle["title"] for vehicle, _ in available]
+        assert set(checked) == set(current_titles), "模板候选集合变更需完整检查"
+        scores = [checked[title] for title in current_titles]
     if cached_scores is not None:
         scores = cached_scores
     for vehicle, identity in available:
@@ -337,6 +382,9 @@ def main():
                 "recommended_order": [v[0]["title"] for v in available], "missing": missing,
                 "selection_policy": profile["selection_policy"],
                 "rotation_file": profile["rotation_file"],
+                "strategy_file": "config/selection_strategy.json" if strategy is not None else None,
+                "selection_engine": "runtime_ocr" if strategy is not None else "static_templates",
+                "recommended_vehicles": [dict(vehicle) for vehicle, _ in available],
                 "compatible_leagues": profile["compatible_leagues"],
                 "search_policy": "reverse_24_then_forward_24", "vehicle_click_region": "car_body_left_of_matched_name",
                 "list_template_checks": scores, "session_time_limit": None,

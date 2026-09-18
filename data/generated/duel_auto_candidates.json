@@ -1,0 +1,1446 @@
+{
+  "schema_version": 1,
+  "source": "MutualExclusionAllocator/repo/gauntlet_data.json",
+  "source_sha256": "70bdd433c04d94fe8913aa09334e3e9896c6b9808a23daf58b3affb866cebf53",
+  "candidate_tier": "自动",
+  "tracks": [
+    {
+      "big": "古老斗技场",
+      "small": "偏僻小道",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_274a1696929910e2",
+          "car_70f43e28c4fa312c",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_70f43e28c4fa312c",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766"
+        ]
+      }
+    },
+    {
+      "big": "古老斗技场",
+      "small": "十字路口",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_d64a2fe90e3e24c7",
+          "car_db01e0aad4ce9a8f",
+          "car_047377f164ce4a20"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "古老斗技场",
+      "small": "旧时风情",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "古老斗技场",
+      "small": "跌宕之路",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_274a1696929910e2",
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_b862fc6f029a1944",
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_d51e24a1fd5f83c0",
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766"
+        ]
+      }
+    },
+    {
+      "big": "大桥海湾",
+      "small": "喧闹铁路",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_322998669997b09d",
+          "car_b862fc6f029a1944",
+          "car_274a1696929910e2",
+          "car_3e780fbcb818eaa2",
+          "car_70f43e28c4fa312c",
+          "car_f6f480da8fa60c6a",
+          "car_0830cf5cbe5608e6"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2",
+          "car_70f43e28c4fa312c",
+          "car_f6f480da8fa60c6a",
+          "car_0830cf5cbe5608e6"
+        ]
+      }
+    },
+    {
+      "big": "大桥海湾",
+      "small": "城市狂飙",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_d64a2fe90e3e24c7",
+          "car_d51e24a1fd5f83c0",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_d51e24a1fd5f83c0",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "大桥海湾",
+      "small": "水滨",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_db01e0aad4ce9a8f"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "大桥海湾",
+      "small": "隧道",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_274a1696929910e2",
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_f66ef378ef364c6d"
+        ]
+      }
+    },
+    {
+      "big": "高地穿梭",
+      "small": "幽灵船",
+      "zones": {
+        "五区": [
+          "car_322998669997b09d",
+          "car_d64a2fe90e3e24c7",
+          "car_b862fc6f029a1944",
+          "car_d51e24a1fd5f83c0",
+          "car_70f43e28c4fa312c",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_7ce3d6f5e1d75ad0"
+        ],
+        "四区": [
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_70f43e28c4fa312c",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_7ce3d6f5e1d75ad0"
+        ]
+      }
+    },
+    {
+      "big": "高地穿梭",
+      "small": "灯塔",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_d64a2fe90e3e24c7"
+        ],
+        "四区": [
+          "car_005c710a33e5b250"
+        ]
+      }
+    },
+    {
+      "big": "高地穿梭",
+      "small": "高原峡谷",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_322998669997b09d",
+          "car_b862fc6f029a1944",
+          "car_274a1696929910e2",
+          "car_d51e24a1fd5f83c0",
+          "car_db01e0aad4ce9a8f",
+          "car_3e780fbcb818eaa2",
+          "car_7ce3d6f5e1d75ad0"
+        ],
+        "四区": [
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_db01e0aad4ce9a8f",
+          "car_3e780fbcb818eaa2",
+          "car_7ce3d6f5e1d75ad0"
+        ]
+      }
+    },
+    {
+      "big": "高地穿梭",
+      "small": "魔法岛屿",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "明珠港口",
+      "small": "东方巴黎",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_005c710a33e5b250",
+          "car_322998669997b09d",
+          "car_274a1696929910e2",
+          "car_d51e24a1fd5f83c0",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "明珠港口",
+      "small": "双环岛",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_db01e0aad4ce9a8f",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f",
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_3e851ea4c5a4b766"
+        ]
+      }
+    },
+    {
+      "big": "明珠港口",
+      "small": "未来之路",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250"
+        ],
+        "四区": [
+          "car_005c710a33e5b250"
+        ]
+      }
+    },
+    {
+      "big": "明珠港口",
+      "small": "触摸天空",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_005c710a33e5b250",
+          "car_274a1696929910e2",
+          "car_b862fc6f029a1944",
+          "car_d51e24a1fd5f83c0",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_3e780fbcb818eaa2",
+          "car_ca55b3856f987b40",
+          "car_70f43e28c4fa312c",
+          "car_3e851ea4c5a4b766",
+          "car_f6f480da8fa60c6a"
+        ]
+      }
+    },
+    {
+      "big": "沙漠迷雾",
+      "small": "国王的复兴",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_322998669997b09d",
+          "car_274a1696929910e2",
+          "car_db01e0aad4ce9a8f",
+          "car_7ce3d6f5e1d75ad0"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f",
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_7ce3d6f5e1d75ad0"
+        ]
+      }
+    },
+    {
+      "big": "沙漠迷雾",
+      "small": "地下冲刺",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766",
+          "car_047377f164ce4a20",
+          "car_db01e0aad4ce9a8f"
+        ],
+        "四区": [
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766",
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "沙漠迷雾",
+      "small": "岛屿幻想",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_3e780fbcb818eaa2",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766",
+          "car_f6f480da8fa60c6a"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766",
+          "car_f6f480da8fa60c6a",
+          "car_70f43e28c4fa312c",
+          "car_ca55b3856f987b40"
+        ]
+      }
+    },
+    {
+      "big": "沙漠迷雾",
+      "small": "高塔赛道",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "西部牧场",
+      "small": "时间旅行",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_274a1696929910e2",
+          "car_b862fc6f029a1944"
+        ],
+        "四区": [
+          "car_d51e24a1fd5f83c0"
+        ]
+      }
+    },
+    {
+      "big": "西部牧场",
+      "small": "曲直高速",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_db01e0aad4ce9a8f"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "西部牧场",
+      "small": "铁道迷",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_274a1696929910e2"
+        ],
+        "四区": [
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "西部牧场",
+      "small": "龙卷风",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_274a1696929910e2",
+          "car_b862fc6f029a1944",
+          "car_db01e0aad4ce9a8f"
+        ],
+        "四区": [
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "神山垭口",
+      "small": "信仰之跃",
+      "zones": {
+        "五区": [
+          "car_322998669997b09d",
+          "car_d64a2fe90e3e24c7",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_274a1696929910e2",
+          "car_70f43e28c4fa312c",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_7ce3d6f5e1d75ad0",
+          "car_f6f480da8fa60c6a"
+        ],
+        "四区": [
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_70f43e28c4fa312c",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_7ce3d6f5e1d75ad0",
+          "car_f6f480da8fa60c6a"
+        ]
+      }
+    },
+    {
+      "big": "神山垭口",
+      "small": "冰封地堡",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_d64a2fe90e3e24c7"
+        ],
+        "四区": []
+      }
+    },
+    {
+      "big": "神山垭口",
+      "small": "山崩",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_274a1696929910e2",
+          "car_b862fc6f029a1944",
+          "car_db01e0aad4ce9a8f",
+          "car_047377f164ce4a20"
+        ],
+        "四区": [
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "神山垭口",
+      "small": "自由落体",
+      "zones": {
+        "五区": [
+          "car_93bd4ec743f8d274",
+          "car_005c710a33e5b250"
+        ],
+        "四区": [
+          "car_93bd4ec743f8d274",
+          "car_005c710a33e5b250"
+        ]
+      }
+    },
+    {
+      "big": "热带天堂",
+      "small": "地狱谷",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_274a1696929910e2",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_70f43e28c4fa312c",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2",
+          "car_ca55b3856f987b40"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2",
+          "car_70f43e28c4fa312c",
+          "car_f6f480da8fa60c6a",
+          "car_3e851ea4c5a4b766",
+          "car_ca55b3856f987b40"
+        ]
+      }
+    },
+    {
+      "big": "热带天堂",
+      "small": "胜地冲刺",
+      "zones": {
+        "五区": [
+          "car_b862fc6f029a1944",
+          "car_d64a2fe90e3e24c7",
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766",
+          "car_7ce3d6f5e1d75ad0"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2",
+          "car_b862fc6f029a1944",
+          "car_70f43e28c4fa312c",
+          "car_3e851ea4c5a4b766"
+        ]
+      }
+    },
+    {
+      "big": "热带天堂",
+      "small": "酒店大道",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_ca55b3856f987b40",
+          "car_04041a454219eaa3",
+          "car_3e780fbcb818eaa2",
+          "car_047377f164ce4a20",
+          "car_d493070a0e2d7cd6"
+        ],
+        "四区": [
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "樱花港",
+      "small": "城市绿洲",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_274a1696929910e2",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_70f43e28c4fa312c",
+          "car_ca55b3856f987b40"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766",
+          "car_f6f480da8fa60c6a",
+          "car_70f43e28c4fa312c",
+          "car_ca55b3856f987b40"
+        ]
+      }
+    },
+    {
+      "big": "樱花港",
+      "small": "急速之争",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_db01e0aad4ce9a8f"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "樱花港",
+      "small": "明治冲击",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_274a1696929910e2",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2",
+          "car_ca55b3856f987b40"
+        ],
+        "四区": [
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_ca55b3856f987b40"
+        ]
+      }
+    },
+    {
+      "big": "樱花港",
+      "small": "樱花城堡",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_ca55b3856f987b40",
+          "car_db01e0aad4ce9a8f",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "摩登城市",
+      "small": "公园竞速",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_274a1696929910e2",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766"
+        ],
+        "四区": [
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766"
+        ]
+      }
+    },
+    {
+      "big": "摩登城市",
+      "small": "富豪之旅",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_274a1696929910e2",
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "摩登城市",
+      "small": "睦邻友好",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_b862fc6f029a1944",
+          "car_274a1696929910e2",
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_70f43e28c4fa312c"
+        ],
+        "四区": [
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_70f43e28c4fa312c"
+        ]
+      }
+    },
+    {
+      "big": "摩登城市",
+      "small": "飞艇竞速",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_274a1696929910e2",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2",
+          "car_047377f164ce4a20"
+        ],
+        "四区": [
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "沙漠高速",
+      "small": "发夹弯冲刺",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_d64a2fe90e3e24c7"
+        ],
+        "四区": [
+          "car_005c710a33e5b250"
+        ]
+      }
+    },
+    {
+      "big": "沙漠高速",
+      "small": "桥间争霸",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_005c710a33e5b250",
+          "car_274a1696929910e2",
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_b862fc6f029a1944",
+          "car_3e780fbcb818eaa2",
+          "car_ca55b3856f987b40"
+        ],
+        "四区": [
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_3e780fbcb818eaa2",
+          "car_ca55b3856f987b40"
+        ]
+      }
+    },
+    {
+      "big": "沙漠高速",
+      "small": "蜿蜒之路",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_d64a2fe90e3e24c7",
+          "car_ca55b3856f987b40",
+          "car_047377f164ce4a20",
+          "car_fbb98b4b8174c394"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_ca55b3856f987b40"
+        ]
+      }
+    },
+    {
+      "big": "沙漠高速",
+      "small": "隧道冲刺",
+      "zones": {
+        "五区": [
+          "car_322998669997b09d",
+          "car_b862fc6f029a1944",
+          "car_d51e24a1fd5f83c0",
+          "car_274a1696929910e2",
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2",
+          "car_7ce3d6f5e1d75ad0"
+        ],
+        "四区": [
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_7ce3d6f5e1d75ad0"
+        ]
+      }
+    },
+    {
+      "big": "狂野赛车场",
+      "small": "侧面视角",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_047377f164ce4a20"
+        ],
+        "四区": [
+          "car_005c710a33e5b250"
+        ]
+      }
+    },
+    {
+      "big": "狂野赛车场",
+      "small": "弯道终点",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_d64a2fe90e3e24c7",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "狂野赛车场",
+      "small": "极速前进",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_047377f164ce4a20"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "狂野赛车场",
+      "small": "直道冲刺",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_005c710a33e5b250",
+          "car_047377f164ce4a20",
+          "car_274a1696929910e2",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "雄鹰之城",
+      "small": "前往码头",
+      "zones": {
+        "五区": [
+          "car_274a1696929910e2",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766",
+          "car_047377f164ce4a20",
+          "car_f6f480da8fa60c6a"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766"
+        ]
+      }
+    },
+    {
+      "big": "雄鹰之城",
+      "small": "拉博卡",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_274a1696929910e2",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766",
+          "car_ca55b3856f987b40",
+          "car_f6f480da8fa60c6a"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_3e851ea4c5a4b766",
+          "car_ca55b3856f987b40"
+        ]
+      }
+    },
+    {
+      "big": "雄鹰之城",
+      "small": "水上狂飙",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_274a1696929910e2",
+          "car_b862fc6f029a1944",
+          "car_ca55b3856f987b40",
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_322998669997b09d",
+          "car_d51e24a1fd5f83c0",
+          "car_ca55b3856f987b40",
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "雄鹰之城",
+      "small": "穿越城市",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_ca55b3856f987b40"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_ca55b3856f987b40"
+        ]
+      }
+    },
+    {
+      "big": "冰火岛",
+      "small": "地心之外",
+      "zones": {
+        "五区": [
+          "car_db01e0aad4ce9a8f"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "冰火岛",
+      "small": "地心探险",
+      "zones": {
+        "五区": [
+          "car_047377f164ce4a20"
+        ],
+        "四区": []
+      }
+    },
+    {
+      "big": "冰火岛",
+      "small": "破冰船",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_274a1696929910e2",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766"
+        ]
+      }
+    },
+    {
+      "big": "冰火岛",
+      "small": "穿越地心",
+      "zones": {
+        "五区": [
+          "car_047377f164ce4a20"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "花都疾驰",
+      "small": "地铁冲刺",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_db01e0aad4ce9a8f",
+          "car_047377f164ce4a20"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "花都疾驰",
+      "small": "河畔漂移",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7"
+        ],
+        "四区": []
+      }
+    },
+    {
+      "big": "花都疾驰",
+      "small": "艺术之旅",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_005c710a33e5b250",
+          "car_274a1696929910e2",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_70f43e28c4fa312c",
+          "car_f6f480da8fa60c6a"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2",
+          "car_ca55b3856f987b40",
+          "car_70f43e28c4fa312c",
+          "car_3e851ea4c5a4b766",
+          "car_f6f480da8fa60c6a"
+        ]
+      }
+    },
+    {
+      "big": "花都疾驰",
+      "small": "铁塔飞跃",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_047377f164ce4a20"
+        ],
+        "四区": [
+          "car_005c710a33e5b250"
+        ]
+      }
+    },
+    {
+      "big": "旷野飙车",
+      "small": "世外萄园",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_274a1696929910e2",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_ca55b3856f987b40",
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_70f43e28c4fa312c",
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_f6f480da8fa60c6a",
+          "car_3e851ea4c5a4b766"
+        ]
+      }
+    },
+    {
+      "big": "旷野飙车",
+      "small": "山野小路",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_d51e24a1fd5f83c0",
+          "car_274a1696929910e2",
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_3e851ea4c5a4b766"
+        ]
+      }
+    },
+    {
+      "big": "旷野飙车",
+      "small": "河岸狂飙",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_005c710a33e5b250",
+          "car_d51e24a1fd5f83c0",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a"
+        ]
+      }
+    },
+    {
+      "big": "旷野飙车",
+      "small": "河滨城堡",
+      "zones": {
+        "五区": [
+          "car_db01e0aad4ce9a8f"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "极昼之地",
+      "small": "凌云狂飙",
+      "zones": {
+        "五区": [
+          "car_db01e0aad4ce9a8f"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "极昼之地",
+      "small": "变幻之风",
+      "zones": {
+        "五区": [],
+        "四区": []
+      }
+    },
+    {
+      "big": "极昼之地",
+      "small": "未来融合",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_322998669997b09d",
+          "car_b862fc6f029a1944",
+          "car_d51e24a1fd5f83c0",
+          "car_274a1696929910e2",
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2",
+          "car_7ce3d6f5e1d75ad0",
+          "car_0830cf5cbe5608e6"
+        ],
+        "四区": [
+          "car_322998669997b09d",
+          "car_db01e0aad4ce9a8f",
+          "car_d51e24a1fd5f83c0",
+          "car_ca55b3856f987b40",
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2",
+          "car_7ce3d6f5e1d75ad0",
+          "car_0830cf5cbe5608e6"
+        ]
+      }
+    },
+    {
+      "big": "极昼之地",
+      "small": "飞向未来",
+      "zones": {
+        "五区": [
+          "car_db01e0aad4ce9a8f"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f"
+        ]
+      }
+    },
+    {
+      "big": "狮城",
+      "small": "乐园追逐",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250",
+          "car_d64a2fe90e3e24c7",
+          "car_d51e24a1fd5f83c0",
+          "car_274a1696929910e2",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_005c710a33e5b250",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "狮城",
+      "small": "天旋地转",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_322998669997b09d",
+          "car_274a1696929910e2",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_ca55b3856f987b40",
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_322998669997b09d",
+          "car_ca55b3856f987b40",
+          "car_d51e24a1fd5f83c0",
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "狮城",
+      "small": "海岸飞驰",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_005c710a33e5b250"
+        ],
+        "四区": [
+          "car_005c710a33e5b250"
+        ]
+      }
+    },
+    {
+      "big": "狮城",
+      "small": "狮城竞速",
+      "zones": {
+        "五区": [
+          "car_274a1696929910e2",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_3e851ea4c5a4b766",
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f",
+          "car_ca55b3856f987b40",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766",
+          "car_70f43e28c4fa312c",
+          "car_f6f480da8fa60c6a"
+        ]
+      }
+    },
+    {
+      "big": "凌空之巅",
+      "small": "漂移回响",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_b862fc6f029a1944",
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2",
+          "car_322998669997b09d",
+          "car_3e851ea4c5a4b766",
+          "car_ca55b3856f987b40"
+        ],
+        "四区": [
+          "car_70f43e28c4fa312c",
+          "car_3e780fbcb818eaa2",
+          "car_3e851ea4c5a4b766",
+          "car_ca55b3856f987b40"
+        ]
+      }
+    },
+    {
+      "big": "凌空之巅",
+      "small": "疾速冲锋",
+      "zones": {
+        "五区": [
+          "car_b862fc6f029a1944",
+          "car_db01e0aad4ce9a8f",
+          "car_047377f164ce4a20",
+          "car_f6f480da8fa60c6a",
+          "car_3e780fbcb818eaa2"
+        ],
+        "四区": [
+          "car_db01e0aad4ce9a8f",
+          "car_f6f480da8fa60c6a",
+          "car_3e780fbcb818eaa2"
+        ]
+      }
+    },
+    {
+      "big": "凌空之巅",
+      "small": "速度螺旋",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_d51e24a1fd5f83c0",
+          "car_b862fc6f029a1944",
+          "car_322998669997b09d",
+          "car_274a1696929910e2",
+          "car_db01e0aad4ce9a8f",
+          "car_70f43e28c4fa312c",
+          "car_0830cf5cbe5608e6"
+        ],
+        "四区": [
+          "car_d51e24a1fd5f83c0",
+          "car_322998669997b09d",
+          "car_db01e0aad4ce9a8f",
+          "car_70f43e28c4fa312c",
+          "car_0830cf5cbe5608e6"
+        ]
+      }
+    },
+    {
+      "big": "凌空之巅",
+      "small": "钢铁坠落",
+      "zones": {
+        "五区": [
+          "car_3e780fbcb818eaa2",
+          "car_d64a2fe90e3e24c7",
+          "car_3e851ea4c5a4b766",
+          "car_f6f480da8fa60c6a"
+        ],
+        "四区": [
+          "car_3e780fbcb818eaa2",
+          "car_f6f480da8fa60c6a",
+          "car_3e851ea4c5a4b766"
+        ]
+      }
+    },
+    {
+      "big": "海港博物馆",
+      "small": "海洋爆冲",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_005c710a33e5b250"
+        ],
+        "四区": [
+          "car_005c710a33e5b250"
+        ]
+      }
+    },
+    {
+      "big": "海港博物馆",
+      "small": "赛博幻影",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7"
+        ],
+        "四区": []
+      }
+    },
+    {
+      "big": "海港博物馆",
+      "small": "集装箱风暴",
+      "zones": {
+        "五区": [
+          "car_005c710a33e5b250"
+        ],
+        "四区": [
+          "car_005c710a33e5b250"
+        ]
+      }
+    },
+    {
+      "big": "海港博物馆",
+      "small": "飞跃城市",
+      "zones": {
+        "五区": [
+          "car_d64a2fe90e3e24c7",
+          "car_005c710a33e5b250"
+        ],
+        "四区": [
+          "car_005c710a33e5b250"
+        ]
+      }
+    },
+    {
+      "big": "季风秘境",
+      "small": "疾风原野",
+      "zones": {
+        "五区": [],
+        "四区": []
+      }
+    },
+    {
+      "big": "季风秘境",
+      "small": "瀑布飞驰",
+      "zones": {
+        "五区": [],
+        "四区": []
+      }
+    },
+    {
+      "big": "季风秘境",
+      "small": "岩石地带",
+      "zones": {
+        "五区": [],
+        "四区": []
+      }
+    },
+    {
+      "big": "季风秘境",
+      "small": "碎石山路",
+      "zones": {
+        "五区": [],
+        "四区": []
+      }
+    }
+  ]
+}

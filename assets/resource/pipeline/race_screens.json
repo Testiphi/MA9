@@ -4,6 +4,7 @@
         "action": "DoNothing",
         "timeout": 60000,
         "next": [
+            "多人结算_通行证升级关闭",
             "多人结算_关闭广告",
             "多人段位_降级确定",
             "多人段位_升级继续",
@@ -60,6 +61,7 @@
         "post_delay": 300,
         "timeout": 60000,
         "next": [
+            "多人结算_通行证升级关闭",
             "多人结算_关闭广告",
             "多人段位_降级确定",
             "多人段位_升级继续",
@@ -111,16 +113,18 @@
             1055,
             650
         ],
-        "max_hit": 1,
-        "post_delay": 300,
+        "max_hit": 3,
+        "post_delay": 1500,
         "timeout": 60000,
         "next": [
+            "多人结算_通行证升级关闭",
             "多人结算_关闭广告",
             "多人段位_降级确定",
             "多人段位_升级继续",
             "多人结算_名人堂奖励继续",
             "多人结算_点击错失机会",
-            "多人结算_已返回系列赛"
+            "多人结算_已返回系列赛",
+            "多人结算_奖励继续"
         ]
     },
     "多人结算_点击错失机会": {
@@ -158,6 +162,7 @@
         "post_delay": 500,
         "timeout": 60000,
         "next": [
+            "多人结算_通行证升级关闭",
             "多人结算_关闭广告",
             "多人段位_降级确定",
             "多人段位_升级继续",
@@ -261,6 +266,7 @@
         "post_delay": 500,
         "timeout": 60000,
         "next": [
+            "多人结算_通行证升级关闭",
             "多人结算_关闭广告",
             "多人段位_降级确定",
             "多人段位_升级继续",
@@ -304,6 +310,7 @@
         "post_delay": 500,
         "timeout": 60000,
         "next": [
+            "多人结算_通行证升级关闭",
             "多人结算_关闭广告",
             "多人结算_名人堂奖励继续",
             "多人结算_已返回系列赛"
@@ -340,16 +347,18 @@
             1132,
             653
         ],
-        "max_hit": 1,
-        "post_delay": 500,
+        "max_hit": 3,
+        "post_delay": 1500,
         "timeout": 60000,
         "next": [
+            "多人结算_通行证升级关闭",
             "多人结算_关闭广告",
             "多人结算_名人堂奖励继续",
             "多人段位_降级确定",
             "多人结算_点击错失机会",
             "多人结算_奖励继续",
-            "多人结算_已返回系列赛"
+            "多人结算_已返回系列赛",
+            "多人段位_升级继续"
         ]
     },
     "赛道识别_神山垭口_坠落": {
@@ -402,6 +411,7 @@
         "timeout": 180000,
         "rate_limit": 100,
         "next": [
+            "多人结算_通行证升级关闭",
             "多人结算_关闭广告",
             "多人段位_降级确定",
             "多人段位_升级继续",
@@ -441,6 +451,7 @@
         ],
         "action": "Click",
         "next": [
+            "多人结算_通行证升级关闭",
             "多人结算_关闭广告",
             "多人段位_降级确定",
             "多人段位_升级继续",
@@ -458,7 +469,7 @@
         "repeat": 2,
         "repeat_delay": 750,
         "pre_delay": 0,
-        "post_delay": 10000,
+        "post_delay": 6000,
         "timeout": 60000,
         "rate_limit": 100
     },
@@ -466,7 +477,8 @@
         "recognition": "TemplateMatch",
         "template": [
             "navigation/language/ad_close_white.png",
-            "navigation/language/ad_close_pink.png"
+            "navigation/language/ad_close_pink.png",
+            "navigation/language/pass_level_close.png"
         ],
         "roi": [
             1000,
@@ -478,6 +490,66 @@
         "action": "Click",
         "target": true,
         "max_hit": 10,
+        "post_delay": 500,
+        "timeout": 180000,
+        "next": [
+            "多人结算_入口"
+        ]
+    },
+    "多人结算_通行证升级关闭": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/pass_level_prefix.png",
+                "roi": [
+                    430,
+                    110,
+                    180,
+                    90
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/pass_level_suffix.png",
+                "roi": [
+                    610,
+                    110,
+                    245,
+                    90
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/race/pass_claim.png",
+                "roi": [
+                    220,
+                    505,
+                    340,
+                    110
+                ],
+                "threshold": 0.9
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "navigation/language/pass_level_close.png",
+                "roi": [
+                    1000,
+                    70,
+                    160,
+                    110
+                ],
+                "threshold": 0.9
+            }
+        ],
+        "action": "Click",
+        "target": [
+            1120,
+            145
+        ],
+        "max_hit": 3,
         "post_delay": 500,
         "timeout": 180000,
         "next": [

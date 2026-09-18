@@ -1,2 +1,3 @@
 MaaFW==5.13.0
 numpy==2.4.4
+opencv-python-headless==4.13.0.92

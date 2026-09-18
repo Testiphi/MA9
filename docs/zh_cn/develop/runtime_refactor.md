@@ -5,7 +5,7 @@
 ## 模块边界
 
 - `agent/ma9_agent/models.py`：段位、矩形和车辆观察结果等公共模型。
-- `agent/ma9_agent/vehicle_selector.py`：过滤、推荐顺序、列表停滞/环绕判断和安全点击坐标。
+- `agent/ma9_agent/vehicle_selector.py`：过滤、推荐顺序、列表停滞/异常重访判断和安全点击坐标。
 - `agent/ma9_agent/race_controller.py`：比赛中断优先级、进度动作和双氮气兜底调度。
 - `agent/ma9_agent/runtime_config.py`：读取并验证现有段位、推荐车辆和赛道数据源。
 - `agent/runtime_action.py`：MaaFramework 自定义动作注册入口。
@@ -14,7 +14,7 @@
 
 ## 当前阶段
 
-第一阶段已完成纯决策核心和数据自检动作，尚未替换正式多人循环：
+第一阶段已完成纯决策核心、数据自检和只读车辆识别动作，尚未替换正式多人循环：
 
 ```powershell
 python -m unittest discover -s agent/tests -v
@@ -34,6 +34,10 @@ python -m venv .venv
 ```
 
 `assets/interface.json` 的开发配置会从 `.venv` 启动 Agent。数据自检任务为“多人运行时数据自检（Agent）”。
+
+账号优先选车顺序现已通过 [选车策略配置](./selection_strategy.md) 接入现有白银、黄金多人循环的生成器；修改配置后需重新生成 Pipeline。倒序兜底沿用原有节点。尚未有列表识别素材的车辆不会进入推荐节点。
+
+“识别选车列表可见车辆（只读）”在多人选车列表截图上复用现有车名模板，只输出可见车名、段位、车名框和安全点击候选点，不点击，也不推断燃油或车辆是否可参赛。结果写入 `debug/vehicle_recognition.json`。当前 49 辆推荐车中有 13 辆具备列表模板；黄金及兼容段位缺少 DB12、P900、Electric R 的列表模板。缺少模板不要求游戏解锁，可在车辆可见时补截图，也可后续加入 OCR 识别。此任务通过 `tools/prepare_vehicle_recognition.py` 生成独立识别节点，正式选车循环目前仍使用原有 Pipeline。
 
 Windows x64 发布包可先构建独立 Agent：
 
@@ -55,7 +59,7 @@ GitHub Actions 的 `install` 工作流会自动下载 MaaFramework v5.13.0 与 M
 ## 后续接入顺序
 
 1. 实现车辆卡片自定义识别，输出车名、卡片矩形、拥有/解锁、油量、完整可见状态。
-2. 将列表页识别结果交给 `VehicleSelector`，按页面指纹判断继续滑动、停滞或环绕。
+2. 将列表页识别结果交给 `VehicleSelector`，按页面指纹判断继续滑动、停滞或异常重访；列表没有环绕。
 3. 点击车辆左侧安全区域，进入详情后复核车辆、有油、可参赛和 TouchDrive。
 4. 用运行时会话保存当前段位、已尝试车辆、恢复次数和完成局数。
 5. 接入赛道进度 OCR，并由 `RaceController` 执行赛道动作；识别不足时继续使用双氮气兜底。
