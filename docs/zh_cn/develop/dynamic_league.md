@@ -14,6 +14,6 @@
 
 启动时若在列表或详情，会逐级返回系列赛首页读取徽章。识别到其他段位或无法确认时停止，避免盲选。当前支持白金、黄金、白银三种玩家段位。
 
-生成：`python -X utf8 tools/prepare_dynamic_multiplayer_loop.py`。该命令分别生成三套独立轮次，再合并到 `assets/resource/pipeline/multiplayer_loop.json`。不要用旧的静态生成命令覆盖合并结果。
+生成：`python -X utf8 tools/prepare_dynamic_multiplayer_loop.py`。该命令分别生成三套独立轮次，并按段位及局数拆分写入 `assets/resource/pipeline/multiplayer_loop*.json`，MaaFramework 会加载该目录中的全部 JSON。不要用旧的静态生成命令覆盖合并结果。
 
 截图交叉检查和节点连接检查可以离线验证；实际升降级后的连续对局仍需在模拟器长时试跑。

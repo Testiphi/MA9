@@ -3,6 +3,7 @@ import json
 import sys
 from pathlib import Path
 from check_daily_navigation import hit, read_image
+from multiplayer_loop_files import load_loop_nodes
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "agent"))
 from ma9_agent.garage_profile import load_profile  # noqa: E402
@@ -10,7 +11,9 @@ from ma9_agent.selection_strategy import load_strategy, planned_vehicles  # noqa
 
 
 def main():
-    nodes = json.loads((ROOT / "assets/resource/pipeline/multiplayer_loop.json").read_text(encoding="utf-8"))
+    nodes = load_loop_nodes(ROOT)
+    assert all(len(node.get("next", [])) == len(set(node.get("next", [])))
+               for node in nodes.values()), "duplicate next route"
     manifest = json.loads((ROOT / "data/generated/multiplayer_loop_manifest.json").read_text(encoding="utf-8"))
     rotation = json.loads((ROOT / "data/generated/champion_rotation.json").read_text(encoding="utf-8"))
     catalog = json.loads((ROOT / "data/generated/vehicle_catalog.json").read_text(encoding="utf-8"))

@@ -1,6 +1,7 @@
 """离线验证服务器错误返回列表及独立恢复计数，不连接设备。"""
 import json
 from pathlib import Path
+from multiplayer_loop_files import load_loop_nodes
 
 from check_daily_navigation import hit, read_image
 
@@ -8,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
-    nodes = json.loads((ROOT / "assets/resource/pipeline/multiplayer_loop.json").read_text(encoding="utf-8"))
+    nodes = load_loop_nodes(ROOT)
     manifest = json.loads((ROOT / "data/generated/multiplayer_loop_manifest.json").read_text(encoding="utf-8"))
     if manifest.get("league_detection") == "series_player_badge":
         from check_dynamic_multiplayer_loop import main as check_dynamic

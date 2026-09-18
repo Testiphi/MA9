@@ -2,6 +2,7 @@
 import copy
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -151,7 +152,6 @@ def main():
         nodes[f"多人循环{rounds}局_入口"] = {"recognition": "DirectHit", "action": "DoNothing",
             "next": [f"多人循环{rounds}局_第01局_自动段位调度"]}
     # 关闭广告具有最高优先级，包括组合生成时改写的升降级和跨段位分支。
-    import re
     for key, node in nodes.items():
         match = re.match(r"多人循环(?:3|20)局_(?:(?:白金|黄金|白银)_)?第\d{2}局_", key)
         if not match or not node.get("next") or key.endswith(("广告关闭", "通行证升级关闭", "本局完成", "多人结算_已返回系列赛")):
@@ -163,7 +163,18 @@ def main():
             node["next"] = [pass_close, *[t for t in node["next"] if t != pass_close]]
     assert all(target in nodes for node in nodes.values() for field in ["next", "on_error"]
                for target in node.get(field, []))
-    write_pipeline(ROOT / "assets/resource/pipeline/multiplayer_loop.json", nodes)
+    pipeline_dir = ROOT / "assets/resource/pipeline"
+    shards = {"multiplayer_loop.json": {}}
+    for name, node in nodes.items():
+        match = re.match(r"多人循环(3|20)局_(白金|黄金|白银)_", name)
+        filename = (f"multiplayer_loop_{match.group(1)}_{match.group(2)}.json"
+                    if match else "multiplayer_loop.json")
+        shards.setdefault(filename, {})[name] = node
+    for filename, part in shards.items():
+        write_pipeline(pipeline_dir / filename, part)
+    for stale in pipeline_dir.glob("multiplayer_loop*.json"):
+        if stale.name not in shards:
+            stale.unlink()
     manifest = {"schema_version": 2, "league_detection": "series_player_badge", "supported_leagues": list(badges),
                 "variants": manifests, "league_template_checks": checks, "node_count": len(nodes),
                 "note": "每局重新确认；原段位不可用立即重读；服务器恢复保持当前局；设备长时运行待验证。"}

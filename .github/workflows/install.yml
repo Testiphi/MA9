@@ -111,7 +111,7 @@ jobs:
 
       - name: Clean up MFAAvalonia archive
         shell: pwsh
-        run: Remove-Item -LiteralPath '${{ fromJson(steps.download_mfa.outputs.downloaded_files)[0] }}' -Force
+        run: Get-ChildItem -LiteralPath 'MFA' -File | Where-Object { $_.Extension -in '.zip', '.7z', '.tar', '.gz' } | Remove-Item -Force
 
       - name: Remove built-in runtime in MFA
         shell: pwsh

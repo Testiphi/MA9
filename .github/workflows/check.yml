@@ -37,6 +37,8 @@ jobs:
           node-version: 22
 
       - name: Run maa-checker
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
         run: |
           npm ci
           npm run check
