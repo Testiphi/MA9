@@ -11,6 +11,44 @@ from typing import Any, Iterable
 ZONES = ("五区", "四区")
 
 
+def _repair_descending_ratings(cards: list[dict[str, Any]]) -> list[int] | None:
+    """Recover a clipped leading thousands digit using the UI's sort order.
+
+    The Duel garage is authoritative and sorted from high to low. OCR
+    occasionally reads 1,827 as 827.  Treat a sub-1000 reading as ambiguous
+    and choose the least correction that makes the complete sequence
+    non-increasing. Genuine low ratings remain unchanged when order permits.
+    """
+    states: dict[int, tuple[tuple[int, int], list[int]]] = {}
+    for index, card in enumerate(cards):
+        performance = card.get("performance")
+        if not performance or not isinstance(performance[0], int):
+            return None
+        raw = performance[0]
+        maximum = performance[1] if len(performance) > 1 else None
+        candidates = [raw]
+        if raw < 1000:
+            candidates.extend(raw + 1000 * prefix for prefix in range(1, 10)
+                              if raw + 1000 * prefix <= (maximum or 10000))
+        next_states: dict[int, tuple[tuple[int, int], list[int]]] = {}
+        for candidate in dict.fromkeys(candidates):
+            correction = candidate - raw
+            step_cost = (int(correction != 0), correction)
+            if index == 0:
+                next_states[candidate] = (step_cost, [candidate])
+                continue
+            choices = [
+                ((cost[0] + step_cost[0], cost[1] + step_cost[1]), [*path, candidate])
+                for previous, (cost, path) in states.items() if previous >= candidate
+            ]
+            if choices:
+                next_states[candidate] = min(choices, key=lambda item: item[0])
+        states = next_states
+        if not states:
+            return None
+    return min(states.values(), key=lambda item: item[0])[1]
+
+
 def load_reference(path: Path) -> dict[str, Any]:
     reference = json.loads(path.read_text(encoding="utf-8"))
     if reference.get("schema_version") != 1 or reference.get("candidate_tier") != "自动":
@@ -188,13 +226,14 @@ def plan_live_weak_defense(
     ordered = list(candidates.values())
     if len(ordered) < 5:
         raise ValueError(f"fewer than five distinct {vehicle_class} cars were scanned")
-    weakest = list(reversed(ordered[-5:]))
-    ratings = [card.get("performance", [None])[0] if card.get("performance") else None
-               for card in weakest]
-    if any(not isinstance(rating, int) or rating < 100 for rating in ratings):
+    repaired = _repair_descending_ratings(ordered)
+    if repaired is None:
+        raise ValueError(f"{vehicle_class}-class ratings contradict the game's ordering")
+    weakest_pairs = list(reversed(list(zip(ordered, repaired))[-5:]))
+    weakest = [card for card, _rating in weakest_pairs]
+    ratings = [rating for _card, rating in weakest_pairs]
+    if any(rating < 100 for rating in ratings):
         raise ValueError(f"a weakest {vehicle_class} car has no trusted live rating")
-    if ratings != sorted(ratings):
-        raise ValueError(f"weakest {vehicle_class} car ratings contradict the game's ordering")
     return {
         "strategy": f"live_lowest_current_performance_{vehicle_class}",
         "vehicle_class": vehicle_class,
@@ -205,11 +244,13 @@ def plan_live_weak_defense(
             {"slot": index, "track": {"big": track["big"], "small": track["small"]},
              "vehicle_id": card["vehicle"]["id"],
              "vehicle": card["vehicle"]["title"],
-             "class": vehicle_class, "performance": card["performance"][0],
+             "class": vehicle_class, "performance": rating,
              "max_performance": card["performance"][1],
+             "rating_repaired": rating != card["performance"][0],
              "stars_lit": card.get("stars_lit"),
              "requires_detail_verification": True}
-            for index, (track, card) in enumerate(zip(tracks["tracks"], weakest), 1)
+            for index, (track, card, rating) in enumerate(
+                zip(tracks["tracks"], weakest, ratings), 1)
         ],
         "starts_race": False,
     }

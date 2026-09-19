@@ -26,15 +26,28 @@ def _map_order(report: dict[str, Any]) -> list[tuple[str, str]]:
     return [(row["big"], row["small"]) for row in report["tracks"]]
 
 
-def _read_tracks(context: Any, reference: dict[str, Any]) -> dict[str, Any]:
-    report = read_five_tracks(_ocr(context, _frame(context), (55, 165, 1190, 160)), reference)
-    if not report.get("complete") or len(report.get("tracks", [])) != 5:
-        raise RuntimeError("five-map OCR did not verify all defense tracks")
-    return report
+def _read_tracks(context: Any, reference: dict[str, Any], *,
+                 timeout: float = 15.0, interval: float = .6) -> dict[str, Any]:
+    """Wait through page transitions until all five ordered maps are stable."""
+    deadline = time.monotonic() + timeout
+    last_report: dict[str, Any] = {"complete": False, "tracks": [], "observed_groups": 0}
+    while True:
+        last_report = read_five_tracks(
+            _ocr(context, _frame(context), (55, 165, 1190, 160)), reference)
+        if last_report.get("complete") and len(last_report.get("tracks", [])) == 5:
+            return last_report
+        if time.monotonic() >= deadline:
+            break
+        time.sleep(interval)
+    raise RuntimeError(
+        "five-map OCR did not verify all defense tracks "
+        f"within {timeout:g}s (groups={last_report.get('observed_groups', 0)}, "
+        f"tracks={len(last_report.get('tracks', []))})")
 
 
 def _run_task(context: Any, entry: str) -> None:
-    if context.run_task(entry) is None:
+    detail = context.run_task(entry)
+    if detail is None or not getattr(getattr(detail, "status", None), "succeeded", False):
         raise RuntimeError(f"failed: {entry}")
 
 
@@ -80,6 +93,12 @@ def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any]) -> d
             (root / "data/generated/duel_auto_candidates.json").read_text(encoding="utf-8"))
         catalog = json.loads(
             (root / "data/generated/vehicle_catalog.json").read_text(encoding="utf-8"))
+        # The GUI task may start on the main multiplayer page, the interrupted
+        # qualifier page, or the lineup itself. Reuse the guarded navigation
+        # pipeline before taking any map-dependent action.
+        progress["status"] = "navigating"
+        _write(progress_path, progress)
+        _run_task(context, "对决_资格赛入口")
         tracks = _read_tracks(context, reference)
         _write(tracks_path, tracks)
 
@@ -91,7 +110,6 @@ def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any]) -> d
             raise RuntimeError(f"{vehicle_class}-class scan stopped at {scan.get('status')}")
         if not context.tasker.controller.post_click(32, 25).wait().succeeded:
             raise RuntimeError("could not return from Duel vehicle selection")
-        time.sleep(1.2)
         observed = _read_tracks(context, reference)
         _write(tracks_path, observed)
         if _map_order(observed) != _map_order(tracks):

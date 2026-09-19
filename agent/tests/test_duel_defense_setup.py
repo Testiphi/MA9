@@ -9,7 +9,12 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from ma9_agent.duel_defense_setup import parse_setup_params, run_defense_setup
+from ma9_agent.duel_defense_setup import (
+    _read_tracks,
+    _run_task,
+    parse_setup_params,
+    run_defense_setup,
+)
 
 
 class _Job:
@@ -17,6 +22,11 @@ class _Job:
 
     def wait(self):
         return self
+
+
+class _TaskDetail:
+    def __init__(self, succeeded=True):
+        self.status = type("Status", (), {"succeeded": succeeded})()
 
 
 class _Controller:
@@ -35,7 +45,7 @@ class _Context:
 
     def run_task(self, entry):
         self.entries.append(entry)
-        return object()
+        return _TaskDetail()
 
 
 class DuelDefenseSetupParamsTest(unittest.TestCase):
@@ -56,6 +66,13 @@ class DuelDefenseSetupParamsTest(unittest.TestCase):
                        {"max_pages": True}, {"strategy": "fastest"}):
             with self.subTest(params=params), self.assertRaises(ValueError):
                 parse_setup_params(params)
+
+    def test_pipeline_failure_is_not_treated_as_success(self) -> None:
+        context = type("Context", (), {
+            "run_task": lambda _self, _entry: _TaskDetail(False),
+        })()
+        with self.assertRaisesRegex(RuntimeError, "failed: broken"):
+            _run_task(context, "broken")
 
 
 class DuelDefenseSetupFlowTest(unittest.TestCase):
@@ -92,7 +109,7 @@ class DuelDefenseSetupFlowTest(unittest.TestCase):
                     patch("ma9_agent.duel_defense_setup.time.sleep"):
                 report = run_defense_setup(context, self._root(temporary), {"mode": "plan"})
         self.assertEqual(report["status"], "planned")
-        self.assertEqual(context.entries, ["对决_防守_进入第1赛道选车"])
+        self.assertEqual(context.entries, ["对决_资格赛入口", "对决_防守_进入第1赛道选车"])
         self.assertEqual(context.tasker.controller.clicks, [(32, 25)])
         self.assertFalse(report["starts_race"])
         self.assertFalse(any("开始" in entry for entry in context.entries))
@@ -106,9 +123,21 @@ class DuelDefenseSetupFlowTest(unittest.TestCase):
                 report = run_defense_setup(context, self._root(temporary), {"mode": "apply"})
         self.assertEqual(report["status"], "five_assigned")
         self.assertEqual(len(report["assigned"]), 5)
-        self.assertEqual(context.entries[1:], [
+        self.assertEqual(context.entries[0], "对决_资格赛入口")
+        self.assertEqual(context.entries[2:], [
             f"对决_防守_进入第{index}赛道选车" for index in range(1, 6)])
         self.assertFalse(any("开始" in entry for entry in context.entries))
+
+    def test_track_reader_waits_through_black_transition(self) -> None:
+        incomplete = {"complete": False, "tracks": [], "observed_groups": 0}
+        complete = self._tracks()
+        with patch("ma9_agent.duel_defense_setup._frame", side_effect=[object(), object()]), \
+                patch("ma9_agent.duel_defense_setup._ocr", return_value=[]), \
+                patch("ma9_agent.duel_defense_setup.read_five_tracks",
+                      side_effect=[incomplete, complete]), \
+                patch("ma9_agent.duel_defense_setup.time.sleep"):
+            report = _read_tracks(object(), {}, timeout=1, interval=.01)
+        self.assertEqual(report, complete)
 
 
 if __name__ == "__main__":

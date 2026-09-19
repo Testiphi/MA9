@@ -57,7 +57,10 @@ def main():
         x, y = BUTTONS[slot - 1]
         nodes[f"对决_防守_第{slot}赛道点击选择车辆"] = {
             **expanded(slot), "action": "Click", "target": [x + 95, y + 25],
-            "max_hit": 1, "post_delay": 500,
+            # The setup flow deliberately enters track 1 twice: once to scan the
+            # owned garage and once to assign the planned car.  A per-context
+            # max_hit would make the second visit impossible.
+            "post_delay": 500,
             "next": ["对决_防守_选车页已到达"],
         }
         for current in range(1, 6):
@@ -66,13 +69,13 @@ def main():
             nodes[f"对决_防守_从第{current}切到第{slot}赛道"] = {
                 **expanded(current), "action": "Click",
                 "target": [collapsed_x(current, slot), 350],
-                "max_hit": 1, "post_delay": 500,
+                "post_delay": 500,
                 "next": [f"对决_防守_第{slot}赛道已展开"],
             }
             nodes[f"对决_防守_从第{current}切到第{slot}赛道并选车"] = {
                 **expanded(current), "action": "Click",
                 "target": [collapsed_x(current, slot), 350],
-                "max_hit": 1, "post_delay": 500,
+                "post_delay": 500,
                 "next": [f"对决_防守_第{slot}赛道点击选择车辆"],
             }
         nodes[f"对决_防守_查看第{slot}赛道"] = {
