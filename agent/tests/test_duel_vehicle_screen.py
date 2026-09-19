@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import unittest
+import sys
+from pathlib import Path
 
 import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ma9_agent.duel_vehicle_screen import read_visible_cards
 
