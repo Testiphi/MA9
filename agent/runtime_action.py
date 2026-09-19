@@ -17,6 +17,26 @@ from ma9_agent.garage_profile import load_profile, owned_vehicle_ids
 from ma9_agent.vehicle_recognizer import available_candidates, recognize_visible
 from ma9_agent.selection_runtime import select_recommended
 from ma9_agent.vehicle_location_test import run_location_test
+from ma9_agent.duel_map_screen import read_five_tracks
+from ma9_agent.duel_vehicle_runtime import scan as scan_duel_vehicles
+from ma9_agent.account_conflict import account_conflict_from_ocr
+from ma9_agent.selection_runtime import _frame, _ocr
+
+
+@AgentServer.custom_action("ma9_account_conflict_diagnose")
+class AccountConflictDiagnoseAction(CustomAction):
+    """Recognize another-device login and leave recovery to the caller."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv
+        root = find_project_root()
+        frame = _frame(context)
+        report = account_conflict_from_ocr(_ocr(context, frame, (140, 200, 1000, 330)))
+        destination = root / "debug/account_conflict_live.json"
+        destination.parent.mkdir(exist_ok=True)
+        destination.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps({"event": "ma9_account_conflict", **report}, ensure_ascii=False), flush=True)
+        return report["detected"]
 
 
 def find_project_root() -> Path:
@@ -195,3 +215,45 @@ class VehicleLocationTestAction(CustomAction):
         destination.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(json.dumps({"event": "ma9_vehicle_location_test", **report}, ensure_ascii=False), flush=True)
         return report["status"] == "found"
+
+
+@AgentServer.custom_action("ma9_duel_read_tracks")
+class DuelReadTracksAction(CustomAction):
+    """Read all five ordered map pairs from the current lineup without input."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv
+        root = find_project_root()
+        reference = json.loads((root / "data/generated/duel_auto_candidates.json").read_text(encoding="utf-8"))
+        report = read_five_tracks(_ocr(context, _frame(context), (55, 165, 1190, 160)), reference)
+        destination = root / "debug/duel_tracks_live.json"
+        destination.parent.mkdir(exist_ok=True)
+        destination.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps({"event": "ma9_duel_tracks", **report}, ensure_ascii=False), flush=True)
+        return report["complete"]
+
+
+@AgentServer.custom_action("ma9_duel_vehicle_scan")
+class DuelVehicleScanAction(CustomAction):
+    """Scan one Duel class, optionally opening or assigning a named vehicle."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        root = find_project_root()
+        params = json.loads(argv.custom_action_param or "{}")
+        if params.get("request_file"):
+            request_path = (root / "config" / params["request_file"]).resolve()
+            if request_path.parent != (root / "config").resolve():
+                raise ValueError("Duel request must be a file in config")
+            params = json.loads(request_path.read_text(encoding="utf-8"))
+        catalog = json.loads((root / "data/generated/vehicle_catalog.json").read_text(encoding="utf-8"))
+        report = scan_duel_vehicles(context, params.get("class", "D"), catalog["vehicles"],
+                                    target_id=params.get("vehicle_id"),
+                                    choose=params.get("choose", False),
+                                    max_pages=params.get("max_pages", 25),
+                                    expected_performance=params.get("performance"),
+                                    expected_stars=params.get("stars"))
+        destination = root / "debug/duel_vehicle_scan_live.json"
+        destination.parent.mkdir(exist_ok=True)
+        destination.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps({"event": "ma9_duel_vehicle_scan", **report}, ensure_ascii=False), flush=True)
+        return report["status"] in {"edge_reached", "class_boundary", "detail_verified", "assigned"}

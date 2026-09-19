@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from functools import cmp_to_key
 from typing import Any, Callable
 
 import cv2
@@ -33,13 +34,29 @@ def _fraction(text: str) -> tuple[int, int] | None:
                             for part in match.groups())
     except ValueError:
         return None
-    # A clipped leading digit is common in this narrow badge. Keep it unknown.
-    if not (1000 <= current <= maximum <= 10000):
+    # Three-digit ratings occur on low-tier cars. A three-digit current value
+    # beside a four-digit maximum is more likely a clipped leading digit.
+    if not (100 <= current <= maximum <= 10000):
+        return None
+    if current < 1000 <= maximum:
         return None
     return current, maximum
 
 
+def _current_rating(text: str) -> int | None:
+    match = re.search(r"\d[\d,.]{2,}", text)
+    if not match:
+        return None
+    value = int(match.group().replace(",", "").replace(".", ""))
+    return value if 100 <= value <= 10000 else None
+
+
 def _stars(frame: np.ndarray, left: int, top: int) -> tuple[int | None, int | None]:
+    # Yellow/gold D cards make the background satisfy the simple lit-star
+    # colour test. Read their stars from the vehicle detail instead.
+    blue, green, red = map(int, frame[top + 4, left + 200])
+    if red >= 180 and green >= 110 and blue < 100:
+        return None, None
     lit = slots = 0
     for index in range(6):
         x, y = left + 15 + 18 * index, top + 15
@@ -70,13 +87,17 @@ def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
     frame = normalize(image)
     result = []
     for top in ROW_TOPS:
+        # Models such as 004C and G60 have only one or no letters, while the
+        # manufacturer line supplies the alphabetic evidence for the group.
         names = [item for item in ocr
-                 if item["confidence"] >= .7 and re.search(r"[A-Za-z]{2}", item["text"])
+                 if item["confidence"] >= .7 and re.search(r"[A-Za-z0-9]{2}", item["text"])
                  and top + 155 <= item["box"][1] <= top + 190]
         groups: list[list[dict[str, Any]]] = []
         for item in sorted(names, key=lambda row: row["box"][0]):
+            # A long model line can be split into words far to the right of
+            # its maker (e.g. PROJECT / BLACK S); columns are ~430 px apart.
             group = next((group for group in groups
-                          if abs(group[0]["box"][0] - item["box"][0]) <= 30), None)
+                          if abs(group[0]["box"][0] - item["box"][0]) <= 200), None)
             if group is None:
                 groups.append([item])
             else:
@@ -85,7 +106,9 @@ def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
             if len(group) < 2:
                 continue
             left = min(item["box"][0] for item in group) - 4
-            if left < 0 or left + CARD_WIDTH > 1280:
+            # The rightmost card can be clipped by a few pixels at 16:9 while
+            # its name, rating, stars and click target remain fully visible.
+            if left < 0 or left + CARD_WIDTH > 1295:
                 continue
             vehicle = match_vehicle(group, catalog)
             if vehicle is None:
@@ -98,6 +121,10 @@ def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
                 field = (left + 8, top + 24, 200, 55)
                 performance = next((pair for item in retry_ocr(field)
                                     if (pair := _fraction(item["text"]))), None)
+            if performance is None:
+                current = next((value for item in performance_items
+                                if (value := _current_rating(item["text"]))), None)
+                performance = (current, None) if current is not None else None
             stars_lit, star_slots = _stars(frame, left, top)
             result.append({
                 "vehicle": vehicle,
@@ -110,4 +137,10 @@ def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
             })
     # The screen sorts column-wise: upper and lower cars in one column precede
     # the next column, unlike multiplayer's page order.
-    return sorted(result, key=lambda row: (row["card"][0], row["card"][1]))
+    def order(left: dict[str, Any], right: dict[str, Any]) -> int:
+        dx = left["card"][0] - right["card"][0]
+        if abs(dx) <= 30:
+            return left["card"][1] - right["card"][1]
+        return dx
+
+    return sorted(result, key=cmp_to_key(order))

@@ -43,7 +43,13 @@ def collapsed_x(current, target):
 
 
 def main():
-    nodes = {}
+    nodes = {
+        "对决_防守_选车页已到达": {
+            "recognition": "OCR", "expected": "车辆选择",
+            "roi": [45, 60, 200, 60], "threshold": 0.7,
+            "action": "DoNothing", "next": [],
+        },
+    }
     for slot in range(1, 6):
         nodes[f"对决_防守_第{slot}赛道已展开"] = {
             **expanded(slot), "action": "DoNothing", "next": [],
@@ -51,7 +57,8 @@ def main():
         x, y = BUTTONS[slot - 1]
         nodes[f"对决_防守_第{slot}赛道点击选择车辆"] = {
             **expanded(slot), "action": "Click", "target": [x + 95, y + 25],
-            "max_hit": 1, "post_delay": 500, "next": [],
+            "max_hit": 1, "post_delay": 500,
+            "next": ["对决_防守_选车页已到达"],
         }
         for current in range(1, 6):
             if current == slot:
@@ -109,7 +116,7 @@ def main():
         image = read_image(ROOT / "captures" / source)
         assert not any(hit(nodes[f"对决_防守_第{slot}赛道已展开"], image)
                        for slot in range(1, 6)), source
-    print("PASS Duel track navigation; game clicks not device-tested")
+    print("PASS Duel track navigation offline cases")
 
 
 if __name__ == "__main__":

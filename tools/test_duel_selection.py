@@ -14,7 +14,7 @@ sys.path.insert(0, str(ROOT / "agent"))
 sys.path.insert(0, str(ROOT / "tools"))
 
 from import_duel_selection_data import build  # noqa: E402
-from ma9_agent.duel_selection import plan_attack, plan_weak_defense  # noqa: E402
+from ma9_agent.duel_selection import plan_attack, plan_live_weak_defense, plan_weak_defense  # noqa: E402
 
 
 CATALOG = {"vehicles": [
@@ -68,6 +68,29 @@ class DuelSelectionTests(unittest.TestCase):
             result = plan_weak_defense(CATALOG, set("abcdef"), csv_path)
         self.assertTrue(result["complete"])
         self.assertEqual([slot["vehicle_id"] for slot in result["slots"]], list("abcde"))
+
+    def test_live_defense_respects_game_order_when_an_earlier_rating_is_clipped(self) -> None:
+        tracks = {"complete": True, "tracks": [
+            {"big": "Map", "small": str(index)} for index in range(1, 6)]}
+        scan = {"status": "edge_reached", "vehicles": [
+            {"vehicle": {"id": name, "title": name}, "class": "D",
+             "performance": [score, None]}
+            for name, score in zip("gabcdef", [3000, 213, 1800, 1600, 1500, 1400, 1300])
+        ]}
+        plan = plan_live_weak_defense(tracks, scan)
+        self.assertEqual([slot["vehicle_id"] for slot in plan["slots"]], list("fedcb"))
+        self.assertEqual(len({slot["vehicle_id"] for slot in plan["slots"]}), 5)
+
+    def test_live_defense_rejects_unverified_final_ratings(self) -> None:
+        tracks = {"complete": True, "tracks": [
+            {"big": "Map", "small": str(index)} for index in range(1, 6)]}
+        scan = {"status": "edge_reached", "vehicles": [
+            {"vehicle": {"id": name, "title": name}, "class": "D",
+             "performance": [score, None] if score else None}
+            for name, score in zip("abcdef", [3000, 2000, 1600, 1500, None, 1300])
+        ]}
+        with self.assertRaises(ValueError):
+            plan_live_weak_defense(tracks, scan)
 
     def test_real_source_maps_all_automatic_nicknames_to_ma9_ids(self) -> None:
         catalog = json.loads((ROOT / "data/generated/vehicle_catalog.json").read_text(encoding="utf-8"))

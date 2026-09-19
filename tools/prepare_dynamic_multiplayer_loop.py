@@ -148,7 +148,18 @@ def main():
                 nodes[key].setdefault("rate_limit", 100)
                 nodes[key].setdefault("pre_delay", 0)
                 nodes[key].setdefault("post_delay", 0)
-                nodes[key].setdefault("on_error", [stop])
+                # A route may not appear in both next and on_error. Several
+                # result nodes already keep the stop node as their last
+                # DirectHit fallback, so adding it to on_error as well makes
+                # maa-tools reject the generated resource as a duplicate.
+                next_routes = set(nodes[key].get("next", []))
+                if "on_error" in nodes[key]:
+                    nodes[key]["on_error"] = [target for target in nodes[key]["on_error"]
+                                               if target not in next_routes]
+                    if not nodes[key]["on_error"]:
+                        nodes[key].pop("on_error")
+                elif stop not in next_routes:
+                    nodes[key]["on_error"] = [stop]
         nodes[f"多人循环{rounds}局_入口"] = {"recognition": "DirectHit", "action": "DoNothing",
             "next": [f"多人循环{rounds}局_第01局_自动段位调度"]}
     # 关闭广告具有最高优先级，包括组合生成时改写的升降级和跨段位分支。
@@ -161,6 +172,17 @@ def main():
         pass_close = match.group() + "多人结算_通行证升级关闭"
         if pass_close in node["next"]:
             node["next"] = [pass_close, *[t for t in node["next"] if t != pass_close]]
+    # The per-league builders may already carry a stop fallback in both route
+    # fields. MaaFramework accepts the graph, but maa-tools treats the overlap
+    # as a duplicate route. Preserve next ordering and remove only the exact
+    # overlap from on_error for every generated node.
+    for node in nodes.values():
+        if "on_error" not in node:
+            continue
+        next_routes = set(node.get("next", []))
+        node["on_error"] = [target for target in node["on_error"] if target not in next_routes]
+        if not node["on_error"]:
+            node.pop("on_error")
     assert all(target in nodes for node in nodes.values() for field in ["next", "on_error"]
                for target in node.get(field, []))
     pipeline_dir = ROOT / "assets/resource/pipeline"

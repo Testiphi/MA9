@@ -44,6 +44,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("image", type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--raw-ocr", action="store_true", help="Include OCR boxes for parser debugging")
     args = parser.parse_args()
     image = normalize(read_image(args.image))
     resource = Resource()
@@ -62,6 +63,8 @@ def main():
                                retry_ocr=lambda roi: recognize_roi(tasker, image, roi))
     report = {"source": str(args.image), "cards": cards,
               "fully_visible_cards": len(cards)}
+    if args.raw_ocr:
+        report["ocr"] = ocr
     output = json.dumps(report, ensure_ascii=False, indent=2)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

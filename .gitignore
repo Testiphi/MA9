@@ -454,3 +454,8 @@ tools/ImageCropper/**/*.png
 
 config
 debug
+
+# Local live-game captures may contain account details. Keep them out of the
+# public repository; offline parser tests use them only when present locally.
+captures/duel_account_kicked.png
+captures/duel_selection_live/

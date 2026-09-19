@@ -1,0 +1,9 @@
+{
+    "通用_账号被顶_识别": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_account_conflict_diagnose",
+        "timeout": 60000,
+        "next": []
+    }
+}

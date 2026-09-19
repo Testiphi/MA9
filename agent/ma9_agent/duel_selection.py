@@ -158,3 +158,53 @@ def plan_weak_defense(
                   for row in selected],
         "requires_live_vehicle_and_fuel_verification": True,
     }
+
+
+def plan_live_weak_defense(tracks: dict[str, Any], scan: dict[str, Any]) -> dict[str, Any]:
+    """Pair five defense maps with the weakest distinct D cars seen in-game.
+
+    The game's current rating is authoritative here. Garage profiles and the
+    static score CSV may be stale, so neither is used to exclude a visible car.
+    This is a proposal only; each detail must still be checked before assignment.
+    """
+    if not tracks.get("complete") or len(tracks.get("tracks", [])) != 5:
+        raise ValueError("five defense tracks were not verified")
+    if scan.get("status") != "edge_reached":
+        raise ValueError("D-class garage scan did not reach its end")
+    candidates: dict[str, dict[str, Any]] = {}
+    for card in scan.get("vehicles", []):
+        vehicle = card.get("vehicle") or {}
+        vehicle_id = vehicle.get("id")
+        if card.get("class") != "D" or not vehicle_id:
+            continue
+        candidates.setdefault(vehicle_id, card)
+    # The Duel garage is already sorted by current performance descending.
+    # Preserve that order: OCR can clip a leading digit (e.g. 2,213 -> 213),
+    # and blindly sorting OCR ratings would wrongly rank that car weakest.
+    ordered = list(candidates.values())
+    if len(ordered) < 5:
+        raise ValueError("fewer than five distinct D cars were scanned")
+    weakest = list(reversed(ordered[-5:]))
+    ratings = [card.get("performance", [None])[0] if card.get("performance") else None
+               for card in weakest]
+    if any(not isinstance(rating, int) or rating < 100 for rating in ratings):
+        raise ValueError("a weakest D car has no trusted live rating")
+    if ratings != sorted(ratings):
+        raise ValueError("weakest D car ratings contradict the game's ordering")
+    return {
+        "strategy": "live_lowest_current_performance_D",
+        "complete": True,
+        "scan_status": scan["status"],
+        "scanned_vehicles": len(candidates),
+        "slots": [
+            {"slot": index, "track": {"big": track["big"], "small": track["small"]},
+             "vehicle_id": card["vehicle"]["id"],
+             "vehicle": card["vehicle"]["title"],
+             "class": "D", "performance": card["performance"][0],
+             "max_performance": card["performance"][1],
+             "stars_lit": card.get("stars_lit"),
+             "requires_detail_verification": True}
+            for index, (track, card) in enumerate(zip(tracks["tracks"], weakest), 1)
+        ],
+        "starts_race": False,
+    }

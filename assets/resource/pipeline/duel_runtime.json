@@ -1,0 +1,38 @@
+{
+    "对决_读取五张地图": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_duel_read_tracks",
+        "timeout": 60000,
+        "next": []
+    },
+    "对决_扫描D级车辆": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_duel_vehicle_scan",
+        "custom_action_param": {"class": "D", "max_pages": 25},
+        "timeout": 600000,
+        "next": []
+    },
+    "对决_按配置查找车辆": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_duel_vehicle_scan",
+        "custom_action_param": {"request_file": "duel_vehicle_request.json"},
+        "timeout": 600000,
+        "next": []
+    },
+    "对决_验证滑动查找IONIQ5N": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_duel_vehicle_scan",
+        "custom_action_param": {
+            "class": "D",
+            "vehicle_id": "car_a6143c5995d3b2e0",
+            "choose": false,
+            "max_pages": 25
+        },
+        "timeout": 600000,
+        "next": []
+    }
+}
