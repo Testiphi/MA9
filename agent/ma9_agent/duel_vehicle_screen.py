@@ -117,12 +117,14 @@ def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
                 item, (left + 5, top + 20, left + 240, top + 85))]
             performance = next((pair for item in performance_items
                                 if (pair := _fraction(item["text"]))), None)
+            retry_items: list[dict[str, Any]] = []
             if performance is None and retry_ocr is not None:
                 field = (left + 8, top + 24, 200, 55)
-                performance = next((pair for item in retry_ocr(field)
+                retry_items = retry_ocr(field)
+                performance = next((pair for item in retry_items
                                     if (pair := _fraction(item["text"]))), None)
             if performance is None:
-                current = next((value for item in performance_items
+                current = next((value for item in [*performance_items, *retry_items]
                                 if (value := _current_rating(item["text"]))), None)
                 performance = (current, None) if current is not None else None
             stars_lit, star_slots = _stars(frame, left, top)
