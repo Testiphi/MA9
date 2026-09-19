@@ -16,4 +16,4 @@ def account_conflict_from_ocr(words: list[dict[str, Any]]) -> dict[str, Any]:
             "detected": title and other_device,
             "title_found": title, "other_device_found": other_device,
             "observed": reliable,
-            "recommended_action": "stop_current_task" if title and other_device else None}
+            "recommended_action": "click_close_and_reenter_duel" if title and other_device else None}

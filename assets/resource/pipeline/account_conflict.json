@@ -1,4 +1,22 @@
 {
+    "通用_账号被顶_立即重进": {
+        "recognition": "OCR",
+        "expected": "并行存取行为",
+        "roi": [
+            140,
+            200,
+            1000,
+            330
+        ],
+        "threshold": 0.7,
+        "action": "Custom",
+        "custom_action": "ma9_account_conflict_recover",
+        "post_delay": 1200,
+        "timeout": 60000,
+        "next": [
+            "对决_资格赛入口"
+        ]
+    },
     "通用_账号被顶_识别": {
         "recognition": "DirectHit",
         "action": "Custom",

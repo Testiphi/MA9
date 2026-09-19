@@ -54,13 +54,15 @@ def main():
     switch = copy.deepcopy(home["主页_多人游戏_切换"])
     switch["next"] = ["对决_点击首页卡片"]
     defense = json.loads((ROOT / "assets/resource/pipeline/duel_defense.json").read_text(encoding="utf-8"))
+    account = json.loads((ROOT / "assets/resource/pipeline/account_conflict.json").read_text(encoding="utf-8"))
     defense_states = defense["对决_防守状态识别入口"]["next"]
     zero_rois = [[x, 230, 140, 35] for x in (140, 374, 608, 842, 1076)]
     interrupted_states = ["对决_确认重开资格赛", "对决_重开零进度资格赛"]
     pipeline = {
         "对决_资格赛入口": {
             "recognition": "DirectHit", "action": "DoNothing", "timeout": 60000,
-            "next": [*interrupted_states, *defense_states, "对决_点击资格赛",
+            "next": ["通用_账号被顶_立即重进", *interrupted_states,
+                     *defense_states, "对决_点击资格赛",
                      "对决_点击首页卡片", "对决_切换多人标签"],
         },
         "对决_切换多人标签": switch,
@@ -114,8 +116,11 @@ def main():
         for slot in range(1, 6)
     })
     cases["多人游戏_对决_资格赛_防守_第1赛道展开_已选车_可开始.png"] = "对决_防守_已选车可开始"
-    candidates = pipeline["对决_资格赛入口"]["next"][:-1]
-    recognition = {**defense, **pipeline}
+    recognition = {**account, **defense, **pipeline}
+    # This lightweight verifier evaluates templates and colors. The saved-image
+    # OCR conflict check lives in tools/tests/test_account_conflict.py.
+    candidates = [name for name in pipeline["对决_资格赛入口"]["next"][:-1]
+                  if recognition[name]["recognition"] != "OCR"]
     report = []
     for source, expected in cases.items():
         image = read_image(ROOT / "captures" / source)

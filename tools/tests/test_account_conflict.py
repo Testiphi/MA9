@@ -26,7 +26,7 @@ class AccountConflictTests(unittest.TestCase):
     def test_requires_title_and_other_device_message(self) -> None:
         found = account_conflict_from_ocr(words("检测到并行存取行为", "该账号从另一台设备登录。"))
         self.assertTrue(found["detected"])
-        self.assertEqual(found["recommended_action"], "stop_current_task")
+        self.assertEqual(found["recommended_action"], "click_close_and_reenter_duel")
         self.assertFalse(account_conflict_from_ocr(words("检测到并行存取行为"))["detected"])
         self.assertFalse(account_conflict_from_ocr(words("该账号从另一台设备登录"))["detected"])
 

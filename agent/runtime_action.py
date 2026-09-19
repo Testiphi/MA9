@@ -40,6 +40,29 @@ class AccountConflictDiagnoseAction(CustomAction):
         return report["detected"]
 
 
+@AgentServer.custom_action("ma9_account_conflict_recover")
+class AccountConflictRecoverAction(CustomAction):
+    """Close a confirmed other-device login popup so navigation can restart."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv
+        root = find_project_root()
+        report = account_conflict_from_ocr(
+            _ocr(context, _frame(context), (140, 200, 1000, 330)))
+        clicked = False
+        if report["detected"]:
+            clicked = bool(context.tasker.controller.post_click(1090, 244).wait().succeeded)
+        report = {**report, "clicked_close": clicked,
+                  "reenter_entry": "对决_资格赛入口" if clicked else None}
+        destination = root / "debug/account_conflict_live.json"
+        destination.parent.mkdir(exist_ok=True)
+        destination.write_text(
+            json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps({"event": "ma9_account_conflict_recover", **report},
+                         ensure_ascii=False), flush=True)
+        return clicked
+
+
 def find_project_root() -> Path:
     configured = os.environ.get("MA9_PROJECT_ROOT")
     if configured:
@@ -279,4 +302,4 @@ class DuelDefenseSetupAction(CustomAction):
                           "vehicle_class": report["vehicle_class"],
                           "assigned": len(report["assigned"]),
                           "starts_race": False}, ensure_ascii=False), flush=True)
-        return report["status"] in {"planned", "five_assigned"}
+        return report["status"] in {"planned", "five_assigned", "already_configured"}

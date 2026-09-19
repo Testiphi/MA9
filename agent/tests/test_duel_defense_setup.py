@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ma9_agent.duel_defense_setup import (
     _read_tracks,
+    _retry_target_after_wrong_detail,
     _run_task,
     parse_setup_params,
     run_defense_setup,
@@ -39,13 +40,21 @@ class _Controller:
 
 
 class _Context:
-    def __init__(self):
+    def __init__(self, ready=False, unselected_slot=None):
         self.entries = []
+        self.ready = ready
+        self.unselected_slot = unselected_slot
         self.tasker = type("Tasker", (), {"controller": _Controller()})()
 
     def run_task(self, entry):
         self.entries.append(entry)
         return _TaskDetail()
+
+    def run_recognition(self, entry, _frame):
+        hit = ((self.ready and entry == "对决_防守_已选车可开始")
+               or (self.unselected_slot is not None
+                   and entry == f"对决_防守_第{self.unselected_slot}赛道展开未选车"))
+        return type("Recognition", (), {"hit": hit})()
 
 
 class DuelDefenseSetupParamsTest(unittest.TestCase):
@@ -105,6 +114,7 @@ class DuelDefenseSetupFlowTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             context = _Context()
             with patch("ma9_agent.duel_defense_setup._read_tracks", return_value=self._tracks()), \
+                    patch("ma9_agent.duel_defense_setup._frame", return_value=object()), \
                     patch("ma9_agent.duel_defense_setup.scan_duel_vehicles", side_effect=self._scan), \
                     patch("ma9_agent.duel_defense_setup.time.sleep"):
                 report = run_defense_setup(context, self._root(temporary), {"mode": "plan"})
@@ -118,15 +128,52 @@ class DuelDefenseSetupFlowTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             context = _Context()
             with patch("ma9_agent.duel_defense_setup._read_tracks", return_value=self._tracks()), \
+                    patch("ma9_agent.duel_defense_setup._frame", return_value=object()), \
+                    patch("ma9_agent.duel_defense_setup.assign_visible",
+                          return_value={"status": "assigned", "performance": 1600}), \
                     patch("ma9_agent.duel_defense_setup.scan_duel_vehicles", side_effect=self._scan), \
                     patch("ma9_agent.duel_defense_setup.time.sleep"):
                 report = run_defense_setup(context, self._root(temporary), {"mode": "apply"})
         self.assertEqual(report["status"], "five_assigned")
         self.assertEqual(len(report["assigned"]), 5)
-        self.assertEqual(context.entries[0], "对决_资格赛入口")
-        self.assertEqual(context.entries[2:], [
-            f"对决_防守_进入第{index}赛道选车" for index in range(1, 6)])
+        self.assertEqual(context.entries, [
+            "对决_资格赛入口",
+            *[f"对决_防守_进入第{index}赛道选车" for index in range(1, 6)]])
         self.assertFalse(any("开始" in entry for entry in context.entries))
+
+    def test_ready_five_car_lineup_is_preserved_without_opening_garage(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            context = _Context(ready=True)
+            with patch("ma9_agent.duel_defense_setup._frame", return_value=object()), \
+                    patch("ma9_agent.duel_defense_setup._read_tracks") as read_tracks, \
+                    patch("ma9_agent.duel_defense_setup.scan_duel_vehicles") as scan:
+                report = run_defense_setup(context, self._root(temporary), {"mode": "apply"})
+        self.assertEqual(report["status"], "already_configured")
+        self.assertTrue(report["existing_defense_preserved"])
+        self.assertEqual(context.entries, ["对决_资格赛入口"])
+        self.assertEqual(context.tasker.controller.clicks, [])
+        read_tracks.assert_not_called()
+        scan.assert_not_called()
+
+    def test_interrupted_partial_lineup_resumes_from_expanded_empty_slot(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            context = _Context(unselected_slot=3)
+            with patch("ma9_agent.duel_defense_setup._read_tracks", return_value=self._tracks()), \
+                    patch("ma9_agent.duel_defense_setup._frame", return_value=object()), \
+                    patch("ma9_agent.duel_defense_setup.assign_visible",
+                          return_value={"status": "assigned", "performance": 2000}), \
+                    patch("ma9_agent.duel_defense_setup.scan_duel_vehicles", side_effect=self._scan), \
+                    patch("ma9_agent.duel_defense_setup.time.sleep"):
+                report = run_defense_setup(context, self._root(temporary), {"mode": "apply"})
+        self.assertEqual(report["status"], "five_assigned")
+        self.assertEqual(report["resumed_from_slot"], 3)
+        self.assertEqual([row["slot"] for row in report["assigned"]], [3, 4, 5])
+        self.assertEqual(context.entries, [
+            "对决_资格赛入口",
+            "对决_防守_进入第3赛道选车",
+            "对决_防守_进入第4赛道选车",
+            "对决_防守_进入第5赛道选车",
+        ])
 
     def test_track_reader_waits_through_black_transition(self) -> None:
         incomplete = {"complete": False, "tracks": [], "observed_groups": 0}
@@ -138,6 +185,19 @@ class DuelDefenseSetupFlowTest(unittest.TestCase):
                 patch("ma9_agent.duel_defense_setup.time.sleep"):
             report = _read_tracks(object(), {}, timeout=1, interval=.01)
         self.assertEqual(report, complete)
+
+    def test_wrong_neighbor_detail_returns_to_list_and_retries_once(self) -> None:
+        context = _Context()
+        target = {"vehicle_id": "a", "performance": 1600, "stars_lit": None}
+        expected = {"status": "assigned", "performance": 1600}
+        with patch("ma9_agent.duel_defense_setup.scan_duel_vehicles",
+                   return_value=expected) as scan:
+            actual = _retry_target_after_wrong_detail(
+                context, {"status": "detail_not_verified"}, "D", target,
+                [{"id": "a", "title": "a", "class": "D"}], 25)
+        self.assertEqual(actual, expected)
+        self.assertEqual(context.tasker.controller.clicks, [(32, 25)])
+        scan.assert_called_once()
 
 
 if __name__ == "__main__":

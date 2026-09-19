@@ -20,6 +20,18 @@ def _selection_title(context: Any, frame: np.ndarray) -> bool:
     return any("车辆选择" in row["text"] for row in _ocr(context, frame, (40, 60, 220, 60)))
 
 
+def _wait_selection_frame(context: Any, timeout: float = 5.0) -> np.ndarray | None:
+    """Wait for the garage title after the slot-navigation transition."""
+    deadline = time.monotonic() + timeout
+    while True:
+        frame = _frame(context)
+        if _selection_title(context, frame):
+            return frame
+        if time.monotonic() >= deadline:
+            return None
+        time.sleep(.35)
+
+
 def _visible(context: Any, frame: np.ndarray, catalog: list[dict[str, Any]]) -> list[dict[str, Any]]:
     words = _ocr(context, frame, (0, 120, 1280, 500))
     return read_visible_cards(frame, words, catalog,
@@ -61,6 +73,70 @@ def _detail(context: Any, expected_id: str, catalog: list[dict[str, Any]]) -> di
     return {"status": "detail_not_verified"}
 
 
+def _finish_target(context: Any, card: dict[str, Any], page: int,
+                   vehicles: list[dict[str, Any]], target_id: str,
+                   catalog: list[dict[str, Any]], *, choose: bool,
+                   expected_performance: int | None,
+                   expected_stars: int | None) -> dict[str, Any]:
+    if not _click(context, *card["target"]):
+        return {"status": "card_click_failed", "pages": page, "vehicles": vehicles}
+    detail = _detail(context, target_id, catalog)
+    result = {**detail, "pages": page, "vehicles": vehicles, "selected_card": card}
+    if detail["status"] == "detail_verified":
+        card_rating = card["performance"][0] if card["performance"] else None
+        detail_rating = detail["performance"]
+        clipped_thousands = (card_rating is not None and detail_rating is not None
+                             and card_rating < 1000 <= detail_rating
+                             and detail_rating % 1000 == card_rating)
+        if (card_rating is not None and detail_rating is not None
+                and card_rating != detail_rating and not clipped_thousands):
+            result["status"] = "list_detail_rating_mismatch"
+            return result
+        if clipped_thousands:
+            result["list_rating_clipped"] = True
+        if expected_performance is not None and detail["performance"] != expected_performance:
+            result["status"] = "performance_mismatch"
+            return result
+        if expected_stars is not None and detail["stars_lit"] != expected_stars:
+            result["status"] = "stars_mismatch"
+            return result
+    if not choose or detail["status"] != "detail_verified":
+        return result
+    if detail["occupied_elsewhere"]:
+        result["status"] = "occupied_elsewhere"
+        return result
+    if not detail["select_available"] or not _click(context, 1139, 658):
+        result["status"] = "select_failed"
+        return result
+    result["status"] = "assignment_unverified"
+    for _ in range(10):
+        time.sleep(.5)
+        frame = _frame(context)
+        changed = any("更换车辆" in row["text"]
+                      for row in _ocr(context, frame, (470, 470, 720, 90)))
+        displayed = match_vehicle(_ocr(context, frame, (0, 170, 1280, 190)), catalog)
+        if changed and displayed and displayed["id"] == target_id:
+            result["status"] = "assigned"
+            break
+    return result
+
+
+def assign_visible(context: Any, target_id: str, catalog: list[dict[str, Any]], *,
+                   expected_performance: int | None = None,
+                   expected_stars: int | None = None) -> dict[str, Any]:
+    """Assign a target already visible on the current Duel garage page."""
+    frame = _wait_selection_frame(context)
+    if frame is None:
+        return {"status": "not_duel_selection", "pages": 0, "vehicles": []}
+    cards = _visible(context, frame, catalog)
+    card = next((row for row in cards if row["vehicle"]["id"] == target_id), None)
+    if card is None:
+        return {"status": "target_not_visible", "pages": 0, "vehicles": cards}
+    return _finish_target(context, card, 0, cards, target_id, catalog, choose=True,
+                          expected_performance=expected_performance,
+                          expected_stars=expected_stars)
+
+
 def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
          target_id: str | None = None, choose: bool = False,
          max_pages: int = 25, expected_performance: int | None = None,
@@ -81,8 +157,8 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
     if ((expected_performance is not None and (type(expected_performance) is not int or expected_performance < 100))
             or (expected_stars is not None and (type(expected_stars) is not int or not 1 <= expected_stars <= 6))):
         raise ValueError("invalid expected performance or stars")
-    frame = _frame(context)
-    if not _selection_title(context, frame):
+    frame = _wait_selection_frame(context)
+    if frame is None:
         return {"status": "not_duel_selection", "pages": 0, "vehicles": []}
     if not _click(context, CLASS_X[vehicle_class], 103):
         return {"status": "class_click_failed", "pages": 0, "vehicles": []}
@@ -106,48 +182,10 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
             found.setdefault(row["vehicle"]["id"], {**row, "page": page})
         if target_id in fingerprint:
             card = next(row for row in cards if row["vehicle"]["id"] == target_id)
-            if not _click(context, *card["target"]):
-                return {"status": "card_click_failed", "pages": page, "vehicles": list(found.values())}
-            detail = _detail(context, target_id, catalog)
-            result = {**detail, "pages": page, "vehicles": list(found.values()),
-                      "selected_card": card}
-            if detail["status"] == "detail_verified":
-                card_rating = card["performance"][0] if card["performance"] else None
-                detail_rating = detail["performance"]
-                clipped_thousands = (card_rating is not None and detail_rating is not None
-                                     and card_rating < 1000 <= detail_rating
-                                     and detail_rating % 1000 == card_rating)
-                if (card_rating is not None and detail_rating is not None
-                        and card_rating != detail_rating and not clipped_thousands):
-                    result["status"] = "list_detail_rating_mismatch"
-                    return result
-                if clipped_thousands:
-                    result["list_rating_clipped"] = True
-                if (expected_performance is not None and detail["performance"] != expected_performance):
-                    result["status"] = "performance_mismatch"
-                    return result
-                if expected_stars is not None and detail["stars_lit"] != expected_stars:
-                    result["status"] = "stars_mismatch"
-                    return result
-            if not choose or detail["status"] != "detail_verified":
-                return result
-            if detail["occupied_elsewhere"]:
-                result["status"] = "occupied_elsewhere"
-                return result
-            if not detail["select_available"] or not _click(context, 1139, 658):
-                result["status"] = "select_failed"
-                return result
-            result["status"] = "assignment_unverified"
-            for _ in range(10):
-                time.sleep(.5)
-                frame = _frame(context)
-                changed = any("更换车辆" in row["text"]
-                              for row in _ocr(context, frame, (470, 470, 720, 90)))
-                displayed = match_vehicle(_ocr(context, frame, (0, 170, 1280, 190)), catalog)
-                if changed and displayed and displayed["id"] == target_id:
-                    result["status"] = "assigned"
-                    break
-            return result
+            return _finish_target(context, card, page, list(found.values()), target_id,
+                                  catalog, choose=choose,
+                                  expected_performance=expected_performance,
+                                  expected_stars=expected_stars)
         if previous is not None and fingerprint == previous:
             before = cv2.resize(cv2.cvtColor(previous_image[170:610], cv2.COLOR_BGR2GRAY), (160, 55))
             after = cv2.resize(cv2.cvtColor(frame[170:610], cv2.COLOR_BGR2GRAY), (160, 55))

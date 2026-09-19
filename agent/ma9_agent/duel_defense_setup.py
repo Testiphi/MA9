@@ -7,14 +7,17 @@ import time
 from pathlib import Path
 from typing import Any
 
+from .account_conflict import account_conflict_from_ocr
 from .duel_map_screen import read_five_tracks
 from .duel_selection import plan_live_weak_defense
-from .duel_vehicle_runtime import CLASS_X, scan as scan_duel_vehicles
+from .duel_vehicle_runtime import CLASS_X, assign_visible, scan as scan_duel_vehicles
 from .selection_runtime import _frame, _ocr
 
 
 VALID_MODES = {"plan", "apply"}
 VALID_STRATEGIES = {"weakest_current"}
+RETRYABLE_DETAIL_STATUSES = {"detail_not_verified", "wrong_detail",
+                             "list_detail_rating_mismatch"}
 
 
 def _write(path: Path, report: dict[str, Any]) -> None:
@@ -51,6 +54,70 @@ def _run_task(context: Any, entry: str) -> None:
         raise RuntimeError(f"failed: {entry}")
 
 
+def _recognition_hit(context: Any, node: str) -> bool:
+    result = context.run_recognition(node, _frame(context))
+    return bool(result and result.hit)
+
+
+def _current_unselected_slot(context: Any) -> int:
+    """Return the expanded empty slot, falling back to a fresh slot-1 setup."""
+    for slot in range(1, 6):
+        if _recognition_hit(context, f"对决_防守_第{slot}赛道展开未选车"):
+            return slot
+    return 1
+
+
+def _recover_account_conflict(context: Any) -> bool:
+    """Immediately close a confirmed other-device login popup."""
+    try:
+        report = account_conflict_from_ocr(
+            _ocr(context, _frame(context), (140, 200, 1000, 330)))
+        if not report["detected"]:
+            return False
+        if not context.tasker.controller.post_click(1090, 244).wait().succeeded:
+            return False
+        deadline = time.monotonic() + 12
+        while time.monotonic() < deadline:
+            time.sleep(.5)
+            observed = account_conflict_from_ocr(
+                _ocr(context, _frame(context), (140, 200, 1000, 330)))
+            if not observed["detected"]:
+                return True
+    except Exception:
+        # Recovery is best effort while another failure is already being handled.
+        return False
+    return False
+
+
+def _record_assignment(progress: dict[str, Any], slot: dict[str, Any],
+                       selection: dict[str, Any], vehicle_class: str) -> None:
+    progress["assigned"].append({
+        "slot": slot["slot"],
+        "vehicle_id": slot["vehicle_id"],
+        "vehicle": slot["vehicle"],
+        "class": vehicle_class,
+        "performance": selection.get("performance"),
+    })
+    progress["status"] = "assigning"
+
+
+def _retry_target_after_wrong_detail(context: Any, selection: dict[str, Any],
+                                     vehicle_class: str, target: dict[str, Any],
+                                     catalog: list[dict[str, Any]],
+                                     max_pages: int) -> dict[str, Any]:
+    """Retry once when a moving list opens a neighboring vehicle detail."""
+    if selection.get("status") not in RETRYABLE_DETAIL_STATUSES:
+        return selection
+    if not context.tasker.controller.post_click(32, 25).wait().succeeded:
+        return selection
+    return scan_duel_vehicles(
+        context, vehicle_class, catalog,
+        target_id=target["vehicle_id"], choose=True, max_pages=max_pages,
+        expected_performance=target["performance"],
+        expected_stars=target.get("stars_lit"),
+    )
+
+
 def parse_setup_params(raw: dict[str, Any]) -> dict[str, Any]:
     """Validate GUI parameters before any game input."""
     vehicle_class = str(raw.get("class", "D")).upper()
@@ -69,7 +136,8 @@ def parse_setup_params(raw: dict[str, Any]) -> dict[str, Any]:
             "max_pages": max_pages}
 
 
-def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any]) -> dict[str, Any]:
+def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any], *,
+                      _conflict_retry: int = 0) -> dict[str, Any]:
     """Plan or assign five cars. This function never presses the Start button."""
     params = parse_setup_params(raw_params)
     vehicle_class = params["class"]
@@ -99,31 +167,76 @@ def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any]) -> d
         progress["status"] = "navigating"
         _write(progress_path, progress)
         _run_task(context, "对决_资格赛入口")
+        if _recognition_hit(context, "对决_防守_已选车可开始"):
+            progress["status"] = "already_configured"
+            progress["existing_defense_preserved"] = True
+            _write(progress_path, progress)
+            return progress
+        start_slot = _current_unselected_slot(context)
+        progress["resumed_from_slot"] = start_slot
         tracks = _read_tracks(context, reference)
         _write(tracks_path, tracks)
 
-        _run_task(context, "对决_防守_进入第1赛道选车")
+        _run_task(context, f"对决_防守_进入第{start_slot}赛道选车")
         scan = scan_duel_vehicles(context, vehicle_class, catalog["vehicles"],
                                   max_pages=params["max_pages"])
         _write(scan_path, scan)
         if scan.get("status") not in {"edge_reached", "class_boundary"}:
             raise RuntimeError(f"{vehicle_class}-class scan stopped at {scan.get('status')}")
-        if not context.tasker.controller.post_click(32, 25).wait().succeeded:
-            raise RuntimeError("could not return from Duel vehicle selection")
-        observed = _read_tracks(context, reference)
-        _write(tracks_path, observed)
-        if _map_order(observed) != _map_order(tracks):
-            raise RuntimeError("defense map order changed after the garage scan")
-
         plan = plan_live_weak_defense(tracks, scan, vehicle_class=vehicle_class)
         _write(plan_path, plan)
         progress["plan"] = plan
         progress["status"] = "planned"
         _write(progress_path, progress)
         if not apply:
+            if not context.tasker.controller.post_click(32, 25).wait().succeeded:
+                raise RuntimeError("could not return from Duel vehicle selection")
+            observed = _read_tracks(context, reference)
+            _write(tracks_path, observed)
+            if _map_order(observed) != _map_order(tracks):
+                raise RuntimeError("defense map order changed after the garage scan")
             return progress
 
-        for slot in plan["slots"]:
+        # The full scan ends on the weakest cars. Select the first pending slot
+        # directly from that page instead of leaving and entering it again.
+        first = plan["slots"][start_slot - 1]
+        selection = assign_visible(
+            context, first["vehicle_id"], catalog["vehicles"],
+            expected_performance=first["performance"],
+            expected_stars=first.get("stars_lit"),
+        )
+        if selection.get("status") == "target_not_visible":
+            # Normally the weakest car remains visible at the scan edge. Keep a
+            # bounded fallback for unusual card layouts or OCR overlap.
+            if not context.tasker.controller.post_click(32, 25).wait().succeeded:
+                raise RuntimeError(f"could not return for slot {start_slot} fallback")
+            observed = _read_tracks(context, reference)
+            _write(tracks_path, observed)
+            if _map_order(observed) != _map_order(tracks):
+                raise RuntimeError(f"slot {start_slot} fallback map order changed")
+            _run_task(context, f"对决_防守_进入第{start_slot}赛道选车")
+            selection = scan_duel_vehicles(
+                context, vehicle_class, catalog["vehicles"],
+                target_id=first["vehicle_id"], choose=True,
+                max_pages=params["max_pages"],
+                expected_performance=first["performance"],
+                expected_stars=first.get("stars_lit"),
+            )
+        selection = _retry_target_after_wrong_detail(
+            context, selection, vehicle_class, first, catalog["vehicles"],
+            params["max_pages"])
+        _write(scan_path, selection)
+        if selection.get("status") != "assigned":
+            raise RuntimeError(
+                f"slot {start_slot} assignment unverified: {selection.get('status')}")
+        observed = _read_tracks(context, reference)
+        _write(tracks_path, observed)
+        if _map_order(observed) != _map_order(tracks):
+            raise RuntimeError(f"slot {start_slot} map order changed")
+        _record_assignment(progress, first, selection, vehicle_class)
+        _write(progress_path, progress)
+
+        for slot in plan["slots"][start_slot:]:
             index = slot["slot"]
             _run_task(context, f"对决_防守_进入第{index}赛道选车")
             selection = scan_duel_vehicles(
@@ -133,6 +246,9 @@ def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any]) -> d
                 expected_performance=slot["performance"],
                 expected_stars=slot.get("stars_lit"),
             )
+            selection = _retry_target_after_wrong_detail(
+                context, selection, vehicle_class, slot, catalog["vehicles"],
+                params["max_pages"])
             _write(scan_path, selection)
             if selection.get("status") != "assigned":
                 raise RuntimeError(
@@ -141,19 +257,18 @@ def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any]) -> d
             _write(tracks_path, observed)
             if _map_order(observed) != _map_order(tracks):
                 raise RuntimeError(f"slot {index} map order changed")
-            progress["assigned"].append({
-                "slot": index,
-                "vehicle_id": slot["vehicle_id"],
-                "vehicle": slot["vehicle"],
-                "class": vehicle_class,
-                "performance": selection.get("performance"),
-            })
-            progress["status"] = "assigning"
+            _record_assignment(progress, slot, selection, vehicle_class)
             _write(progress_path, progress)
         progress["status"] = "five_assigned"
         _write(progress_path, progress)
         return progress
     except Exception as exc:
+        if _conflict_retry < 1 and _recover_account_conflict(context):
+            progress["status"] = "recovering_account_conflict"
+            progress["account_conflict_retries"] = _conflict_retry + 1
+            _write(progress_path, progress)
+            return run_defense_setup(context, root, raw_params,
+                                     _conflict_retry=_conflict_retry + 1)
         progress["status"] = "stopped"
         progress["error"] = str(exc)
         _write(progress_path, progress)
