@@ -160,8 +160,10 @@ def plan_weak_defense(
     }
 
 
-def plan_live_weak_defense(tracks: dict[str, Any], scan: dict[str, Any]) -> dict[str, Any]:
-    """Pair five defense maps with the weakest distinct D cars seen in-game.
+def plan_live_weak_defense(
+    tracks: dict[str, Any], scan: dict[str, Any], *, vehicle_class: str = "D",
+) -> dict[str, Any]:
+    """Pair five defense maps with the weakest distinct cars seen in-game.
 
     The game's current rating is authoritative here. Garage profiles and the
     static score CSV may be stale, so neither is used to exclude a visible car.
@@ -169,13 +171,15 @@ def plan_live_weak_defense(tracks: dict[str, Any], scan: dict[str, Any]) -> dict
     """
     if not tracks.get("complete") or len(tracks.get("tracks", [])) != 5:
         raise ValueError("five defense tracks were not verified")
-    if scan.get("status") != "edge_reached":
-        raise ValueError("D-class garage scan did not reach its end")
+    if vehicle_class not in {"R", "S", "A", "B", "C", "D"}:
+        raise ValueError("unsupported Duel vehicle class")
+    if scan.get("status") not in {"edge_reached", "class_boundary"}:
+        raise ValueError(f"{vehicle_class}-class garage scan did not reach its end")
     candidates: dict[str, dict[str, Any]] = {}
     for card in scan.get("vehicles", []):
         vehicle = card.get("vehicle") or {}
         vehicle_id = vehicle.get("id")
-        if card.get("class") != "D" or not vehicle_id:
+        if card.get("class") != vehicle_class or not vehicle_id:
             continue
         candidates.setdefault(vehicle_id, card)
     # The Duel garage is already sorted by current performance descending.
@@ -183,16 +187,17 @@ def plan_live_weak_defense(tracks: dict[str, Any], scan: dict[str, Any]) -> dict
     # and blindly sorting OCR ratings would wrongly rank that car weakest.
     ordered = list(candidates.values())
     if len(ordered) < 5:
-        raise ValueError("fewer than five distinct D cars were scanned")
+        raise ValueError(f"fewer than five distinct {vehicle_class} cars were scanned")
     weakest = list(reversed(ordered[-5:]))
     ratings = [card.get("performance", [None])[0] if card.get("performance") else None
                for card in weakest]
     if any(not isinstance(rating, int) or rating < 100 for rating in ratings):
-        raise ValueError("a weakest D car has no trusted live rating")
+        raise ValueError(f"a weakest {vehicle_class} car has no trusted live rating")
     if ratings != sorted(ratings):
-        raise ValueError("weakest D car ratings contradict the game's ordering")
+        raise ValueError(f"weakest {vehicle_class} car ratings contradict the game's ordering")
     return {
-        "strategy": "live_lowest_current_performance_D",
+        "strategy": f"live_lowest_current_performance_{vehicle_class}",
+        "vehicle_class": vehicle_class,
         "complete": True,
         "scan_status": scan["status"],
         "scanned_vehicles": len(candidates),
@@ -200,7 +205,7 @@ def plan_live_weak_defense(tracks: dict[str, Any], scan: dict[str, Any]) -> dict
             {"slot": index, "track": {"big": track["big"], "small": track["small"]},
              "vehicle_id": card["vehicle"]["id"],
              "vehicle": card["vehicle"]["title"],
-             "class": "D", "performance": card["performance"][0],
+             "class": vehicle_class, "performance": card["performance"][0],
              "max_performance": card["performance"][1],
              "stars_lit": card.get("stars_lit"),
              "requires_detail_verification": True}

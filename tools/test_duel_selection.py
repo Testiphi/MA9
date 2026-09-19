@@ -92,6 +92,21 @@ class DuelSelectionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             plan_live_weak_defense(tracks, scan)
 
+    def test_live_defense_supports_other_vehicle_classes_and_boundaries(self) -> None:
+        tracks = {"complete": True, "tracks": [
+            {"big": "Map", "small": str(index)} for index in range(1, 6)]}
+        scan = {"status": "class_boundary", "vehicles": [
+            {"vehicle": {"id": name, "title": name}, "class": "C",
+             "performance": [score, score + 100]}
+            for name, score in zip("abcdef", [2400, 2200, 2000, 1800, 1600, 1400])
+        ]}
+        plan = plan_live_weak_defense(tracks, scan, vehicle_class="C")
+        self.assertEqual(plan["vehicle_class"], "C")
+        self.assertEqual(plan["strategy"], "live_lowest_current_performance_C")
+        self.assertEqual([slot["vehicle_id"] for slot in plan["slots"]],
+                         ["f", "e", "d", "c", "b"])
+        self.assertTrue(all(slot["class"] == "C" for slot in plan["slots"]))
+
     def test_real_source_maps_all_automatic_nicknames_to_ma9_ids(self) -> None:
         catalog = json.loads((ROOT / "data/generated/vehicle_catalog.json").read_text(encoding="utf-8"))
         source = ROOT.parent / "MutualExclusionAllocator" / "repo"

@@ -96,6 +96,20 @@
             "entry": "对决_防守状态识别入口"
         },
         {
+            "name": "对决资格赛：生成五车弱防方案（预演，不选车）",
+            "entry": "对决_防守自动规划入口",
+            "option": [
+                "对决防守车辆等级"
+            ]
+        },
+        {
+            "name": "对决资格赛：自动配置五辆弱防车（不开始比赛）",
+            "entry": "对决_防守自动配置入口",
+            "option": [
+                "对决防守车辆等级"
+            ]
+        },
+        {
             "name": "对决资格赛：查看第1张图",
             "entry": "对决_防守_查看第1赛道"
         },
@@ -256,6 +270,77 @@
         }
     ],
     "option": {
+        "对决防守车辆等级": {
+            "type": "select",
+            "cases": [
+                {
+                    "name": "D 级（默认）",
+                    "pipeline_override": {
+                        "对决_防守自动规划入口": {
+                            "custom_action_param": {"class": "D", "mode": "plan", "strategy": "weakest_current", "max_pages": 25}
+                        },
+                        "对决_防守自动配置入口": {
+                            "custom_action_param": {"class": "D", "mode": "apply", "strategy": "weakest_current", "max_pages": 25}
+                        }
+                    }
+                },
+                {
+                    "name": "C 级",
+                    "pipeline_override": {
+                        "对决_防守自动规划入口": {
+                            "custom_action_param": {"class": "C", "mode": "plan", "strategy": "weakest_current", "max_pages": 25}
+                        },
+                        "对决_防守自动配置入口": {
+                            "custom_action_param": {"class": "C", "mode": "apply", "strategy": "weakest_current", "max_pages": 25}
+                        }
+                    }
+                },
+                {
+                    "name": "B 级",
+                    "pipeline_override": {
+                        "对决_防守自动规划入口": {
+                            "custom_action_param": {"class": "B", "mode": "plan", "strategy": "weakest_current", "max_pages": 25}
+                        },
+                        "对决_防守自动配置入口": {
+                            "custom_action_param": {"class": "B", "mode": "apply", "strategy": "weakest_current", "max_pages": 25}
+                        }
+                    }
+                },
+                {
+                    "name": "A 级",
+                    "pipeline_override": {
+                        "对决_防守自动规划入口": {
+                            "custom_action_param": {"class": "A", "mode": "plan", "strategy": "weakest_current", "max_pages": 25}
+                        },
+                        "对决_防守自动配置入口": {
+                            "custom_action_param": {"class": "A", "mode": "apply", "strategy": "weakest_current", "max_pages": 25}
+                        }
+                    }
+                },
+                {
+                    "name": "S 级",
+                    "pipeline_override": {
+                        "对决_防守自动规划入口": {
+                            "custom_action_param": {"class": "S", "mode": "plan", "strategy": "weakest_current", "max_pages": 25}
+                        },
+                        "对决_防守自动配置入口": {
+                            "custom_action_param": {"class": "S", "mode": "apply", "strategy": "weakest_current", "max_pages": 25}
+                        }
+                    }
+                },
+                {
+                    "name": "R 级",
+                    "pipeline_override": {
+                        "对决_防守自动规划入口": {
+                            "custom_action_param": {"class": "R", "mode": "plan", "strategy": "weakest_current", "max_pages": 25}
+                        },
+                        "对决_防守自动配置入口": {
+                            "custom_action_param": {"class": "R", "mode": "apply", "strategy": "weakest_current", "max_pages": 25}
+                        }
+                    }
+                }
+            ]
+        },
         "任务选项1": {
             "type": "select",
             "cases": [

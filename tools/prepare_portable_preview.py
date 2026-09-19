@@ -21,7 +21,7 @@ BASE = ROOT / "build/portable"
 DESTINATION = BASE / "MA9-preview"
 AGENT = ROOT / "build/agent/win-x64/dist/ma9-agent"
 TASKS = {"多人运行时_数据自检", "多人循环3局_入口", "多人循环20局_入口",
-         "通用_账号被顶_识别"}
+         "通用_账号被顶_识别", "对决_防守自动规划入口", "对决_防守自动配置入口"}
 
 
 def _copy_file(source: Path, target: Path) -> None:

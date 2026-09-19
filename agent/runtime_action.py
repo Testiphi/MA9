@@ -19,6 +19,7 @@ from ma9_agent.selection_runtime import select_recommended
 from ma9_agent.vehicle_location_test import run_location_test
 from ma9_agent.duel_map_screen import read_five_tracks
 from ma9_agent.duel_vehicle_runtime import scan as scan_duel_vehicles
+from ma9_agent.duel_defense_setup import run_defense_setup
 from ma9_agent.account_conflict import account_conflict_from_ocr
 from ma9_agent.selection_runtime import _frame, _ocr
 
@@ -257,3 +258,25 @@ class DuelVehicleScanAction(CustomAction):
         destination.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(json.dumps({"event": "ma9_duel_vehicle_scan", **report}, ensure_ascii=False), flush=True)
         return report["status"] in {"edge_reached", "class_boundary", "detail_verified", "assigned"}
+
+
+@AgentServer.custom_action("ma9_duel_defense_setup")
+class DuelDefenseSetupAction(CustomAction):
+    """Plan or assign all five qualification-defense cars without starting."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        params = json.loads(argv.custom_action_param or "{}")
+        try:
+            report = run_defense_setup(context, find_project_root(), params)
+        except Exception as exc:
+            print(json.dumps({"event": "ma9_duel_defense_setup",
+                              "status": "stopped", "error": str(exc),
+                              "starts_race": False}, ensure_ascii=False), flush=True)
+            return False
+        print(json.dumps({"event": "ma9_duel_defense_setup",
+                          "status": report["status"],
+                          "mode": report["mode"],
+                          "vehicle_class": report["vehicle_class"],
+                          "assigned": len(report["assigned"]),
+                          "starts_race": False}, ensure_ascii=False), flush=True)
+        return report["status"] in {"planned", "five_assigned"}

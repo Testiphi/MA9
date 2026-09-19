@@ -14,6 +14,32 @@
         "timeout": 600000,
         "next": []
     },
+    "对决_防守自动规划入口": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_duel_defense_setup",
+        "custom_action_param": {
+            "class": "D",
+            "mode": "plan",
+            "strategy": "weakest_current",
+            "max_pages": 25
+        },
+        "timeout": 900000,
+        "next": []
+    },
+    "对决_防守自动配置入口": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_duel_defense_setup",
+        "custom_action_param": {
+            "class": "D",
+            "mode": "apply",
+            "strategy": "weakest_current",
+            "max_pages": 25
+        },
+        "timeout": 1800000,
+        "next": []
+    },
     "对决_按配置查找车辆": {
         "recognition": "DirectHit",
         "action": "Custom",
