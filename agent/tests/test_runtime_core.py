@@ -84,6 +84,53 @@ class RaceControllerTest(unittest.TestCase):
         self.assertEqual(controller.next_action(ScreenState.RACE, progress=20, elapsed_ms=2_000).kind, ActionKind.WAIT)
         self.assertEqual(controller.next_action(ScreenState.RACE, progress=20, elapsed_ms=10_000).kind, ActionKind.NITRO_PAIR)
 
+    def test_missing_progress_reports_stall_instead_of_falling_back(self) -> None:
+        """No progress reading must not be confused with an unmet threshold.
+
+        The track plan is still pending on data we never received, so silently
+        returning the generic nitro fallback would hide the fact that the whole
+        progress-gated strategy never ran.
+        """
+        controller = RaceController([{"id": "p10", "when": {"progress_gte": 10}, "action": "tap", "target": [9, 8]}])
+        action = controller.next_action(ScreenState.RACE, progress=None, elapsed_ms=30_000)
+        self.assertEqual(action.kind, ActionKind.WAIT)
+        self.assertEqual(action.action_id, "wait:progress-unavailable")
+        self.assertEqual(action.source, "guard:no_progress")
+
+    def test_missing_progress_is_reported_right_away(self) -> None:
+        """The stall is visible on the first tick, not only after the fallback interval."""
+        controller = RaceController(
+            [{"id": "p10", "when": {"progress_gte": 10}, "action": "tap", "target": [1, 1]}],
+            fallback_interval_ms=60_000,
+        )
+        action = controller.next_action(ScreenState.RACE, progress=None, elapsed_ms=0)
+        self.assertEqual(action.source, "guard:no_progress")
+        self.assertIsNone(controller._last_fallback_ms)
+
+    def test_time_only_actions_unaffected_by_missing_progress(self) -> None:
+        """Behaviour is unchanged for plans that never ask for progress."""
+        controller = RaceController([{"id": "t1", "when": {"elapsed_ms_gte": 1_000}, "action": "nitro_pair"}])
+        self.assertEqual(controller.next_action(ScreenState.RACE, progress=None, elapsed_ms=0).kind, ActionKind.NITRO_PAIR)
+        self.assertEqual(controller.next_action(ScreenState.RACE, progress=None, elapsed_ms=5_000).kind, ActionKind.NITRO_PAIR)
+
+    def test_zero_progress_is_a_valid_reading(self) -> None:
+        """``0`` is a legitimate progress value, not a stand-in for "missing"."""
+        controller = RaceController([{"id": "p0", "when": {"progress_gte": 0}, "action": "tap", "target": [3, 4]}])
+        action = controller.next_action(ScreenState.RACE, progress=0)
+        self.assertEqual(action.kind, ActionKind.TAP)
+        self.assertEqual(action.target, (3, 4))
+        self.assertEqual(action.action_id, "p0")
+
+    def test_progress_recovers_after_stall(self) -> None:
+        """Once a real reading arrives the pending action runs, then fallback resumes."""
+        controller = RaceController([{"id": "p10", "when": {"progress_gte": 10}, "action": "tap", "target": [9, 8]}])
+        self.assertEqual(controller.next_action(ScreenState.RACE).source, "guard:no_progress")
+        action = controller.next_action(ScreenState.RACE, progress=11, elapsed_ms=1_000)
+        self.assertEqual(action.action_id, "p10")
+        self.assertEqual(action.kind, ActionKind.TAP)
+        # The action is a one-shot, so the next tick keeps the controller alive.
+        self.assertEqual(controller.next_action(ScreenState.RACE, progress=11, elapsed_ms=1_100).kind, ActionKind.NITRO_PAIR)
+
 
 class RuntimeConfigTest(unittest.TestCase):
     def test_loads_existing_schema(self) -> None:

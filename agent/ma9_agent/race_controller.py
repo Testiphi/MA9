@@ -86,6 +86,7 @@ class RaceController:
         if screen is not ScreenState.RACE:
             return ScheduledAction("wait:unknown", ActionKind.WAIT, source="guard")
 
+        awaiting_progress = False
         for index, config in enumerate(self.actions):
             action_id = str(config.get("id", f"action-{index}"))
             if action_id in self._completed:
@@ -95,7 +96,14 @@ class RaceController:
                 progress is not None and progress >= int(condition["progress_gte"])
             )
             time_due = "elapsed_ms_gte" not in condition or elapsed_ms >= int(condition["elapsed_ms_gte"])
-            if not progress_due or not time_due:
+            if not progress_due:
+                # A missing progress reading is not the same as an unmet
+                # threshold. Track it so the caller can tell "not yet" from
+                # "no data", instead of silently losing the whole track plan.
+                if progress is None and "progress_gte" in condition:
+                    awaiting_progress = True
+                continue
+            if not time_due:
                 continue
 
             kind = ActionKind(config["action"])
@@ -108,6 +116,16 @@ class RaceController:
                 kind=kind,
                 pair_delay_ms=int(config.get("pair_delay_ms", self.nitro_pair_delay_ms)),
                 target=target,
+            )
+
+        if awaiting_progress:
+            # Do not fall through to the generic nitro fallback: a strategy
+            # action is still pending on data we never received. Reporting the
+            # stall keeps progress-gated plans visible to logs and callers.
+            return ScheduledAction(
+                "wait:progress-unavailable",
+                ActionKind.WAIT,
+                source="guard:no_progress",
             )
 
         if self._last_fallback_ms is None or elapsed_ms - self._last_fallback_ms >= self.fallback_interval_ms:
