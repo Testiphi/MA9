@@ -9,6 +9,7 @@ from typing import Any, Iterable
 
 
 ZONES = ("五区", "四区")
+CLASS_ORDER = ("R", "S", "A", "B", "C", "D")
 
 
 def _repair_descending_ratings(cards: list[dict[str, Any]]) -> list[int] | None:
@@ -209,43 +210,57 @@ def plan_live_weak_defense(
     """
     if not tracks.get("complete") or len(tracks.get("tracks", [])) != 5:
         raise ValueError("five defense tracks were not verified")
-    if vehicle_class not in {"R", "S", "A", "B", "C", "D"}:
+    if vehicle_class not in CLASS_ORDER:
         raise ValueError("unsupported Duel vehicle class")
-    if scan.get("status") not in {"edge_reached", "class_boundary"}:
+    if scan.get("status") not in {"edge_reached", "class_boundary",
+                                  "class_ladder_complete"}:
         raise ValueError(f"{vehicle_class}-class garage scan did not reach its end")
+    allowed_classes = CLASS_ORDER[CLASS_ORDER.index(vehicle_class):]
     candidates: dict[str, dict[str, Any]] = {}
     for card in scan.get("vehicles", []):
         vehicle = card.get("vehicle") or {}
         vehicle_id = vehicle.get("id")
-        if card.get("class") != vehicle_class or not vehicle_id:
+        if card.get("class") not in allowed_classes or not vehicle_id:
             continue
         candidates.setdefault(vehicle_id, card)
-    # The Duel garage is already sorted by current performance descending.
-    # Preserve that order: OCR can clip a leading digit (e.g. 2,213 -> 213),
-    # and blindly sorting OCR ratings would wrongly rank that car weakest.
-    ordered = list(candidates.values())
-    if len(ordered) < 5:
-        raise ValueError(f"fewer than five distinct {vehicle_class} cars were scanned")
-    repaired = _repair_descending_ratings(ordered)
-    if repaired is None:
-        raise ValueError(f"{vehicle_class}-class ratings contradict the game's ordering")
-    weakest_pairs = list(reversed(list(zip(ordered, repaired))[-5:]))
+    if len(candidates) < 5:
+        raise ValueError(
+            f"fewer than five distinct {vehicle_class}-or-lower cars were scanned")
+    # Prefer the requested class, then fill any shortage from the next lower
+    # classes.  Within each class the Duel list is already descending; repair
+    # clipped OCR ratings per class before taking its weakest tail.
+    weakest_pairs: list[tuple[dict[str, Any], int]] = []
+    for candidate_class in allowed_classes:
+        ordered = [card for card in candidates.values()
+                   if card.get("class") == candidate_class]
+        if not ordered:
+            continue
+        repaired = _repair_descending_ratings(ordered)
+        if repaired is None:
+            raise ValueError(
+                f"{candidate_class}-class ratings contradict the game's ordering")
+        needed = 5 - len(weakest_pairs)
+        weakest_pairs.extend(reversed(list(zip(ordered, repaired))[-needed:]))
+        if len(weakest_pairs) == 5:
+            break
     weakest = [card for card, _rating in weakest_pairs]
     ratings = [rating for _card, rating in weakest_pairs]
     if any(rating < 100 for rating in ratings):
         raise ValueError(f"a weakest {vehicle_class} car has no trusted live rating")
     return {
-        "strategy": f"live_lowest_current_performance_{vehicle_class}",
+        "strategy": f"live_lowest_current_performance_{vehicle_class}_with_lower_fallback",
         "vehicle_class": vehicle_class,
         "complete": True,
         "scan_status": scan["status"],
         "scanned_vehicles": len(candidates),
+        "classes_used": list(dict.fromkeys(card["class"] for card in weakest)),
         "slots": [
             {"slot": index, "track": {"big": track["big"], "small": track["small"]},
              "vehicle_id": card["vehicle"]["id"],
              "vehicle": card["vehicle"]["title"],
-             "class": vehicle_class, "performance": rating,
+             "class": card["class"], "performance": rating,
              "max_performance": card["performance"][1],
+             "scan_page": card.get("page"),
              "rating_repaired": rating != card["performance"][0],
              "stars_lit": card.get("stars_lit"),
              "requires_detail_verification": True}

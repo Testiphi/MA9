@@ -26,6 +26,32 @@ class DuelLiveDefenseSelectionTest(unittest.TestCase):
                          [1546, 1662, 1683, 1738, 1814])
         self.assertTrue(plan["slots"][1]["rating_repaired"])
 
+    def test_requested_class_shortage_falls_back_without_duplicates(self) -> None:
+        tracks = {"complete": True, "tracks": [
+            {"big": "Map", "small": str(index)} for index in range(1, 6)]}
+        cards = []
+        for vehicle_class, ratings in (("R", [5300, 5100]),
+                                       ("S", [4900, 4700, 4500, 4300])):
+            cards.extend({
+                "vehicle": {"id": f"{vehicle_class}{rating}",
+                            "title": f"{vehicle_class}{rating}"},
+                "class": vehicle_class,
+                "performance": [rating, None],
+                "stars_lit": None,
+            } for rating in ratings)
+        scan = {"status": "class_ladder_complete", "scan_complete": True,
+                "vehicles": cards}
+
+        plan = plan_live_weak_defense(tracks, scan, vehicle_class="R")
+
+        self.assertTrue(plan["complete"])
+        self.assertEqual(plan["classes_used"], ["R", "S"])
+        self.assertEqual([slot["class"] for slot in plan["slots"]],
+                         ["R", "R", "S", "S", "S"])
+        self.assertEqual([slot["performance"] for slot in plan["slots"]],
+                         [5100, 5300, 4300, 4500, 4700])
+        self.assertEqual(len({slot["vehicle_id"] for slot in plan["slots"]}), 5)
+
 
 if __name__ == "__main__":
     unittest.main()
