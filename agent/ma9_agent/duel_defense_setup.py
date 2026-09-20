@@ -10,7 +10,8 @@ from typing import Any
 from .account_conflict import account_conflict_from_ocr
 from .duel_map_screen import read_five_tracks
 from .duel_selection import plan_live_weak_defense
-from .duel_vehicle_runtime import CLASS_X, assign_visible, scan as scan_duel_vehicles
+from .duel_vehicle_runtime import (CLASS_ORDER, CLASS_X, assign_visible,
+                                   scan as scan_duel_vehicles)
 from .selection_runtime import _frame, _ocr
 
 
@@ -18,6 +19,12 @@ VALID_MODES = {"plan", "apply"}
 VALID_STRATEGIES = {"weakest_current"}
 RETRYABLE_DETAIL_STATUSES = {"detail_not_verified", "wrong_detail",
                              "list_detail_rating_mismatch"}
+RETRYABLE_TARGET_SCAN_STATUSES = {
+    *RETRYABLE_DETAIL_STATUSES,
+    "target_not_found",
+    "target_temporarily_unreadable",
+    "page_ocr_unverified",
+}
 
 
 def _write(path: Path, report: dict[str, Any]) -> None:
@@ -90,32 +97,92 @@ def _recover_account_conflict(context: Any) -> bool:
 
 
 def _record_assignment(progress: dict[str, Any], slot: dict[str, Any],
-                       selection: dict[str, Any], vehicle_class: str) -> None:
+                       selection: dict[str, Any]) -> None:
     progress["assigned"].append({
         "slot": slot["slot"],
         "vehicle_id": slot["vehicle_id"],
         "vehicle": slot["vehicle"],
-        "class": vehicle_class,
+        "class": slot["class"],
         "performance": selection.get("performance"),
     })
     progress["status"] = "assigning"
+
+
+def _scan_class_ladder(context: Any, vehicle_class: str,
+                       catalog: list[dict[str, Any]], max_pages: int,
+                       *, required: int = 5) -> dict[str, Any]:
+    """Scan lower classes only when the requested class has too few cars."""
+    start = CLASS_ORDER.index(vehicle_class)
+    reports: list[dict[str, Any]] = []
+    vehicles: dict[str, dict[str, Any]] = {}
+    for candidate_class in CLASS_ORDER[start:]:
+        report = scan_duel_vehicles(
+            context, candidate_class, catalog, max_pages=max_pages)
+        if (not report.get("scan_complete")
+                or report.get("status") not in {"edge_reached", "class_boundary"}):
+            return {
+                **report,
+                "requested_class": vehicle_class,
+                "scanned_classes": [row["class"] for row in reports],
+            }
+        reports.append({
+            "class": candidate_class,
+            "status": report["status"],
+            "pages": report.get("pages"),
+            "vehicles": len(report.get("vehicles", [])),
+        })
+        for card in report.get("vehicles", []):
+            vehicle = card.get("vehicle") or {}
+            if card.get("class") == candidate_class and vehicle.get("id"):
+                vehicles.setdefault(vehicle["id"], card)
+        if len(vehicles) >= required:
+            return {
+                "status": "class_ladder_complete",
+                "scan_complete": True,
+                "assignment_complete": False,
+                "requested_class": vehicle_class,
+                "scanned_classes": [row["class"] for row in reports],
+                "class_reports": reports,
+                "vehicles": list(vehicles.values()),
+            }
+    return {
+        "status": "insufficient_owned_vehicles",
+        "scan_complete": True,
+        "assignment_complete": False,
+        "requested_class": vehicle_class,
+        "scanned_classes": [row["class"] for row in reports],
+        "class_reports": reports,
+        "vehicles": list(vehicles.values()),
+    }
 
 
 def _retry_target_after_wrong_detail(context: Any, selection: dict[str, Any],
                                      vehicle_class: str, target: dict[str, Any],
                                      catalog: list[dict[str, Any]],
                                      max_pages: int) -> dict[str, Any]:
-    """Retry once when a moving list opens a neighboring vehicle detail."""
-    if selection.get("status") not in RETRYABLE_DETAIL_STATUSES:
-        return selection
-    if not context.tasker.controller.post_click(32, 25).wait().succeeded:
-        return selection
-    return scan_duel_vehicles(
-        context, vehicle_class, catalog,
-        target_id=target["vehicle_id"], choose=True, max_pages=max_pages,
-        expected_performance=target["performance"],
-        expected_stars=target.get("stars_lit"),
-    )
+    """Boundedly restart a target scan after transient OCR or list motion."""
+    retries = 0
+    while (selection.get("status") in RETRYABLE_TARGET_SCAN_STATUSES
+           and retries < 2):
+        # Detail failures leave the vehicle detail open. Scan/edge failures
+        # already leave us on the garage list, so pressing Back there would
+        # incorrectly return to the five-track lineup.
+        if selection.get("status") in RETRYABLE_DETAIL_STATUSES:
+            if not context.tasker.controller.post_click(32, 25).wait().succeeded:
+                return selection
+        selection = scan_duel_vehicles(
+            context, vehicle_class, catalog,
+            target_id=target["vehicle_id"], choose=True, max_pages=max_pages,
+            expected_performance=target["performance"],
+            expected_stars=target.get("stars_lit"),
+            # The normal assignment already used the recorded page hint.  A
+            # retry deliberately scans from the class start so an inaccurate
+            # hint or unusual swipe inertia cannot make the target unreachable.
+            page_hint=None,
+        )
+        retries += 1
+        selection["defense_rescan_count"] = retries
+    return selection
 
 
 def parse_setup_params(raw: dict[str, Any]) -> dict[str, Any]:
@@ -178,10 +245,11 @@ def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any], *,
         _write(tracks_path, tracks)
 
         _run_task(context, f"对决_防守_进入第{start_slot}赛道选车")
-        scan = scan_duel_vehicles(context, vehicle_class, catalog["vehicles"],
-                                  max_pages=params["max_pages"])
+        scan = _scan_class_ladder(context, vehicle_class, catalog["vehicles"],
+                                  params["max_pages"])
         _write(scan_path, scan)
-        if scan.get("status") not in {"edge_reached", "class_boundary"}:
+        if (not scan.get("scan_complete")
+                or scan.get("status") != "class_ladder_complete"):
             raise RuntimeError(f"{vehicle_class}-class scan stopped at {scan.get('status')}")
         plan = plan_live_weak_defense(tracks, scan, vehicle_class=vehicle_class)
         _write(plan_path, plan)
@@ -216,14 +284,15 @@ def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any], *,
                 raise RuntimeError(f"slot {start_slot} fallback map order changed")
             _run_task(context, f"对决_防守_进入第{start_slot}赛道选车")
             selection = scan_duel_vehicles(
-                context, vehicle_class, catalog["vehicles"],
+                context, first["class"], catalog["vehicles"],
                 target_id=first["vehicle_id"], choose=True,
                 max_pages=params["max_pages"],
                 expected_performance=first["performance"],
                 expected_stars=first.get("stars_lit"),
+                page_hint=first.get("scan_page"),
             )
         selection = _retry_target_after_wrong_detail(
-            context, selection, vehicle_class, first, catalog["vehicles"],
+            context, selection, first["class"], first, catalog["vehicles"],
             params["max_pages"])
         _write(scan_path, selection)
         if selection.get("status") != "assigned":
@@ -233,21 +302,22 @@ def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any], *,
         _write(tracks_path, observed)
         if _map_order(observed) != _map_order(tracks):
             raise RuntimeError(f"slot {start_slot} map order changed")
-        _record_assignment(progress, first, selection, vehicle_class)
+        _record_assignment(progress, first, selection)
         _write(progress_path, progress)
 
         for slot in plan["slots"][start_slot:]:
             index = slot["slot"]
             _run_task(context, f"对决_防守_进入第{index}赛道选车")
             selection = scan_duel_vehicles(
-                context, vehicle_class, catalog["vehicles"],
+                context, slot["class"], catalog["vehicles"],
                 target_id=slot["vehicle_id"], choose=True,
                 max_pages=params["max_pages"],
                 expected_performance=slot["performance"],
                 expected_stars=slot.get("stars_lit"),
+                page_hint=slot.get("scan_page"),
             )
             selection = _retry_target_after_wrong_detail(
-                context, selection, vehicle_class, slot, catalog["vehicles"],
+                context, selection, slot["class"], slot, catalog["vehicles"],
                 params["max_pages"])
             _write(scan_path, selection)
             if selection.get("status") != "assigned":
@@ -257,7 +327,7 @@ def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any], *,
             _write(tracks_path, observed)
             if _map_order(observed) != _map_order(tracks):
                 raise RuntimeError(f"slot {index} map order changed")
-            _record_assignment(progress, slot, selection, vehicle_class)
+            _record_assignment(progress, slot, selection)
             _write(progress_path, progress)
         progress["status"] = "five_assigned"
         _write(progress_path, progress)

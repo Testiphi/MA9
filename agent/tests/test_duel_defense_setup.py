@@ -13,6 +13,7 @@ from ma9_agent.duel_defense_setup import (
     _read_tracks,
     _retry_target_after_wrong_detail,
     _run_task,
+    _scan_class_ladder,
     parse_setup_params,
     run_defense_setup,
 )
@@ -104,7 +105,7 @@ class DuelDefenseSetupFlowTest(unittest.TestCase):
     def _scan(_context, _vehicle_class, _catalog, **kwargs):
         if kwargs.get("target_id"):
             return {"status": "assigned", "performance": kwargs["expected_performance"]}
-        return {"status": "edge_reached", "vehicles": [
+        return {"status": "edge_reached", "scan_complete": True, "vehicles": [
             {"vehicle": {"id": name, "title": name}, "class": "D",
              "performance": [score, None], "stars_lit": None}
             for name, score in zip("abcdef", [2600, 2400, 2200, 2000, 1800, 1600])
@@ -198,6 +199,57 @@ class DuelDefenseSetupFlowTest(unittest.TestCase):
         self.assertEqual(actual, expected)
         self.assertEqual(context.tasker.controller.clicks, [(32, 25)])
         scan.assert_called_once()
+
+    def test_target_not_found_restarts_scan_without_leaving_garage(self) -> None:
+        context = _Context()
+        target = {"vehicle_id": "a", "performance": 1600, "stars_lit": None}
+        expected = {"status": "assigned", "performance": 1600,
+                    "assignment_complete": True}
+        with patch("ma9_agent.duel_defense_setup.scan_duel_vehicles",
+                   return_value=expected) as scan:
+            actual = _retry_target_after_wrong_detail(
+                context, {"status": "target_not_found", "scan_complete": True},
+                "D", target, [{"id": "a", "title": "a", "class": "D"}], 25)
+        self.assertEqual(actual["status"], "assigned")
+        self.assertEqual(context.tasker.controller.clicks, [])
+        scan.assert_called_once()
+
+    def test_incomplete_scan_cannot_become_a_completed_plan(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            context = _Context()
+            incomplete = {"status": "edge_reached", "scan_complete": False,
+                          "vehicles": []}
+            with patch("ma9_agent.duel_defense_setup._read_tracks",
+                       return_value=self._tracks()), \
+                    patch("ma9_agent.duel_defense_setup._frame", return_value=object()), \
+                    patch("ma9_agent.duel_defense_setup.scan_duel_vehicles",
+                          return_value=incomplete), \
+                    patch("ma9_agent.duel_defense_setup.time.sleep"):
+                with self.assertRaisesRegex(RuntimeError, "scan stopped"):
+                    run_defense_setup(context, self._root(temporary), {"mode": "apply"})
+
+    def test_class_ladder_scans_lower_class_only_when_needed(self) -> None:
+        context = _Context()
+
+        def class_scan(_context, vehicle_class, _catalog, **_kwargs):
+            count = {"R": 2, "S": 4}[vehicle_class]
+            return {
+                "status": "class_boundary",
+                "scan_complete": True,
+                "vehicles": [
+                    {"vehicle": {"id": f"{vehicle_class}{index}"},
+                     "class": vehicle_class, "performance": [2000 - index, None]}
+                    for index in range(count)
+                ],
+            }
+
+        with patch("ma9_agent.duel_defense_setup.scan_duel_vehicles",
+                   side_effect=class_scan) as scan:
+            report = _scan_class_ladder(context, "R", [], 25)
+        self.assertEqual(report["status"], "class_ladder_complete")
+        self.assertEqual(report["scanned_classes"], ["R", "S"])
+        self.assertEqual(len(report["vehicles"]), 6)
+        self.assertEqual([call.args[1] for call in scan.call_args_list], ["R", "S"])
 
 
 if __name__ == "__main__":
