@@ -1,0 +1,428 @@
+# MA9 多智能体 lane 清单
+# 消费者：编排层（GPT-6 Astra，默认 medium）。派活时逐行读取，不要凭记忆。
+# 规则与理由：docs/zh_cn/develop/multi_agent_plan.md（赛道识别与策略挂载见第 5 节）
+# 契约签名草稿：docs/zh_cn/develop/contract_freeze_draft.md（赛道策略表接缝见第 6 节）
+#
+# 开工前先确认四件事：
+#   1. contract_frozen_at 非空 —— 契约已提交到 main，否则新建的 worktree 看不到任何东西
+#   2. 所有 lane 都可以「读取」契约层那 5 个模块，但只有 contract lane 可以「修改」
+#   3. needs_device 为 true 的 lane 共用同一个 ADB 串口，必须串行执行
+#   4. owns 只列「已经存在」的文件；本席将要新建的文件一律列在 owns_new。
+#      完成定义校验用 owns ∪ owns_new ∪ owns_generated；owns_generated 只能由工具产出。
+
+version: 1
+contract_frozen_at: null          # 编排层冻结契约并提交后，在此填写 commit sha
+device_serial: "127.0.0.1:16384"
+device_is_singleton: true
+
+orchestrator:
+  model: gpt-6-astra
+  effort_default: medium
+  effort_high_for:
+    - contract_freeze
+    - cross_lane_conflict
+    - critical_merge
+    - repeated_failure_diagnosis
+  notes: >
+    编排层负责契约冻结、依赖调度、设备令牌、验收、合并与最终裁决。
+    contract lane 由编排层亲自执行，不得派给普通子智能体。
+
+orchestration_policy:
+  single_orchestrator: true
+  child_may_spawn_agents: false
+  cross_lane_communication: through_orchestrator
+  concurrency: >
+    使用运行环境实时提供的子智能体槽位；不要假设四条可并行 lane 一定能同时运行。
+    needs_device=true 的 lane 无论槽位多少都必须串行持有 ADB 令牌。
+  reviewer_semantics: >
+    lane 出现 reviewer 时，owner 验收通过后必须进行只读复核。reviewer 不修代码，
+    只提交问题清单；最终修复派回 owner，是否合入由 Astra 编排层裁决。
+
+execution_transports:
+  codex_direct:
+    models: [astra, terra, luna]
+    mode: direct
+    notes: >
+      GPT 模型由 Codex 启动，编排层可直接创建任务、读取结果并做只读复核。
+  workbuddy_user_relay:
+    models: [deepseek, glm, kimi]
+    mode: user_relay
+    procedure:
+      - Astra 按 multi_agent_plan.md 第 9 节生成一份可直接复制的完整提示词
+      - 用户把提示词转交 WorkBuddy，并把结果、commit 或 diff 带回 Codex
+      - Astra 在本地独立检查实际 diff、文件边界并重跑验收命令
+    notes: >
+      不假设 Codex 能自动创建、等待或读取 WorkBuddy 任务；WorkBuddy 的自报测试结果
+      不能替代本地验收。MiniMax-M3 的启动渠道尚未指定，启用前由用户补充。
+
+live_verification:
+  default_operator: user
+  agent_device_control_requires_explicit_user_request: true
+  required_handoff:
+    - install_or_run_entry
+    - shortest_reproduction_steps
+    - expected_screen_and_success_criteria
+    - debug_json_or_log_paths
+  notes: >
+    needs_device=true 表示该 lane 需要用户实机结果才能闭环，并继续受 ADB 单例约束；
+    它不代表子智能体可以默认接管模拟器。编排层负责串行安排用户验证请求。
+
+python_runtime:
+  placeholder: "{python}"
+  preferred_env: MA9_PYTHON
+  host_overrides:
+    local: "E:/hzz/work/MA9/.venv/Scripts/python.exe"
+  working_directory: lane_worktree_root
+  resolution_order:
+    - 使用 MA9_PYTHON 指向的可执行文件
+    - 使用当前主工作区 host_overrides.local 的共享解释器
+    - 找不到时停止并报告，不得静默改用另一套 Python
+  notes: >
+    编排层在派活前只解析一次 {python} 并执行 --version；每个命令的 cwd 必须是对应
+    lane 的 worktree 根目录，使导入、相对路径和测试均来自该 worktree，而非主工作区。
+
+node_runtime:
+  check_environment:
+    NODE_OPTIONS: "--max-old-space-size=6144"
+  notes: >
+    maa-tools 会读取六个大型多人 JSON；未设置 6 GB 堆时，本机已复现约 4 GB 处
+    JavaScript heap out of memory。CI 已使用同一设置，本地与 worktree 验收必须保持一致。
+
+# 每席的完成定义都必须包含这三条，与 CI 的 check.yml 保持一致。
+# 派活前由编排层把 {python} 替换为 python_runtime 解析出的绝对路径。
+verify_default:
+  - "{python} -X utf8 -m unittest discover -s agent/tests -v"
+  - "{python} -X utf8 -m unittest discover -s tools/tests -v"
+  - "{python} -X utf8 tools/validate_schema.py --schema-dir deps/tools --resource-dirs assets/resource --exclude-dirs assets/resource/announcement --interface-files assets/interface.json"
+
+model_tiers:
+  astra:
+    product: GPT-6 Astra
+    efforts: [medium, high]
+    note: 仅供编排层；日常 medium，契约冻结、冲突裁决和关键合并 high。
+  deepseek:
+    product: DeepSeek V4.1 Flash
+    efforts: [low, high, max]
+    note: 子任务首选；1M 上下文、原生视觉。简单任务 low，日常 Agent high，复杂任务 max。
+  glm:
+    product: GLM-5.3
+    efforts: [low, high, max]
+    note: 只用于最难的纯代码与算法推理；当前固定给 duel-attack max。
+  terra:
+    product: GPT-5.6 Terra
+    efforts: [high]
+    note: 关键路径的独立只读复核，以及 DeepSeek max 连续失败后的故障复核；不直接取代 owner。
+
+reserve_models:
+  minimax:
+    product: MiniMax-M3
+    use_when: DeepSeek 连续失败后的长程、多模态备用；首轮不设固定 lane。
+  kimi:
+    product: Kimi-K3
+    use_when: 仅用于边界明确的只读研究；不得直接修改仓库。
+  luna:
+    product: GPT-5.6 Luna
+    use_when: 仅用于可机械验收、范围极窄的批量任务；首轮不设固定 lane。
+
+lanes:
+
+  # ---------------------------------------------------------------- 契约层
+  - id: contract
+    title: 契约 · 集成层
+    branch: main
+    model: astra
+    effort: high
+    executed_by: orchestrator
+    needs_device: false
+    depends_on: []
+    owns:
+      - agent/ma9_agent/models.py
+      - agent/ma9_agent/vehicle_screen.py
+      - agent/ma9_agent/garage_profile.py
+      - agent/ma9_agent/selection_strategy.py
+      - agent/ma9_agent/selection_runtime.py
+      - agent/ma9_agent/__init__.py
+      - agent/runtime_action.py
+      - agent/tests/test_runtime_root.py
+      - agent/tests/test_selection_runtime_search.py
+      - agent/tests/test_garage_profile.py
+      - agent/tests/test_selection_strategy.py
+    owns_generated:
+      # 生成物：本席负责「重新生成」，任何情况下不得手改
+      - assets/interface.json
+    owns_new:
+      # 本席新建（名字是建议名，调整后回来改本文件）
+      - agent/ma9_agent/race_strategy_schema.py     # 赛道策略表的 schema 常量 + 校验函数
+      - agent/tests/test_race_strategy_contract.py  # 用假表锁住 schema
+    exclusive: true               # 冻结后其它 lane 一律不得修改上述文件
+    notes: >
+      唯一装配点。爆炸半径全场最大：错一个签名，其余 7 条 lane 全部返工。
+      本席由 Astra 编排层亲自执行，不创建普通子智能体。
+      冻结以「签名 + 断言 + schema」表达，不要写成散文。
+      除那 5 个模块外，本席还要冻结第三处接缝：赛道策略表（contract_freeze_draft.md 第 6 节）。
+      该接缝的**实现**（加载 + 派发）属于 multiplayer，本席只出 schema 与断言。
+      详见 contract_freeze_draft.md 里两处待决瑕疵。
+
+  # ------------------------------------------------- 可即刻并行的四条 lane
+  - id: nav
+    title: 导航 · 国际化
+    branch: lane/nav-i18n
+    model: deepseek
+    effort: high
+    needs_device: true
+    depends_on: [contract]
+    owns:
+      - agent/ma9_agent/account_conflict.py
+      - assets/resource/pipeline/daily_navigation.json
+      - assets/resource/pipeline/home_navigation.json
+      - assets/resource/pipeline/return_navigation.json
+      - assets/resource/pipeline/multiplayer_navigation.json
+      - assets/resource/pipeline/language_switch.json
+      - assets/resource/pipeline/account_conflict.json
+      - tools/check_daily_navigation.py
+      - tools/check_server_recovery.py
+      - tools/tests/test_account_conflict.py
+      - docs/zh_cn/develop/daily_navigation.md
+      - docs/zh_cn/develop/home_multiplayer_navigation.md
+      - docs/zh_cn/develop/language_switch.md
+    notes: >
+      试点 lane。换模型先在这里验证：跑 3 个真实任务，对比通过率、返工次数、成本，
+      通过后再推广到其余 DeepSeek 席位。最模式化，失败被隔离在单个任务内。
+
+  - id: build
+    title: 构建 · CI · 发布
+    branch: lane/build-ci
+    model: deepseek
+    effort: high
+    needs_device: false
+    depends_on: [contract]
+    owns:
+      - .github/workflows/check.yml
+      - package.json
+      - package-lock.json
+      - tools/build_agent.py
+      - tools/build_selection_gui.py
+      - tools/build_windows_package.ps1
+      - tools/configure.py
+      - tools/approve_champion_rotation.py
+      - docs/zh_cn/develop/how_to_develop.md
+    verify_extra:
+      - npm ci
+      - npm run check
+    verify_environment:
+      NODE_OPTIONS: "--max-old-space-size=6144"
+    notes: >
+      CI 是全体 lane 共享的闸门，本席一坏全部堵死 —— 必须与其他 lane 隔离。
+      风险在长工具链可靠性而非判断力，且出错在 30 秒内必然暴露，是最安全的投产席位。
+
+  - id: vehicle
+    title: 车辆识别 · 车型库
+    branch: lane/vehicle-id
+    model: deepseek
+    effort: max
+    needs_device: true
+    depends_on: [contract]
+    owns:
+      - agent/ma9_agent/vehicle_recognizer.py
+      - agent/ma9_agent/vehicle_location_test.py
+      - assets/resource/pipeline/vehicle_recognition.json
+      - assets/resource/pipeline/vehicle_controls.json
+      - assets/resource/pipeline/j50_search.json
+      - assets/resource/pipeline/race_screens.json
+      - tools/collect_vehicle_scan.py
+      - tools/crosscheck_vehicle_scan.py
+      - tools/check_runtime_vehicle_ocr.py
+      - tools/vehicle_card_locator.py
+      - agent/tests/test_vehicle_recognizer.py
+      - agent/tests/test_vehicle_location_test.py
+      - tools/tests/test_vehicle_card_locator.py
+      - tools/tests/test_vehicle_location_pipeline.py
+      - docs/zh_cn/develop/vehicle_scan.md
+      - docs/zh_cn/develop/garage_recognition_design.md
+      - docs/zh_cn/develop/recognized_vehicles.md
+      - docs/zh_cn/develop/vehicle_duplicates_review.md
+      - docs/zh_cn/develop/vehicle_controls.md
+      - docs/zh_cn/develop/vehicle_location_test.md
+    notes: >
+      需求是「视觉 + 大文本」，正好命中 DeepSeek 的两项能力，是收益最高的一换。
+      注意 vehicle_screen.py 属契约层：可读可测，不可改。
+
+  - id: multiplayer
+    title: 多人经典循环 · 赛道识别与策略挂载
+    branch: lane/multiplayer
+    model: deepseek
+    effort: max
+    needs_device: true
+    depends_on: [contract]
+    owns:
+      - agent/ma9_agent/race_controller.py
+      - agent/ma9_agent/vehicle_selector.py
+      - agent/ma9_agent/runtime_config.py
+      - agent/ma9_agent/selection_editor.py
+      - assets/resource/pipeline/multiplayer_loop.json
+      - assets/resource/pipeline/gold_rotation.json
+      - assets/resource/pipeline/reverse_fallback.json
+      - assets/resource/pipeline/two_car_rotation.json
+      - tools/prepare_dynamic_multiplayer_loop.py
+      - tools/prepare_multiplayer_loop.py
+      - tools/prepare_reverse_fallback.py
+      - tools/multiplayer_loop_files.py
+      - tools/check_dynamic_multiplayer_loop.py
+      - agent/tests/test_runtime_core.py
+      - agent/tests/test_selection_editor.py
+      - docs/zh_cn/develop/multiplayer_loop_model.md
+      - docs/zh_cn/develop/multiplayer_loop_test.md
+      - docs/zh_cn/develop/multiplayer_preparation.md
+      - docs/zh_cn/develop/current_multiplayer_model.md
+      - docs/zh_cn/develop/gold_rotation.md
+      - docs/zh_cn/develop/reverse_fallback.md
+      - docs/zh_cn/develop/two_car_rotation.md
+      - docs/zh_cn/develop/dynamic_league.md
+      - docs/zh_cn/develop/race_screens.md
+    owns_new:
+      # 本席新建（名字是建议名，调整后回来改本文件）
+      - agent/ma9_agent/track_identity.py              # 加载界面两行 OCR + 父子漏斗 + 模糊匹配
+      - agent/tests/test_track_identity.py
+      - agent/ma9_agent/race_strategy.py               # 策略表加载 + progress 派发 + 过期与降级
+      - agent/tests/test_race_strategy.py
+      - assets/resource/pipeline/track_identity.json   # 全流程只放一个节点
+      - docs/zh_cn/develop/track_identity.md
+    reviewer:
+      model: terra
+      effort: high
+      mode: read_only
+      trigger: 提交前检查跳幅、not_after、不可读超时与兜底路径
+    owns_generated:
+      # 这 6 个文件合计 102.6 MB，只能运行 generate_commands 重新生成，不得读取或手改。
+      - assets/resource/pipeline/multiplayer_loop_3_黄金.json
+      - assets/resource/pipeline/multiplayer_loop_3_白金.json
+      - assets/resource/pipeline/multiplayer_loop_3_白银.json
+      - assets/resource/pipeline/multiplayer_loop_20_黄金.json
+      - assets/resource/pipeline/multiplayer_loop_20_白金.json
+      - assets/resource/pipeline/multiplayer_loop_20_白银.json
+    generate_commands:
+      - "{python} -X utf8 tools/prepare_dynamic_multiplayer_loop.py"
+    verify_generated:
+      - "{python} -X utf8 tools/check_dynamic_multiplayer_loop.py"
+      - "{python} -X utf8 tools/check_server_recovery.py"
+      - "{python} -X utf8 tools/validate_schema.py --schema-dir deps/tools --resource-dirs assets/resource --exclude-dirs assets/resource/announcement --interface-files assets/interface.json"
+    notes: >
+      全项目唯一真正吃窗口的席位：可读 JSON 合计 886 KB
+      （multiplayer_loop 356K + gold_rotation 437K + reverse_fallback 93K）。
+      1M 上下文 + 原生视觉是它的两项硬需求 —— 这正是换 DeepSeek 的理由。
+      若窗口仍吃紧，正确解法是按「主循环 / 轮换表 / 兜底表」再切一刀，而不是升档。
+
+      局内策略改为「不自研、只挂载」：第三方按赛道百分比分点的策略表以只读方式接入。
+      本席负责 赛道名识别 → 查表 → 喂 race_controller(progress=...) → 派发；
+      读不到赛道名或读不到百分比时，一律落回通用兜底（兜底是默认实现）。
+      详见 multi_agent_plan.md 第 5 节。
+
+      race_controller.py 的 progress_gte + once 已经是阈值触发语义，不要另起一套机制；
+      跳幅超限读数、迟到越过 not_after、持续不可读这三种情况分别按护栏处理。
+
+      加载界面节点放本席新建的 track_identity.json，
+      不要去动 vehicle 名下的 assets/resource/pipeline/race_screens.json。
+
+  # ------------------------------------------------- 擂台串行关键路径三步
+  - id: duel-scan
+    title: 擂台① 车库遍历
+    branch: lane/duel-scan
+    model: deepseek
+    effort: max
+    needs_device: true
+    depends_on: [contract]
+    owns:
+      - agent/ma9_agent/duel_vehicle_runtime.py
+      - agent/ma9_agent/duel_vehicle_screen.py
+      - assets/resource/pipeline/duel_slot_navigation.json
+      - assets/resource/pipeline/duel_runtime.json
+      - assets/resource/pipeline/duel_navigation.json
+      - agent/tests/test_duel_vehicle_runtime.py
+      - agent/tests/test_duel_vehicle_screen.py
+      - docs/zh_cn/develop/duel_offline_recognition.md
+    reviewer:
+      model: terra
+      effort: high
+      mode: read_only
+      trigger: 合入前独立检查模板证据、滚动车名、等级边界和快速定位兜底
+    notes: >
+      341 行，最近一次改动 +322/-39。它是 ②③ 的硬前置，不得降档。
+      213 张模板状态审计属于本席内部只读子任务，由 DeepSeek max 直接完成；最终由 Astra 裁决。
+      当前 D 级已实机完成五车配置；页码快速定位与缩短等待已落地但尚待用户复测总耗时。
+      R/S/A/B/C 等级边界目前只有离线测试证据。
+
+  - id: duel-defense
+    title: 擂台② 防守编排
+    branch: lane/duel-defense
+    model: deepseek
+    effort: high
+    needs_device: true
+    depends_on: [duel-scan]
+    owns:
+      - agent/ma9_agent/duel_defense_setup.py
+      - agent/ma9_agent/duel_map_screen.py
+      - assets/resource/pipeline/duel_defense.json
+      - agent/tests/test_duel_defense_setup.py
+      - docs/zh_cn/develop/duel_daily_model.md
+    notes: >
+      上层流程编排，硬依赖只有 duel_vehicle_runtime.CLASS_ORDER，
+      所以本席 worktree 在 duel-scan 合入 main 之后才能创建。
+      已知 D 级结果为 five_assigned、五车互斥且不会开始比赛；后续实机验证由用户执行。
+
+  - id: duel-attack
+    title: 擂台③ 进攻闭环
+    branch: lane/duel-attack
+    model: glm
+    effort: max
+    needs_device: true
+    depends_on: [duel-defense]
+    owns:
+      - agent/ma9_agent/duel_selection.py
+      - tools/import_duel_selection_data.py
+      - agent/tests/test_duel_selection.py
+      - docs/zh_cn/develop/duel_selection.md
+      - docs/zh_cn/develop/blueprint_safe_selection.md
+    external:
+      - E:/hzz/work/MutualExclusionAllocator    # plan_attack / _repair_descending_ratings 所在
+    reviewer:
+      model: terra
+      effort: high
+      mode: read_only
+      trigger: 合入前检查互斥、降级、DP 修复、确定性和失败路径
+    notes: >
+      全项目唯一的 frontier-hard 推理：plan_attack 是回溯 + Pareto 前沿 + 互斥，
+      _repair_descending_ratings 用 DP 恢复被 OCR 截掉的千位。
+      离线可跑、有测试兜底 —— 推理深度换来的质量能立刻被兑现，ultra 不浪费。
+      本席使用 GLM-5.3 max 且禁止降档；最终由 Astra 编排层复核并决定是否合入。
+
+# 禁改清单：由工具产出，任何 lane 都不得手改
+generated_artifacts:
+  - assets/interface.json
+  - assets/resource/pipeline/multiplayer_loop_3_黄金.json
+  - assets/resource/pipeline/multiplayer_loop_3_白金.json
+  - assets/resource/pipeline/multiplayer_loop_3_白银.json
+  - assets/resource/pipeline/multiplayer_loop_20_黄金.json
+  - assets/resource/pipeline/multiplayer_loop_20_白金.json
+  - assets/resource/pipeline/multiplayer_loop_20_白银.json
+  - data/generated/*.json
+
+# 外来只读输入：第三方提供的赛道策略原文及其本地规范化副本。
+# 原文禁止手改、禁止提交；规范化副本只能由转写适配器生成并通过 schema 校验，也不提交。
+# 缺原文、缺规范化副本或赛道名未命中时，一律落回通用兜底 —— 不报错、不阻断。
+foreign_readonly_inputs:
+  - id: third_party_track_strategy
+    availability: optional
+    path: null                    # 有来源后再记录实际本地路径；null 是合法状态，不是待办
+    accepted_source: 结构化数据、自由文本或人工转录文本
+    normalized_local_path: config/external/track_strategy.normalized.json
+    transcription_report_path: config/external/track_strategy.transcription.json
+    repository_policy: raw_and_normalized_are_local_only
+    missing_behavior: generic_fallback
+    ingestion: >
+      来源存在时先做可追溯转写/解析，保存来源标识与转写报告，再生成规范化副本并按
+      race_strategy_schema 校验；自由文本不得直接驱动 race_controller。来源不存在时
+      multiplayer 仍须用假表完成加载、派发、护栏与通用兜底测试，不得等待第三方资料。
+    shape: 大地图名 → 小地图名 → 按百分比升序的动作点列表
+    note: >
+      第三方表不带「过期上界」字段，由适配层补默认值。
+      换模型/换表后必须重跑护栏断言（见 contract_freeze_draft.md 第 6 节）。
