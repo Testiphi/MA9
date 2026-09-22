@@ -12,7 +12,7 @@
 #      完成定义校验用 owns ∪ owns_new ∪ owns_generated；owns_generated 只能由工具产出。
 
 version: 1
-contract_frozen_at: null          # 先提交契约得 A，再在后续元数据提交中填写 A；不能自引用当前提交
+contract_frozen_at: bd9a535336750d8fae3799f20d321498e21f5b00 # 契约实现提交 A；本元数据提交为 B
 device_serial: "127.0.0.1:16384"
 device_is_singleton: true
 
