@@ -128,7 +128,18 @@ def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
         for group in groups:
             if len(group) < 2:
                 continue
-            left = min(item["box"][0] for item in group) - 4
+            # A card is anchored on its identity block: the manufacturer and
+            # model lines are left-aligned at the card's left edge, and the
+            # rating badge and the click target share that edge. The last
+            # statistic of the column to the left sits at the same height as
+            # this row's model line, so a bare number can land inside the name
+            # band. Letting it drag the edge leftwards moves the badge ROI onto
+            # the neighbouring column's statistics. Only items carrying letters
+            # anchor the card, which is the same alphabetic evidence the
+            # manufacturer line already supplies for identification.
+            anchor = [item["box"][0] for item in group
+                      if re.search(r"[A-Za-z]", item["text"])]
+            left = min(anchor or [item["box"][0] for item in group]) - 4
             # The rightmost card can be clipped by a few pixels at 16:9 while
             # its name, rating, stars and click target remain fully visible.
             if left < 0 or left + CARD_WIDTH > 1295:
