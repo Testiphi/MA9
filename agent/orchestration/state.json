@@ -40,17 +40,17 @@
     },
     "duel-scan": {
       "project": "MA9-05-擂台车库遍历",
-      "phase": "fixing_select_button_and_redundant_ocr",
+      "phase": "awaiting_device_verification",
       "model": "gpt-5.6-terra",
       "effort": "high",
       "branch": "lane/duel-scan",
       "worktree": "E:/hzz/work/MA9-worktrees/duel-scan",
       "base_commit": "db596b412b0b150a2717d32b7906a4ca63033810",
-      "review": "terra_high_passed_no_blockers_at_3605c8e",
-      "device": "failed_20260922_224444_select_button_ocr",
+      "review": "terra_high_no_blockers_at_0850f33",
+      "device": "pending_select_button_retest",
       "merged": false,
-      "next": "Terra high 修固定按钮视觉识别、有界详情等待和安全OCR去重；总控用已有私有截图独立验证并评估车型图像辅助试点。",
-      "head": "3605c8e9b1581259055d464c87e36c07a1ffa7c2",
+      "next": "用户停止旧包任务，运行 user-test-select/MFAAvalonia.exe 的 D 级五车防守配置并回传终屏和耗时；总控读取新目录日志。未达到 five_assigned 前不合入业务代码或放行06/07。",
+      "head": "0850f33d4f3a127ed79ba7c62a0d25a6282a6845",
       "agent_task": "/root/ma9_05_duel_scan",
       "agent_status": "completed",
       "pilot_report": "agent/orchestration/duel_scan_pilot_report.md",
@@ -64,10 +64,10 @@
           "exit_code": 0
         }
       },
-      "local_verify": "verify_default_passed_at_3605c8e",
+      "local_verify": "agent_99_tools_12_plus_1_skip_passed_schema_reused_identical_inputs",
       "review_agent": "/root/ma9_r_stability_review",
       "stability_report": "agent/orchestration/duel_scan_stability_report.md",
-      "test_package": "E:/hzz/work/MA9-worktrees/duel-scan/build/user-test-recovery",
+      "test_package": "E:/hzz/work/MA9-worktrees/duel-scan/build/user-test-select",
       "device_evidence": "E:/hzz/work/MA9-evidence/20260922-224444-recovery-retest",
       "temporary_ownership": {
         "from": "duel-defense",
@@ -84,6 +84,29 @@
         "schema": "27_passed_exit_0",
         "reviewer_defense_passed": 17,
         "device": "pending"
+      },
+      "select_button_tests": {
+        "agent": 99,
+        "tools_passed": 12,
+        "tools_skipped": 1,
+        "native_button_checked_cases": 56,
+        "native_detail_cases": 3,
+        "schema": "reused_27_passes_at_3605c8e_34_inputs_unchanged",
+        "review_targeted": 18
+      },
+      "performance_evidence": {
+        "frames": 22,
+        "rating_retry_calls_before": 64,
+        "after": 62,
+        "ids_and_ratings_unchanged": true,
+        "end_to_end_speed": "not_measured"
+      },
+      "image_pilot": {
+        "vehicles": 5,
+        "held_out_known_correct": "6/6",
+        "unknown_rejected": "32/32",
+        "scope": "detail_thumbnail_only",
+        "production_integrated": false
       }
     },
     "duel-defense": {
@@ -100,10 +123,11 @@
   "evidence": {
     "previous_acceptance": "E:/hzz/work/MA9-orchestration-20260922/acceptance-01-02.md",
     "private_root": "E:/hzz/work/MA9-evidence",
-    "recovery_fix": "E:/hzz/work/MA9-evidence/recovery-fix"
+    "recovery_fix": "E:/hzz/work/MA9-evidence/recovery-fix",
+    "select_button_fix": "E:/hzz/work/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance.",
-  "next": "Terra high 修固定按钮视觉识别、有界详情等待和安全OCR去重；总控用已有私有截图独立验证并评估车型图像辅助试点。",
+  "next": "用户停止旧包任务，运行 user-test-select/MFAAvalonia.exe 的 D 级五车防守配置并回传终屏和耗时；总控读取新目录日志。未达到 five_assigned 前不合入业务代码或放行06/07。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -142,5 +166,10 @@
   "usage_snapshot_button_start": {
     "weekly_used_percent": 14,
     "reset_credits": 0
+  },
+  "usage_snapshot_button_end": {
+    "weekly_used_percent": 18,
+    "reset_credits": 0,
+    "note": "账号级14→18快照，不能精确归因某任务/模型"
   }
 }
