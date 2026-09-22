@@ -402,6 +402,9 @@ lanes:
       - agent/tests/test_duel_vehicle_runtime.py
       - agent/tests/test_duel_vehicle_screen.py
       - docs/zh_cn/develop/duel_offline_recognition.md
+      # 临时单一归属：20260922 账号恢复阻塞；05 验收后由总控归还 06。
+      - agent/ma9_agent/duel_defense_setup.py
+      - agent/tests/test_duel_defense_setup.py
     reviewer:
       model: terra
       effort: high
@@ -424,10 +427,8 @@ lanes:
     needs_device: true
     depends_on: [duel-scan]
     owns:
-      - agent/ma9_agent/duel_defense_setup.py
       - agent/ma9_agent/duel_map_screen.py
       - assets/resource/pipeline/duel_defense.json
-      - agent/tests/test_duel_defense_setup.py
       - docs/zh_cn/develop/duel_daily_model.md
     notes: >
       上层流程编排，硬依赖只有 duel_vehicle_runtime.CLASS_ORDER，
