@@ -104,3 +104,10 @@ owner 和总控各自重跑 Agent 99/99、tools 12 通过与 1 既有私有截�
 独立 Terra high reviewer /root/ma9_r_stability_review 无阻塞；定向 runtime 14/14、screen 4/4，通过。PyInstaller 构建 exit 0、164.3 MiB；包中三个关键模块的 PYZ 代码对象和当前源码编译结果相等。新包 user-test-select / v0.0.0-duel-select-0850f33，241 个受控资源 SHA256 一致，Agent 无 socket 启动取得预期 Usage/exit 1。TEST-BUILD.json 记录 schema 复用、测试与复核；旧包及其日志保持原样。
 
 状态：可交用户实机复测，尚未合入业务代码、未推送、未操作设备。用户仍在总控对话回传终屏和耗时，总控自行读新目录日志；不用补截图或外部模型。06/07 等待，04 暂停。全部本机验证证据位于 E:/hzz/work/MA9-evidence/select-button-fix。
+
+
+## 2026-09-22 23:17:46 新回传与 DeepSeek 交接
+
+运行日志 Working=E:/hzz/work/MA9/install，23:19:43 stopped：D-class ratings contradict the game's ordering；8页21辆、assigned为空、未开始比赛。地图识别已完成。install Agent SHA256=d78e6da428dd82d40e9db828fcae6e87679f36ff999fa4ca36d9fb12c35c4ea9，与0850f33测试包不同；user-test-select无debug目录，不能认定新包实机失败。证据：E:\hzz\work\MA9-evidence\20260922-231746-ordering-handoff。
+
+用户要求改回 DeepSeek 人工中转，停止 GPT 子智能体。下一任务先核对运行版本与排序错误，不取消排序/身份安全校验；若需修改07名下duel_selection.py须先返回总控登记边界。06/07仍不放行，04暂停。

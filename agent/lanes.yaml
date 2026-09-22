@@ -33,8 +33,8 @@ orchestration_policy:
   child_may_spawn_agents: false
   cross_lane_communication: through_orchestrator
   concurrency: >
-    默认只运行一个 owner，交付后再启动 reviewer；仅在任务完全独立且收益明确时，
-    增加一个 Luna 或外部辅助任务。实际槽位以运行环境为准，不要求填满。
+    默认只派一个 DeepSeek owner，经 WorkBuddy 用户中转；交付后有 reviewer 的席位
+    使用独立 DeepSeek 只读上下文。禁止自动启动 GPT 子智能体。
     needs_device=true 的实机验证始终串行，默认由用户执行。
   reviewer_semantics: >
     lane 出现 reviewer 时，owner 验收通过后必须进行只读复核。reviewer 不修代码，
@@ -70,8 +70,9 @@ budget_policy:
 support_roles:
   evidence:
     project: MA9-L-证据与机械辅助
-    model: luna
-    effort: medium
+    model: deepseek
+    effort: low
+    transport: workbuddy_user_relay
     mode: read_only_default
   external:
     project: MA9-E-外部资料整理
@@ -86,7 +87,7 @@ execution_transports:
     models: [astra, sol, terra, luna]
     mode: direct
     notes: >
-      GPT 模型由总控通过原生子智能体启动，写入 owner 使用独立 worktree。
+      当前禁用 GPT 子智能体自动启动；只有用户重新明确授权才启用。
       普通 lane 不得再派生；仅用户明确需要独立对话时才创建用户可见的新任务。
   workbuddy_user_relay:
     models: [deepseek, glm, kimi]
@@ -147,7 +148,7 @@ model_tiers:
   deepseek:
     product: DeepSeek V4.1 Flash
     efforts: [low, high, max]
-    note: 可选外部辅助；仅非阻塞、边界明确的资料整理，WorkBuddy 用户中转。
+    note: 当前业务 owner 与独立 reviewer 主力，WorkBuddy 用户中转；默认 high，辅助 low。
   glm:
     product: GLM-5.3
     efforts: [low, high, max]
@@ -218,7 +219,7 @@ lanes:
     scheduling: minimal_closeout_only
     title: 导航 · 国际化
     branch: lane/nav-i18n
-    model: luna
+    model: deepseek
     effort: high
     needs_device: true
     depends_on: [contract]
@@ -237,7 +238,7 @@ lanes:
       - docs/zh_cn/develop/home_multiplayer_navigation.md
       - docs/zh_cn/develop/language_switch.md
     notes: >
-      仅收尾已确认的小修复或擂台入口阻塞；共享判据变更和生成器诊断转 Terra high。
+      仅收尾已确认的小修复或擂台入口阻塞；共享判据变更和生成器诊断交总控裁决。
       未提交的 debug 验收脚本必须先登记新文件边界再迁移，禁止凭退出码 0 宣称断言通过。
 
   - id: build
@@ -245,8 +246,8 @@ lanes:
     scheduling: maintenance_on_demand
     title: 构建 · CI · 发布
     branch: lane/build-ci
-    model: terra
-    effort: medium
+    model: deepseek
+    effort: high
     needs_device: false
     depends_on: [contract]
     owns:
@@ -272,7 +273,7 @@ lanes:
     scheduling: duel_blocker_only
     title: 车辆识别 · 车型库
     branch: lane/vehicle-id
-    model: terra
+    model: deepseek
     effort: high
     needs_device: true
     depends_on: [contract]
@@ -342,7 +343,7 @@ lanes:
       - assets/resource/pipeline/track_identity.json   # 全流程只放一个节点
       - docs/zh_cn/develop/track_identity.md
     reviewer:
-      model: terra
+      model: deepseek
       effort: high
       mode: read_only
       trigger: 提交前检查跳幅、not_after、不可读超时与兜底路径
@@ -389,7 +390,7 @@ lanes:
     scheduling: first_priority
     title: 擂台① 车库遍历
     branch: lane/duel-scan
-    model: terra
+    model: deepseek
     effort: high
     needs_device: true
     depends_on: [contract]
@@ -408,14 +409,14 @@ lanes:
     owns_new:
       - assets/resource/image/navigation/duel/detail_select_text.png
     reviewer:
-      model: terra
+      model: deepseek
       effort: high
       mode: read_only
       trigger: 合入前独立检查模板证据、滚动车名、等级边界和快速定位兜底
     notes: >
-      用户批准 Terra high 成本平衡试点；它是 ②③ 的硬前置，保留独立 Terra high 复核。
+      用户改回 DeepSeek high 人工中转；它是 ②③ 的硬前置，保留独立只读复核。
       先用固定截图/现有测试核对剩余缺口，不重写已成功的 D 级流程。
-      具体难题两轮修复失败后交总控诊断，必要时切 Sol high，不默认 max。
+      具体难题两轮修复失败后交总控诊断，保存证据交总控，不自动升级 GPT 或 max。
       当前 D 级已实机完成五车配置；页码快速定位与缩短等待已落地但尚待用户复测总耗时。
       R/S/A/B/C 等级边界目前只有离线测试证据。
 
@@ -424,8 +425,8 @@ lanes:
     scheduling: after_dependency
     title: 擂台② 防守编排
     branch: lane/duel-defense
-    model: terra
-    effort: medium
+    model: deepseek
+    effort: high
     needs_device: true
     depends_on: [duel-scan]
     owns:
@@ -443,7 +444,7 @@ lanes:
     scheduling: after_defense_stable
     title: 擂台③ 进攻闭环
     branch: lane/duel-attack
-    model: sol
+    model: deepseek
     effort: high
     needs_device: true
     depends_on: [duel-defense]
@@ -458,14 +459,14 @@ lanes:
     external:
       - E:/hzz/work/MutualExclusionAllocator    # plan_attack / _repair_descending_ratings 所在
     reviewer:
-      model: terra
+      model: deepseek
       effort: high
       mode: read_only
       trigger: 合入前检查互斥、降级、DP 修复、确定性和失败路径
     notes: >
       全项目唯一的 frontier-hard 推理：plan_attack 是回溯 + Pareto 前沿 + 互斥，
       _repair_descending_ratings 用 DP 恢复被 OCR 截掉的千位。
-      用户批准按需 Sol high；只有具体算法瓶颈有证据时才考虑 max。
+      用户批准 DeepSeek high 人工中转；困难问题返回总控，不自动升级。
       防守管理稳定后启动；最终由 Astra 编排层复核并决定是否合入。
 
 # 禁改清单：由工具产出，任何 lane 都不得手改

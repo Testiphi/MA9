@@ -1,7 +1,7 @@
 {
   "version": 1,
   "updated_at": "2026-09-22",
-  "policy": "cost-balanced-duel-first-approved",
+  "policy": "deepseek-user-relay-approved",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
   "active_owner_limit": 1,
@@ -40,16 +40,16 @@
     },
     "duel-scan": {
       "project": "MA9-05-擂台车库遍历",
-      "phase": "awaiting_device_verification",
-      "model": "gpt-5.6-terra",
+      "phase": "external_diagnosis_handoff",
+      "model": "deepseek",
       "effort": "high",
       "branch": "lane/duel-scan",
       "worktree": "E:/hzz/work/MA9-worktrees/duel-scan",
       "base_commit": "db596b412b0b150a2717d32b7906a4ca63033810",
       "review": "terra_high_no_blockers_at_0850f33",
-      "device": "pending_select_button_retest",
+      "device": "failed_in_install_package_version_not_select_build",
       "merged": false,
-      "next": "用户停止旧包任务，运行 user-test-select/MFAAvalonia.exe 的 D 级五车防守配置并回传终屏和耗时；总控读取新目录日志。未达到 five_assigned 前不合入业务代码或放行06/07。",
+      "next": "DeepSeek核对运行包来源、排序矛盾；边界内修复，越界返回总控。",
       "head": "0850f33d4f3a127ed79ba7c62a0d25a6282a6845",
       "agent_task": "/root/ma9_05_duel_scan",
       "agent_status": "completed",
@@ -68,7 +68,7 @@
       "review_agent": "/root/ma9_r_stability_review",
       "stability_report": "agent/orchestration/duel_scan_stability_report.md",
       "test_package": "E:/hzz/work/MA9-worktrees/duel-scan/build/user-test-select",
-      "device_evidence": "E:/hzz/work/MA9-evidence/20260922-224444-recovery-retest",
+      "device_evidence": "E:\\hzz\\work\\MA9-evidence\\20260922-231746-ordering-handoff",
       "temporary_ownership": {
         "from": "duel-defense",
         "files": [
@@ -107,7 +107,8 @@
         "unknown_rejected": "32/32",
         "scope": "detail_thumbnail_only",
         "production_integrated": false
-      }
+      },
+      "transport": "workbuddy_user_relay"
     },
     "duel-defense": {
       "phase": "waiting_dependency",
@@ -127,7 +128,7 @@
     "select_button_fix": "E:/hzz/work/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance.",
-  "next": "用户停止旧包任务，运行 user-test-select/MFAAvalonia.exe 的 D 级五车防守配置并回传终屏和耗时；总控读取新目录日志。未达到 five_assigned 前不合入业务代码或放行06/07。",
+  "next": "DeepSeek核对运行包来源、排序矛盾；边界内修复，越界返回总控。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -136,18 +137,12 @@
   },
   "policy_validation": {
     "status": "passed",
+    "scope": "metadata only",
     "checks": [
       "YAML/JSON parse",
-      "model/effort consistency",
-      "paused multiplayer null model",
-      "unchanged frozen commit",
-      "unchanged lane dependencies and owns/owns_new/owns_generated",
-      "unchanged reviewer and verify_default",
-      "unchanged generated/foreign-input constraints",
-      "orchestrator-only changed files",
-      "git diff --check"
-    ],
-    "scope": "orchestration-only changes; no claim of business lane acceptance"
+      "unchanged ownership/dependencies/verify_default/contract",
+      "DeepSeek business seats; multiplayer paused"
+    ]
   },
   "usage_snapshot_end": {
     "weekly_used_percent": 10,
@@ -171,5 +166,6 @@
     "weekly_used_percent": 18,
     "reset_credits": 0,
     "note": "账号级14→18快照，不能精确归因某任务/模型"
-  }
+  },
+  "gpt_subagents_enabled": false
 }
