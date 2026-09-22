@@ -9,7 +9,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from ma9_agent.duel_vehicle_runtime import _try_target, scan
+from ma9_agent.duel_vehicle_runtime import _try_target, assign_visible, scan
 
 
 class _Job:
@@ -137,6 +137,131 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
         self.assertEqual(context.tasker.controller.swipes, 4)
         self.assertEqual(report["status"], "assigned")
         self.assertEqual(report["fast_forward_swipes"], 4)
+
+    def test_continuously_unstable_page_stops_without_scanning_or_swiping(self) -> None:
+        context = _Context()
+        unstable = (self.frame, [_card("untrusted")], False)
+        catalog = [{"id": "untrusted", "title": "untrusted", "class": "D"}]
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=self.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._sample_visible",
+                      return_value=unstable) as sample, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "D", catalog, max_pages=3)
+        self.assertEqual(report["status"], "page_ocr_unverified")
+        self.assertFalse(report["scan_complete"])
+        self.assertEqual(report["vehicles"], [])
+        self.assertEqual(context.tasker.controller.swipes, 0)
+        self.assertEqual(sample.call_count, 2)
+
+    def test_stable_resample_discards_prior_unstable_cards(self) -> None:
+        context = _Context()
+        unstable = (self.frame, [_card("untrusted")], False)
+        settled = (self.frame, [_card("trusted")], True)
+        catalog = [{"id": value, "title": value, "class": "D"}
+                   for value in ("untrusted", "trusted")]
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=self.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._sample_visible",
+                      side_effect=[unstable, settled, settled, settled]), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "D", catalog, max_pages=4)
+        self.assertEqual(report["status"], "edge_reached")
+        self.assertEqual([row["vehicle"]["id"] for row in report["vehicles"]], ["trusted"])
+        self.assertEqual(context.tasker.controller.swipes, 2)
+
+    def test_unstable_target_is_never_opened_before_a_stable_read(self) -> None:
+        context = _Context()
+        target = _card("target")
+        stable_other = (self.frame, [_card("other")], True)
+        catalog = [{"id": "target", "title": "target", "class": "D"},
+                   {"id": "other", "title": "other", "class": "D"}]
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=self.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._sample_visible",
+                      side_effect=[(self.frame, [target], False), stable_other,
+                                   stable_other, stable_other]), \
+                patch("ma9_agent.duel_vehicle_runtime._try_target") as try_target, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "D", catalog, target_id="target", choose=True, max_pages=4)
+        self.assertEqual(report["status"], "target_not_found")
+        self.assertTrue(report["scan_complete"])
+        self.assertEqual([row["vehicle"]["id"] for row in report["vehicles"]], ["other"])
+        try_target.assert_not_called()
+
+    def test_assign_visible_refuses_a_continuously_unstable_target(self) -> None:
+        context = _Context()
+        target = _card("target")
+        catalog = [{"id": "target", "title": "target", "class": "D"}]
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=self.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._sample_visible",
+                      side_effect=[(self.frame, [target], False)] * 2), \
+                patch("ma9_agent.duel_vehicle_runtime._try_target") as try_target, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = assign_visible(context, "target", catalog)
+        self.assertEqual(report["status"], "page_ocr_unverified")
+        self.assertFalse(report["scan_complete"])
+        try_target.assert_not_called()
+
+    def test_detail_retry_refuses_a_continuously_unstable_replacement(self) -> None:
+        context = _Context()
+        target = _card("target")
+        catalog = [{"id": "target", "title": "target", "class": "D"}]
+        with patch("ma9_agent.duel_vehicle_runtime._finish_target",
+                   return_value={"status": "wrong_detail"}) as finish, \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._sample_visible",
+                      side_effect=[(self.frame, [target], False)] * 2), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = _try_target(context, target, 1, [target], "target", catalog,
+                                 choose=True, expected_performance=2000,
+                                 expected_stars=None)
+        self.assertEqual(report["status"], "target_temporarily_unreadable")
+        self.assertEqual(report["target_attempts"], 1)
+        finish.assert_called_once()
+
+    def test_unstable_lower_class_page_cannot_finish_an_existing_scan(self) -> None:
+        context = _Context()
+        trusted = _card("trusted", "R")
+        lower = _card("lower", "S")
+        unstable_lower = (self.frame, [lower], False)
+        catalog = [{"id": "trusted", "title": "trusted", "class": "R"},
+                   {"id": "lower", "title": "lower", "class": "S"}]
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=self.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._sample_visible",
+                      side_effect=[(self.frame, [trusted], True),
+                                   unstable_lower, unstable_lower]), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "R", catalog, max_pages=3)
+        self.assertEqual(report["status"], "page_ocr_unverified")
+        self.assertFalse(report["scan_complete"])
+        self.assertEqual([row["vehicle"]["id"] for row in report["vehicles"]], ["trusted"])
+        self.assertEqual(context.tasker.controller.swipes, 1)
+
+    def test_real_sampler_rejects_four_distinct_animated_fingerprints(self) -> None:
+        context = _Context()
+        cards = [_card(f"car{index}") for index in range(8)]
+        catalog = [{"id": card["vehicle"]["id"], "title": card["vehicle"]["id"], "class": "D"}
+                   for card in cards]
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=self.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._frame", return_value=self.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=[[card] for card in cards]), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "D", catalog, max_pages=3)
+        self.assertEqual(report["status"], "page_ocr_unverified")
+        self.assertFalse(report["scan_complete"])
+        self.assertEqual(report["vehicles"], [])
+        self.assertEqual(context.tasker.controller.swipes, 0)
 
 
 if __name__ == "__main__":

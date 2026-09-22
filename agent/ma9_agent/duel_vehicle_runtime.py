@@ -88,6 +88,20 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
     return frame, cards, bool(fingerprint and fingerprint in repeated)
 
 
+def _stable_sample_visible(context: Any, catalog: list[dict[str, Any]], *,
+                           attempts: int = 4, interval: float = .18,
+                           target_id: str | None = None,
+                           ) -> tuple[np.ndarray | None, list[dict[str, Any]], bool]:
+    """Give an animated page one extra complete sampling window before use."""
+    frame, cards, stable = _sample_visible(
+        context, catalog, attempts=attempts, interval=interval, target_id=target_id)
+    if frame is None or stable:
+        return frame, cards, stable
+    time.sleep(interval)
+    return _sample_visible(
+        context, catalog, attempts=attempts, interval=interval, target_id=target_id)
+
+
 def _gray_list(frame: np.ndarray) -> np.ndarray:
     return cv2.resize(cv2.cvtColor(frame[170:610], cv2.COLOR_BGR2GRAY), (160, 55))
 
@@ -210,10 +224,13 @@ def _try_target(context: Any, card: dict[str, Any], page: int,
         if not _click(context, 32, 25):
             return last
         time.sleep(.65)
-        frame, cards, _stable = _sample_visible(
+        frame, cards, stable = _stable_sample_visible(
             context, catalog, attempts=3, target_id=target_id)
         if frame is None:
             return _result("selection_lost", page, vehicles,
+                           target_attempts=attempt + 1)
+        if not stable:
+            return _result("target_temporarily_unreadable", page, vehicles,
                            target_attempts=attempt + 1)
         replacement = next(
             (row for row in cards if row["vehicle"]["id"] == target_id), None)
@@ -232,10 +249,12 @@ def assign_visible(context: Any, target_id: str, catalog: list[dict[str, Any]], 
     frame = _wait_selection_frame(context)
     if frame is None:
         return _result("not_duel_selection", 0, [])
-    sampled_frame, cards, _stable = _sample_visible(
+    sampled_frame, cards, stable = _stable_sample_visible(
         context, catalog, attempts=3, target_id=target_id)
     if sampled_frame is None:
         return _result("not_duel_selection", 0, [])
+    if not stable:
+        return _result("page_ocr_unverified", 0, [])
     card = next((row for row in cards if row["vehicle"]["id"] == target_id), None)
     if card is None:
         return _result("target_not_visible", 0, cards)
@@ -288,10 +307,13 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
     class_index = CLASS_ORDER.index(vehicle_class)
     lower_classes = set(CLASS_ORDER[class_index + 1:])
     for page in range(fast_forward + 1, max_pages + 1):
-        frame, cards, stable = _sample_visible(
+        frame, cards, stable = _stable_sample_visible(
             context, catalog, target_id=target_id)
         if frame is None:
             return _result("selection_lost", page - 1, list(found.values()))
+        if not stable:
+            return _result("page_ocr_unverified", page, list(found.values()),
+                           unstable_samples=2)
         if not cards:
             return _result("page_ocr_unverified", page, list(found.values()))
         target_cards = [row for row in cards if row["class"] == vehicle_class]
