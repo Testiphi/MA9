@@ -405,6 +405,8 @@ lanes:
       # 临时单一归属：20260922 账号恢复阻塞；05 验收后由总控归还 06。
       - agent/ma9_agent/duel_defense_setup.py
       - agent/tests/test_duel_defense_setup.py
+    owns_new:
+      - assets/resource/image/navigation/duel/detail_select_text.png
     reviewer:
       model: terra
       effort: high
