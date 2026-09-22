@@ -20,9 +20,10 @@
    标出的两处待决瑕疵；再冻结第 6 节的「赛道策略表」接缝（schema + 断言）。
    为 runtime_action.py 与 assets/interface.json 指定单 owner。
    契约必须以「签名 + 断言 + schema」表达，不要写成散文。
-2. 把这三份文档与契约一起提交到 main，并在 lanes.yaml 的 contract_frozen_at 填该 commit sha。
-   （worktree 只从 commit 派生 —— 没提交的东西，任何 lane 都看不到。）
-3. 按 lanes.yaml 建 worktree，一次只放行「依赖已满足且设备空闲」的 lane。
+2. 使用两次提交完成冻结：先把契约实现、断言与 schema 提交到 main，得到提交 A；
+   再把 lanes.yaml 的 contract_frozen_at 填为 A，并单独提交元数据提交 B。
+   不能在 A 中填写 A 自身的 SHA，因为字段变化会改变提交 SHA。
+3. 从 B 或其后提交按 lanes.yaml 建 worktree，一次只放行「依赖已满足且设备空闲」的 lane。
 4. 每个 lane 的提示词按本文件第 9 节的模板写，不要自己发挥。
    提示词里必须写明该席的 owns、owns_new 与 owns_generated —— 少了边界，lane 会越界改别人的文件。
    GPT 席位通过 Codex 直接启动；DeepSeek、GLM、Kimi 席位由编排层生成完整提示词，
@@ -38,7 +39,7 @@
   读不到赛道名或读不到百分比时一律落回通用兜底。要改这个前提，先回来改本文件。
 - 跳幅超限的读数（真实 40 误读成 91）必须丢弃该帧，不得接受；
   阈值迟到越过 not_after 时必须跳过而不是补发。这两条是灾难级失败的唯一防线。
-- assets/interface.json 与 multiplayer_loop_*.json 等生成物，禁止手改；
+- `assets/interface.json` 是 contract 单一 owner 管理的手写源配置；多人循环 JSON 等受控生成物禁止手改；
   第三方策略表属外来只读输入，禁止手改、禁止提交进本仓库。
 - ADB 是单例（127.0.0.1:16384）。needs_device 为 true 的 lane 验证请求必须串行；只有用户明确要求智能体实机操作时才发设备令牌。
 - 为节省额度，**实机验证默认由用户执行**。lane 负责产出安装包、最短复现步骤和要回传的日志；
@@ -116,7 +117,8 @@ Astra 必须查看本地实际改动并重跑验证；第三方模型声称“�
 
 1. **5 个契约模块的公开签名与不变式**（草稿已给）
 2. **pipeline 节点命名规范**：`<领域>_<动作>` 中文命名，如 `对决_防守自动配置入口`；新增节点不得与既有 22 个历史失败节点重名
-3. **`assets/interface.json` 的 49 个任务注册表**：任务名是 GUI 与用户之间的契约，改名等于破坏用户习惯
+3. **`assets/interface.json` 的 49 个任务注册表**：它是手写源配置，由 contract 单一 owner 管理；
+   任务名是 GUI 与用户之间的契约，改名等于破坏用户习惯
 4. **验收标准**：即 CI 的 `check.yml`（`npm run check` + `unittest discover` + `validate_schema.py`）
 
 ## 4. 依赖顺序（不许颠倒）
@@ -233,10 +235,13 @@ Actions 的失败原因必须从对应 run 日志判断。不要为了绕过该�
 
 ## 7. 生成物禁令
 
-以下文件**只能由工具产出，禁止手改**（完整清单见 `lanes.yaml` 的 `generated_artifacts`）：
+以下文件**只能由工具产出，禁止手改**（完整清单见 `lanes.yaml` 的 `generated_artifacts`）。
+`assets/interface.json` 不在此列：它是手写源配置，只是修改权归 contract：
 
-- `assets/interface.json`
+- `assets/resource/pipeline/multiplayer_loop.json`、`reverse_fallback.json`、`vehicle_recognition.json`
 - `assets/resource/pipeline/multiplayer_loop_{3,20}_{黄金,白金,白银}.json`（6 个，合计 102.6 MB）
+- `assets/resource/image/navigation/loop/player_{黄金,白金,白银}.png`
+- `captures/reverse_fallback_check.json`
 - `data/generated/*.json`
 
 六个大型多人 JSON 归 `multiplayer` lane。权威入口只有：
@@ -245,9 +250,16 @@ Actions 的失败原因必须从对应 run 日志判断。不要为了绕过该�
 {python} -X utf8 tools/prepare_dynamic_multiplayer_loop.py
 ```
 
-该入口调用 `prepare_reverse_fallback.py` 与 `prepare_multiplayer_loop.py`，再按段位和轮次拆成六个文件。
-生成器及 `multiplayer_loop_files.py` 可由该 lane 修改；六个输出只列在 `owns_generated`，模型不得打开、读取或手改。
+该入口调用 `prepare_reverse_fallback.py` 与 `prepare_multiplayer_loop.py`，再调用 `prepare_vehicle_recognition.py`，
+同时更新主循环、六个分片、兜底表、车型识别表、三个段位徽章、检查报告和 manifest。
+这些生成器及 `multiplayer_loop_files.py` 可由该 lane 修改；全部输出只列在 `owns_generated`，模型不得手改，
+其中六个大型分片不得打开或读入模型上下文。
 生成后必须运行 `lanes.yaml` 的 `verify_generated`，并由 CI 完成最终校验。
+
+`generated_artifacts` 是全局禁改清单，并不表示每个文件当前都允许某条 lane 重新生成。
+只有同时出现在某条 lane 的 `owns_generated` 中的精确路径才有生成 owner；其余 `data/generated/*`
+默认保持只读。后续任务若确实需要重建其中某项，编排层必须先把生成器和精确输出路径登记到同一 lane，
+再派活，不能用通配符临时放宽边界。
 
 ## 7.1 外来只读输入
 
@@ -339,3 +351,4 @@ Python：将下文的 {python} 替换为编排层已验证的绝对路径；所�
 | 2026-09-21 | 新增 §5 赛道识别与策略挂载；§7.1 外来只读输入；完成定义改为 `owns ∪ owns_new`；启动指令同步更新（§0） | 用户确认局内策略改为「只挂载、不自研」：第三方按赛道百分比分点的数据表 + 局前加载界面两级识别（大地图 → 小地图）。原 §5 之后的章节顺延一位 |
 | 2026-09-21 | 编排层改为 GPT-6 Astra medium，关键阶段升 high；子任务改为 DeepSeek 优先，`duel-attack` 使用 GLM-5.3 max，并加入 Terra 独立复核、单一编排者、用户实机验证和备用模型规则；完成边界补入 `owns_generated` | 将交接文件改为无历史上下文也能直接执行的模型分工，并消除合法生成物无法通过边界验收的矛盾 |
 | 2026-09-21 | 增加 Codex/WorkBuddy 人工中转规则、统一 `{python}` 解析、明确多人 JSON 的生成器归属，并把第三方策略改为可缺省的转写输入 | 适配实际模型启动渠道，消除 worktree 解释器漂移与生成物 owner 空缺，同时允许外部策略长期缺失或以自由文本到达 |
+| 2026-09-22 | 冻结流程改为 A/B 两次提交；补齐 contract 测试边界与多人总生成器的全部输出；将 `assets/interface.json` 更正为手写源配置 | 最终交接审计发现提交 SHA 不能自引用，且总生成器实际写入范围大于六个分片；修正后边界可机械验收 |

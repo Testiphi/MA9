@@ -4,14 +4,15 @@
 # 契约签名草稿：docs/zh_cn/develop/contract_freeze_draft.md（赛道策略表接缝见第 6 节）
 #
 # 开工前先确认四件事：
-#   1. contract_frozen_at 非空 —— 契约已提交到 main，否则新建的 worktree 看不到任何东西
+#   1. contract_frozen_at 非空 —— 它指向契约实现提交 A；填写该值的元数据提交 B 也已进入 main。
+#      所有 worktree 从 B 或其后提交创建，否则看不到冻结状态。
 #   2. 所有 lane 都可以「读取」契约层那 5 个模块，但只有 contract lane 可以「修改」
 #   3. needs_device 为 true 的 lane 共用同一个 ADB 串口，必须串行执行
 #   4. owns 只列「已经存在」的文件；本席将要新建的文件一律列在 owns_new。
 #      完成定义校验用 owns ∪ owns_new ∪ owns_generated；owns_generated 只能由工具产出。
 
 version: 1
-contract_frozen_at: null          # 编排层冻结契约并提交后，在此填写 commit sha
+contract_frozen_at: null          # 先提交契约得 A，再在后续元数据提交中填写 A；不能自引用当前提交
 device_serial: "127.0.0.1:16384"
 device_is_singleton: true
 
@@ -143,13 +144,13 @@ lanes:
       - agent/ma9_agent/selection_runtime.py
       - agent/ma9_agent/__init__.py
       - agent/runtime_action.py
+      - assets/interface.json
       - agent/tests/test_runtime_root.py
+      - agent/tests/test_vehicle_screen.py
       - agent/tests/test_selection_runtime_search.py
       - agent/tests/test_garage_profile.py
       - agent/tests/test_selection_strategy.py
-    owns_generated:
-      # 生成物：本席负责「重新生成」，任何情况下不得手改
-      - assets/interface.json
+    owns_generated: []
     owns_new:
       # 本席新建（名字是建议名，调整后回来改本文件）
       - agent/ma9_agent/race_strategy_schema.py     # 赛道策略表的 schema 常量 + 校验函数
@@ -204,7 +205,6 @@ lanes:
       - tools/build_selection_gui.py
       - tools/build_windows_package.ps1
       - tools/configure.py
-      - tools/approve_champion_rotation.py
       - docs/zh_cn/develop/how_to_develop.md
     verify_extra:
       - npm ci
@@ -225,7 +225,6 @@ lanes:
     owns:
       - agent/ma9_agent/vehicle_recognizer.py
       - agent/ma9_agent/vehicle_location_test.py
-      - assets/resource/pipeline/vehicle_recognition.json
       - assets/resource/pipeline/vehicle_controls.json
       - assets/resource/pipeline/j50_search.json
       - assets/resource/pipeline/race_screens.json
@@ -259,13 +258,12 @@ lanes:
       - agent/ma9_agent/vehicle_selector.py
       - agent/ma9_agent/runtime_config.py
       - agent/ma9_agent/selection_editor.py
-      - assets/resource/pipeline/multiplayer_loop.json
       - assets/resource/pipeline/gold_rotation.json
-      - assets/resource/pipeline/reverse_fallback.json
       - assets/resource/pipeline/two_car_rotation.json
       - tools/prepare_dynamic_multiplayer_loop.py
       - tools/prepare_multiplayer_loop.py
       - tools/prepare_reverse_fallback.py
+      - tools/prepare_vehicle_recognition.py
       - tools/multiplayer_loop_files.py
       - tools/check_dynamic_multiplayer_loop.py
       - agent/tests/test_runtime_core.py
@@ -293,13 +291,21 @@ lanes:
       mode: read_only
       trigger: 提交前检查跳幅、not_after、不可读超时与兜底路径
     owns_generated:
-      # 这 6 个文件合计 102.6 MB，只能运行 generate_commands 重新生成，不得读取或手改。
+      # 以下文件由总生成器一次性改写，只能运行 generate_commands 重新生成，不得手改。
+      - assets/resource/pipeline/multiplayer_loop.json
       - assets/resource/pipeline/multiplayer_loop_3_黄金.json
       - assets/resource/pipeline/multiplayer_loop_3_白金.json
       - assets/resource/pipeline/multiplayer_loop_3_白银.json
       - assets/resource/pipeline/multiplayer_loop_20_黄金.json
       - assets/resource/pipeline/multiplayer_loop_20_白金.json
       - assets/resource/pipeline/multiplayer_loop_20_白银.json
+      - assets/resource/pipeline/reverse_fallback.json
+      - assets/resource/pipeline/vehicle_recognition.json
+      - assets/resource/image/navigation/loop/player_黄金.png
+      - assets/resource/image/navigation/loop/player_白金.png
+      - assets/resource/image/navigation/loop/player_白银.png
+      - captures/reverse_fallback_check.json
+      - data/generated/multiplayer_loop_manifest.json
     generate_commands:
       - "{python} -X utf8 tools/prepare_dynamic_multiplayer_loop.py"
     verify_generated:
@@ -382,6 +388,8 @@ lanes:
       - agent/tests/test_duel_selection.py
       - docs/zh_cn/develop/duel_selection.md
       - docs/zh_cn/develop/blueprint_safe_selection.md
+    owns_generated:
+      - data/generated/duel_auto_candidates.json
     external:
       - E:/hzz/work/MutualExclusionAllocator    # plan_attack / _repair_descending_ratings 所在
     reviewer:
@@ -397,13 +405,19 @@ lanes:
 
 # 禁改清单：由工具产出，任何 lane 都不得手改
 generated_artifacts:
-  - assets/interface.json
+  - assets/resource/pipeline/multiplayer_loop.json
   - assets/resource/pipeline/multiplayer_loop_3_黄金.json
   - assets/resource/pipeline/multiplayer_loop_3_白金.json
   - assets/resource/pipeline/multiplayer_loop_3_白银.json
   - assets/resource/pipeline/multiplayer_loop_20_黄金.json
   - assets/resource/pipeline/multiplayer_loop_20_白金.json
   - assets/resource/pipeline/multiplayer_loop_20_白银.json
+  - assets/resource/pipeline/reverse_fallback.json
+  - assets/resource/pipeline/vehicle_recognition.json
+  - assets/resource/image/navigation/loop/player_黄金.png
+  - assets/resource/image/navigation/loop/player_白金.png
+  - assets/resource/image/navigation/loop/player_白银.png
+  - captures/reverse_fallback_check.json
   - data/generated/*.json
 
 # 外来只读输入：第三方提供的赛道策略原文及其本地规范化副本。

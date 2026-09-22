@@ -277,5 +277,7 @@ from ma9_agent.selection_runtime import _frame, _ocr
 
 新建的两个文件属于 `contract` 一席，已登记在 `lanes.yaml` 的 `owns_new`。
 
-冻结提交时请把这三份文档（`multi_agent_plan.md`、`lanes.yaml`、本文件）一起带上 —— worktree 只从 commit 派生。
+冻结采用两次提交：先提交契约实现、断言与 schema 得到提交 A；再把 `lanes.yaml` 的
+`contract_frozen_at` 填为 A，并提交元数据提交 B。所有 worktree 从 B 或其后提交派生。
+不能在 A 中填写 A 自身 SHA；修改该字段会改变提交 SHA。
 第 6 节的 `schema` 与断言同样属于冻结范围：**漏掉它，`multiplayer` 就没法开工。**
