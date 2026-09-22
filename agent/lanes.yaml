@@ -11,7 +11,7 @@
 #   4. owns 只列「已经存在」的文件；本席将要新建的文件一律列在 owns_new。
 #      完成定义校验用 owns ∪ owns_new ∪ owns_generated；owns_generated 只能由工具产出。
 
-version: 1
+version: 2
 contract_frozen_at: bd9a535336750d8fae3799f20d321498e21f5b00 # 契约实现提交 A；本元数据提交为 B
 device_serial: "127.0.0.1:16384"
 device_is_singleton: true
@@ -33,18 +33,59 @@ orchestration_policy:
   child_may_spawn_agents: false
   cross_lane_communication: through_orchestrator
   concurrency: >
-    使用运行环境实时提供的子智能体槽位；不要假设四条可并行 lane 一定能同时运行。
-    needs_device=true 的 lane 无论槽位多少都必须串行持有 ADB 令牌。
+    默认只运行一个 owner，交付后再启动 reviewer；仅在任务完全独立且收益明确时，
+    增加一个 Luna 或外部辅助任务。实际槽位以运行环境为准，不要求填满。
+    needs_device=true 的实机验证始终串行，默认由用户执行。
   reviewer_semantics: >
     lane 出现 reviewer 时，owner 验收通过后必须进行只读复核。reviewer 不修代码，
     只提交问题清单；最终修复派回 owner，是否合入由 Astra 编排层裁决。
 
+# 编排文件只有总控可写，不属于普通 lane 的隐式边界。
+orchestration_files:
+  owner: orchestrator
+  owns:
+    - agent/lanes.yaml
+    - docs/zh_cn/develop/multi_agent_plan.md
+  owns_new:
+    - agent/orchestration/state.json
+    - agent/orchestration/README.md
+    - agent/orchestration/duel_scan_pilot.md
+  local_evidence_root: E:/hzz/work/MA9-evidence
+
+budget_policy:
+  approved_at: '2026-09-22'
+  priority: [duel-scan, duel-defense, duel-attack]
+  default_active_owners: 1
+  weekly_reserve_percent: 20
+  max_targeted_fix_rounds: 2
+  allow_automatic_purchase: false
+  allow_automatic_reset: false
+  notes: >
+    所有 GPT 席位共用账号额度。每阶段开始/结束读取快照，差值不能精确归因到本项目。
+    接近预留线先报告并缩小计划，不启动新的重任务；不主动启用加价加速。
+    优先脚本、针对性检查和最小上下文；交付仍执行完整 verify_default，不能以节省额度为由省验收。
+
+support_roles:
+  evidence:
+    project: MA9-L-证据与机械辅助
+    model: luna
+    effort: medium
+    mode: read_only_default
+  external:
+    project: MA9-E-外部资料整理
+    model: deepseek
+    effort: low
+    transport: workbuddy_user_relay
+    mode: read_only
+    notes: 仅独立、非阻塞的截图索引/脱敏日志分类/操作卡整理；使用用户已有额度，结果本地复核。
+
 execution_transports:
   codex_direct:
-    models: [astra, terra, luna]
+    models: [astra, sol, terra, luna]
     mode: direct
     notes: >
-      GPT 模型由 Codex 启动，编排层可直接创建任务、读取结果并做只读复核。
+      GPT 模型由总控通过原生子智能体启动，写入 owner 使用独立 worktree。
+      普通 lane 不得再派生；仅用户明确需要独立对话时才创建用户可见的新任务。
   workbuddy_user_relay:
     models: [deepseek, glm, kimi]
     mode: user_relay
@@ -104,15 +145,23 @@ model_tiers:
   deepseek:
     product: DeepSeek V4.1 Flash
     efforts: [low, high, max]
-    note: 子任务首选；1M 上下文、原生视觉。简单任务 low，日常 Agent high，复杂任务 max。
+    note: 可选外部辅助；仅非阻塞、边界明确的资料整理，WorkBuddy 用户中转。
   glm:
     product: GLM-5.3
     efforts: [low, high, max]
-    note: 只用于最难的纯代码与算法推理；当前固定给 duel-attack max。
+    note: 外部备用，不默认分配业务 lane。
   terra:
     product: GPT-5.6 Terra
-    efforts: [high]
-    note: 关键路径的独立只读复核，以及 DeepSeek max 连续失败后的故障复核；不直接取代 owner。
+    efforts: [medium, high]
+    note: 常规实现主力；独立 reviewer 固定 high，必须使用与 owner 分离的上下文。
+  sol:
+    product: GPT-5.6 Sol
+    efforts: [high, max]
+    note: 进攻算法与有证据的疑难修复；默认 high，不常驻 max。
+  luna:
+    product: GPT-5.6 Luna
+    efforts: [low, medium, high]
+    note: 可机械验收的小修复和辅助；共享判据与复杂生成器诊断转 Terra high。
 
 reserve_models:
   minimax:
@@ -121,9 +170,6 @@ reserve_models:
   kimi:
     product: Kimi-K3
     use_when: 仅用于边界明确的只读研究；不得直接修改仓库。
-  luna:
-    product: GPT-5.6 Luna
-    use_when: 仅用于可机械验收、范围极窄的批量任务；首轮不设固定 lane。
 
 lanes:
 
@@ -166,9 +212,11 @@ lanes:
 
   # ------------------------------------------------- 可即刻并行的四条 lane
   - id: nav
+    project: MA9-01-导航与语言验证
+    scheduling: minimal_closeout_only
     title: 导航 · 国际化
     branch: lane/nav-i18n
-    model: deepseek
+    model: luna
     effort: high
     needs_device: true
     depends_on: [contract]
@@ -187,14 +235,16 @@ lanes:
       - docs/zh_cn/develop/home_multiplayer_navigation.md
       - docs/zh_cn/develop/language_switch.md
     notes: >
-      试点 lane。换模型先在这里验证：跑 3 个真实任务，对比通过率、返工次数、成本，
-      通过后再推广到其余 DeepSeek 席位。最模式化，失败被隔离在单个任务内。
+      仅收尾已确认的小修复或擂台入口阻塞；共享判据变更和生成器诊断转 Terra high。
+      未提交的 debug 验收脚本必须先登记新文件边界再迁移，禁止凭退出码 0 宣称断言通过。
 
   - id: build
+    project: MA9-02-CI验收链补齐
+    scheduling: maintenance_on_demand
     title: 构建 · CI · 发布
     branch: lane/build-ci
-    model: deepseek
-    effort: high
+    model: terra
+    effort: medium
     needs_device: false
     depends_on: [contract]
     owns:
@@ -216,10 +266,12 @@ lanes:
       风险在长工具链可靠性而非判断力，且出错在 30 秒内必然暴露，是最安全的投产席位。
 
   - id: vehicle
+    project: MA9-03-车辆识别与车型库
+    scheduling: duel_blocker_only
     title: 车辆识别 · 车型库
     branch: lane/vehicle-id
-    model: deepseek
-    effort: max
+    model: terra
+    effort: high
     needs_device: true
     depends_on: [contract]
     owns:
@@ -243,14 +295,16 @@ lanes:
       - docs/zh_cn/develop/vehicle_controls.md
       - docs/zh_cn/develop/vehicle_location_test.md
     notes: >
-      需求是「视觉 + 大文本」，正好命中 DeepSeek 的两项能力，是收益最高的一换。
+      暂缓全面扩建车型库，只处理有证据的擂台识别阻塞。
       注意 vehicle_screen.py 属契约层：可读可测，不可改。
 
   - id: multiplayer
+    project: MA9-04-多人循环与赛道策略
+    scheduling: paused_placeholder
     title: 多人经典循环 · 赛道识别与策略挂载
     branch: lane/multiplayer
-    model: deepseek
-    effort: max
+    model: null
+    effort: null
     needs_device: true
     depends_on: [contract]
     owns:
@@ -313,10 +367,8 @@ lanes:
       - "{python} -X utf8 tools/check_server_recovery.py"
       - "{python} -X utf8 tools/validate_schema.py --schema-dir deps/tools --resource-dirs assets/resource --exclude-dirs assets/resource/announcement --interface-files assets/interface.json"
     notes: >
-      全项目唯一真正吃窗口的席位：可读 JSON 合计 886 KB
-      （multiplayer_loop 356K + gold_rotation 437K + reverse_fallback 93K）。
-      1M 上下文 + 原生视觉是它的两项硬需求 —— 这正是换 DeepSeek 的理由。
-      若窗口仍吃紧，正确解法是按「主循环 / 轮换表 / 兜底表」再切一刀，而不是升档。
+      用户明确暂停，仅保留原边界与契约，不创建 worktree、不派活、不做策略研究。
+      恢复时由总控重新登记模型与档位；六个大型分片仍不允许读入模型上下文。
 
       局内策略改为「不自研、只挂载」：第三方按赛道百分比分点的策略表以只读方式接入。
       本席负责 赛道名识别 → 查表 → 喂 race_controller(progress=...) → 派发；
@@ -331,10 +383,12 @@ lanes:
 
   # ------------------------------------------------- 擂台串行关键路径三步
   - id: duel-scan
+    project: MA9-05-擂台车库遍历
+    scheduling: first_priority
     title: 擂台① 车库遍历
     branch: lane/duel-scan
-    model: deepseek
-    effort: max
+    model: terra
+    effort: high
     needs_device: true
     depends_on: [contract]
     owns:
@@ -352,16 +406,19 @@ lanes:
       mode: read_only
       trigger: 合入前独立检查模板证据、滚动车名、等级边界和快速定位兜底
     notes: >
-      341 行，最近一次改动 +322/-39。它是 ②③ 的硬前置，不得降档。
-      213 张模板状态审计属于本席内部只读子任务，由 DeepSeek max 直接完成；最终由 Astra 裁决。
+      用户批准 Terra high 成本平衡试点；它是 ②③ 的硬前置，保留独立 Terra high 复核。
+      先用固定截图/现有测试核对剩余缺口，不重写已成功的 D 级流程。
+      具体难题两轮修复失败后交总控诊断，必要时切 Sol high，不默认 max。
       当前 D 级已实机完成五车配置；页码快速定位与缩短等待已落地但尚待用户复测总耗时。
       R/S/A/B/C 等级边界目前只有离线测试证据。
 
   - id: duel-defense
+    project: MA9-06-擂台防守编排
+    scheduling: after_dependency
     title: 擂台② 防守编排
     branch: lane/duel-defense
-    model: deepseek
-    effort: high
+    model: terra
+    effort: medium
     needs_device: true
     depends_on: [duel-scan]
     owns:
@@ -374,12 +431,15 @@ lanes:
       上层流程编排，硬依赖只有 duel_vehicle_runtime.CLASS_ORDER，
       所以本席 worktree 在 duel-scan 合入 main 之后才能创建。
       已知 D 级结果为 five_assigned、五车互斥且不会开始比赛；后续实机验证由用户执行。
+      互斥或等级降级出现复杂问题时升 high。
 
   - id: duel-attack
+    project: MA9-07-擂台进攻闭环
+    scheduling: after_defense_stable
     title: 擂台③ 进攻闭环
     branch: lane/duel-attack
-    model: glm
-    effort: max
+    model: sol
+    effort: high
     needs_device: true
     depends_on: [duel-defense]
     owns:
@@ -400,8 +460,8 @@ lanes:
     notes: >
       全项目唯一的 frontier-hard 推理：plan_attack 是回溯 + Pareto 前沿 + 互斥，
       _repair_descending_ratings 用 DP 恢复被 OCR 截掉的千位。
-      离线可跑、有测试兜底 —— 推理深度换来的质量能立刻被兑现，ultra 不浪费。
-      本席使用 GLM-5.3 max 且禁止降档；最终由 Astra 编排层复核并决定是否合入。
+      用户批准按需 Sol high；只有具体算法瓶颈有证据时才考虑 max。
+      防守管理稳定后启动；最终由 Astra 编排层复核并决定是否合入。
 
 # 禁改清单：由工具产出，任何 lane 都不得手改
 generated_artifacts:

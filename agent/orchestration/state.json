@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "updated_at": "2026-09-22",
+  "policy": "cost-balanced-duel-first-approved",
+  "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
+  "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
+  "active_owner_limit": 1,
+  "device_operator": "user",
+  "device_authorized": false,
+  "lanes": {
+    "nav": {
+      "project": "MA9-01-导航与语言验证",
+      "head": "891d68efc9d33d08cb4799855414579900b5648d",
+      "worktree": "E:/hzz/work/MA9-worktrees/nav-i18n",
+      "phase": "closeout_pending",
+      "local_verify": "passed_at_recorded_head",
+      "review": "orchestrator_reviewed_with_findings",
+      "device": "pending",
+      "merged": false,
+      "next": "登记并迁移 debug 验收脚本，修复错误不返回失败；仅收尾或擂台阻塞触发"
+    },
+    "build": {
+      "project": "MA9-02-CI验收链补齐",
+      "head": "03c6d9751f8b5f31865501d1954b2486568afd76",
+      "worktree": "E:/hzz/work/MA9-worktrees/build-ci",
+      "phase": "local_accepted",
+      "local_verify": "verify_default_and_extra_passed",
+      "review": "orchestrator_reviewed",
+      "remote_ci": "not_run",
+      "merged": false,
+      "next": "保留现有成果，后续集成；不为等待 CI 常驻模型"
+    },
+    "vehicle": {
+      "phase": "deferred_until_duel_blocker"
+    },
+    "multiplayer": {
+      "phase": "paused_placeholder",
+      "model": null,
+      "worktree": null
+    },
+    "duel-scan": {
+      "project": "MA9-05-擂台车库遍历",
+      "phase": "pilot_queued",
+      "model": "gpt-5.6-terra",
+      "effort": "high",
+      "branch": "lane/duel-scan",
+      "worktree": "E:/hzz/work/MA9-worktrees/duel-scan",
+      "base_commit": null,
+      "review": "not_started",
+      "device": "pending",
+      "merged": false,
+      "next": "只读核查现有固定样例/测试与剩余缺口，形成有证据的最小实现任务"
+    },
+    "duel-defense": {
+      "phase": "waiting_dependency",
+      "depends_on": "duel-scan",
+      "worktree": null
+    },
+    "duel-attack": {
+      "phase": "waiting_defense_stable",
+      "depends_on": "duel-defense",
+      "worktree": null
+    }
+  },
+  "evidence": {
+    "previous_acceptance": "E:/hzz/work/MA9-orchestration-20260922/acceptance-01-02.md",
+    "private_root": "E:/hzz/work/MA9-evidence"
+  },
+  "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance.",
+  "next": "提交已批准规则后，从该提交创建 duel-scan worktree，再启动单个 Terra high 只读试点。"
+}
