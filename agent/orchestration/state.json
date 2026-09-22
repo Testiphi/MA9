@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-09-22",
-  "policy": "deepseek-user-relay-approved",
+  "updated_at": "2026-09-23",
+  "policy": "external-fresh-conversations-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
   "active_owner_limit": 1,
@@ -11,24 +11,26 @@
     "nav": {
       "project": "MA9-01-导航与语言验证",
       "head": "891d68efc9d33d08cb4799855414579900b5648d",
-      "worktree": "E:/hzz/work/MA9-worktrees/nav-i18n",
+      "worktree": "E:/hzz/work/MA9/MA9-worktrees/nav-i18n",
       "phase": "closeout_pending",
       "local_verify": "passed_at_recorded_head",
       "review": "orchestrator_reviewed_with_findings",
       "device": "pending",
       "merged": false,
-      "next": "登记并迁移 debug 验收脚本，修复错误不返回失败；仅收尾或擂台阻塞触发"
+      "next": "登记并迁移 debug 验收脚本，修复错误不返回失败；仅收尾或擂台阻塞触发",
+      "model": "hy3"
     },
     "build": {
       "project": "MA9-02-CI验收链补齐",
       "head": "03c6d9751f8b5f31865501d1954b2486568afd76",
-      "worktree": "E:/hzz/work/MA9-worktrees/build-ci",
+      "worktree": "E:/hzz/work/MA9/MA9-worktrees/build-ci",
       "phase": "local_accepted",
       "local_verify": "verify_default_and_extra_passed",
       "review": "orchestrator_reviewed",
       "remote_ci": "not_run",
       "merged": false,
-      "next": "保留现有成果，后续集成；不为等待 CI 常驻模型"
+      "next": "保留现有成果，后续集成；不为等待 CI 常驻模型",
+      "model": "deepseek"
     },
     "vehicle": {
       "phase": "deferred_until_duel_blocker"
@@ -40,19 +42,17 @@
     },
     "duel-scan": {
       "project": "MA9-05-擂台车库遍历",
-      "phase": "external_diagnosis_handoff",
+      "phase": "local_accepted_external_review_pending",
       "model": "deepseek",
       "effort": "high",
       "branch": "lane/duel-scan",
-      "worktree": "E:/hzz/work/MA9-worktrees/duel-scan",
-      "base_commit": "db596b412b0b150a2717d32b7906a4ca63033810",
-      "review": "terra_high_no_blockers_at_0850f33",
-      "device": "failed_in_install_package_version_not_select_build",
+      "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
+      "base_commit": "0850f33d4f3a127ed79ba7c62a0d25a6282a6845",
+      "review": "pending_fresh_glm_5_3_review",
+      "device": "pending_f5472bc_package_and_user_verification",
       "merged": false,
-      "next": "DeepSeek核对运行包来源、排序矛盾；边界内修复，越界返回总控。",
-      "head": "0850f33d4f3a127ed79ba7c62a0d25a6282a6845",
-      "agent_task": "/root/ma9_05_duel_scan",
-      "agent_status": "completed",
+      "next": "用户在MA9新对话用00-orchestrator.md接管，再将05R-review.md交GLM-5.3 high全新对话只读复核；通过后准备f5472bc新包实机，06/07仍等待。",
+      "head": "f5472bce3443fde42df17ad8a1819e18b46a2059",
       "pilot_report": "agent/orchestration/duel_scan_pilot_report.md",
       "pilot_tests": {
         "runtime": {
@@ -64,11 +64,10 @@
           "exit_code": 0
         }
       },
-      "local_verify": "agent_99_tools_12_plus_1_skip_passed_schema_reused_identical_inputs",
-      "review_agent": "/root/ma9_r_stability_review",
+      "local_verify": "agent_101_tools_12_plus_1_skip_schema_27_passed_exit_0_at_f5472bc",
       "stability_report": "agent/orchestration/duel_scan_stability_report.md",
-      "test_package": "E:/hzz/work/MA9-worktrees/duel-scan/build/user-test-select",
-      "device_evidence": "E:\\hzz\\work\\MA9-evidence\\20260922-231746-ordering-handoff",
+      "test_package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-select",
+      "device_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260922-231746-ordering-handoff",
       "temporary_ownership": {
         "from": "duel-defense",
         "files": [
@@ -108,7 +107,30 @@
         "scope": "detail_thumbnail_only",
         "production_integrated": false
       },
-      "transport": "workbuddy_user_relay"
+      "transport": "external_user_relay",
+      "ordering_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-05D-acceptance",
+      "test_package_status": "stale_0850f33_do_not_use_for_f5472bc_acceptance",
+      "historical_agents": {
+        "owner": "/root/ma9_05_duel_scan",
+        "reviewer": "/root/ma9_r_stability_review",
+        "status": "completed_disabled_do_not_resume"
+      },
+      "current_owner_delivery": "05D external user relay at f5472bc",
+      "review_prompt": "agent/orchestration/prompts/05R-review.md",
+      "ordering_tests": {
+        "commit": "f5472bce3443fde42df17ad8a1819e18b46a2059",
+        "agent_passed": 101,
+        "tools_passed": 12,
+        "tools_skipped": 1,
+        "schema_passed": 27,
+        "schema_exit_code": 0,
+        "schema_seconds": 1213.44,
+        "negative_control_old_failures": 2,
+        "negative_control_new_passes": 2,
+        "original_log_frame_replayed": true,
+        "review": "pending_GLM-5.3_fresh_conversation",
+        "device": "not_run"
+      }
     },
     "duel-defense": {
       "phase": "waiting_dependency",
@@ -118,17 +140,18 @@
     "duel-attack": {
       "phase": "waiting_defense_stable",
       "depends_on": "duel-defense",
-      "worktree": null
+      "worktree": null,
+      "model": "glm"
     }
   },
   "evidence": {
-    "previous_acceptance": "E:/hzz/work/MA9-orchestration-20260922/acceptance-01-02.md",
-    "private_root": "E:/hzz/work/MA9-evidence",
-    "recovery_fix": "E:/hzz/work/MA9-evidence/recovery-fix",
-    "select_button_fix": "E:/hzz/work/MA9-evidence/select-button-fix"
+    "previous_acceptance": "E:/hzz/work/MA9/MA9-orchestration-20260922/acceptance-01-02.md",
+    "private_root": "E:/hzz/work/MA9/MA9-evidence",
+    "recovery_fix": "E:/hzz/work/MA9/MA9-evidence/recovery-fix",
+    "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
-  "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance.",
-  "next": "DeepSeek核对运行包来源、排序矛盾；边界内修复，越界返回总控。",
+  "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
+  "next": "用户在MA9新对话用00-orchestrator.md接管，再将05R-review.md交GLM-5.3 high全新对话只读复核；通过后准备f5472bc新包实机，06/07仍等待。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -137,11 +160,14 @@
   },
   "policy_validation": {
     "status": "passed",
-    "scope": "metadata only",
+    "scope": "root-contained migration and fresh-conversation policies",
     "checks": [
       "YAML/JSON parse",
-      "unchanged ownership/dependencies/verify_default/contract",
-      "DeepSeek business seats; multiplayer paused"
+      "unchanged contract/dependencies/lane ownership/verification commands",
+      "model/effort consistency",
+      "only registered coordinator files changed",
+      "no old paths in active state/prompts",
+      "three clean repaired worktrees"
     ]
   },
   "usage_snapshot_end": {
@@ -167,5 +193,8 @@
     "reset_credits": 0,
     "note": "账号级14→18快照，不能精确归因某任务/模型"
   },
-  "gpt_subagents_enabled": false
+  "gpt_subagents_enabled": false,
+  "workspace_root": "E:/hzz/work/MA9",
+  "fresh_conversation_per_task": true,
+  "migration_report": "agent/orchestration/migration_20260923.md"
 }

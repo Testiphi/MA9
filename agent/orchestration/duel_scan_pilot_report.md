@@ -1,7 +1,7 @@
 # MA9-05 Terra high 只读试点结果
 
 日期：2026-09-22。基点/实际 HEAD：103977249b2312ae5cb01b2e1221314553f8ff0c。
-worktree：E:/hzz/work/MA9-worktrees/duel-scan；分支 lane/duel-scan。试点无文件改动。
+worktree：E:/hzz/work/MA9/MA9-worktrees/duel-scan；分支 lane/duel-scan。试点无文件改动。
 这是初始审计，不是正式 lane 交付；未运行全量 verify_default、未完成 reviewer 或用户实机验收。
 
 ## 已执行检查

@@ -2,7 +2,7 @@
 
 执行渠道：Codex 原生子智能体。模型 gpt-5.6-terra / high。唯一编排层是 Astra；不得创建下级智能体，不得直接联系别席，不得合并或推送。
 
-worktree：E:/hzz/work/MA9-worktrees/duel-scan；branch：lane/duel-scan。
+worktree：E:/hzz/work/MA9/MA9-worktrees/duel-scan；branch：lane/duel-scan。
 基点由总控在创建 worktree 后写入 state.json 并在派发消息中给出；必须为契约元数据 B（ab13bf9ec91f916754aa0910bd1138e2f038d0a5）后代。
 Python：E:/hzz/work/MA9/.venv/Scripts/python.exe（总控已验证 3.14.4，MA9_PYTHON 未设置）。所有命令 cwd 必须是本 worktree 根，Python 一律 -X utf8，不设置指向主工作区的 PYTHONPATH。找不到解释器停止报告。
 

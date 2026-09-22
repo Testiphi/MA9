@@ -1,7 +1,9 @@
+> 历史修复过程记录；当前模型、阶段和路径以state.json及migration_20260923.md为准。原日志不改写。
+
 # MA9-05 页面稳定性修复验收
 
 基点：db596b412b0b150a2717d32b7906a4ca63033810。
-owner：GPT-5.6 Terra high；worktree：E:/hzz/work/MA9-worktrees/duel-scan。
+owner：GPT-5.6 Terra high；worktree：E:/hzz/work/MA9/MA9-worktrees/duel-scan。
 本报告由总控维护。修复提交：aaa7bba67eb67dd453ee68531b17af3eae05b45b；当前阶段：离线验证与独立复核通过，待用户实机。
 
 ## 任务边界与证据
@@ -31,7 +33,7 @@ owner 初次 schema 工具调用只显示 r.output，丢失进程 session_id/exi
 
 PyInstaller 构建成功（exit 0，164.3 MiB）。从构建 PYZ 提取 runtime 模块代码对象，与当前源码编译结果相等；不连接 socket 启动可执行文件返回预期 Usage/exit 1，验证模块导入和原生库加载，没有连接设备。
 
-隔离测试目录：E:/hzz/work/MA9-worktrees/duel-scan/build/user-test-stability。
+隔离测试目录：E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-stability。
 测试版本：v0.0.0-duel-stability-aaa7bba。运行入口为该目录 MFAAvalonia.exe；使用缓存 UI/原生运行库/OCR 模型和本 worktree 资源，未复制用户 config/日志。所有受控资源逐文件 SHA256 与本 worktree 相同，Agent 可执行文件与构建产物相同；源码 SHA256 为 4a95cf01b507ea7e0ef01223494a56412e1fe5a900b6541e6e51a0d53e164f7d。
 
 目录中 TEST-BUILD.json 记录提交和哈希，实机验证说明.txt 提供 D 级五车配置操作卡与日志清单。未启动 GUI、未连接设备，故不能声称实机成功。
@@ -49,7 +51,7 @@ PyInstaller 构建成功（exit 0，164.3 MiB）。从构建 PYZ 提取 runtime 
 
 本次运行 21:57:46 至 22:01:15，约 3 分 29 秒，使用隔离测试包 user-test-stability。未完成五车配置，assigned=[]；此前离线测试和只读复核通过不构成实机通过。未操作设备、未修改业务代码或测试包、未合并或推送。
 
-私有证据冻结于 `E:/hzz/work/MA9-evidence/20260922-215746-duel-stability`。账号截图和完整日志不提交仓库。以该目录 debug/maafw.log 的行号为准：
+私有证据冻结于 `E:/hzz/work/MA9/MA9-evidence/20260922-215746-duel-stability`。账号截图和完整日志不提交仓库。以该目录 debug/maafw.log 的行号为准：
 
 - 本次地图报告 complete=true，五条赛道被接受；车库报告扫描 6 页、21 辆车后 selection_lost，scan_complete=false。尚未开始选车，不能据此认定车辆清单或五车结果正确。
 - 22:00:11.895（9632 行）OCR 同时读到“检测到并行存取行为”和“该账号从另一台设备登录。”；22:00:11.906（9644 行）恢复流程点击关闭弹窗。无法仅凭日志确定另一登录来源。
@@ -73,7 +75,7 @@ owner 与总控分别执行 Agent 93 项、tools 13 项（12 通过、1 既有�
 
 PyInstaller 构建 exit 0，164.3 MiB。新包 user-test-recovery 的版本为 v0.0.0-duel-recovery-3605c8e，未复制用户 config/日志。240 个受控资源 SHA256 与 worktree 一致；PYZ 中 defense_setup 与 vehicle_runtime 代码对象和当前源码编译相等。无 socket 启动 Agent 得到预期 Usage/exit 1；未启动 GUI 或设备。新包的 TEST-BUILD.json 和实机验证说明.txt 已生成。
 
-最终门禁：完整 schema 总控进程 32911 返回全部 27 项通过、exit 0；schema-result.json 保存原始完成输出。独立 Terra high /root/ma9_r_stability_review 只读复核无阻塞，另跑 defense 17/17 通过；确认五节点清除范围精确、恢复最多一次、失败安全停止、阵容保留与不开始比赛语义不变。证据目录 E:/hzz/work/MA9-evidence/recovery-fix。
+最终门禁：完整 schema 总控进程 32911 返回全部 27 项通过、exit 0；schema-result.json 保存原始完成输出。独立 Terra high /root/ma9_r_stability_review 只读复核无阻塞，另跑 defense 17/17 通过；确认五节点清除范围精确、恢复最多一次、失败安全停止、阵容保留与不开始比赛语义不变。证据目录 E:/hzz/work/MA9/MA9-evidence/recovery-fix。
 
 新包已放行用户复测，TEST-BUILD.json 已写入最终门禁与复核结果。业务修复 3605c8e 留在 lane/duel-scan，主工作区仅提交编排记录；未推送、未合入业务代码、未操作设备。旧包与原始失败证据保持原样。临时文件归属保留至实机验收及集成后再由总控归还 06；依赖 lane 仍等待。
 
@@ -86,7 +88,7 @@ PyInstaller 构建 exit 0，164.3 MiB。新包 user-test-recovery 的版本为 v
 
 本次日志记录 119 次 OCR，算法 cost 累计约 40.757 秒；这不包括全部框架调用、截屏、等待和往返开销，不能把约 159 秒全部归因于车名滚动。现有整页重复采样与性能分补读亦有减少空间。
 
-评估建议：固定按钮用局部图像/颜色形状与页面守卫结合，并有界等待；车型先保留 OCR，加入稳定卡面辅助与本次运行缓存的小样本试点；动态性能分等仍核对。暂不要求用户为全车型海量截图。先复用现有样本，在 5–10 辆难例（含滚动长名/相似车型）上做独立帧验证、未知/歧义拒绝、误点和耗时比较，再决定扩展。图片方案未实现、未测得提速倍数。私有证据已冻结在 E:/hzz/work/MA9-evidence/20260922-224444-recovery-retest。
+评估建议：固定按钮用局部图像/颜色形状与页面守卫结合，并有界等待；车型先保留 OCR，加入稳定卡面辅助与本次运行缓存的小样本试点；动态性能分等仍核对。暂不要求用户为全车型海量截图。先复用现有样本，在 5–10 辆难例（含滚动长名/相似车型）上做独立帧验证、未知/歧义拒绝、误点和耗时比较，再决定扩展。图片方案未实现、未测得提速倍数。私有证据已冻结在 E:/hzz/work/MA9/MA9-evidence/20260922-224444-recovery-retest。
 
 
 ## 选择按钮修复与 OCR 去重交付（2026-09-22）
@@ -103,11 +105,27 @@ owner 和总控各自重跑 Agent 99/99、tools 12 通过与 1 既有私有截�
 
 独立 Terra high reviewer /root/ma9_r_stability_review 无阻塞；定向 runtime 14/14、screen 4/4，通过。PyInstaller 构建 exit 0、164.3 MiB；包中三个关键模块的 PYZ 代码对象和当前源码编译结果相等。新包 user-test-select / v0.0.0-duel-select-0850f33，241 个受控资源 SHA256 一致，Agent 无 socket 启动取得预期 Usage/exit 1。TEST-BUILD.json 记录 schema 复用、测试与复核；旧包及其日志保持原样。
 
-状态：可交用户实机复测，尚未合入业务代码、未推送、未操作设备。用户仍在总控对话回传终屏和耗时，总控自行读新目录日志；不用补截图或外部模型。06/07 等待，04 暂停。全部本机验证证据位于 E:/hzz/work/MA9-evidence/select-button-fix。
+状态：可交用户实机复测，尚未合入业务代码、未推送、未操作设备。用户仍在总控对话回传终屏和耗时，总控自行读新目录日志；不用补截图或外部模型。06/07 等待，04 暂停。全部本机验证证据位于 E:/hzz/work/MA9/MA9-evidence/select-button-fix。
 
 
 ## 2026-09-22 23:17:46 新回传与 DeepSeek 交接
 
-运行日志 Working=E:/hzz/work/MA9/install，23:19:43 stopped：D-class ratings contradict the game's ordering；8页21辆、assigned为空、未开始比赛。地图识别已完成。install Agent SHA256=d78e6da428dd82d40e9db828fcae6e87679f36ff999fa4ca36d9fb12c35c4ea9，与0850f33测试包不同；user-test-select无debug目录，不能认定新包实机失败。证据：E:\hzz\work\MA9-evidence\20260922-231746-ordering-handoff。
+运行日志 Working=E:/hzz/work/MA9/install，23:19:43 stopped：D-class ratings contradict the game's ordering；8页21辆、assigned为空、未开始比赛。地图识别已完成。install Agent SHA256=d78e6da428dd82d40e9db828fcae6e87679f36ff999fa4ca36d9fb12c35c4ea9，与0850f33测试包不同；user-test-select无debug目录，不能认定新包实机失败。证据：E:\hzz\work\MA9\MA9-evidence\20260922-231746-ordering-handoff。
 
 用户要求改回 DeepSeek 人工中转，停止 GPT 子智能体。下一任务先核对运行版本与排序错误，不取消排序/身份安全校验；若需修改07名下duel_selection.py须先返回总控登记边界。06/07仍不放行，04暂停。
+
+
+## 2026-09-23 05D本地验收与目录迁移
+
+交付f5472bce3443fde42df17ad8a1819e18b46a2059，相对0850f33仅3个05授权文件；不修改07排序护栏。
+根因：同高相邻统计62.64进入名称组，错误拉动卡片left184->34，ROI误取@71.54形成7154。
+总控使用原始未改写日志23:18:23.444独立重放，当前left184且性能2559；旧源码运行新增2项回归均失败，当前2项均通过。
+
+迁移后cwd=E:/hzz/work/MA9/MA9-worktrees/duel-scan，解释器E:/hzz/work/MA9/.venv/Scripts/python.exe，所有命令-X utf8。
+独立完整验收：Agent101通过；tools13项中12通过、1既有私有截图缺失跳过；schema27项全部通过、进程exit0，用时1213.44秒。不是复用owner报告。
+证据：E:/hzz/work/MA9/MA9-evidence/20260923-05D-acceptance/{results.json,agent.log,tools.log,schema.log,negative-control.json,original-log-replay.json,boundaries.json,migration-check.json,schema-inputs.json}。
+
+结论：05D本地验收通过，但独立GLM-5.3复核未运行、实机未完成，业务代码未合入main。
+残留事项：07缺读数与排序矛盾共用错误消息；当前性能数字拼接；带字母邻列分组潜在干扰。保持边界，交review按证据判断是否阻塞，不自动扩修。
+四目录已迁入MA9并修复Git登记，三个worktree干净，未删除证据、未操作设备、未推送。
+新入口prompts/00-orchestrator.md；下一席prompts/05R-review.md。用户每次使用全新外部对话，不启用GPT子智能体。
