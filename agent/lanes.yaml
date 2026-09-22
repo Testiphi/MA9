@@ -50,6 +50,7 @@ orchestration_files:
     - agent/orchestration/state.json
     - agent/orchestration/README.md
     - agent/orchestration/duel_scan_pilot.md
+    - agent/orchestration/duel_scan_pilot_report.md
   local_evidence_root: E:/hzz/work/MA9-evidence
 
 budget_policy:

@@ -40,16 +40,31 @@
     },
     "duel-scan": {
       "project": "MA9-05-擂台车库遍历",
-      "phase": "pilot_queued",
+      "phase": "pilot_complete_fix_pending",
       "model": "gpt-5.6-terra",
       "effort": "high",
       "branch": "lane/duel-scan",
       "worktree": "E:/hzz/work/MA9-worktrees/duel-scan",
-      "base_commit": null,
+      "base_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
       "review": "not_started",
       "device": "pending",
       "merged": false,
-      "next": "只读核查现有固定样例/测试与剩余缺口，形成有证据的最小实现任务"
+      "next": "先复现并修复不稳定页仍完成扫描；范围限 duel_vehicle_runtime.py 与既有 runtime 测试；之后完整验收与独立复核",
+      "head": "103977249b2312ae5cb01b2e1221314553f8ff0c",
+      "agent_task": "/root/ma9_05_duel_scan",
+      "agent_status": "completed",
+      "pilot_report": "agent/orchestration/duel_scan_pilot_report.md",
+      "pilot_tests": {
+        "runtime": {
+          "passed": 4,
+          "exit_code": 0
+        },
+        "screen": {
+          "passed": 1,
+          "exit_code": 0
+        }
+      },
+      "local_verify": "targeted_only_not_lane_acceptance"
     },
     "duel-defense": {
       "phase": "waiting_dependency",
@@ -67,5 +82,31 @@
     "private_root": "E:/hzz/work/MA9-evidence"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance.",
-  "next": "提交已批准规则后，从该提交创建 duel-scan worktree，再启动单个 Terra high 只读试点。"
+  "next": "MA9-05 最小稳定性修复；06/07 等待前置，04 暂停。用户实机尚未执行。",
+  "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
+  "usage_snapshot_start": {
+    "weekly_used_percent": 5,
+    "reset_credits": 0,
+    "note": "账号级快照，非本项目独占用量"
+  },
+  "policy_validation": {
+    "status": "passed",
+    "checks": [
+      "YAML/JSON parse",
+      "model/effort consistency",
+      "paused multiplayer null model",
+      "unchanged frozen commit",
+      "unchanged lane dependencies and owns/owns_new/owns_generated",
+      "unchanged reviewer and verify_default",
+      "unchanged generated/foreign-input constraints",
+      "orchestrator-only changed files",
+      "git diff --check"
+    ],
+    "scope": "orchestration-only changes; no claim of business lane acceptance"
+  },
+  "usage_snapshot_end": {
+    "weekly_used_percent": 6,
+    "reset_credits": 0,
+    "note": "账号级整数快照，5→6 不能精确归因本轮/子智能体"
+  }
 }

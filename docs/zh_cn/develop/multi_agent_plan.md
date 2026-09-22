@@ -15,6 +15,8 @@
 需要写契约时再读 docs/zh_cn/develop/contract_freeze_draft.md
 
 执行顺序：
+0. 先检查 git status、实际 HEAD、contract_frozen_at 和 agent/orchestration/state.json。
+   若契约 A/B 已提交且祖先关系正确，复用冻结状态，跳过下面的首次冻结步骤；不得重新冻结或覆盖已有工作。
 1. 由编排层亲自冻结契约，不得下放给普通子智能体：按 contract_freeze_draft.md 固化 models / vehicle_screen /
    garage_profile / selection_strategy / selection_runtime 的签名，处理其中
    标出的两处待决瑕疵；再冻结第 6 节的「赛道策略表」接缝（schema + 断言）。
@@ -145,6 +147,8 @@ Astra 必须查看本地实际改动并重跑验证；第三方模型声称“�
 
 ## 4. 依赖顺序（不许颠倒）
 
+下图表示技术依赖，不代表当前派发计划；成本平衡阶段按 §0.3 调度，尤其 multiplayer 暂停。
+
 ```
 contract ──┬─→ nav          （可即刻并行）
            ├─→ build        （可即刻并行）
@@ -237,7 +241,7 @@ schema 与断言属于 `contract` 一席。**两个 OCR 不要拆成独立 lane*
 ### 6.1 跨 worktree 的 Python 规则
 
 `lanes.yaml.python_runtime` 是唯一解析规则。编排层优先读取 `MA9_PYTHON`；本机未设置时使用
-`E:/hzz/work/MA9/.venv/Scripts/python.exe`。解析后先运行 `{python} --version`，再把同一个绝对路径替换进
+`E:/hzz/work/MA9/.venv/Scripts/python.exe`。解析后先运行 `{python} -X utf8 --version`，再把同一个绝对路径替换进
 所有 lane 的验证命令。解释器可以共享，**cwd 与源码不能共享**：命令必须在对应 worktree 根目录执行，
 这样相对路径和导入都来自该 lane。找不到指定解释器时停止并报告，不能静默调用 PATH 中的另一套 Python。
 
