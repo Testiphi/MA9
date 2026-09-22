@@ -40,7 +40,7 @@
     },
     "duel-scan": {
       "project": "MA9-05-擂台车库遍历",
-      "phase": "device_failed_select_button_assessment",
+      "phase": "fixing_select_button_and_redundant_ocr",
       "model": "gpt-5.6-terra",
       "effort": "high",
       "branch": "lane/duel-scan",
@@ -49,7 +49,7 @@
       "review": "terra_high_passed_no_blockers_at_3605c8e",
       "device": "failed_20260922_224444_select_button_ocr",
       "merged": false,
-      "next": "用户要求先评估图片比对：优先固定选择按钮视觉判据与有限等待，其次削减重复OCR、试点小范围车型图像辅助；未授权本轮实施，暂不大量采图。",
+      "next": "Terra high 修固定按钮视觉识别、有界详情等待和安全OCR去重；总控用已有私有截图独立验证并评估车型图像辅助试点。",
       "head": "3605c8e9b1581259055d464c87e36c07a1ffa7c2",
       "agent_task": "/root/ma9_05_duel_scan",
       "agent_status": "completed",
@@ -103,7 +103,7 @@
     "recovery_fix": "E:/hzz/work/MA9-evidence/recovery-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance.",
-  "next": "用户要求先评估图片比对：优先固定选择按钮视觉判据与有限等待，其次削减重复OCR、试点小范围车型图像辅助；未授权本轮实施，暂不大量采图。 06/07仍等待。",
+  "next": "Terra high 修固定按钮视觉识别、有界详情等待和安全OCR去重；总控用已有私有截图独立验证并评估车型图像辅助试点。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -138,5 +138,9 @@
     "weekly_used_percent": 14,
     "reset_credits": 0,
     "note": "账号级快照，11→14不能精确归因本任务或某模型"
+  },
+  "usage_snapshot_button_start": {
+    "weekly_used_percent": 14,
+    "reset_credits": 0
   }
 }
