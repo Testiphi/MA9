@@ -40,16 +40,16 @@
     },
     "duel-scan": {
       "project": "MA9-05-擂台车库遍历",
-      "phase": "awaiting_device_verification",
+      "phase": "device_failed_select_button_assessment",
       "model": "gpt-5.6-terra",
       "effort": "high",
       "branch": "lane/duel-scan",
       "worktree": "E:/hzz/work/MA9-worktrees/duel-scan",
       "base_commit": "db596b412b0b150a2717d32b7906a4ca63033810",
       "review": "terra_high_passed_no_blockers_at_3605c8e",
-      "device": "pending_retest_previous_run_failed",
+      "device": "failed_20260922_224444_select_button_ocr",
       "merged": false,
-      "next": "用户停止旧任务后运行 user-test-recovery/MFAAvalonia.exe，明确选择 D 级五车防守配置并回传终屏和耗时；总控自行读取新包日志。实机通过后再裁决合入并归还临时文件归属。",
+      "next": "用户要求先评估图片比对：优先固定选择按钮视觉判据与有限等待，其次削减重复OCR、试点小范围车型图像辅助；未授权本轮实施，暂不大量采图。",
       "head": "3605c8e9b1581259055d464c87e36c07a1ffa7c2",
       "agent_task": "/root/ma9_05_duel_scan",
       "agent_status": "completed",
@@ -68,7 +68,7 @@
       "review_agent": "/root/ma9_r_stability_review",
       "stability_report": "agent/orchestration/duel_scan_stability_report.md",
       "test_package": "E:/hzz/work/MA9-worktrees/duel-scan/build/user-test-recovery",
-      "device_evidence": "E:/hzz/work/MA9-evidence/20260922-215746-duel-stability",
+      "device_evidence": "E:/hzz/work/MA9-evidence/20260922-224444-recovery-retest",
       "temporary_ownership": {
         "from": "duel-defense",
         "files": [
@@ -103,7 +103,7 @@
     "recovery_fix": "E:/hzz/work/MA9-evidence/recovery-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance.",
-  "next": "用户停止旧任务后运行 user-test-recovery/MFAAvalonia.exe，明确选择 D 级五车防守配置并回传终屏和耗时；总控自行读取新包日志。实机通过后再裁决合入并归还临时文件归属。 06/07等待，04暂停。",
+  "next": "用户要求先评估图片比对：优先固定选择按钮视觉判据与有限等待，其次削减重复OCR、试点小范围车型图像辅助；未授权本轮实施，暂不大量采图。 06/07仍等待。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

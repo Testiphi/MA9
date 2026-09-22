@@ -76,3 +76,14 @@ PyInstaller 构建 exit 0，164.3 MiB。新包 user-test-recovery 的版本为 v
 最终门禁：完整 schema 总控进程 32911 返回全部 27 项通过、exit 0；schema-result.json 保存原始完成输出。独立 Terra high /root/ma9_r_stability_review 只读复核无阻塞，另跑 defense 17/17 通过；确认五节点清除范围精确、恢复最多一次、失败安全停止、阵容保留与不开始比赛语义不变。证据目录 E:/hzz/work/MA9-evidence/recovery-fix。
 
 新包已放行用户复测，TEST-BUILD.json 已写入最终门禁与复核结果。业务修复 3605c8e 留在 lane/duel-scan，主工作区仅提交编排记录；未推送、未合入业务代码、未操作设备。旧包与原始失败证据保持原样。临时文件归属保留至实机验收及集成后再由总控归还 06；依赖 lane 仍等待。
+
+
+## 2026-09-22 22:44:44 新包复测与图像识别评估
+
+用户仅要求评估，本轮未修改业务代码、未操作设备、未派发写入任务。运行约 2 分 39 秒（至 22:47:23），最终 stopped / slot 1 assignment unverified: select_failed / assigned=[]。地图读取和 21 车完整扫描已通过现有程序判据，并生成五车计划；仍无五车实机成功结论，也不能据此认定未触发的账号恢复路径已实机通过。
+
+第一目标 Mitsubishi Lancer Evolution，列表/详情均为 1381，detail_vehicle confidence=1.0；详情 occupied_elsewhere=false、select_available=false。日志 22:47:21.123 的按钮 ROI OCR 仅得到“择”，故源码 _finish_target 在点击前返回 select_failed。当前 _detail 在车型匹配后立即返回，只进行一次按钮 OCR，按钮瞬态误读无专门重试；最终截图上的按钮存在并不能证明此前采样时它已完全稳定。
+
+本次日志记录 119 次 OCR，算法 cost 累计约 40.757 秒；这不包括全部框架调用、截屏、等待和往返开销，不能把约 159 秒全部归因于车名滚动。现有整页重复采样与性能分补读亦有减少空间。
+
+评估建议：固定按钮用局部图像/颜色形状与页面守卫结合，并有界等待；车型先保留 OCR，加入稳定卡面辅助与本次运行缓存的小样本试点；动态性能分等仍核对。暂不要求用户为全车型海量截图。先复用现有样本，在 5–10 辆难例（含滚动长名/相似车型）上做独立帧验证、未知/歧义拒绝、误点和耗时比较，再决定扩展。图片方案未实现、未测得提速倍数。私有证据已冻结在 E:/hzz/work/MA9-evidence/20260922-224444-recovery-retest。
