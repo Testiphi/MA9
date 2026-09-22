@@ -40,19 +40,19 @@
     },
     "duel-scan": {
       "project": "MA9-05-擂台车库遍历",
-      "phase": "pilot_complete_fix_pending",
+      "phase": "repairing_account_conflict_recovery",
       "model": "gpt-5.6-terra",
       "effort": "high",
       "branch": "lane/duel-scan",
       "worktree": "E:/hzz/work/MA9-worktrees/duel-scan",
-      "base_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
-      "review": "not_started",
-      "device": "pending",
+      "base_commit": "db596b412b0b150a2717d32b7906a4ca63033810",
+      "review": "terra_high_passed_no_blockers",
+      "device": "failed_20260922_215746_account_conflict_then_navigation_hit_limit",
       "merged": false,
-      "next": "先复现并修复不稳定页仍完成扫描；范围限 duel_vehicle_runtime.py 与既有 runtime 测试；之后完整验收与独立复核",
-      "head": "103977249b2312ae5cb01b2e1221314553f8ff0c",
+      "next": "Terra high 修复恢复计数与故障链，完整验收后 Terra high 独立复核并重建隔离包。",
+      "head": "aaa7bba67eb67dd453ee68531b17af3eae05b45b",
       "agent_task": "/root/ma9_05_duel_scan",
-      "agent_status": "completed",
+      "agent_status": "completed_read_only_incident_diagnosis",
       "pilot_report": "agent/orchestration/duel_scan_pilot_report.md",
       "pilot_tests": {
         "runtime": {
@@ -64,7 +64,19 @@
           "exit_code": 0
         }
       },
-      "local_verify": "targeted_only_not_lane_acceptance"
+      "local_verify": "verify_default_passed_orchestrator_schema",
+      "review_agent": "/root/ma9_r_stability_review",
+      "stability_report": "agent/orchestration/duel_scan_stability_report.md",
+      "test_package": "E:/hzz/work/MA9-worktrees/duel-scan/build/user-test-stability",
+      "device_evidence": "E:/hzz/work/MA9-evidence/20260922-215746-duel-stability",
+      "temporary_ownership": {
+        "from": "duel-defense",
+        "files": [
+          "agent/ma9_agent/duel_defense_setup.py",
+          "agent/tests/test_duel_defense_setup.py"
+        ],
+        "reason": "20260922 device blocker; return after repair acceptance"
+      }
     },
     "duel-defense": {
       "phase": "waiting_dependency",
@@ -82,12 +94,12 @@
     "private_root": "E:/hzz/work/MA9-evidence"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance.",
-  "next": "MA9-05 最小稳定性修复；06/07 等待前置，04 暂停。用户实机尚未执行。",
+  "next": "Terra high 修复恢复计数与故障链，完整验收后 Terra high 独立复核并重建隔离包。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
-    "weekly_used_percent": 5,
+    "weekly_used_percent": 7,
     "reset_credits": 0,
-    "note": "账号级快照，非本项目独占用量"
+    "note": "账号级快照，非本任务独占"
   },
   "policy_validation": {
     "status": "passed",
@@ -105,8 +117,12 @@
     "scope": "orchestration-only changes; no claim of business lane acceptance"
   },
   "usage_snapshot_end": {
-    "weekly_used_percent": 6,
+    "weekly_used_percent": 10,
     "reset_credits": 0,
-    "note": "账号级整数快照，5→6 不能精确归因本轮/子智能体"
+    "note": "账号级快照，本轮7→10不精确归因MA9或某模型"
+  },
+  "usage_snapshot_recovery_start": {
+    "weekly_used_percent": 11,
+    "reset_credits": 0
   }
 }
