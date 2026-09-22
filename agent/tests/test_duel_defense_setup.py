@@ -58,6 +58,41 @@ class _Context:
         return type("Recognition", (), {"hit": hit})()
 
 
+class _HitLimitedRecoveryContext(_Context):
+    """Model the context-wide max_hit state which survives a recursive task."""
+
+    recovery_nodes = (
+        "对决_切换多人标签",
+        "对决_点击首页卡片",
+        "对决_重开零进度资格赛",
+        "对决_确认重开资格赛",
+        "对决_点击资格赛",
+    )
+
+    def __init__(self, *, clear_failure: str | None = None):
+        super().__init__()
+        self.hit_counts: dict[str, int] = {}
+        self.clear_calls: list[str] = []
+        self.clear_failure = clear_failure
+
+    def run_task(self, entry):
+        self.entries.append(entry)
+        if entry == "对决_资格赛入口":
+            if any(self.hit_counts.get(node, 0) for node in self.recovery_nodes):
+                return _TaskDetail(False)
+            # The first navigation consumes the same guarded nodes that a
+            # recursive recovery must use from the multiplayer home page.
+            self.hit_counts = {node: 1 for node in self.recovery_nodes}
+        return _TaskDetail()
+
+    def clear_hit_count(self, node):
+        self.clear_calls.append(node)
+        if node == self.clear_failure:
+            return False
+        self.hit_counts[node] = 0
+        return True
+
+
 class DuelDefenseSetupParamsTest(unittest.TestCase):
     def test_defaults_are_safe_plan_only(self) -> None:
         self.assertEqual(parse_setup_params({}), {
@@ -227,6 +262,71 @@ class DuelDefenseSetupFlowTest(unittest.TestCase):
                     patch("ma9_agent.duel_defense_setup.time.sleep"):
                 with self.assertRaisesRegex(RuntimeError, "scan stopped"):
                     run_defense_setup(context, self._root(temporary), {"mode": "apply"})
+
+    def test_account_conflict_recovery_resets_navigation_hits_and_keeps_initial_fault(self) -> None:
+        """A same-context retry used to be blocked by the first run's max_hit."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = self._root(temporary)
+            context = _HitLimitedRecoveryContext()
+            with patch("ma9_agent.duel_defense_setup._read_tracks",
+                       side_effect=[RuntimeError("initial selection_lost"),
+                                    self._tracks(), self._tracks()]), \
+                    patch("ma9_agent.duel_defense_setup._frame", return_value=object()), \
+                    patch("ma9_agent.duel_defense_setup.scan_duel_vehicles", side_effect=self._scan), \
+                    patch("ma9_agent.duel_defense_setup._recover_account_conflict", return_value=True), \
+                    patch("ma9_agent.duel_defense_setup.time.sleep"):
+                report = run_defense_setup(context, root, {"mode": "plan"})
+        self.assertEqual(report["status"], "planned")
+        self.assertEqual(report["initial_error"], "initial selection_lost")
+        self.assertEqual(report["account_conflict_retries"], 1)
+        self.assertEqual(context.entries.count("对决_资格赛入口"), 2)
+        self.assertEqual(context.clear_calls, list(context.recovery_nodes))
+        self.assertFalse(any("账号被顶" in node for node in context.clear_calls))
+
+    def test_second_conflict_stops_without_a_second_recovery_and_keeps_both_faults(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = self._root(temporary)
+            context = _HitLimitedRecoveryContext()
+            with patch("ma9_agent.duel_defense_setup._read_tracks",
+                       side_effect=[RuntimeError("initial selection_lost"),
+                                    RuntimeError("recovered attempt interrupted")]), \
+                    patch("ma9_agent.duel_defense_setup._frame", return_value=object()), \
+                    patch("ma9_agent.duel_defense_setup._recover_account_conflict", return_value=True) as recover:
+                with self.assertRaisesRegex(RuntimeError, "recovered attempt interrupted"):
+                    run_defense_setup(context, root, {"mode": "plan"})
+            progress = json.loads((root / "debug/duel_defense_gui_setup.json").read_text(encoding="utf-8"))
+        self.assertEqual(recover.call_count, 1)
+        self.assertEqual(progress["initial_error"], "initial selection_lost")
+        self.assertEqual(progress["error"], "recovered attempt interrupted")
+        self.assertEqual(progress["account_conflict_retries"], 1)
+
+    def test_non_conflict_failure_does_not_clear_navigation_hits(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = self._root(temporary)
+            context = _HitLimitedRecoveryContext()
+            with patch("ma9_agent.duel_defense_setup._read_tracks",
+                       side_effect=RuntimeError("initial selection_lost")), \
+                    patch("ma9_agent.duel_defense_setup._frame", return_value=object()), \
+                    patch("ma9_agent.duel_defense_setup._recover_account_conflict", return_value=False):
+                with self.assertRaisesRegex(RuntimeError, "initial selection_lost"):
+                    run_defense_setup(context, root, {"mode": "plan"})
+        self.assertEqual(context.clear_calls, [])
+
+    def test_failed_navigation_hit_reset_stops_and_preserves_initial_fault(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = self._root(temporary)
+            context = _HitLimitedRecoveryContext(clear_failure="对决_点击首页卡片")
+            with patch("ma9_agent.duel_defense_setup._read_tracks",
+                       side_effect=RuntimeError("initial selection_lost")), \
+                    patch("ma9_agent.duel_defense_setup._frame", return_value=object()), \
+                    patch("ma9_agent.duel_defense_setup._recover_account_conflict", return_value=True):
+                with self.assertRaisesRegex(RuntimeError, "initial selection_lost.*could not reset"):
+                    run_defense_setup(context, root, {"mode": "plan"})
+            progress = json.loads((root / "debug/duel_defense_gui_setup.json").read_text(encoding="utf-8"))
+        self.assertEqual(context.entries.count("对决_资格赛入口"), 1)
+        self.assertEqual(progress["status"], "stopped")
+        self.assertEqual(progress["initial_error"], "initial selection_lost")
+        self.assertIn("对决_点击首页卡片", progress["error"])
 
     def test_class_ladder_scans_lower_class_only_when_needed(self) -> None:
         context = _Context()

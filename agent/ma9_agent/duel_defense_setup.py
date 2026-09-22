@@ -25,6 +25,13 @@ RETRYABLE_TARGET_SCAN_STATUSES = {
     "target_temporarily_unreadable",
     "page_ocr_unverified",
 }
+RECOVERY_NAVIGATION_HIT_NODES = (
+    "对决_切换多人标签",
+    "对决_点击首页卡片",
+    "对决_重开零进度资格赛",
+    "对决_确认重开资格赛",
+    "对决_点击资格赛",
+)
 
 
 def _write(path: Path, report: dict[str, Any]) -> None:
@@ -94,6 +101,17 @@ def _recover_account_conflict(context: Any) -> bool:
         # Recovery is best effort while another failure is already being handled.
         return False
     return False
+
+
+def _clear_recovery_navigation_hits(context: Any) -> str | None:
+    """Clear only the finite max_hit nodes needed to re-enter the qualifier."""
+    for node in RECOVERY_NAVIGATION_HIT_NODES:
+        try:
+            if not context.clear_hit_count(node):
+                return f"could not reset navigation hit count: {node}"
+        except Exception as exc:
+            return f"could not reset navigation hit count: {node} ({exc})"
+    return None
 
 
 def _record_assignment(progress: dict[str, Any], slot: dict[str, Any],
@@ -204,7 +222,8 @@ def parse_setup_params(raw: dict[str, Any]) -> dict[str, Any]:
 
 
 def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any], *,
-                      _conflict_retry: int = 0) -> dict[str, Any]:
+                      _conflict_retry: int = 0,
+                      _initial_error: str | None = None) -> dict[str, Any]:
     """Plan or assign five cars. This function never presses the Start button."""
     params = parse_setup_params(raw_params)
     vehicle_class = params["class"]
@@ -222,6 +241,10 @@ def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any], *,
         "assigned": [],
         "starts_race": False,
     }
+    if _initial_error is not None:
+        progress["initial_error"] = _initial_error
+    if _conflict_retry:
+        progress["account_conflict_retries"] = _conflict_retry
     _write(progress_path, progress)
     try:
         reference = json.loads(
@@ -333,12 +356,22 @@ def run_defense_setup(context: Any, root: Path, raw_params: dict[str, Any], *,
         _write(progress_path, progress)
         return progress
     except Exception as exc:
+        initial_error = _initial_error or str(exc)
         if _conflict_retry < 1 and _recover_account_conflict(context):
+            reset_error = _clear_recovery_navigation_hits(context)
+            if reset_error is not None:
+                progress["status"] = "stopped"
+                progress["initial_error"] = initial_error
+                progress["error"] = f"{initial_error}; {reset_error}"
+                _write(progress_path, progress)
+                raise RuntimeError(progress["error"]) from exc
             progress["status"] = "recovering_account_conflict"
             progress["account_conflict_retries"] = _conflict_retry + 1
+            progress["initial_error"] = initial_error
             _write(progress_path, progress)
             return run_defense_setup(context, root, raw_params,
-                                     _conflict_retry=_conflict_retry + 1)
+                                     _conflict_retry=_conflict_retry + 1,
+                                     _initial_error=initial_error)
         progress["status"] = "stopped"
         progress["error"] = str(exc)
         _write(progress_path, progress)
