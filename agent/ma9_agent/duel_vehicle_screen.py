@@ -51,6 +51,29 @@ def _current_rating(text: str) -> int | None:
     return value if 100 <= value <= 10000 else None
 
 
+def _trusted_current_rating(items: list[dict[str, Any]]) -> int | None:
+    """Accept one clear four-digit current rating only when no rival reading exists."""
+    def complete_rating(text: str) -> int | None:
+        normalized = text.translate(str.maketrans("，．", ",.")).strip()
+        if not re.fullmatch(r"[1-9]\d{3}|[1-9][,.]\d{3}", normalized):
+            return None
+        return int(normalized.replace(",", "").replace(".", ""))
+
+    readings = [(complete_rating(item["text"]), bool(re.search(r"\d", item["text"])),
+                 item["confidence"])
+                for item in items]
+    ratings = {rating for rating, _has_digits, confidence in readings
+               if confidence >= .9 and rating is not None}
+    if len(ratings) != 1 or any(has_digits and rating is None
+                                for rating, has_digits, _confidence in readings):
+        return None
+    rating = ratings.pop()
+    # Do not discard a low-confidence conflicting reading when deciding whether
+    # the fast path is safe; it must retain the established local retry.
+    return rating if all(other is None or other == rating
+                         for other, _has_digits, _confidence in readings) else None
+
+
 def _stars(frame: np.ndarray, left: int, top: int) -> tuple[int | None, int | None]:
     # Yellow/gold D cards make the background satisfy the simple lit-star
     # colour test. Read their stars from the vehicle detail instead.
@@ -118,14 +141,19 @@ def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
             performance = next((pair for item in performance_items
                                 if (pair := _fraction(item["text"]))), None)
             retry_items: list[dict[str, Any]] = []
-            if performance is None and retry_ocr is not None:
+            current = _trusted_current_rating(performance_items)
+            if performance is None and current is None and retry_ocr is not None:
                 field = (left + 8, top + 24, 200, 55)
                 retry_items = retry_ocr(field)
                 performance = next((pair for item in retry_items
                                     if (pair := _fraction(item["text"]))), None)
             if performance is None:
-                current = next((value for item in [*performance_items, *retry_items]
-                                if (value := _current_rating(item["text"]))), None)
+                # Preserve the established post-retry fallback. The fast path
+                # above is deliberately narrower: it only avoids a redundant
+                # retry for one clear, four-digit current score.
+                current = current or next(
+                    (value for item in [*performance_items, *retry_items]
+                     if (value := _current_rating(item["text"])) is not None), None)
                 performance = (current, None) if current is not None else None
             stars_lit, star_slots = _stars(frame, left, top)
             result.append({

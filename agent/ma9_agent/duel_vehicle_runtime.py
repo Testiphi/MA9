@@ -7,6 +7,7 @@ from typing import Any
 
 import cv2
 import numpy as np
+from maa.pipeline import JRecognitionType, JTemplateMatch
 
 from .duel_vehicle_screen import _current_rating, read_visible_cards
 from .selection_runtime import _click, _frame, _ocr
@@ -17,6 +18,10 @@ CLASS_ORDER = ("R", "S", "A", "B", "C", "D")
 CLASS_X = {"R": 808, "S": 874, "A": 940, "B": 1006, "C": 1071, "D": 1137}
 RETRYABLE_TARGET_STATUSES = {"detail_not_verified", "wrong_detail",
                              "list_detail_rating_mismatch"}
+DETAIL_ATTEMPTS = 8
+DETAIL_INTERVAL = .5
+SELECT_BUTTON_ROI = (1020, 610, 240, 100)
+SELECT_BUTTON_TEMPLATE = "navigation/duel/detail_select_text.png"
 
 
 def _selection_title(context: Any, frame: np.ndarray) -> bool:
@@ -132,9 +137,31 @@ def _detail_stars(frame: np.ndarray) -> tuple[int | None, int | None]:
     return (lit, slots) if slots >= 3 else (None, None)
 
 
+def _active_select_button(frame: np.ndarray) -> bool:
+    """Reject a dimmed detail page even if its old button text still matches."""
+    button = frame[625:690, 1045:1235]
+    blue, green, red = (float(button[:, :, index].mean()) for index in range(3))
+    bright_green = float((button[:, :, 1] > 180).mean())
+    return bright_green >= .8 and green >= 180 and green - max(red, blue) >= 30
+
+
+def _select_button_ready(context: Any, frame: np.ndarray) -> bool:
+    """Require the detail button's template in its fixed ROI and active colour."""
+    try:
+        detail = context.run_recognition_direct(
+            JRecognitionType.TemplateMatch,
+            JTemplateMatch(template=[SELECT_BUTTON_TEMPLATE], roi=SELECT_BUTTON_ROI,
+                           threshold=[.9]),
+            frame)
+    except Exception:
+        return False
+    return bool(detail and detail.hit and _active_select_button(frame))
+
+
 def _detail(context: Any, expected_id: str, catalog: list[dict[str, Any]]) -> dict[str, Any]:
-    for _ in range(8):
-        time.sleep(.5)
+    last_verified: dict[str, Any] | None = None
+    for _ in range(DETAIL_ATTEMPTS):
+        time.sleep(DETAIL_INTERVAL)
         frame = _frame(context)
         words = _ocr(context, frame, (160, 76, 300, 110))
         observed = match_vehicle(words, catalog)
@@ -142,15 +169,23 @@ def _detail(context: Any, expected_id: str, catalog: list[dict[str, Any]]) -> di
             lower = _ocr(context, frame, (200, 560, 800, 150))
             occupied = any("已被放置" in row["text"] or "所在的赛道" in row["text"]
                            for row in lower)
-            has_select = any("选择" in row["text"] for row in _ocr(context, frame, (1000, 600, 270, 105)))
             rating = next((score for row in _ocr(context, frame, (900, 90, 210, 90))
                            if (score := _current_rating(row["text"])) is not None), None)
             stars_lit, star_slots = _detail_stars(frame)
-            return {"status": "detail_verified", "occupied_elsewhere": occupied,
-                    "select_available": has_select, "detail_vehicle": observed,
-                    "performance": rating, "stars_lit": stars_lit, "star_slots": star_slots}
-        if observed and observed["confidence"] >= .95:
+            verified = {"status": "detail_verified", "occupied_elsewhere": occupied,
+                        "select_available": False, "detail_vehicle": observed,
+                        "performance": rating, "stars_lit": stars_lit,
+                        "star_slots": star_slots}
+            if occupied:
+                return verified
+            if _select_button_ready(context, frame):
+                verified["select_available"] = True
+                return verified
+            last_verified = verified
+        elif observed and observed["confidence"] >= .95:
             return {"status": "wrong_detail", "detail_vehicle": observed}
+    if last_verified is not None:
+        return {**last_verified, "select_wait_timed_out": True}
     return {"status": "detail_not_verified"}
 
 
@@ -188,8 +223,11 @@ def _finish_target(context: Any, card: dict[str, Any], page: int,
     if detail["occupied_elsewhere"]:
         result["status"] = "occupied_elsewhere"
         return result
-    if not detail["select_available"] or not _click(context, 1139, 658):
-        result["status"] = "select_failed"
+    if not detail["select_available"]:
+        result["status"] = "select_unavailable"
+        return result
+    if not _click(context, 1139, 658):
+        result["status"] = "select_click_failed"
         return result
     result["status"] = "assignment_unverified"
     for _ in range(10):
