@@ -96,7 +96,7 @@ def load_strategy(path: Path, catalog: dict[str, Any], rotation: dict[str, Any],
 
 
 def planned_vehicles(current: str, catalog: dict[str, Any], rotation: dict[str, Any],
-                     strategy: dict[str, Any] | None) -> list[dict[str, str]]:
+                     strategy: dict[str, Any] | None = None) -> list[dict[str, str]]:
     indexed = vehicle_index(catalog, rotation)
     ids = (strategy["priorities"][current] if strategy is not None
            else default_priorities(rotation)[current])

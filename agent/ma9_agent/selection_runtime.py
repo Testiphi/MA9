@@ -17,14 +17,23 @@ from .vehicle_screen import (LEAGUE_CENTERS, normalize,
                              parse_fuel, read_page, selected_league)
 
 
-def _ocr(context: Any, image: np.ndarray, roi: tuple[int, int, int, int]) -> list[dict[str, Any]]:
+__all__ = ["frame_of", "ocr_roi", "scan_rank", "select_recommended", "_frame", "_ocr"]
+
+
+def ocr_roi(context: Any, image: np.ndarray, roi: tuple[int, int, int, int]) -> list[dict[str, Any]]:
     detail = context.run_recognition_direct(JRecognitionType.OCR, JOCR(roi=roi), image)
     return ([{"text": item.text, "confidence": float(item.score), "box": list(item.box)}
              for item in detail.all_results] if detail else [])
 
 
-def _frame(context: Any) -> np.ndarray:
+def frame_of(context: Any) -> np.ndarray:
     return normalize(context.tasker.controller.post_screencap().get(wait=True))
+
+
+# Compatibility for existing callers and their patch points. New integrations
+# use the public names; both names initially refer to the same callable.
+_frame = frame_of
+_ocr = ocr_roi
 
 
 def _click(context: Any, x: int, y: int) -> bool:

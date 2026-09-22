@@ -10,7 +10,7 @@ from typing import Any, Callable
 import cv2
 import numpy as np
 
-from .models import League
+from .models import League, Rect
 
 
 LEAGUE_CENTERS = (560, 616, 671, 727, 782, 837, 893, 948, 1003)
@@ -63,7 +63,7 @@ def match_vehicle(ocr: list[dict[str, Any]], catalog: list[dict[str, Any]],
              if item["confidence"] >= .7 and re.search(r"[A-Za-z0-9]", item["text"])]
     observed = _key(" ".join(parts))
     observed = {"proqor1": "pragar1", "progor1": "pragar1"}.get(observed, observed)
-    if not observed:
+    if not observed or not catalog:
         return None
     scored = sorted(((SequenceMatcher(None, observed, _key(car["title"])).ratio(), car)
                      for car in catalog), key=lambda pair: pair[0], reverse=True)
@@ -98,7 +98,7 @@ def _inside(item: dict[str, Any], roi: tuple[int, int, int, int]) -> bool:
 
 def parse_fuel(items: list[dict[str, Any]]) -> int | None:
     for item in items:
-        match = re.search(r"(\d+)\s*[/／]\s*(\d+)", item["text"])
+        match = re.search(r"(-?\d+)\s*[/／]\s*(-?\d+)", item["text"])
         if match:
             current, maximum = map(int, match.groups())
             if 0 <= current <= maximum and maximum > 0:
@@ -129,5 +129,5 @@ def read_page(image: np.ndarray, ocr: list[dict[str, Any]],
         result.append({"vehicle": vehicle,
                        "fuel": fuel,
                        "card": [x, y, width, height],
-                       "target": [round(x + width * .30), round(y + height * .55)]})
+                       "target": list(Rect(x, y, width, height).safe_vehicle_point())})
     return result

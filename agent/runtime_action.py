@@ -15,13 +15,12 @@ from maa.custom_action import CustomAction
 from ma9_agent.runtime_config import RuntimeConfig
 from ma9_agent.garage_profile import load_profile, owned_vehicle_ids
 from ma9_agent.vehicle_recognizer import available_candidates, recognize_visible
-from ma9_agent.selection_runtime import select_recommended
+from ma9_agent.selection_runtime import frame_of, ocr_roi, select_recommended
 from ma9_agent.vehicle_location_test import run_location_test
 from ma9_agent.duel_map_screen import read_five_tracks
 from ma9_agent.duel_vehicle_runtime import scan as scan_duel_vehicles
 from ma9_agent.duel_defense_setup import run_defense_setup
 from ma9_agent.account_conflict import account_conflict_from_ocr
-from ma9_agent.selection_runtime import _frame, _ocr
 
 
 @AgentServer.custom_action("ma9_account_conflict_diagnose")
@@ -31,8 +30,8 @@ class AccountConflictDiagnoseAction(CustomAction):
     def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
         del argv
         root = find_project_root()
-        frame = _frame(context)
-        report = account_conflict_from_ocr(_ocr(context, frame, (140, 200, 1000, 330)))
+        frame = frame_of(context)
+        report = account_conflict_from_ocr(ocr_roi(context, frame, (140, 200, 1000, 330)))
         destination = root / "debug/account_conflict_live.json"
         destination.parent.mkdir(exist_ok=True)
         destination.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -48,7 +47,7 @@ class AccountConflictRecoverAction(CustomAction):
         del argv
         root = find_project_root()
         report = account_conflict_from_ocr(
-            _ocr(context, _frame(context), (140, 200, 1000, 330)))
+            ocr_roi(context, frame_of(context), (140, 200, 1000, 330)))
         clicked = False
         if report["detected"]:
             clicked = bool(context.tasker.controller.post_click(1090, 244).wait().succeeded)
@@ -249,7 +248,7 @@ class DuelReadTracksAction(CustomAction):
         del argv
         root = find_project_root()
         reference = json.loads((root / "data/generated/duel_auto_candidates.json").read_text(encoding="utf-8"))
-        report = read_five_tracks(_ocr(context, _frame(context), (55, 165, 1190, 160)), reference)
+        report = read_five_tracks(ocr_roi(context, frame_of(context), (55, 165, 1190, 160)), reference)
         destination = root / "debug/duel_tracks_live.json"
         destination.parent.mkdir(exist_ok=True)
         destination.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -8,10 +8,42 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from ma9_agent.selection_strategy import LEAGUES, load_strategy, new_strategy, planned_vehicles
+from ma9_agent.selection_strategy import LEAGUES, default_priorities, load_strategy, new_strategy, planned_vehicles, vehicle_index
+from ma9_agent.models import League
 
 
 class SelectionStrategyTest(unittest.TestCase):
+    def test_league_keys_fallback_and_version_are_strict(self) -> None:
+        self.assertEqual(LEAGUES, tuple(rank.label for rank in League))
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "strategy.json"
+            self.assertIsNone(load_strategy(path, self.catalog, self.rotation, self.garage))
+            for change in ("missing", "extra", "version", "fallback", "no_garage"):
+                strategy = new_strategy(self.catalog, self.rotation, self.garage)
+                self.assertEqual(set(strategy), {"schema_version", "fallback", "priorities"})
+                if change == "missing":
+                    del strategy["priorities"]["传奇"]
+                elif change == "extra":
+                    strategy["priorities"]["不存在"] = []
+                elif change == "version":
+                    strategy["schema_version"] = 2
+                elif change == "fallback":
+                    strategy["fallback"] = "forward"
+                path.write_text(json.dumps(strategy), encoding="utf-8")
+                garage = None if change == "no_garage" else self.garage
+                with self.subTest(change=change), self.assertRaises(ValueError):
+                    load_strategy(path, self.catalog, self.rotation, garage)
+
+    def test_default_ownership_filter_and_approved_league_override(self) -> None:
+        self.assertEqual(default_priorities(self.rotation)["黄金"], ["gold", "silver", "bronze"])
+        self.assertEqual(default_priorities(self.rotation, set())["黄金"], [])
+        self.assertEqual(default_priorities(self.rotation, {"silver"})["黄金"], ["silver"])
+        self.catalog["vehicles"][1]["league"] = "传奇"
+        self.assertEqual(vehicle_index(self.catalog, self.rotation)["silver"]["league"], "白银")
+        self.assertEqual(self.catalog["vehicles"][1]["league"], "传奇")
+        self.assertEqual([v["catalog_id"] for v in planned_vehicles("白银", self.catalog, self.rotation)],
+                         ["silver", "bronze"])
+
     def setUp(self) -> None:
         self.catalog = {"vehicles": [
             {"id": "bronze", "title": "Bronze Car", "league": "青铜"},
