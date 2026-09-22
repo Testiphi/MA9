@@ -58,3 +58,21 @@ PyInstaller 构建成功（exit 0，164.3 MiB）。从构建 PYZ 提取 runtime 
 - 根编排层使用现有 check_daily_navigation.hit/score 对末次 1280×720 失败截图进行只读离线检查：首页卡片 And 判据 hit=True，多人选中模板 0.9999995、对决标题模板 0.973783，均超过 0.9。未发现此次停留由地图更新或主页模板失配导致的证据。
 
 结论：账号冲突中断了车库扫描；恢复流程复用已耗尽的导航命中计数，导致无法再次进入对决。下一修复应控制恢复导航的计数作用域并保留故障链，维持一次账号恢复上限；不应仅降低模板阈值或取消点击上限。涉及 duel-defense 恢复入口与 duel-scan 导航边界，实施前须由总控明确归属并遵守 high 档跨 lane 决策要求。旧包暂不复测，后续依赖保持等待。
+
+
+## 账号冲突恢复修复（2026-09-22）
+
+总控在 ca45c50 中把 duel_defense_setup.py 与对应测试临时从 06 转给 05 单一 owner；05 合入编排元数据后的基点是 d127cb705a5c108a8e785190466562555dc08253。依赖图不变，06/07 不开工。修复代码留在 lane/duel-scan，尚未合入 main。
+
+修复提交：3605c8e9b1581259055d464c87e36c07a1ffa7c2，只改临时授权的两个文件，+135/-2。
+确认账号冲突并关闭弹窗后，最多一次清除五个对决导航节点的历史命中计数。未改 pipeline 的 max_hit、账号冲突节点计数、契约或赛道判据。清除失败直接停止；恢复后的成功或失败报告保留 initial_error 与 account_conflict_retries。槽位/防守/runtime pipeline 没有显式 max_hit，无需清除。
+
+owner 与总控分别执行 Agent 93 项、tools 13 项（12 通过、1 既有私有截图跳过），均 exit 0。总控独立负对照把最终四项恢复回归放在旧源码上，得到 2 failures + 1 error，恰为三个预期旧行为失败；含真实 failed: 对决_资格赛入口，无夹具耗尽。当前四项全部通过。
+
+原生框架离线探针使用纯内存 CustomController，所有设备动作禁止：同一 Context 第一次进入成功，第二次被 max_hit=1 阻断；clear_hit_count 后第三次成功。经本机实际 AgentClient/AgentServer 跨进程复测同样成功，未命中节点也可清除。探针第一次默认 IPC 创建受主机环境限制失败，改为随机本地 TCP 端口后通过，未连接游戏设备。
+
+PyInstaller 构建 exit 0，164.3 MiB。新包 user-test-recovery 的版本为 v0.0.0-duel-recovery-3605c8e，未复制用户 config/日志。240 个受控资源 SHA256 与 worktree 一致；PYZ 中 defense_setup 与 vehicle_runtime 代码对象和当前源码编译相等。无 socket 启动 Agent 得到预期 Usage/exit 1；未启动 GUI 或设备。新包的 TEST-BUILD.json 和实机验证说明.txt 已生成。
+
+最终门禁：完整 schema 总控进程 32911 返回全部 27 项通过、exit 0；schema-result.json 保存原始完成输出。独立 Terra high /root/ma9_r_stability_review 只读复核无阻塞，另跑 defense 17/17 通过；确认五节点清除范围精确、恢复最多一次、失败安全停止、阵容保留与不开始比赛语义不变。证据目录 E:/hzz/work/MA9-evidence/recovery-fix。
+
+新包已放行用户复测，TEST-BUILD.json 已写入最终门禁与复核结果。业务修复 3605c8e 留在 lane/duel-scan，主工作区仅提交编排记录；未推送、未合入业务代码、未操作设备。旧包与原始失败证据保持原样。临时文件归属保留至实机验收及集成后再由总控归还 06；依赖 lane 仍等待。
