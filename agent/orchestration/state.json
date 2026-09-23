@@ -43,7 +43,7 @@
     },
     "duel-scan": {
       "project": "MA9-05-擂台车库遍历",
-      "phase": "D_device_passed_integration_blocked_by_existing_root_resolution",
+      "phase": "merged_D_device_passed",
       "model": "deepseek",
       "effort": "high",
       "branch": "lane/duel-scan",
@@ -51,8 +51,8 @@
       "base_commit": "0850f33d4f3a127ed79ba7c62a0d25a6282a6845",
       "review": "GLM-5.3_high_no_blockers_report_and_37_test_logs_checked",
       "device": "D_five_assigned_unique_starts_race_false_lineup_confirmed",
-      "merged": false,
-      "next": "用户以GLM-5.3 high全新对话执行02R-root-review.md，只读复核d118f52..a7d9910整个根隔离改动；通过后总控处理必要更正并恢复集成。05实机成功保留，06/07等待。",
+      "merged": true,
+      "next": "本轮05修复已合入，后续只按新证据维护；06进行只读防守缺口审计，07等待。",
       "head": "f5472bce3443fde42df17ad8a1819e18b46a2059",
       "pilot_report": "agent/orchestration/duel_scan_pilot_report.md",
       "pilot_tests": {
@@ -75,7 +75,9 @@
           "agent/ma9_agent/duel_defense_setup.py",
           "agent/tests/test_duel_defense_setup.py"
         ],
-        "reason": "20260922 device blocker; return after repair acceptance"
+        "reason": "20260922 device blocker; return after repair acceptance",
+        "status": "returned_to_duel-defense_after_integration",
+        "return_basis": "f36f3b23db952aae67e2583f9e74ae965fa6fa65 plus D live acceptance"
       },
       "recovery_tests": {
         "agent_passed": 93,
@@ -187,12 +189,29 @@
         "merge": "aborted_safely_before_commit",
         "main_head": "d118f5254e4c99df40488779f388fc24a7730e62",
         "ownership": "defense_setup仍归05，06/07不放行"
+      },
+      "merge_commit": "f36f3b23db952aae67e2583f9e74ae965fa6fa65",
+      "combined_integration": {
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-combined-integration/results.json",
+        "agent_passed": 105,
+        "tools_passed": 29,
+        "tools_skipped": 0,
+        "exit_codes": [
+          0,
+          0
+        ],
+        "schema": "27_passes_reused_34_inputs_equivalent",
+        "remote_ci": "not_yet_confirmed"
       }
     },
     "duel-defense": {
-      "phase": "waiting_dependency",
+      "phase": "dependency_met_read_only_audit_preparing",
       "depends_on": "duel-scan",
-      "worktree": null
+      "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-defense",
+      "branch": "lane/duel-defense",
+      "model": "deepseek",
+      "effort": "high",
+      "ownership": "defense_setup and its test explicitly returned by orchestrator"
     },
     "duel-attack": {
       "phase": "waiting_defense_stable",
@@ -208,7 +227,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "总控合入已独立复核的根隔离与05修复，运行组合集成门禁；通过后归还06文件并准备窄任务。",
+  "next": "05及根隔离已合入，通过Agent105/tools29及schema复用；总控创建06工作区并刷新只读缺口审计提示词，用户ds-v4.1flash high新对话运行。07继续等待，04暂停。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -273,7 +292,7 @@
     "review_prompt": "completed_GLM-5.3_review_accepted"
   },
   "root_isolation": {
-    "phase": "review_accepted_integration_pending",
+    "phase": "merged_reviewed_offline_verified_new_marker_device_not_run",
     "decision": "M-alpha",
     "marker": ".ma9-portable-root",
     "priority": [
@@ -329,6 +348,7 @@
         "ids": "F7_F8",
         "status": "record_only_no_change"
       }
-    ]
+    ],
+    "merge_commit": "380b051afceac70af1f31471c0339de071a076ce"
   }
 }

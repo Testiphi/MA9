@@ -185,3 +185,11 @@ GUI及其测试、install.py、prepare_portable_preview.py登记归build；只�
 已核对02R report/results、runtime/gui/preview日志和P1–P6探针结果。目标a7d9910cc945072efbf6ccb9b3d38f4f949a6e87未变且工作区干净；接受GLM-5.3 high“无阻塞”。三组9/11/7项通过，报告记录最终exit0；preview首轮宿主超时后取得的最终重跑结果与首次中断分开看待。
 代码按已复核版本集成，不为低/信息级发现扩修。F1/F2/F3总控更正已有记录，原始日志不改；F4/F6与GUI相邻catalog覆盖登记给build后续；F5 runtime模块链测试必须归总控（reviewer将整项列02D不改变契约单owner）。F7/F8记录不改。
 新标记包无实机结论；05无标记f5472bc的D级449.013秒成功有效。开始组合集成门禁，未通过前不归还06文件、不放行06/07。关键阶段当前无法主动切high，不声称已切档。
+
+## 2026-09-23 组合集成完成与06归属归还
+
+根隔离合并380b051afceac70af1f31471c0339de071a076ce；05合并f36f3b23db952aae67e2583f9e74ae965fa6fa65。均保持独立复核的生产代码，无额外行为修改。
+总控组合现场Agent105通过、tools29通过无skip、最终exit0；主仓库私有截图存在所以历史跳过项本轮也通过。34项schema输入逐项核对：相同字节或仅CRLF/LF文本等价，复用f5472bc的27项exit0，不声称重跑。证据MA9-evidence/20260923-combined-integration/results.json与日志。旧失败门禁已被本轮实际通过解除，原失败证据不改。
+05的D级449.013秒实机成功保持限定；新标记包没有实机结论，R/S/A/B/C与账号恢复实机覆盖仍未扩展。
+总控现明确将agent/ma9_agent/duel_defense_setup.py及agent/tests/test_duel_defense_setup.py从05归还06，lanes.yaml已反映单一owner。下一06A仅只读梳理剩余防守门禁和最小下一步，不授权开赛、设备操作或重写已成功流程；07等待06结论，04暂停。
+02R低/信息级建议登记后续，不为非阻塞事项无限返工；runtime测试归总控、GUI文档/测试归02，原02D报告与原始日志不覆盖。

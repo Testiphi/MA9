@@ -17,18 +17,18 @@
 
 ## 全新对话提示词索引（2026-09-23）
 
-每次任务使用全新对话；表格是分工与预案，不代表全部放行。当前只派05R。
+每次任务使用全新对话；表格是分工与预案，不代表全部放行。当前05与根隔离已合入，下一任务为06A只读缺口审计；旧05R/02D/02R提示词仅作历史，不重复派发。
 
 | 项目 | 模型 | 新提示词 | 状态 |
 |---|---|---|---|
 | MA9-00 新编排入口 | 当前Astra总控 | [00](prompts/00-orchestrator.md) | 用户新对话接管 |
 | MA9-01 导航与语言验证 | Hy3 | [01](prompts/01-nav.md) | 文档收尾待触发 |
-| MA9-02 CI与构建 | ds-v4.1flash high | [02](prompts/02-build.md) | 复核通过后按需构建 |
+| MA9-02 CI与构建 | ds-v4.1flash high | [02](prompts/02-build.md) | 原CI交付保留；根隔离已合入，低优先级收尾待触发 |
 | MA9-03 车辆识别 | ds-v4.1flash high | [03](prompts/03-vehicle.md) | 仅擂台阻塞触发 |
 | MA9-04 多人循环 | 暂无 | [04](prompts/04-multiplayer-paused.md) | 暂停 |
-| MA9-05 车库遍历 | ds-v4.1flash high | [05](prompts/05-duel-scan.md) | 修复已交付，等待复核 |
-| MA9-05R 独立复核 | GLM-5.3 high | [05R](prompts/05R-review.md) | 下一任务，可派发 |
-| MA9-06 防守编排 | ds-v4.1flash high | [06](prompts/06-duel-defense.md) | 等待05 |
+| MA9-05 车库遍历 | ds-v4.1flash high | [05](prompts/05-duel-scan.md) | 本轮修复已合入，D级实机通过 |
+| MA9-05R 独立复核 | GLM-5.3 high | [05R](prompts/05R-review.md) | 已完成，不重复派发 |
+| MA9-06 防守编排 | ds-v4.1flash high | [06](prompts/06-duel-defense.md) | 依赖满足，准备06A只读缺口审计 |
 | MA9-07 进攻闭环 | GLM-5.3 high | [07](prompts/07-duel-attack.md) | 等待06稳定 |
 | MA9-E 日志截图索引 | GLM-5.3-Flash | [E](prompts/E-evidence.md) | 按需只读 |
 | MA9-V 截图歧义核对 | Hy4 preview | [V](prompts/V-visual.md) | 按需只读试点 |

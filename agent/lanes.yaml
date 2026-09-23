@@ -449,9 +449,7 @@ lanes:
       - agent/tests/test_duel_vehicle_runtime.py
       - agent/tests/test_duel_vehicle_screen.py
       - docs/zh_cn/develop/duel_offline_recognition.md
-      # 临时单一归属：20260922 账号恢复阻塞；05 验收后由总控归还 06。
-      - agent/ma9_agent/duel_defense_setup.py
-      - agent/tests/test_duel_defense_setup.py
+      # 20260923：实机与集成通过，两个defense_setup文件已归还06。
     owns_new:
       - assets/resource/image/navigation/duel/detail_select_text.png
     reviewer:
@@ -463,7 +461,7 @@ lanes:
       用户改回 DeepSeek high 人工中转；它是 ②③ 的硬前置，保留独立只读复核。
       先用固定截图/现有测试核对剩余缺口，不重写已成功的 D 级流程。
       具体难题两轮修复失败后交总控诊断，保存证据交总控，不自动升级 GPT 或 max。
-      当前 D 级已实机完成五车配置；页码快速定位与缩短等待已落地但尚待用户复测总耗时。
+      当前D级f5472bc已实机five_assigned、五车互斥且未开赛，耗时449.013秒；已通过组合集成。
       R/S/A/B/C 等级边界目前只有离线测试证据。
 
   - id: duel-defense
@@ -476,6 +474,8 @@ lanes:
     needs_device: true
     depends_on: [duel-scan]
     owns:
+      - agent/ma9_agent/duel_defense_setup.py
+      - agent/tests/test_duel_defense_setup.py
       - agent/ma9_agent/duel_map_screen.py
       - assets/resource/pipeline/duel_defense.json
       - docs/zh_cn/develop/duel_daily_model.md
