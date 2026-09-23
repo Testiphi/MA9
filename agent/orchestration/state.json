@@ -251,7 +251,8 @@
       "effort": "high",
       "head": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
       "base_commit": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
-      "prompt": "agent/orchestration/prompts/07-duel-attack.md"
+      "prompt": "agent/orchestration/prompts/07-duel-attack.md",
+      "scheduling_note": "User reports GLM-5.3 quota unavailable for approximately four hours; original07A prompt and fixed2876a4a base retained. No model replacement or scheduled wakeup created."
     }
   },
   "evidence": {
@@ -261,7 +262,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "06配置阶段已按限定范围闭环；用户用GLM-5.3 high全新对话执行07A只读进攻规划审计，不能写代码/操作设备/开赛，04暂停。",
+  "next": "等待GLM额度期间可由用户以ds-v4.1flash high新对话运行02E文档/测试收尾；07A固定2876a4a只读规划保留，GLM恢复后执行，二者边界独立。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -370,7 +371,7 @@
       {
         "ids": "F4_F6_F5_GUI",
         "owner": "build",
-        "status": "nonblocking_followup_not_dispatched",
+        "status": "02E_prompt_ready",
         "scope": "docs wording, ControlledFilesystem comment, GUI adjacent catalog compatibility test"
       },
       {
@@ -383,20 +384,55 @@
         "status": "record_only_no_change"
       }
     ],
-    "merge_commit": "380b051afceac70af1f31471c0339de071a076ce"
+    "merge_commit": "380b051afceac70af1f31471c0339de071a076ce",
+    "closeout_task": {
+      "project": "MA9-02E-根隔离文档与GUI回归收尾",
+      "phase": "prompt_ready",
+      "model": "ds-v4.1flash",
+      "effort": "high",
+      "branch": "codex/root-isolation",
+      "worktree": "E:/hzz/work/MA9/MA9-worktrees/root-isolation",
+      "base_commit": "18964c884cd3b6a4a81bb3c69edeb96b26ed26dc",
+      "prompt": "agent/orchestration/prompts/02-build.md",
+      "scope": [
+        "docs/zh_cn/develop/how_to_develop.md",
+        "tools/tests/test_selection_gui_path.py"
+      ],
+      "production_changes_allowed": false
+    }
   },
   "remote_sync": {
-    "status": "user_explicitly_confirmed_push_pending_execution",
+    "status": "pushed_verified",
     "attempt": "git push origin main",
     "destination": "https://github.com/Testiphi/MA9.git",
-    "payload_head": "b8baaaa5e7fa47b823037387867fd3cd7b2652b4",
+    "payload_head": "18964c884cd3b6a4a81bb3c69edeb96b26ed26dc",
     "local_commits_ahead_at_attempt": 34,
-    "executed": false,
-    "remote_ci": "not_confirmed",
+    "executed": true,
+    "remote_ci": "check_and_install_completed_success_at_18964c8",
     "reason": "Auto-review did not recognize explicit authorization for exporting the repository contents and 34 local commits to this destination",
-    "next": "Commit current authorized orchestration updates, then ordinary push origin main and verify remote SHA; do not infer CI pass.",
+    "next": "远端18964c8的check/install均成功；本轮02E派发元数据本地提交，业务交付后再按授权集成推送。",
     "payload_update": "The recorded 34-commit push attempt was blocked before execution. This local policy-record commit adds one more commit; recompute HEAD and outgoing count before requesting push approval.",
-    "authorization": "2026-09-23 user message: 确认推送。 Destination remains https://github.com/Testiphi/MA9.git; ordinary main push, no force."
+    "authorization": "2026-09-23 user message: 确认推送。 Destination remains https://github.com/Testiphi/MA9.git; ordinary main push, no force.",
+    "verified_remote_head": "18964c884cd3b6a4a81bb3c69edeb96b26ed26dc",
+    "pushed_commits": 37,
+    "push_exit_code": 0,
+    "ci_runs": [
+      {
+        "id": 35818798712,
+        "name": "check",
+        "status": "completed",
+        "url": "https://github.com/Testiphi/MA9/actions/runs/35818798712",
+        "conclusion": "success"
+      },
+      {
+        "id": 35818798735,
+        "name": "install",
+        "status": "completed",
+        "url": "https://github.com/Testiphi/MA9/actions/runs/35818798735",
+        "conclusion": "success"
+      }
+    ],
+    "observation_note": "Post-push local status observation only; no second status-only push to retrigger CI. Major orchestration changes already committed and pushed."
   },
   "git_commit_policy": {
     "approved_at": "2026-09-23",

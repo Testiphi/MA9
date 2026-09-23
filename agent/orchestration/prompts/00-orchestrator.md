@@ -22,3 +22,5 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 每个新任务完整注明项目、模型/档位、cwd/branch/完整基点与HEAD、必读文件、精确owns/owns_new/owns_generated、验证命令、证据、结束条件和回传格式。用户只回传结果，总控查实际证据、维护状态和下一份提示词。实机默认用户串行执行，不操作ADB/MuMu；GUI完成提示不能替代业务JSON。合入通过后按用户授权推送，除非用户明确不推送；失败如实记录，不改写历史或强推。
 
 用户新增持久规则：每次较大修改形成完整且验证通过的阶段后，自动创建一次本地Git提交，不再逐次询问；只提交授权文件，不纳入私有证据或用户.workbuddy。远端推送与本地提交分开处理，自动审批拒绝时不得绕过。
+
+最新调度补充：用户报告GLM-5.3约4小时额度等待，07A固定2876a4a提示词保留、不换模。期间可执行02E（ds-v4.1flash high，prompts/02-build.md），cwd MA9-worktrees/root-isolation、branch codex/root-isolation、基点18964c884cd3b6a4a81bb3c69edeb96b26ed26dc，仅文档/GUI测试两文件。该18964c8远端check与install现已均成功。总控不自动新建对话或唤醒。

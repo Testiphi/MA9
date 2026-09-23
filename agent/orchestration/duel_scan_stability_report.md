@@ -200,3 +200,9 @@ GUI及其测试、install.py、prepare_portable_preview.py登记归build；只�
 接受当前五车配置阶段“无阻塞”并关闭该有限阶段；不把它写成五场防守比赛、所有等级或完整日常闭环完成。地图顺序守卫回归覆盖缺口为06可选后续；07错误消息及根隔离文档/测试仍按既定owner。
 总控更正统计：G1有D级直接实机证据；G2–G8仅离线/代码证据。resumed_from_slot=1并不证明中途断点恢复，未命中already_configured分支不证明阵容保留路径实机通过；因此不采信“5项实机+3项离线”。未出现Start命名点击也不能单独证明无开赛，以既有业务JSON、完整流程与用户终屏共同支持G1。原始06A报告不改。
 允许07A只读规划，禁止写06文件、进攻实机/扣票/开赛/领奖/购买，不触碰根外MutualExclusionAllocator。用户本次明确“确认推送”，授权按既定origin https://github.com/Testiphi/MA9.git 普通推送main，不强推；本轮编排更新完成后执行并核对远端SHA。
+
+## 2026-09-23 GLM额度等待期：02E文档/测试收尾
+
+用户询问等待约4小时期间可并行的任务。总控选择已由02R确认的非阻塞F4/F6/F5-GUI，派02E给ds-v4.1flash high；只改how_to_develop根隔离段落与test_selection_gui_path注释/一项兼容回归，不改生产模块、不消耗GLM复核额度。F5-runtime仍归总控，不下放。
+已核对远端18964c884cd3b6a4a81bb3c69edeb96b26ed26dc：GitHub Actions check 35818798712与install 35818798735均completed/success。此结论仅针对该SHA。
+02工作区codex/root-isolation从干净a7d9910快进到18964c8作为02E基点；02原build-ci与07工作区未动。07A保持2876a4a固定基点和GLM-5.3 high安排，只读规划与02E两文件不冲突；未创建自动唤醒、外部对话或子智能体。
