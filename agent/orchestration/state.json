@@ -213,7 +213,7 @@
       "effort": "high",
       "ownership": "defense_setup and its test explicitly returned by orchestrator",
       "base_commit": "550c01dc95af0e5bc2cb16f8ccc70b316b88980d",
-      "head": "550c01dc95af0e5bc2cb16f8ccc70b316b88980d",
+      "head": "caf5c0455f4ecc6595ed79c82eac365a2e57a1d9",
       "prompt": "agent/orchestration/prompts/06-duel-defense.md",
       "audit_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-06A-defense-audit/results.json",
       "closeout": {
@@ -243,14 +243,16 @@
       },
       "maintenance_task": {
         "project": "MA9-06B-地图顺序守卫回归",
-        "phase": "preparing_prompt",
+        "phase": "06B_prompt_ready",
         "model": "ds-v4.1flash",
         "effort": "high",
         "scope": [
           "agent/tests/test_duel_defense_setup.py"
         ],
         "production_changes_allowed": false,
-        "reason": "06A F1 existing guard coverage gap, does not reopen completed configuration stage"
+        "reason": "06A F1 existing guard coverage gap, does not reopen completed configuration stage",
+        "base_commit": "caf5c0455f4ecc6595ed79c82eac365a2e57a1d9",
+        "prompt": "agent/orchestration/prompts/06-duel-defense.md"
       }
     },
     "duel-attack": {
