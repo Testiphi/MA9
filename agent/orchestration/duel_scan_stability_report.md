@@ -206,3 +206,10 @@ GUI及其测试、install.py、prepare_portable_preview.py登记归build；只�
 用户询问等待约4小时期间可并行的任务。总控选择已由02R确认的非阻塞F4/F6/F5-GUI，派02E给ds-v4.1flash high；只改how_to_develop根隔离段落与test_selection_gui_path注释/一项兼容回归，不改生产模块、不消耗GLM复核额度。F5-runtime仍归总控，不下放。
 已核对远端18964c884cd3b6a4a81bb3c69edeb96b26ed26dc：GitHub Actions check 35818798712与install 35818798735均completed/success。此结论仅针对该SHA。
 02工作区codex/root-isolation从干净a7d9910快进到18964c8作为02E基点；02原build-ci与07工作区未动。07A保持2876a4a固定基点和GLM-5.3 high安排，只读规划与02E两文件不冲突；未创建自动唤醒、外部对话或子智能体。
+
+## 2026-09-23 02E接收与进攻规则澄清
+
+02E交付8759c9f02b3155670a2bb5038b735b3e6a3ca3db仅两个授权文件。总控读实际diff，确认只改根隔离文档、ControlledFilesystem错误注释与一个GUI兼容回归，不改生产逻辑。主仓库合并候选tools30项全过无skip、最终exit0；Agent105/schema27按未变化输入复用。证据MA9-evidence/20260923-02E-orchestrator。已自动合入d0418c1363769b72fa53a0e89945e578fc75cbd7，不需要再次占用GLM复核额度。
+02E results.json的reuse段有几处完整SHA抄写错误，以实际Git及reuse.json中的18964c884cd3b6a4a81bb3c69edeb96b26ed26dc为准；提示词是“目录已存在则停止”的条件句，不是声称目录已存在。两项均记录纠正，原证据不改。F4/F6/F5-GUI关闭，F5-runtime仍为总控后续。
+用户明确：选对手偏好D/C合计至少三辆；进攻三胜足以赢整组是用户确认的规则，但如何结束剩余比赛尚未实机。防守则需五图有效完成，中断重做；旧中断失败记录不能直接移用于进攻。原文“五张有效票”不作为推断票券消耗的依据。
+07A保持只读、原固定基点和GLM-5.3 high，不自动退出/跳过/扣票/开赛。用户愿意提供具体截图和验证；下一最小现场材料可在自然第三胜结算页取得，不要求额外消耗机会或重跑D级。当前没有设备操作授权。

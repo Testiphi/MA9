@@ -252,7 +252,21 @@
       "head": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
       "base_commit": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
       "prompt": "agent/orchestration/prompts/07-duel-attack.md",
-      "scheduling_note": "User reports GLM-5.3 quota unavailable for approximately four hours; original07A prompt and fixed2876a4a base retained. No model replacement or scheduled wakeup created."
+      "scheduling_note": "User reports GLM-5.3 quota unavailable for approximately four hours; original07A prompt and fixed2876a4a base retained. No model replacement or scheduled wakeup created.",
+      "user_strategy": {
+        "source": "2026-09-23 user clarification in orchestrator conversation",
+        "opponent_preference": "D_and_C_combined_at_least_3_of_5_defense_cars",
+        "preference_not_win_guarantee": true,
+        "no_qualifying_opponent": "not_specified_do_not_invent",
+        "attack_win_rule": "user states 3 wins suffice for overall attack victory",
+        "early_finish_action": "not_device_verified_no_automatic_exit_or_skip",
+        "defense_rule": "user states all five maps must validly complete; interruption requires restarting defense",
+        "original_defense_wording": "防守一定需要五张有效票才可，一旦有一张图被中断需要重新从头防守",
+        "interpretation_limit": "Do not infer ticket consumption/count from the wording; confirm UI semantics when necessary",
+        "historical_conflict": "user corrects earlier interruption-loss record as defense context; do not apply it automatically to attack, preserve raw records",
+        "next_observation": "At a naturally reached third attack victory, capture the full result screen before any early exit; then determine minimal validation steps",
+        "device_control_authorized": false
+      }
     }
   },
   "evidence": {
@@ -262,7 +276,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "等待GLM额度期间可由用户以ds-v4.1flash high新对话运行02E文档/测试收尾；07A固定2876a4a只读规划保留，GLM恢复后执行，二者边界独立。",
+  "next": "02E已合入并验证；07A等待GLM恢复，提示词增加用户确认的D/C合计>=3偏好与进攻/防守规则区分。三胜后的提前结束操作未实机验证，不自动退出。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -371,7 +385,7 @@
       {
         "ids": "F4_F6_F5_GUI",
         "owner": "build",
-        "status": "02E_prompt_ready",
+        "status": "completed_8759c9f_merged_d0418c1",
         "scope": "docs wording, ControlledFilesystem comment, GUI adjacent catalog compatibility test"
       },
       {
@@ -387,7 +401,7 @@
     "merge_commit": "380b051afceac70af1f31471c0339de071a076ce",
     "closeout_task": {
       "project": "MA9-02E-根隔离文档与GUI回归收尾",
-      "phase": "prompt_ready",
+      "phase": "merged_orchestrator_verified",
       "model": "ds-v4.1flash",
       "effort": "high",
       "branch": "codex/root-isolation",
@@ -398,11 +412,15 @@
         "docs/zh_cn/develop/how_to_develop.md",
         "tools/tests/test_selection_gui_path.py"
       ],
-      "production_changes_allowed": false
+      "production_changes_allowed": false,
+      "delivery": "8759c9f02b3155670a2bb5038b735b3e6a3ca3db",
+      "merge_commit": "d0418c1363769b72fa53a0e89945e578fc75cbd7",
+      "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260923-02E-orchestrator/results.json",
+      "tools": "30_passed_exit0_no_skip_in_main"
     }
   },
   "remote_sync": {
-    "status": "pushed_verified",
+    "status": "02E_and_strategy_records_ready_for_authorized_push",
     "attempt": "git push origin main",
     "destination": "https://github.com/Testiphi/MA9.git",
     "payload_head": "18964c884cd3b6a4a81bb3c69edeb96b26ed26dc",
@@ -410,7 +428,7 @@
     "executed": true,
     "remote_ci": "check_and_install_completed_success_at_18964c8",
     "reason": "Auto-review did not recognize explicit authorization for exporting the repository contents and 34 local commits to this destination",
-    "next": "远端18964c8的check/install均成功；本轮02E派发元数据本地提交，业务交付后再按授权集成推送。",
+    "next": "普通推送main到已获确认的origin；新的远端CI需独立核对，不能沿用18964c8的成功结论。",
     "payload_update": "The recorded 34-commit push attempt was blocked before execution. This local policy-record commit adds one more commit; recompute HEAD and outgoing count before requesting push approval.",
     "authorization": "2026-09-23 user message: 确认推送。 Destination remains https://github.com/Testiphi/MA9.git; ordinary main push, no force.",
     "verified_remote_head": "18964c884cd3b6a4a81bb3c69edeb96b26ed26dc",

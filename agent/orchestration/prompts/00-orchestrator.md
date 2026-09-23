@@ -24,3 +24,5 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 用户新增持久规则：每次较大修改形成完整且验证通过的阶段后，自动创建一次本地Git提交，不再逐次询问；只提交授权文件，不纳入私有证据或用户.workbuddy。远端推送与本地提交分开处理，自动审批拒绝时不得绕过。
 
 最新调度补充：用户报告GLM-5.3约4小时额度等待，07A固定2876a4a提示词保留、不换模。期间可执行02E（ds-v4.1flash high，prompts/02-build.md），cwd MA9-worktrees/root-isolation、branch codex/root-isolation、基点18964c884cd3b6a4a81bb3c69edeb96b26ed26dc，仅文档/GUI测试两文件。该18964c8远端check与install现已均成功。总控不自动新建对话或唤醒。
+
+02E最新：8759c9f已由总控合入d0418c1，tools30全过；02E任务结束，不重复派发。07用户新策略为D/C合计至少三辆优先；进攻三胜规则由用户确认，但结束余场的操作未实机验证。防守中断需重做，旧中断判负不直接套进攻。以state.user_strategy及07提示词最新补充为准，不自动退出或操作设备。
