@@ -205,13 +205,16 @@
       }
     },
     "duel-defense": {
-      "phase": "dependency_met_read_only_audit_preparing",
+      "phase": "06A_read_only_audit_prompt_ready",
       "depends_on": "duel-scan",
       "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-defense",
       "branch": "lane/duel-defense",
       "model": "deepseek",
       "effort": "high",
-      "ownership": "defense_setup and its test explicitly returned by orchestrator"
+      "ownership": "defense_setup and its test explicitly returned by orchestrator",
+      "base_commit": "550c01dc95af0e5bc2cb16f8ccc70b316b88980d",
+      "head": "550c01dc95af0e5bc2cb16f8ccc70b316b88980d",
+      "prompt": "agent/orchestration/prompts/06-duel-defense.md"
     },
     "duel-attack": {
       "phase": "waiting_defense_stable",
@@ -227,7 +230,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05及根隔离已合入，通过Agent105/tools29及schema复用；总控创建06工作区并刷新只读缺口审计提示词，用户ds-v4.1flash high新对话运行。07继续等待，04暂停。",
+  "next": "用户用ds-v4.1flash high全新对话执行06A只读防守门禁审计，提示词06-duel-defense.md；05和根隔离已合入。07等06结论，04暂停。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
