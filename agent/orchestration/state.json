@@ -262,7 +262,7 @@
       }
     },
     "duel-attack": {
-      "phase": "07A_read_only_planning_prompt_ready",
+      "phase": "07A_read_only_planning_completed_next_task_not_dispatched",
       "depends_on": "duel-defense",
       "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-attack",
       "model": "glm",
@@ -271,7 +271,7 @@
       "head": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
       "base_commit": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
       "prompt": "agent/orchestration/prompts/07-duel-attack.md",
-      "scheduling_note": "User reports GLM-5.3 quota unavailable for approximately four hours; original07A prompt and fixed2876a4a base retained. No model replacement or scheduled wakeup created.",
+      "scheduling_note": "07A artifacts completed before quota notice; do not rerun to recover a missing final chat response. Next implementation task/model not yet dispatched.",
       "user_strategy": {
         "source": "2026-09-23 user clarification in orchestrator conversation",
         "opponent_preference": "D_and_C_combined_at_least_3_of_5_defense_cars",
@@ -315,6 +315,32 @@
         },
         "count_semantics": "race number3 or completed race count is not3wins; count distinct winning slots once per challenge; highlighted next slot4/5 is not a win; unreadable/conflicting statuses require bounded retry/stop",
         "missing_images": "previously requested reward page and third-win result pages received; terminal ranking not in supplied batches"
+      },
+      "planning_acceptance": {
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-07A-attack-planning/results.json",
+        "report": "E:/hzz/work/MA9/MA9-evidence/20260923-07A-attack-planning/report.md",
+        "head": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
+        "controlled_worktree": "clean",
+        "test_counts": [
+          2,
+          3
+        ],
+        "reported_exit_codes": [
+          0,
+          0
+        ],
+        "logs_checked": true,
+        "probe_source_checked": true,
+        "tests_not_rerun": true,
+        "status": "required_planning_artifacts_complete_despite_platform_quota_notice",
+        "model_effort_note": "GLM-5.3 high requested; report says platform exposes no independent effort switch",
+        "next_recommendation": "pure offline attack session state machine; two new files need orchestrator registration before dispatch",
+        "proposed_new_files": [
+          "agent/ma9_agent/duel_attack_session.py",
+          "agent/tests/test_duel_attack_session.py"
+        ],
+        "registration_authorized": false,
+        "implementation_started": false
       }
     }
   },
@@ -325,7 +351,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "06B已验收本地合入；已安排的根隔离与地图守卫收尾完成。等待GLM-5.3额度恢复执行07A最新只读提示词，固定2876a4a基点不变；不为填满等待时间扩修，04暂停。",
+  "next": "07A只读规划已完成并核对产物；下一步由总控定义/登记纯离线进攻状态机任务，尚未放行写入。Qwen3.7-Max仅讨论候选，不声明等性能或自动切换。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
