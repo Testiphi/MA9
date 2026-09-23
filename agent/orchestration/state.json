@@ -262,14 +262,14 @@
       }
     },
     "duel-attack": {
-      "phase": "07B_implementation_prompt_ready",
+      "phase": "07B_local_acceptance_blocked_07B1_fix_prompt_ready",
       "depends_on": "duel-defense",
       "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-attack",
       "model": "deepseek",
       "branch": "lane/duel-attack",
       "effort": "high",
-      "head": "72e32dad93165f3c34dc022096c9222c9a1e0977",
-      "base_commit": "72e32dad93165f3c34dc022096c9222c9a1e0977",
+      "head": "b063f56cf988bf2544362c3d861cc51ecbe6597d",
+      "base_commit": "b063f56cf988bf2544362c3d861cc51ecbe6597d",
       "prompt": "agent/orchestration/prompts/07-duel-attack.md",
       "scheduling_note": "07A completed;07B now dispatched as bounded new-file implementation to ds-v4.1flash high, not max; independent reviewer selected after delivery.",
       "user_strategy": {
@@ -359,6 +359,23 @@
         "max_policy": "do_not_start_max; only consider after bounded reproducible hard failure",
         "base_commit": "72e32dad93165f3c34dc022096c9222c9a1e0977",
         "prompt": "agent/orchestration/prompts/07-duel-attack.md"
+      },
+      "implementation_acceptance": {
+        "delivery": "b063f56cf988bf2544362c3d861cc51ecbe6597d",
+        "result": "blocked",
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-07B-orchestrator/results.json",
+        "repro_exit": 1,
+        "failures": 2,
+        "issues": [
+          "readable_less_than3_wins_plus_confirmed_win_returns_continue_instead_of_stop",
+          "explicit_loss_with_unknown_slot_rereads_instead_of_immediate_stop"
+        ],
+        "base_tests": 107,
+        "new_tests": 26,
+        "owner_total": 133,
+        "merged": false,
+        "independent_review": "deferred_until_blockers_fixed",
+        "repair_round": "second_bounded_round_including_owner_initial_fix"
       }
     }
   },
@@ -369,7 +386,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "总控准备07B完整提示词：ds-v4.1flash high，仅两个已登记新增文件，纯离线状态决策/候选衔接，无识别/点击/设备/真实包；交付后独立复核。",
+  "next": "用户用ds-v4.1flash high全新对话执行07B1窄修复提示词；总控两反例红转绿后再做本地验收与独立review，不合入当前b063。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

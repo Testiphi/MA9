@@ -38,3 +38,5 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 最新07A状态：实际report/results及2+3测试日志已齐全，07HEAD2876a4a干净。平台末尾限额不影响只读规划已完成，不换模型重跑旧07A。下一纯离线状态机为建议，尚未登记新增文件或派发；Qwen3.7-Max只讨论候选，未自动替换模型。
 
 最新派发07B：用户要求high/max建议与完整提示词，总控选择ds-v4.1flash high，不开max。07工作区已快进72e32dad93165f3c34dc022096c9222c9a1e0977，新登记duel_attack_session.py及对应测试，仅纯离线决策/候选衔接；详见07-duel-attack.md。07A已完成不重跑，Qwen3.7-Max只为后续独立review候选。
+
+当前唯一下一步（优先于上面历史附记）：07B b063f56cf988bf2544362c3d861cc51ecbe6597d总控验收被两条停止语义反例阻断，未合入；prompt07现为07B1（ds-v4.1flash high新对话），cwd MA9-worktrees/duel-attack、branch lane/duel-attack、起始HEAD=b063f56cf988bf2544362c3d861cc51ecbe6597d。证据20260923-07B-orchestrator/repro.py+log，修复后再独立review。基点107+新增26=133无计数异常。不要重跑已完成07A或误称07B已验收。总控可继续自动压缩，不需要按固定轮数重开；若新开，先读本文件与state并核对现场。
