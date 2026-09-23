@@ -213,7 +213,7 @@
       "effort": "high",
       "ownership": "defense_setup and its test explicitly returned by orchestrator",
       "base_commit": "550c01dc95af0e5bc2cb16f8ccc70b316b88980d",
-      "head": "caf5c0455f4ecc6595ed79c82eac365a2e57a1d9",
+      "head": "23ced1f75621fa642709c12652891bd957b5764f",
       "prompt": "agent/orchestration/prompts/06-duel-defense.md",
       "audit_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-06A-defense-audit/results.json",
       "closeout": {
@@ -243,7 +243,7 @@
       },
       "maintenance_task": {
         "project": "MA9-06B-地图顺序守卫回归",
-        "phase": "06B_prompt_ready",
+        "phase": "06B_accepted_integrated",
         "model": "ds-v4.1flash",
         "effort": "high",
         "scope": [
@@ -252,7 +252,13 @@
         "production_changes_allowed": false,
         "reason": "06A F1 existing guard coverage gap, does not reopen completed configuration stage",
         "base_commit": "caf5c0455f4ecc6595ed79c82eac365a2e57a1d9",
-        "prompt": "agent/orchestration/prompts/06-duel-defense.md"
+        "prompt": "agent/orchestration/prompts/06-duel-defense.md",
+        "delivery": "23ced1f75621fa642709c12652891bd957b5764f",
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260923-06B-orchestrator/results.json",
+        "agent_passed": 107,
+        "exit_code": 0,
+        "coverage": "earliest plan-mode map-order guard covered; other3 guards optional, no device coverage claim",
+        "production_changed": false
       }
     },
     "duel-attack": {
@@ -319,7 +325,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "GLM额度等待期：总控runtime模块链回归已完成；用户可用ds-v4.1flash high新对话运行06B地图守卫测试收尾，07A仍等待GLM，不改生产行为。",
+  "next": "06B已验收本地合入；已安排的根隔离与地图守卫收尾完成。等待GLM-5.3额度恢复执行07A最新只读提示词，固定2876a4a基点不变；不为填满等待时间扩修，04暂停。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

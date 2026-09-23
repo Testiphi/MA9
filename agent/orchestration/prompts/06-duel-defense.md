@@ -5,7 +5,7 @@ cwd：E:/hzz/work/MA9/MA9-worktrees/duel-defense
 branch：lane/duel-defense
 完整基点与预期起始HEAD：caf5c0455f4ecc6595ed79c82eac365a2e57a1d9。
 总控已将干净06工作区快进到此基点；不要使用原06A的550c01d，不自行checkout/reset/merge。
-本次任务仅覆盖06A F1已知测试缺口，不重新打开已完成的D级配置阶段，不改生产逻辑。07A等待GLM额度且只读，与本次独立。
+本次06B已完成并由总控验收：交付23ced1f75621fa642709c12652891bd957b5764f，Agent107全过。下文保留为历史派发内容，禁止重复执行；后续任务必须由总控重新刷新提示词。原任务仅覆盖06A F1已知测试缺口，不重新打开已完成的D级配置阶段，不改生产逻辑。07A等待GLM额度且只读，与本次独立。
 
 必读：
 E:/hzz/work/MA9/docs/zh_cn/develop/multi_agent_plan.md

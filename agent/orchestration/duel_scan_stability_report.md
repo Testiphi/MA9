@@ -235,3 +235,10 @@ s05明确第1局输、第2/3局赢、第4局输、第5局未打，即2胜2负。
 用户要求重跑上一卡住轮次。现场核对确认上轮仅完成只读检查，main仍2a1cdc6且无受控修改；没有重复已有写入或测试。
 总控完成02R F5-runtime：test_module_chain_marker_is_used_when_executable_and_cwd_are_unmarked，exe/cwd指向无标记账号根，仅冻结模块祖先链有标记，断言返回模块包根。只改test_runtime_root.py，生产代码不变。Agent106全过、最终exit0，证据MA9-evidence/20260923-runtime-module-regression；三种temp变量均固定根内。
 下一06B仅针对06A F1补一项“扫描后地图顺序改变则安全停止”回归，归06单owner，不改生产代码、不要求实机或GLM复核、不重开已闭环配置阶段。07A仍保持GLM-5.3 high只读规划安排。
+
+## 2026-09-23 06B验收完成
+
+核对23ced1f75621fa642709c12652891bd957b5764f相对caf5c04的实际diff，仅test_duel_defense_setup.py一个授权文件。_tracks新增默认big参数但原调用输出保持；新增用例分别构造两份列表并交换small列，顺序实际不同，调用真实run_defense_setup，断言顺序错误、stopped、starts_race=false、assigned为空、未调用assign_visible且仅返回列表点击。
+总控在合并候选main重新运行Agent107项全部通过、最终exit0，三种temp变量固定MA9内，证据MA9-evidence/20260923-06B-orchestrator/results.json。tools30/schema27以未变输入复用，未重跑。原先作者首轮夹具失败只是同名big交换未改变读数，不登记为生产缺陷红转绿。
+06A F1最早plan模式守卫覆盖已补；另外三个守卫未覆盖仍为可选后续，不宣称全部守卫或实机覆盖。测试docstring中“浅拷贝会空转通过”的说法不精确：当前assertRaises使无顺序差异时失败，实际断言有效，不因此扩修。
+自动本地合入并关闭06B本轮单测试任务；不重新打开D级配置阶段，不修改生产逻辑、不操作设备、不自动推送未获当前payload确认的新提交。等待期已安排收尾完成，07A仍等待GLM-5.3 high，原固定基点与最新用户截图规则保留。
