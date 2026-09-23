@@ -5,6 +5,13 @@
 cwd：E:/hzz/work/MA9/MA9-worktrees/duel-scan；branch：lane/duel-scan。
 审查范围：0850f33d4f3a127ed79ba7c62a0d25a6282a6845..f5472bce3443fde42df17ad8a1819e18b46a2059；预期HEAD=f5472bce3443fde42df17ad8a1819e18b46a2059。
 
+总控派发前已于2026-09-23重新核对：main=55a8c1c0d5590206d16cce539767175436c86d19；lane HEAD与上述目标一致且工作区干净；A→B→main、B→目标HEAD及审查基点→目标HEAD祖先检查均exit 0。你开工时仍须核对现场。
+本次精确写入边界：
+- owns: []（所有受控代码、测试、文档、配置只读）
+- owns_new: []（不新建受控文件）
+- owns_generated: []（不生成或重建受控产物）
+- 唯一允许的私有报告/测试日志输出：E:/hzz/work/MA9/MA9-worktrees/duel-scan/debug/05R-review.md、E:/hzz/work/MA9/MA9-worktrees/duel-scan/debug/05R-screen.log、E:/hzz/work/MA9/MA9-worktrees/duel-scan/debug/05R-runtime.log、E:/hzz/work/MA9/MA9-worktrees/duel-scan/debug/05R-defense.log；已有文件先报告，不覆盖原证据。
+
 依次检查实际diff后再读owner报告：
 1. 仅duel_vehicle_screen.py、其测试、duel_offline_recognition.md三文件，是否都在05边界。
 2. 用冻结23:18:23.444 OCR证据核对left锚点、性能ROI、点击坐标，确认7154->2559来自正确徽标而非猜数。
@@ -53,15 +60,11 @@ models/vehicle_screen/garage_profile/selection_strategy/selection_runtime、race
 第三方策略原文与规范化副本均本机只读、不提交；缺失走通用兜底，不阻塞多人模块。
 私有截图/日志不提交。临时输出写指定worktree被忽略的debug目录；不得创建别席受控文件。
 
-正式代码交付的最低验证（把命令中的解释器替换为已解析的MA9_PYTHON，如未设置则用下面默认值）：
-& E:/hzz/work/MA9/.venv/Scripts/python.exe -X utf8 -m unittest discover -s agent/tests -v
-& E:/hzz/work/MA9/.venv/Scripts/python.exe -X utf8 -m unittest discover -s tools/tests -v
-& E:/hzz/work/MA9/.venv/Scripts/python.exe -X utf8 tools/validate_schema.py --schema-dir deps/tools --resource-dirs assets/resource --exclude-dirs assets/resource/announcement --interface-files assets/interface.json
-需要npm时，PowerShell先设置 $env:NODE_OPTIONS='--max-old-space-size=6144'。
+本次是只读复核，仅执行上面的三项针对性测试，把解释器替换为实际解析路径。总控已核对results.json中的Agent/tools/schema最终exit_code均为0及相应日志，复用该证据，不要求重跑完整schema或npm检查。
 记录实际进程退出码，长命令持续等待到退出；没有输出或工具返回不等于成功。未执行的测试不得引用历史结果冒充。
 只读诊断/复核可针对性验证，必须明确不是完整lane交付。
 
 统一回传：项目名、模型实际标签/平台/档位、cwd、branch、起止完整SHA、工作区状态、问题与证据位置、diff文件清单与stat、验证命令/退出码/数量/跳过原因、私有脚本绝对路径、剩余风险与所需下一步。
-代码交付先git diff --check并按owns∪owns_new∪owns_generated查边界；只提交自己的修改，不合入main。
+结束条件：三项针对性测试均取得最终退出码；实际diff与证据核对完成；形成明确“无阻塞/有阻塞”结论，或明确列出无法验证项并标记复核未完成。检查工作区未新增受控改动；不提交、不合入main。
 复核者只给文件/行号/复现/严重程度，不替owner改代码。用户把结果回传总控，总控独立验收。
 实机成功必须five_assigned、五车互斥、starts_race=false并停阵容页；GUI“任务全部完成”不等于业务成功。

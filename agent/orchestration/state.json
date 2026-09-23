@@ -30,7 +30,8 @@
       "remote_ci": "not_run",
       "merged": false,
       "next": "保留现有成果，后续集成；不为等待 CI 常驻模型",
-      "model": "deepseek"
+      "model": "deepseek",
+      "packaging_environment_note": "02B外部报告WorkBuddy删除守卫与回收站错误、用户单次审批及拒绝删除残留；仅记录外部会话经过，不作为未来删除授权，不绕过守卫。后续构建优先设计唯一输出目录，需受控工具改动先登记；本轮不扩修。"
     },
     "vehicle": {
       "phase": "deferred_until_duel_blocker"
@@ -42,16 +43,16 @@
     },
     "duel-scan": {
       "project": "MA9-05-擂台车库遍历",
-      "phase": "local_accepted_external_review_pending",
+      "phase": "D_device_accepted_integration_pending",
       "model": "deepseek",
       "effort": "high",
       "branch": "lane/duel-scan",
       "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
       "base_commit": "0850f33d4f3a127ed79ba7c62a0d25a6282a6845",
-      "review": "pending_fresh_glm_5_3_review",
-      "device": "pending_f5472bc_package_and_user_verification",
+      "review": "GLM-5.3_high_no_blockers_report_and_37_test_logs_checked",
+      "device": "D_five_assigned_unique_starts_race_false_lineup_confirmed",
       "merged": false,
-      "next": "用户在MA9新对话用00-orchestrator.md接管，再将05R-review.md交GLM-5.3 high全新对话只读复核；通过后准备f5472bc新包实机，06/07仍等待。",
+      "next": "总控检查05完整边界并合入；集成后归还两个defense_setup文件给06。",
       "head": "f5472bce3443fde42df17ad8a1819e18b46a2059",
       "pilot_report": "agent/orchestration/duel_scan_pilot_report.md",
       "pilot_tests": {
@@ -66,8 +67,8 @@
       },
       "local_verify": "agent_101_tools_12_plus_1_skip_schema_27_passed_exit_0_at_f5472bc",
       "stability_report": "agent/orchestration/duel_scan_stability_report.md",
-      "test_package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-select",
-      "device_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260922-231746-ordering-handoff",
+      "test_package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-ordering-f5472bc",
+      "device_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-091020-D-five-assigned",
       "temporary_ownership": {
         "from": "duel-defense",
         "files": [
@@ -109,7 +110,7 @@
       },
       "transport": "external_user_relay",
       "ordering_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-05D-acceptance",
-      "test_package_status": "stale_0850f33_do_not_use_for_f5472bc_acceptance",
+      "test_package_status": "orchestrator_verified_exact_f5472bc_released_for_user_test_not_device_passed",
       "historical_agents": {
         "owner": "/root/ma9_05_duel_scan",
         "reviewer": "/root/ma9_r_stability_review",
@@ -128,8 +129,48 @@
         "negative_control_old_failures": 2,
         "negative_control_new_passes": 2,
         "original_log_frame_replayed": true,
-        "review": "pending_GLM-5.3_fresh_conversation",
-        "device": "not_run"
+        "review": "accepted_GLM-5.3_high_no_blockers",
+        "device": "D_passed_449.013_seconds"
+      },
+      "review_acceptance": {
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-05R-accepted",
+        "targeted_counts": [
+          6,
+          14,
+          17
+        ],
+        "exit_codes": "review_report_records_0_0_0_logs_show_OK",
+        "source_head": "f5472bce3443fde42df17ad8a1819e18b46a2059",
+        "full_suite": "reuse_existing_orchestrator_05D_acceptance_no_duplicate_run",
+        "replay_295_frames": "reviewer_cites_owner_AB_not_independent_rerun",
+        "stale_artifacts": "debug/ocr-call-*.json not valid evidence for 23:18:23.444; use frozen raw maafw.log; originals preserved",
+        "remaining": "rating concatenation and alphabetic neighbor interference: evidence-driven observation; diagnostic message distinction belongs to 07"
+      },
+      "package_acceptance": {
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-02B-orchestrator-acceptance.json",
+        "source_head": "f5472bce3443fde42df17ad8a1819e18b46a2059",
+        "agent_exe_sha256": "77388c345c16d8ae25bb3ac3c1864efc489fe68ef88407a6bf7b08673395d3f6",
+        "process_exit_code": 0,
+        "resources_data": 250,
+        "agent_files": 128,
+        "modules_identical": 4,
+        "old_source_negative_control": "screen_differs_other_three_equal",
+        "smoke": "external_log_checked_Usage_exit_1_not_rerun",
+        "device": "not_run",
+        "already_configured": "not_a_fresh_five_assignment_pass"
+      },
+      "device_acceptance": {
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-091020-D-five-assigned/acceptance.json",
+        "seconds": 449.013,
+        "classes": [
+          "D"
+        ],
+        "status": "five_assigned",
+        "five_unique": true,
+        "starts_race": false,
+        "runtime_root": "E:/hzz/work/MA9",
+        "input_data": "parsed_equal_CRLF_LF_only",
+        "other_classes": "not_device_verified"
       }
     },
     "duel-defense": {
@@ -151,7 +192,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户在MA9新对话用00-orchestrator.md接管，再将05R-review.md交GLM-5.3 high全新对话只读复核；通过后准备f5472bc新包实机，06/07仍等待。",
+  "next": "总控检查05完整边界并合入；集成后归还两个defense_setup文件给06。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -196,5 +237,23 @@
   "gpt_subagents_enabled": false,
   "workspace_root": "E:/hzz/work/MA9",
   "fresh_conversation_per_task": true,
-  "migration_report": "agent/orchestration/migration_20260923.md"
+  "migration_report": "agent/orchestration/migration_20260923.md",
+  "takeover_check": {
+    "date": "2026-09-23",
+    "main_head": "55a8c1c0d5590206d16cce539767175436c86d19",
+    "main_initial_status": "clean_ahead_origin_main_20",
+    "duel_head": "f5472bce3443fde42df17ad8a1819e18b46a2059",
+    "duel_status": "clean",
+    "contract_ancestry": "A_to_B_to_main_and_B_to_duel_HEAD_exit_0",
+    "python": "E:/hzz/work/MA9/.venv/Scripts/python.exe",
+    "python_version": "3.14.4",
+    "acceptance_results": "E:/hzz/work/MA9/MA9-evidence/20260923-05D-acceptance/results.json",
+    "confirmed_final_exit_codes": {
+      "agent": 0,
+      "tools": 0,
+      "schema": 0
+    },
+    "verification": "existing_results_and_log_tails_checked_no_duplicate_test_run",
+    "review_prompt": "completed_GLM-5.3_review_accepted"
+  }
 }

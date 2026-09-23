@@ -129,3 +129,30 @@ owner 和总控各自重跑 Agent 99/99、tools 12 通过与 1 既有私有截�
 残留事项：07缺读数与排序矛盾共用错误消息；当前性能数字拼接；带字母邻列分组潜在干扰。保持边界，交review按证据判断是否阻塞，不自动扩修。
 四目录已迁入MA9并修复Git登记，三个worktree干净，未删除证据、未操作设备、未推送。
 新入口prompts/00-orchestrator.md；下一席prompts/05R-review.md。用户每次使用全新外部对话，不启用GPT子智能体。
+
+## 2026-09-23 外部05R复核接收
+
+GLM-5.3 / WorkBuddy / high返回无阻塞。总控检查实际报告和三份日志（6/14/17项均OK；报告记录最终退出码均0），lane仍干净且HEAD=f5472bce3443fde42df17ad8a1819e18b46a2059。复用此前总控完整05D验收，不重复运行。
+报告、日志和SHA256索引冻结于MA9-evidence/20260923-05R-accepted。295帧结论在详细报告中引用owner的A/B记录，不记作reviewer独立重跑；冻结帧重放与红绿验证按reviewer报告归档。
+debug/ocr-call-0.json现场时间戳23:19:00.805，不能支持诊断文档引用的23:18:23.444；该批中间产物不可据此引用，应直接用冻结maafw.log。原件保留。
+性能分拼接与带字母邻列干扰继续观察；缺读数/排序矛盾共用错误消息归07后续处理，不扩修。
+下一任务02B由用户以ds-v4.1flash high新对话运行，仅在05工作区从精确f5472bc构建；02原交付保留。总控验包后才交用户实机。现场新增未跟踪.workbuddy/保持原样。04暂停、06/07等待，两个defense_setup文件仍临时归05；未合入业务代码、未实机、未推送。
+
+## 2026-09-23 02B新包总控验收与用户实机放行
+
+包：E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-ordering-f5472bc；入口MFAAvalonia.exe；版本v0.0.0-duel-ordering-f5472bc。
+lane HEAD仍为f5472bce3443fde42df17ad8a1819e18b46a2059且干净。总控审阅组包与模块核验脚本后独立重算250条资源/数据、128个Agent文件SHA256，核对资源/数据/Agent精确文件集合、interface仅agent/version变化、源码哈希和四模块递归代码对象一致。独立旧源码负对照仅screen不同，其余三模块相同；验收进程最终exit0。
+Agent SHA256=77388c345c16d8ae25bb3ac3c1864efc489fe68ef88407a6bf7b08673395d3f6。证据：MA9-evidence/20260923-02B-orchestrator-acceptance.json，包含外部原始证据文件哈希索引。
+构建原日志最终exit0；离线冒烟原记录Usage两行、stderr空、exit1与入口代码一致，本总控复用而未重跑。原05D全量验收和05R复核沿用，未重复schema/npm/业务测试，未启动GUI或设备。
+外部报告的删除守卫批准、回收站移动和残留续包按外部会话经历保留；本总控未操作回收站或删除文件，记录不构成未来删除授权，不以改变shell/环境绕过守卫。本轮包完整性已独立检查，未重建、未修改包内原始元数据。
+现放行用户串行D级五车实机。成功须five_assigned、五车互斥、starts_race=false并停阵容页；already_configured不算本次赋值通过，GUI完成提示不能替代业务JSON。待用户回传终屏与耗时，总控读取本包debug日志和业务报告。
+业务代码仍未合入，04暂停、06/07等待；defense_setup两个文件临时归05未归还。
+
+## 2026-09-23 09:10:20 D级用户实机通过
+
+新包f5472bce3443fde42df17ad8a1819e18b46a2059，运行Agent PID9184的实际路径与包内exe一致，SHA256仍为77388c345c16d8ae25bb3ac3c1864efc489fe68ef88407a6bf7b08673395d3f6。
+框架任务200000001：09:10:20.660开始，09:17:49.673成功，耗时449.013秒（7分29秒）；用户约报7分钟。业务JSON为five_assigned，五个唯一vehicle_id，slots1–5全部D级，starts_race=false，截图停阵容页。
+五车依次：Lancer Evolution1381、BMW Z4 LCI E89 1476、Porsche 911 Carrera RS 3.8 1516、Camaro LT1546、370Z Nismo1662。
+证据冻结MA9-evidence/20260923-091020-D-five-assigned/acceptance.json及四份业务JSON、框架日志快照、包元数据。用户终屏图保留在本对话，未误用历史debug图片。
+发现既有find_project_root偏好带config/garage.json的祖先账号根，本次业务JSON实际在主仓库debug，而框架日志在新包debug。运行数据首次字节哈希核对因CRLF/LF不同失败，后续文本换行归一化与JSON结构比对全部一致；不是包源码导入main，不声称包内数据完全隔离。记录为契约/构建后续观察，不修改本次代码。
+只认可D级本次实机，不推断R/S/A/B/C或账号冲突恢复路径通过。满足05本次修复合入门禁，进入总控集成检查。总控当前无法切换推理档位，不声称已切high。
