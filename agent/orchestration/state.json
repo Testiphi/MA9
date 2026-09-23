@@ -276,7 +276,7 @@
         "source": "2026-09-23 user clarification in orchestrator conversation",
         "opponent_preference": "D_and_C_combined_at_least_3_of_5_defense_cars",
         "preference_not_win_guarantee": true,
-        "no_qualifying_opponent": "not_specified_do_not_invent",
+        "no_qualifying_opponent": "still_not_specified; no automatic_paid_refresh_or_forced_challenge",
         "attack_win_rule": "user-confirmed with three screenshot pairs: 3 winning slots plus explicit confirmation that leaving challenge counts as victory",
         "early_finish_action": "manual user flow confirmed: Return to lobby -> overview Finish -> victory confirmation Finish -> daily reward progress -> optional reward Continue -> ranking; MA9 automation not implemented or device-verified",
         "defense_rule": "user states all five maps must validly complete; interruption requires restarting defense",
@@ -314,7 +314,15 @@
           "visible_finish_button_is_not_permission": true
         },
         "count_semantics": "race number3 or completed race count is not3wins; count distinct winning slots once per challenge; highlighted next slot4/5 is not a win; unreadable/conflicting statuses require bounded retry/stop",
-        "missing_images": "previously requested reward page and third-win result pages received; terminal ranking not in supplied batches"
+        "missing_images": "previously requested reward page and third-win result pages received; terminal ranking not in supplied batches",
+        "opponent_tiebreak": "amongD/C>=3qualified_opponents_prefer_more_displayed_hand_reward",
+        "attack_fuel_rule": {
+          "value": "ordinary_vehicle_fuel_not_consumed",
+          "source": "user_direct_confirmation_in_capture_intake",
+          "scope": "gauntlet_attack_only",
+          "implementation": "not_yet_applied_to_legacy_plan_output_flag",
+          "do_not_infer": "no_global_change_to_multiplayer_fuel_checks"
+        }
       },
       "planning_acceptance": {
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-07A-attack-planning/results.json",
@@ -420,6 +428,30 @@
         "result": "completed_no_blocking_defect",
         "identity_note": "registeredQwen3.8-Max label; reviewer cannot self-verify underlying identity; no independent effort switch",
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-07R-attack-review/results.json"
+      },
+      "recognition_intake": {
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-184330-attack-mumu-intake/manifest.json",
+        "files": 12,
+        "resolution": "all1280x720",
+        "covered": "01-09including3opponent_dialogs,2vehicle_lists,3vehicle_details",
+        "ready": "offline pageclassification andopponentD/C extraction; notend-to-end",
+        "dc_counts": [
+          3,
+          3,
+          0
+        ],
+        "displayed_hand_rewards": [
+          2,
+          3,
+          5
+        ],
+        "preference_result": "middle meetsDC3 andhighestdisplayedreward amongqualified; notwin_guarantee",
+        "new_data_gap": "季风秘境/岩石地带 hasnoautomaticcandidate inbothzones",
+        "middle_probe": "synthetic_all_owned givescomplete5; actualgarage notvalidated",
+        "layout_issue": "existing read_five_tracks y200..275 cannot blindlyserve opponentdialogs/expandedattackslot; newpage-specificROIs needed",
+        "remaining": "MuMu matchresults/win-loss slotbadges/finishconfirm/dailyprogress/rewardreturn after09notyetprovided",
+        "images": "private untracked originalcaptures remainuntouched; snapshotsignored",
+        "automated_OCR": "notrun_or_claimed"
       }
     }
   },
@@ -430,7 +462,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "纯离线07B已集成，下一阶段只读进攻识别需要目标MuMu1280x720原图；先一张含混合槽状态的五图进攻页即可，无需额外开赛或整套重拍。Qwen3.8-Flash登记备用，未派发。",
+  "next": "现有12张MuMu1280x720样本足够推进07C只读页面/对手等级识别（优先01-05）；先处理页面ROI分离、自动候选空项和进攻免普通燃油规则接缝，不等后续比赛截图，不授权点击挑战或设备操作。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
