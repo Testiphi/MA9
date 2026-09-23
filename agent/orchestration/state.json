@@ -243,12 +243,15 @@
       }
     },
     "duel-attack": {
-      "phase": "07A_read_only_planning_preparing",
+      "phase": "07A_read_only_planning_prompt_ready",
       "depends_on": "duel-defense",
       "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-attack",
       "model": "glm",
       "branch": "lane/duel-attack",
-      "effort": "high"
+      "effort": "high",
+      "head": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
+      "base_commit": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
+      "prompt": "agent/orchestration/prompts/07-duel-attack.md"
     }
   },
   "evidence": {

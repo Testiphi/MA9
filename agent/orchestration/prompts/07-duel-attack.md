@@ -1,63 +1,43 @@
-# MA9-07-擂台进攻闭环
+# MA9-07A-进攻只读规划与最小交付定义
 
-模型：GLM-5.3；档位：high。
-指定cwd：E:/hzz/work/MA9/MA9-worktrees/duel-attack
-分支：lane/duel-attack
-预期HEAD：尚未创建；总控放行时必须填写实际完整SHA，当前禁止开工
+模型：GLM-5.3 / high。用户在外部平台新建完整独立对话粘贴本文件。你是07只读规划执行者，不创建对话、子智能体或worktree，不依赖旧聊天，不自行升档。
+cwd：E:/hzz/work/MA9/MA9-worktrees/duel-attack
+branch：lane/duel-attack
+完整基点及预期起止HEAD：2876a4a25f5dcc7101963bfccd97ae23f6f41ba6。
+总控已创建工作区，主仓库后续可能有提示词/状态提交；主仓库编排配置权威。现场不符停止，不reset/checkout/merge。
+契约A=bd9a535336750d8fae3799f20d321498e21f5b00、B=ab13bf9ec91f916754aa0910bd1138e2f038d0a5，检查祖先后复用，不重新冻结。05修复f5472bce3443fde42df17ad8a1819e18b46a2059经f36f3b23db952aae67e2583f9e74ae965fa6fa65合入；根隔离a7d9910cc945072efbf6ccb9b3d38f4f949a6e87经380b051afceac70af1f31471c0339de071a076ce合入。
 
-本次状态与任务：
-等待06防守管理稳定，未创建worktree，不得自行创建。当前仅保留排序错误消息/缺读数区分的待办，不据此提前启动进攻研发。恢复后总控给出具体失败样例与范围；不能删除互斥、降级、确定性与排序护栏。E:/hzz/work/MutualExclusionAllocator仅历史只读参考，不允许写入项目根外。
+前置范围：06当前“D级五车配置、停阵容、不开始比赛”阶段已闭环，不等于五场资格赛已完成或已进入进攻页面。05的449.013秒D级实机有效；其他等级、已配置阵容保留、中途恢复和账号恢复没有本轮直接实机证明。06A回传“5实机+3离线”已被总控更正为G1直接实机、G2–G8离线/代码证据。禁止扩写成功范围。
 
-你运行在用户新建的独立对话，不能依赖任何旧聊天、长期记忆或另一席位的口头授权。
-只有 MA9 总控可以调度、修改边界、创建 worktree 和合并；不得创建子智能体、联系其他席位、自动切模型。
-项目唯一根：E:/hzz/work/MA9。禁止在 E:/hzz/work 下新建同级 MA9-*，也不要使用旧路径。
-若平台没有本地文件/命令能力，明确报告，只分析用户提供的材料，不假称已读取或验证。
+本次任务：仅用MA9内现有代码、数据与文档，盘点进攻离线规划能力及其到安全只读页面入口的缺口，给出一个最小可交付的下一实施任务。不要直接写进攻闭环，不操作游戏，不消耗票券，不把离线complete当作开始比赛的授权。
 
-必读（绝对路径，主工作区只读）：
+必读：
 E:/hzz/work/MA9/docs/zh_cn/develop/multi_agent_plan.md
-E:/hzz/work/MA9/agent/lanes.yaml
+E:/hzz/work/MA9/agent/lanes.yaml（07、06与契约边界）
 E:/hzz/work/MA9/agent/orchestration/state.json
 E:/hzz/work/MA9/agent/orchestration/migration_20260923.md
-按需读 E:/hzz/work/MA9/docs/zh_cn/develop/contract_freeze_draft.md；冻结已经完成，不要重新冻结。
-主工作区的编排配置是权威，worktree里的旧模型、旧路径和旧提示词仅历史资料。
-契约 A=bd9a535336750d8fae3799f20d321498e21f5b00；基点 B=ab13bf9ec91f916754aa0910bd1138e2f038d0a5。核对 B 是指定 HEAD 祖先。
+E:/hzz/work/MA9/MA9-evidence/20260923-06A-defense-audit/results.json（须结合总控更正，不采信夸大实机项）
+E:/hzz/work/MA9/MA9-evidence/20260923-combined-integration/results.json
+本cwd下：agent/ma9_agent/duel_selection.py、agent/tests/test_duel_selection.py、tools/plan_duel_selection.py、tools/test_duel_selection.py、tools/import_duel_selection_data.py（只读，不执行导入器）、docs/zh_cn/develop/duel_selection.md、blueprint_safe_selection.md、duel_daily_model.md；按需读取data/generated/duel_auto_candidates.json与vehicle_catalog.json，禁止重建。
 
-开工前：核对 cwd、git status --short、git rev-parse HEAD、最近3次提交；不符则报告，不reset、不覆盖改动、不自行checkout/merge其他分支。
-不修改全局Git配置；dubious ownership只用命令级 -c safe.directory=<当前worktree绝对路径>。
-Python 优先 MA9_PYTHON；为空则 E:/hzz/work/MA9/.venv/Scripts/python.exe。先验证存在并运行 -X utf8 --version；不存在停止，不能替换成PATH解释器。
-每条Python命令都加-X utf8，cwd必须为指定lane根；不从主工作区导入源码、不设置指向main的PYTHONPATH。
+精确本次边界：owns=[]、owns_new=[]、owns_generated=[]。所有受控文件只读，不修改07/06/05、契约、interface源、schema或编排配置。07全lane归属不代表本任务写权限。tools/plan_duel_selection.py和tools/test_duel_selection.py目前不在07写入清单，若建议以后改它们须报告总控先登记。
+根外E:/hzz/work/MutualExclusionAllocator本次禁止读写或运行；lanes.external仅历史参考，不构成授权。不要执行import_duel_selection_data.py、不要运行tools/test_duel_selection.py的整套real_source测试、不要复制外部仓库。真实来源缺失不阻塞本次假数据纯函数审计。
+允许新建私有输出仅E:/hzz/work/MA9/MA9-evidence/20260923-07A-attack-planning/下report.md、results.json、selection-tests.log、attack-tests.log及tmp/小夹具/有界只读探针。目录存在停止报告，不覆盖历史；所有临时写入根内。不读六个大型multiplayer_loop分片，不运行任何资源生成器。
 
-禁止操作 ADB/MuMu 或启动游戏；实机由用户串行验证。禁止推送、发布、自动更新安装目录或开始比赛。
-六个大型 multiplayer_loop 分片不得读入模型上下文或手改；只有登记生成器可以处理对应产物。
-未精确登记的data/generated只读。assets/interface.json是契约手写源，不是生成物。
-models/vehicle_screen/garage_profile/selection_strategy/selection_runtime、race_strategy_schema、runtime_action及其他契约文件只读；越界问题交总控。
-第三方策略原文与规范化副本均本机只读、不提交；缺失走通用兜底，不阻塞多人模块。
-私有截图/日志不提交。临时输出写指定worktree被忽略的debug目录；不得创建别席受控文件。
+检查清单（每项给代码/测试/证据位置，区分已实现、离线已证、待实机、缺实现）：
+1. plan_attack输入/输出：五图、赛区、确认拥有集合、不可用集合、互斥约束、候选档、未知/无候选/互斥不足、确定性、limit与Pareto排序。识别已有测试与默认discover遗漏，别说“没有测试”而漏看tools/test_duel_selection.py。
+2. 现有静态候选只是推荐顺序，不含实测赛道时间，不据此预测胜率；complete与requires_live_vehicle_and_fuel_verification的语义是否被调用端保持。
+3. 地图/对手详情/票券/五槽状态等只读输入到离线候选的最小接口。区分“i详情只读”与“挑战立即扣票”；购买、领奖、刷新、提升、开始按钮全部不在本次许可内。没有当前MuMu进攻截图时明确缺什么，不猜模板坐标、不让用户批量收集无关截图。
+4. _repair_descending_ratings的缺读数/排序矛盾错误消息待办仍属07；只评估它是否为下一最小任务的真实阻塞，不改护栏，不捎带优化05已验证OCR。
+5. 若发现算法/数据缺陷，用小规模确定性假数据复现，保存最小输入与实际输出；禁止无界性能测试或大规模穷举。针对数据规模的风险必须给现有候选数与可验证证据，不泛泛宣称复杂度问题。
+6. 最后只建议一个下一写入任务：说明目标、精准文件/owner（缺登记明确标出）、所需最少输入、纯离线验收命令、失败停止条件、独立复核范围。无需一轮列出整个日常系统的实现计划。若已无离线阻塞而缺现场输入，给一个最小用户资料请求建议，由总控决定是否派发，不直接接管设备。
 
-正式代码交付的最低验证（把命令中的解释器替换为已解析的MA9_PYTHON，如未设置则用下面默认值）：
-& E:/hzz/work/MA9/.venv/Scripts/python.exe -X utf8 -m unittest discover -s agent/tests -v
-& E:/hzz/work/MA9/.venv/Scripts/python.exe -X utf8 -m unittest discover -s tools/tests -v
-& E:/hzz/work/MA9/.venv/Scripts/python.exe -X utf8 tools/validate_schema.py --schema-dir deps/tools --resource-dirs assets/resource --exclude-dirs assets/resource/announcement --interface-files assets/interface.json
-需要npm时，PowerShell先设置 $env:NODE_OPTIONS='--max-old-space-size=6144'。
-记录实际进程退出码，长命令持续等待到退出；没有输出或工具返回不等于成功。未执行的测试不得引用历史结果冒充。
-只读诊断/复核可针对性验证，必须明确不是完整lane交付。
+环境与验证：
+Python优先MA9_PYTHON，否则E:/hzz/work/MA9/.venv/Scripts/python.exe；先验证存在及-X utf8 --version，缺失停止，不切PATH。所有Python-X utf8、cwd始终07工作区，不从main导入源码。TMPDIR/TMP/TEMP同时设为本证据tmp，并打印实际tempfile.gettempdir。
+开工/结束核对git status --short、branch、完整HEAD、最近3提交及B祖先；Git只用命令级-c safe.directory=E:/hzz/work/MA9/MA9-worktrees/duel-attack，不改全局配置。
+最低命令（$lanePython为解析后的路径）：
+& $lanePython -X utf8 -m unittest discover -s agent/tests -p test_duel_selection.py -v
+& $lanePython -X utf8 tools/test_duel_selection.py DuelSelectionTests.test_allocator_uses_distinct_cars_and_best_available_tradeoff DuelSelectionTests.test_unknown_and_empty_tracks_are_reported_without_a_startable_plan DuelSelectionTests.test_same_car_on_every_track_reports_mutual_exclusion_shortage -v
+上述tools命令只选择3项纯假数据进攻测试，不运行外部源测试。记录最终退出码、数量与复用项；长进程续等到退出。全量Agent/tools/schema为已通过组合证据，不重复跑，不声称本轮独立复现。
 
-统一回传：项目名、模型实际标签/平台/档位、cwd、branch、起止完整SHA、工作区状态、问题与证据位置、diff文件清单与stat、验证命令/退出码/数量/跳过原因、私有脚本绝对路径、剩余风险与所需下一步。
-代码交付先git diff --check并按owns∪owns_new∪owns_generated查边界；只提交自己的修改，不合入main。
-复核者只给文件/行号/复现/严重程度，不替owner改代码。用户把结果回传总控，总控独立验收。
-实机成功必须five_assigned、五车互斥、starts_race=false并停阵容页；GUI“任务全部完成”不等于业务成功。
-
-可修改的现有文件：
-- agent/ma9_agent/duel_selection.py
-- tools/import_duel_selection_data.py
-- agent/tests/test_duel_selection.py
-- docs/zh_cn/develop/duel_selection.md
-- docs/zh_cn/develop/blueprint_safe_selection.md
-
-精确允许新增/维护的文件：
-无。
-
-仅登记生成器可改的产物：
-- data/generated/duel_auto_candidates.json
-
-本提示词相对路径均相对上面指定cwd；所有未列出的文件只读。正式放行前总控刷新HEAD和任务范围。
+结束条件：受控文件保持不变，针对性测试有最终退出码，完成证据化能力清单及一个最小下一任务。回传项目名、实际模型/平台/档位、cwd/branch/起止完整SHA、git状态、命令/退出码/数量、缺陷行号/复现、建议任务、证据绝对路径与剩余风险。总控决定是否授权写入和是否需要独立review；本席不提交、不推送、不打包、不启动GUI/ADB/MuMu，不开赛、不扣票、不购买。04继续暂停。

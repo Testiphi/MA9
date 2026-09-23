@@ -15,9 +15,9 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 - 根隔离合并380b051afceac70af1f31471c0339de071a076ce；05合并f36f3b23db952aae67e2583f9e74ae965fa6fa65。组合Agent105、tools29全过无skip、exit0；schema34项输入等价复用27项exit0。证据MA9-evidence/20260923-combined-integration。远端状态必须现场检查，不把本地通过当CI通过。
 - 总控在550c01dc95af0e5bc2cb16f8ccc70b316b88980d归还duel_defense_setup.py及其测试给06，已从05 owns移除。
 
-当前下一任务：用户用ds-v4.1flash high全新对话执行agent/orchestration/prompts/06-duel-defense.md（06A只读剩余门禁审计）。worktree E:/hzz/work/MA9/MA9-worktrees/duel-defense，branch lane/duel-defense，基点与当前HEAD预期550c01dc95af0e5bc2cb16f8ccc70b316b88980d。核对现场。没有放行写代码、开赛或设备操作；07仍等待06结论，04暂停。
+当前下一任务：06配置阶段已按有限范围闭环；仅G1有本轮直接实机证据，G2–G8仍为离线/代码证据，resumed_from_slot=1不证明中途恢复。用户用GLM-5.3 high全新对话执行agent/orchestration/prompts/07-duel-attack.md（07A只读规划）。worktree E:/hzz/work/MA9/MA9-worktrees/duel-attack，branch lane/duel-attack，基点与预期HEAD=2876a4a25f5dcc7101963bfccd97ae23f6f41ba6。未放行写代码、进攻实机、扣票、开赛或根外读取；04暂停。用户已在06A回传后明确确认向既定origin推送；远端状态仍按Git现场与state核实。
 
-保留：01=891d68efc9d33d08cb4799855414579900b5648d未闭环；02原CI=03c6d9751f8b5f31865501d1954b2486568afd76未合入，别与已合入的根隔离任务混淆。五个当前worktree以git现场为准。旧05R/02D/02R任务已完成，提示词仅历史，不能重复派发。
+保留：01=891d68efc9d33d08cb4799855414579900b5648d未闭环；02原CI=03c6d9751f8b5f31865501d1954b2486568afd76未合入，别与已合入的根隔离任务混淆。当前worktree数量和SHA以git现场为准。旧05R/02D/02R任务已完成，提示词仅历史，不能重复派发。
 外部安排：01 Hy3；02/03/05/06 ds-v4.1flash；07及独立review GLM-5.3 high；E GLM-5.3-Flash，V Hy4 preview，H Kimi-K3；MiniMax-M3备用未派发，04无模型。不启用全部模型，不自动购买/重置/升max。
 每个新任务完整注明项目、模型/档位、cwd/branch/完整基点与HEAD、必读文件、精确owns/owns_new/owns_generated、验证命令、证据、结束条件和回传格式。用户只回传结果，总控查实际证据、维护状态和下一份提示词。实机默认用户串行执行，不操作ADB/MuMu；GUI完成提示不能替代业务JSON。合入通过后按用户授权推送，除非用户明确不推送；失败如实记录，不改写历史或强推。
 
