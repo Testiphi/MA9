@@ -353,5 +353,25 @@
       }
     ],
     "merge_commit": "380b051afceac70af1f31471c0339de071a076ce"
+  },
+  "remote_sync": {
+    "status": "blocked_auto_review_explicit_payload_destination_confirmation_required",
+    "attempt": "git push origin main",
+    "destination": "https://github.com/Testiphi/MA9.git",
+    "payload_head": "b8baaaa5e7fa47b823037387867fd3cd7b2652b4",
+    "local_commits_ahead_at_attempt": 34,
+    "executed": false,
+    "remote_ci": "not_confirmed",
+    "reason": "Auto-review did not recognize explicit authorization for exporting the repository contents and 34 local commits to this destination",
+    "next": "Ask user to approve this destination and payload; no workaround or indirect retry",
+    "payload_update": "The recorded 34-commit push attempt was blocked before execution. This local policy-record commit adds one more commit; recompute HEAD and outgoing count before requesting push approval."
+  },
+  "git_commit_policy": {
+    "approved_at": "2026-09-23",
+    "automatic_local_commit_after_major_change": true,
+    "trigger": "coherent_major_stage_after_applicable_validation",
+    "ask_each_time": false,
+    "scope": "only_authorized_changed_files_exclude_private_evidence_and_user_workbuddy",
+    "push": "separate_remote_action_follow_existing_authorization_and_host_review"
   }
 }
