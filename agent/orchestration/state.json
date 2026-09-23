@@ -258,14 +258,25 @@
         "opponent_preference": "D_and_C_combined_at_least_3_of_5_defense_cars",
         "preference_not_win_guarantee": true,
         "no_qualifying_opponent": "not_specified_do_not_invent",
-        "attack_win_rule": "user states 3 wins suffice for overall attack victory",
-        "early_finish_action": "not_device_verified_no_automatic_exit_or_skip",
+        "attack_win_rule": "user-confirmed with three screenshot pairs: 3 winning slots plus explicit confirmation that leaving challenge counts as victory",
+        "early_finish_action": "manual user flow confirmed: Return to lobby -> overview Finish -> victory confirmation Finish -> daily reward progress -> optional reward Continue -> ranking; MA9 automation not implemented or device-verified",
         "defense_rule": "user states all five maps must validly complete; interruption requires restarting defense",
         "original_defense_wording": "防守一定需要五张有效票才可，一旦有一张图被中断需要重新从头防守",
         "interpretation_limit": "Do not infer ticket consumption/count from the wording; confirm UI semantics when necessary",
         "historical_conflict": "user corrects earlier interruption-loss record as defense context; do not apply it automatically to attack, preserve raw records",
-        "next_observation": "At a naturally reached third attack victory, capture the full result screen before any early exit; then determine minimal validation steps",
-        "device_control_authorized": false
+        "next_observation": "Request missing image8 optional reward and third-win single-race result with Return to lobby; no need for an entire flow reshoot at this stage",
+        "device_control_authorized": false,
+        "screenshot_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-attack-three-win-user-confirmed/manifest.json",
+        "received_images": 7,
+        "manual_confirmation_guard": "at least 3 distinct winning slots AND explicit victory wording in Finish confirmation; unknown/loss wording must not be treated as success",
+        "optional_rewards": "after daily hand progress tap, handle recognized optional reward page and Continue before ranking; user-described, image8 missing",
+        "image_limits": "p1-p6=2420x1668,p7=1567x1080; UI-flow evidence, not1280x720 MuMu templates or automated validation",
+        "counting_guards": [
+          "GP delta is not hand increment",
+          "daily25/22 is cumulative; no known per-run delta",
+          "ticket0/5,1/5,2/5 is not race progress",
+          "three separate challenge pairs, not one sequence"
+        ]
       }
     }
   },
@@ -276,7 +287,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "02E已合入并验证；07A等待GLM恢复，提示词增加用户确认的D/C合计>=3偏好与进攻/防守规则区分。三胜后的提前结束操作未实机验证，不自动退出。",
+  "next": "07A待GLM恢复，以新增三胜完成确认截图为只读流程证据；优先补缺失图8与第三胜成绩页，不要求全流程或重跑D配置。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -420,18 +431,18 @@
     }
   },
   "remote_sync": {
-    "status": "02E_and_strategy_records_ready_for_authorized_push",
+    "status": "approved_343e2f3_pushed_verified_new_image_notes_local_only",
     "attempt": "git push origin main",
     "destination": "https://github.com/Testiphi/MA9.git",
-    "payload_head": "18964c884cd3b6a4a81bb3c69edeb96b26ed26dc",
+    "payload_head": "343e2f31b92230b57fc30cde74ff74ac2f073f65",
     "local_commits_ahead_at_attempt": 34,
     "executed": true,
-    "remote_ci": "check_and_install_completed_success_at_18964c8",
-    "reason": "Auto-review did not recognize explicit authorization for exporting the repository contents and 34 local commits to this destination",
-    "next": "普通推送main到已获确认的origin；新的远端CI需独立核对，不能沿用18964c8的成功结论。",
+    "remote_ci": "new343e2f3_not_yet_checked_previous18964c8_success_is_historical",
+    "reason": "User explicitly approved the four-commit343e2f3 payload in the screenshot message; ordinary push succeeded.",
+    "next": "Image intake and07prompt updated locally after the approved push; do not claim those later metadata changes or newCI already remote.",
     "payload_update": "The recorded 34-commit push attempt was blocked before execution. This local policy-record commit adds one more commit; recompute HEAD and outgoing count before requesting push approval.",
     "authorization": "2026-09-23 user message: 确认推送。 Destination remains https://github.com/Testiphi/MA9.git; ordinary main push, no force.",
-    "verified_remote_head": "18964c884cd3b6a4a81bb3c69edeb96b26ed26dc",
+    "verified_remote_head": "343e2f31b92230b57fc30cde74ff74ac2f073f65",
     "pushed_commits": 37,
     "push_exit_code": 0,
     "ci_runs": [
@@ -450,7 +461,8 @@
         "conclusion": "success"
       }
     ],
-    "observation_note": "Post-push local status observation only; no second status-only push to retrigger CI. Major orchestration changes already committed and pushed."
+    "observation_note": "Post-push local status observation only; no second status-only push to retrigger CI. Major orchestration changes already committed and pushed.",
+    "new_commits_pending": 4
   },
   "git_commit_policy": {
     "approved_at": "2026-09-23",
