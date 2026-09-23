@@ -240,6 +240,17 @@
         ],
         "followup": "optional map-order regression test belongs to06",
         "full_daily_loop_complete": false
+      },
+      "maintenance_task": {
+        "project": "MA9-06B-地图顺序守卫回归",
+        "phase": "preparing_prompt",
+        "model": "ds-v4.1flash",
+        "effort": "high",
+        "scope": [
+          "agent/tests/test_duel_defense_setup.py"
+        ],
+        "production_changes_allowed": false,
+        "reason": "06A F1 existing guard coverage gap, does not reopen completed configuration stage"
       }
     },
     "duel-attack": {
@@ -306,7 +317,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "07A待GLM恢复，已具备三胜返回大厅/完成确认/每日累计奖励/可选奖励页及2胜2负不得提前结算的正反例，暂不要求补全流程。仍仅只读规划，不操作设备。",
+  "next": "GLM额度等待期：总控runtime模块链回归已完成；用户可用ds-v4.1flash high新对话运行06B地图守卫测试收尾，07A仍等待GLM，不改生产行为。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -421,7 +432,7 @@
       {
         "ids": "F5_runtime",
         "owner": "orchestrator",
-        "status": "nonblocking_module_chain_test_followup"
+        "status": "completed_module_chain_regression_agent106_exit0"
       },
       {
         "ids": "F7_F8",
@@ -447,6 +458,13 @@
       "merge_commit": "d0418c1363769b72fa53a0e89945e578fc75cbd7",
       "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260923-02E-orchestrator/results.json",
       "tools": "30_passed_exit0_no_skip_in_main"
+    },
+    "module_chain_regression": {
+      "file": "agent/tests/test_runtime_root.py",
+      "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-runtime-module-regression/results.json",
+      "agent_passed": 106,
+      "exit_code": 0,
+      "production_changed": false
     }
   },
   "remote_sync": {

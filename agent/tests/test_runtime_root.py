@@ -139,6 +139,24 @@ class FrozenPublicContractTest(unittest.TestCase):
 
 
 class RuntimeRootTest(unittest.TestCase):
+    def test_module_chain_marker_is_used_when_executable_and_cwd_are_unmarked(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            account = Path(directory) / "account"
+            module_root = Path(directory) / "frozen-package"
+            for path in (account, module_root):
+                (path / "data").mkdir(parents=True)
+                (path / "data/multiplayer_profile.json").write_text("{}")
+            (account / "config").mkdir()
+            (account / "config/garage.json").write_text("{}")
+            (module_root / ".ma9-portable-root").touch()
+            module_directory = module_root / "_internal"
+            module_directory.mkdir()
+            with patch.dict("os.environ", {"MA9_PROJECT_ROOT": ""}), \
+                    patch("runtime_action.Path.cwd", return_value=account), \
+                    patch("runtime_action.sys.executable", str(account / "bin/ma9-agent.exe")), \
+                    patch("runtime_action.__file__", str(module_directory / "runtime_action.py")):
+                self.assertEqual(find_project_root(), module_root)
+
     def test_marked_package_beats_ancestor_account_root(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "account"
