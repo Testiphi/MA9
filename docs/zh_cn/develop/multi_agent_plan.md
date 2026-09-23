@@ -57,7 +57,7 @@
 
 - 总控保持 Astra，负责边界、证据、验收与合并；禁止自动启动 GPT 子智能体。
 - 普通业务 owner 默认 ds-v4.1flash high；01 使用 Hy3 文档收尾试点；07A只读规划由GLM-5.3完成，当前07B窄实现使用ds-v4.1flash high，独立review另派。具体模型见 lanes.yaml。
-- 有 reviewer 的 lane 使用另一个独立 GLM-5.3 high 只读上下文；owner 修复，总控独立本地验收。
+- 有 reviewer 的 lane 默认使用独立 GLM-5.3 high 只读上下文；当前07R登记Qwen3.7-Max为有界复核试点，平台档位如实记录，不保证等性能。owner修复，总控独立本地验收。
 - 机械资料整理使用GLM-5.3-Flash，截图歧义核对使用Hy4 preview，交接审计使用Kimi-K3；一次一个owner，04暂停。
 - 用户重新授权前不调用 Terra、Luna、Sol 席位，不自动购买或重置额度。
 - 本节替代旧的 Terra/Luna/Sol 成本试点；历史记录只代表当时配置。
