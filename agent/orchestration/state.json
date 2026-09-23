@@ -262,16 +262,16 @@
       }
     },
     "duel-attack": {
-      "phase": "07B_offline_implementation_preparing",
+      "phase": "07B_implementation_prompt_ready",
       "depends_on": "duel-defense",
       "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-attack",
       "model": "deepseek",
       "branch": "lane/duel-attack",
       "effort": "high",
-      "head": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
-      "base_commit": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
+      "head": "72e32dad93165f3c34dc022096c9222c9a1e0977",
+      "base_commit": "72e32dad93165f3c34dc022096c9222c9a1e0977",
       "prompt": "agent/orchestration/prompts/07-duel-attack.md",
-      "scheduling_note": "07A artifacts completed before quota notice; do not rerun to recover a missing final chat response. Next implementation task/model not yet dispatched.",
+      "scheduling_note": "07A completed;07B now dispatched as bounded new-file implementation to ds-v4.1flash high, not max; independent reviewer selected after delivery.",
       "user_strategy": {
         "source": "2026-09-23 user clarification in orchestrator conversation",
         "opponent_preference": "D_and_C_combined_at_least_3_of_5_defense_cars",
@@ -356,7 +356,9 @@
         "code_not_started": true,
         "review": "separate_read_only_review_required_after_delivery",
         "qwen": "candidate_only_no_unverified_effort_enum",
-        "max_policy": "do_not_start_max; only consider after bounded reproducible hard failure"
+        "max_policy": "do_not_start_max; only consider after bounded reproducible hard failure",
+        "base_commit": "72e32dad93165f3c34dc022096c9222c9a1e0977",
+        "prompt": "agent/orchestration/prompts/07-duel-attack.md"
       }
     }
   },

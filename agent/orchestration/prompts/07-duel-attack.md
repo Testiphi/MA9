@@ -1,63 +1,80 @@
-# MA9-07A-进攻只读规划与最小交付定义
+# MA9-07B-纯离线进攻状态决策与候选衔接
 
-状态：07A已完成。总控已检查report/results、2项与3项测试日志和干净HEAD2876a4a。以下是历史完整派发内容，禁止因平台限额缺最终回复而重跑；下一写入任务须另行登记与派发。
-
-模型：GLM-5.3 / high。用户在外部平台新建完整独立对话粘贴本文件。你是07只读规划执行者，不创建对话、子智能体或worktree，不依赖旧聊天，不自行升档。
+模型：ds-v4.1flash / high。high足够，禁止自动升max；平台若不暴露档位如实注明，不伪称切换。用户新建外部对话粘贴完整提示词，不依赖旧聊天、不创建子智能体/对话/worktree。
 cwd：E:/hzz/work/MA9/MA9-worktrees/duel-attack
 branch：lane/duel-attack
-完整基点及预期起止HEAD：2876a4a25f5dcc7101963bfccd97ae23f6f41ba6。
-总控已创建工作区，主仓库后续可能有提示词/状态提交；主仓库编排配置权威。现场不符停止，不reset/checkout/merge。
-契约A=bd9a535336750d8fae3799f20d321498e21f5b00、B=ab13bf9ec91f916754aa0910bd1138e2f038d0a5，检查祖先后复用，不重新冻结。05修复f5472bce3443fde42df17ad8a1819e18b46a2059经f36f3b23db952aae67e2583f9e74ae965fa6fa65合入；根隔离a7d9910cc945072efbf6ccb9b3d38f4f949a6e87经380b051afceac70af1f31471c0339de071a076ce合入。
+完整基点与预期起始HEAD：72e32dad93165f3c34dc022096c9222c9a1e0977。
+总控已创建并快进工作区、登记新增文件；不再使用07A的2876a4a，不自行checkout/reset/merge。主仓库编排文件为权威。
 
-前置范围：06当前“D级五车配置、停阵容、不开始比赛”阶段已闭环，不等于五场资格赛已完成或已进入进攻页面。05的449.013秒D级实机有效；其他等级、已配置阵容保留、中途恢复和账号恢复没有本轮直接实机证明。06A回传“5实机+3离线”已被总控更正为G1直接实机、G2–G8离线/代码证据。禁止扩写成功范围。
+任务：新增一个纯离线模块，根据同一挑战的五槽状态快照提出下一步建议，并薄封装现有plan_attack结果。不实现OCR、按钮点击、真实挑战或整个日常循环。07A规划已完成，不重复审计整仓。
+契约A=bd9a535336750d8fae3799f20d321498e21f5b00、B=ab13bf9ec91f916754aa0910bd1138e2f038d0a5，验证祖先后复用，不重新冻结；不得改五契约模块/schema/interface/runtime_action。
 
-本次任务：仅用MA9内现有代码、数据与文档，盘点进攻离线规划能力及其到安全只读页面入口的缺口，给出一个最小可交付的下一实施任务。不要直接写进攻闭环，不操作游戏，不消耗票券，不把离线complete当作开始比赛的授权。
-用户最新策略与截图证据（2026-09-23，此段替代旧的“提前结算操作尚无截图”记录）：
-- 对手偏好仍为五辆防守车中D/C合计至少三辆；不是同级三辆，也不保证胜率，不发明同分权重/找不到对手时付费刷新策略。
-- 总控已收到并查看7张图，原图与hash/尺寸/映射存于E:/hzz/work/MA9/MA9-evidence/20260923-attack-three-win-user-confirmed/manifest.json。按需读该目录p01..p06.png、p07.jpg；只读，不复制到受控素材、不修改原图。
-- p01–p03为三场不同挑战的三胜概览，p04–p06为对应完成确认（1↔4、2↔5、3↔6）。确认页有三行有效获胜成绩、两行“未完成”，并明确“如果您现在离开挑战，将被视作获胜”。这是直接界面证据，不再仅是推测规则。
-- 用户实际操作说明：第三胜单场成绩页点“返回大厅”→挑战概览右上“完成”→确认页右下“完成”→每日挑战巴掌进度页→点空白继续→可能出现额外奖励页→继续→擂台排名页。第一批为7张；后续已补第三胜成绩页与额外奖励页，详见下段。最终排名页不在两批附件中。
-- p07可见“每日挑战奖励”、25/22和“点击继续”。25/22是累计每日进度，不是该挑战新增25；确认页+18 GP不是巴掌奖励；概览右上0/5、1/5、2/5是票数，不能作小图进度。
-- 规划提前结算应以≥3个不同槽位明确获胜，并在确认弹窗再次读到“将被视作获胜”为双重判据；未知/矛盾/判负文案不得按成功处理。不能把任意“退出”操作等同于这个专门“完成”流程。
-- 已有用户手动实测说明和静态截图，MA9自动识别/点击链路尚未实现或实机验证；不得把人工证据写成Agent通过。p01–p06为2420x1668，p07为1567x1080，不是1280x720 MuMu模板，禁止直接拉伸套坐标。
-- 奖励页作为结算后可选分支：有则识别后继续，无则直接验证回排名；不能硬编码必出现，不能把领取/继续当成新挑战或重复记巴掌。动态图动画应等稳定后读累计数，再返回页核对，未知页面有界停止。
-- 防守中断需五图重做是另一场景；不把旧防守中断失败泛用于进攻。用户原话“五张有效票”不能据此推断票券消费。
-- 当前仍只读规划，不启动设备、不点击完成/退出/开赛。已补齐之前请求的奖励页与第三胜成绩页，不再重复索取或要求整套全流程；真正进入MuMu识别实现时再按具体缺口提出最少资料。
-后续补图与必守反例（用户本轮另给5张）：
-证据目录E:/hzz/work/MA9/MA9-evidence/20260923-attack-three-win-supplement/，先读manifest.json；s01.jpg为可选奖励页，s02/s03/s04.png为三组第三胜单场成绩页，s05.jpg为两胜两负未锁胜反例。
-- s01明确“恭喜！你获得了这些奖励”、擂台币900与“继续”；900只是样例数值，不固定金额/奖励种类，也不将此可选页当作巴掌累计页。
-- s02–s04标题“比赛#3 获胜”，底部前三槽均为绿色上箭头，左下“返回大厅”，右下“下一场比赛”。它们分别对应第一批1/4、2/5、3/6样例，支持用户手动链路；不是同一组比赛的连续三个胜场截图。
-- s05五槽状态依次“失败、获胜、获胜、失败、未完成”，只有2胜2负，第五局未打。即使右上“完成”按钮可见，必须继续第五局，不能走提前完成分支。它是未锁胜状态，不是三胜。
-- 决策依据必须为同一挑战内不同槽位的累计获胜数，不是比赛#序号、完成场数、当前展开槽位或亮起的下一槽编号。重复帧不得累加胜场；未读出/矛盾时有界重读或停止，不猜已锁胜。
-- 达到3胜后，才能规划返回大厅→完成，并再次核对确认弹窗“将被视作获胜”；未达3胜且有未完成比赛则继续尚未完成的比赛（本反例特指第五局）。本次并未授权自动开赛或操作设备，这只是状态机需求。
-- 第二批尺寸s02–s04=2420x1668，s01/s05=1567x1080。原始图片只读，账号图不提交，不直接拉伸作MuMu模板。当前无需再请求完整流程图。
 必读：
 E:/hzz/work/MA9/docs/zh_cn/develop/multi_agent_plan.md
-E:/hzz/work/MA9/agent/lanes.yaml（07、06与契约边界）
+E:/hzz/work/MA9/agent/lanes.yaml（07 owns_new，按本任务更窄范围）
 E:/hzz/work/MA9/agent/orchestration/state.json
 E:/hzz/work/MA9/agent/orchestration/migration_20260923.md
-E:/hzz/work/MA9/MA9-evidence/20260923-06A-defense-audit/results.json（须结合总控更正，不采信夸大实机项）
-E:/hzz/work/MA9/MA9-evidence/20260923-combined-integration/results.json
-本cwd下：agent/ma9_agent/duel_selection.py、agent/tests/test_duel_selection.py、tools/plan_duel_selection.py、tools/test_duel_selection.py、tools/import_duel_selection_data.py（只读，不执行导入器）、docs/zh_cn/develop/duel_selection.md、blueprint_safe_selection.md、duel_daily_model.md；按需读取data/generated/duel_auto_candidates.json与vehicle_catalog.json，禁止重建。
+E:/hzz/work/MA9/MA9-evidence/20260923-07A-attack-planning/report.md、results.json
+E:/hzz/work/MA9/MA9-evidence/20260923-attack-three-win-user-confirmed/manifest.json
+E:/hzz/work/MA9/MA9-evidence/20260923-attack-three-win-supplement/manifest.json（s05两胜两负反例）
+本cwd下agent/ma9_agent/duel_selection.py、agent/tests/test_duel_selection.py、tools/test_duel_selection.py；均只读。无需读全套私有截图来重复做识别；本任务输入是规范化枚举，不是图片。
 
-精确本次边界：owns=[]、owns_new=[]、owns_generated=[]。所有受控文件只读，不修改07/06/05、契约、interface源、schema或编排配置。07全lane归属不代表本任务写权限。tools/plan_duel_selection.py和tools/test_duel_selection.py目前不在07写入清单，若建议以后改它们须报告总控先登记。
-根外E:/hzz/work/MutualExclusionAllocator本次禁止读写或运行；lanes.external仅历史参考，不构成授权。不要执行import_duel_selection_data.py、不要运行tools/test_duel_selection.py的整套real_source测试、不要复制外部仓库。真实来源缺失不阻塞本次假数据纯函数审计。
-允许新建私有输出仅E:/hzz/work/MA9/MA9-evidence/20260923-07A-attack-planning/下report.md、results.json、selection-tests.log、attack-tests.log及tmp/小夹具/有界只读探针。目录存在停止报告，不覆盖历史；所有临时写入根内。不读六个大型multiplayer_loop分片，不运行任何资源生成器。
+精确写入边界：
+owns: []
+owns_new:
+- agent/ma9_agent/duel_attack_session.py
+- agent/tests/test_duel_attack_session.py
+owns_generated: []
+若文件已存在或工作区非干净停止报告，不覆盖现有成果。只可新增这两文件；不修改duel_selection.py、__init__.py、runtime_action.py、旧测试、CLI、文档、lanes/state、pipeline、资源、generated或05/06文件。不得安装新依赖，不复制/调用根外MutualExclusionAllocator。
 
-检查清单（每项给代码/测试/证据位置，区分已实现、离线已证、待实机、缺实现）：
-1. plan_attack输入/输出：五图、赛区、确认拥有集合、不可用集合、互斥约束、候选档、未知/无候选/互斥不足、确定性、limit与Pareto排序。识别已有测试与默认discover遗漏，别说“没有测试”而漏看tools/test_duel_selection.py。
-2. 现有静态候选只是推荐顺序，不含实测赛道时间，不据此预测胜率；complete与requires_live_vehicle_and_fuel_verification的语义是否被调用端保持。
-3. 地图/对手详情/票券/五槽状态等只读输入到离线候选的最小接口。区分“i详情只读”与“挑战立即扣票”；购买、领奖、刷新、提升、开始按钮全部不在本次许可内。没有当前MuMu进攻截图时明确缺什么，不猜模板坐标、不让用户批量收集无关截图。
-4. _repair_descending_ratings的缺读数/排序矛盾错误消息待办仍属07；只评估它是否为下一最小任务的真实阻塞，不改护栏，不捎带优化05已验证OCR。
-5. 若发现算法/数据缺陷，用小规模确定性假数据复现，保存最小输入与实际输出；禁止无界性能测试或大规模穷举。针对数据规模的风险必须给现有候选数与可验证证据，不泛泛宣称复杂度问题。
-6. 最后只建议一个下一写入任务：说明目标、精准文件/owner（缺登记明确标出）、所需最少输入、纯离线验收命令、失败停止条件、独立复核范围。无需一轮列出整个日常系统的实现计划。若已无离线阻塞而缺现场输入，给一个最小用户资料请求建议，由总控决定是否派发，不直接接管设备。
+设计范围（保持小而纯，不建通用状态机框架）：
+A. 五槽快照决策函数
+- 输入是同一挑战、同一快照的五个带slot编号条目，slot必须恰好1..5各一次，状态仅win/loss/unplayed/unknown。条目次序可不同，输出按slot排序确定；长度/重复slot/非法状态或非法重试计数以明确ValueError拒绝，不隐式猜测。
+- 函数只统计本次快照，不叠加历史帧，不使用全局缓存、文件、时间、随机数或设备。重复调用相同快照不增加胜场；新挑战由调用方提供新快照并重置重读计数。本轮不合并旧快照、不从比赛编号猜胜场。
+- 另收规范化确认结果not_seen/win/loss/unknown。这不是OCR文字解析；确认框的“将被视作获胜”应由未来识别层映射为win，本轮只处理枚举。
+- 输出至少包含wins、losses、unplayed_slots、unknown_slots、next_action、reason、next_unknown_attempts；以及starts_race=false与requires_live_verification=true。action只是纯建议，不是执行器。
+- 无未知/矛盾且wins>=3，确认not_seen：只能request_finish_confirmation，不能标记已胜利结算，也不能许可直接点确认完成。
+- wins>=3且确认win：可给confirm_finish建议/early_finish_allowed=true；这两项必须只在此组合成立。仍不宣称已点击或已结算。
+- 2胜2负+第五槽unplayed：建议continue_race并明确pending为[5]，绝不提前完成，即使未来UI报告完成按钮可见。
+- wins<3、有未打槽且无确认矛盾：建议继续尚未打的槽，不主动放弃。五槽均已完成且wins<3：stop并给出未取得三胜的终态原因，不开始第六局；不在本轮自动处理败局退出。
+- 确认loss，或确认win但已知完整快照wins<3：stop且不授权完成。不要把确认判负按成功处理。
+- 槽位unknown，或需要确认但确认结果unknown：bounded_reread；重读计数显式传入、返回，累计第3次仍不可读则stop。有效且一致快照将重读计数重置为0。不睡眠、不轮询设备；“3次”只是离线调用预算，不声称实机时延已调优。
+- 已有unknown/矛盾时不得跳到完成建议；边界优先级写入函数docstring并测试。无确认时的正常待赛不算未知重读。
 
-环境与验证：
-Python优先MA9_PYTHON，否则E:/hzz/work/MA9/.venv/Scripts/python.exe；先验证存在及-X utf8 --version，缺失停止，不切PATH。所有Python-X utf8、cwd始终07工作区，不从main导入源码。TMPDIR/TMP/TEMP同时设为本证据tmp，并打印实际tempfile.gettempdir。
-开工/结束核对git status --short、branch、完整HEAD、最近3提交及B祖先；Git只用命令级-c safe.directory=E:/hzz/work/MA9/MA9-worktrees/duel-attack，不改全局配置。
-最低命令（$lanePython为解析后的路径）：
-& $lanePython -X utf8 -m unittest discover -s agent/tests -p test_duel_selection.py -v
+B. 候选衔接函数
+- 直接调用现有plan_attack，明确接收五图、赛区、owned_ids、reference、catalog及unavailable_ids/limit，原样传递过滤与限制。不得重写算法、改变Pareto/排序/互斥规则或修改原函数。
+- 保留complete、filled_slots、gaps、plans和requires_live_vehicle_and_fuel_verification。完整候选只表示五槽有互斥方案，不等于允许Start；封装结果额外明确starts_race=false，不能把候选complete与三胜混为一谈。
+- 不隐藏complete=false的缺口；零拥有时现有一个全None方案不能误显示为可开赛。调用既有函数的输入错误保持清晰，不吞异常伪造成功。
+- 输入数据、集合、列表不得被修改。只依赖标准库与现有duel_selection纯函数，不导入maa/controller/GUI或真实识别层。
+- 两个函数在同一新模块，公开名称与类型可由你选最小清晰实现，在docstring写明，不新增共享契约、配置或持久文件。
+
+明确不做：
+对手D/C合计>=3是已记录的后续择敌偏好，本轮不做对手评分/刷新/扣票；不接三档i详情；不做奖励领取、巴掌记账、排行榜返回、真实自动驾驶、断线恢复、图像模板；不修缺读数与排序矛盾共用错误消息。对手“完成”按钮可见、比赛#3、票数N/5、亮起下一槽编号、GP数值均不是输入胜场依据。
+用户手动截图证明完成确认路径，但不构成MA9自动化通过。非16:9参考图不直接变1280x720模板。当前不需要用户再补图或跑实机。
+
+新增测试必须至少覆盖：
+1. 三胜+not_seen仅请求确认；三胜+win才允许确认完成；loss/unknown分别安全停止或有界重读。
+2. s05对应[loss,win,win,loss,unplayed]继续slot5；完成按钮信息不能绕过胜场判断。
+3. “第三场赢但前两场输”只有1胜不能提前完成；相同快照重复输入不累计；slot输入排列变化输出相同。
+4. unknown三次预算到达stop，恢复有效后计数归零；坏slot/重复slot/非法状态/负计数拒绝；跨调用无共享可变状态。
+5. 全完成但只有2胜无第六局建议；确认win与不足三胜矛盾不放行。
+6. 用小型假reference/catalog验证衔接结果和直接plan_attack一致：互斥、unavailable排除、缺轨/候选不足、零拥有、确定性、limit传递、完整候选仍starts_race=false；输入不变。
+新增测试放agent/tests，确保默认discover覆盖新接口。旧plan_attack三个工具测试仍要显式运行（它们在tools/根，默认discover不会发现）。不得mock被测新函数返回值，不加skip，不大规模穷举。
+
+证据与环境：
+仅在E:/hzz/work/MA9/MA9-evidence/20260923-07B-attack-session/新建report.md、results.json、targeted.log、attack-regression.log、agent.log、tools.log、schema-reuse.json或schema.log及tmp/小夹具。目录存在停止，不覆盖原证据；不同轮日志另存带序号文件，不覆盖红/失败记录。
+Python优先MA9_PYTHON，否则E:/hzz/work/MA9/.venv/Scripts/python.exe；先验证存在并-X utf8 --version，缺失停止，不换PATH。每条Python-X utf8，cwd始终07根，禁止main源码PYTHONPATH。TMPDIR/TMP/TEMP三者同时指向上述tmp，打印并记录实际tempfile.gettempdir；所有写入MA9内，不绕过宿主守卫。
+Git开工/收工核对status、branch、完整HEAD、最近3提交及B祖先；只用-c safe.directory=E:/hzz/work/MA9/MA9-worktrees/duel-attack，不改全局配置。
+
+验收命令（$lanePython为已解析解释器）：
+& $lanePython -X utf8 -m unittest discover -s agent/tests -p test_duel_attack_session.py -v
 & $lanePython -X utf8 tools/test_duel_selection.py DuelSelectionTests.test_allocator_uses_distinct_cars_and_best_available_tradeoff DuelSelectionTests.test_unknown_and_empty_tracks_are_reported_without_a_startable_plan DuelSelectionTests.test_same_car_on_every_track_reports_mutual_exclusion_shortage -v
-上述tools命令只选择3项纯假数据进攻测试，不运行外部源测试。记录最终退出码、数量与复用项；长进程续等到退出。全量Agent/tools/schema为已通过组合证据，不重复跑，不声称本轮独立复现。
+& $lanePython -X utf8 -m unittest discover -s agent/tests -v
+& $lanePython -X utf8 -m unittest discover -s tools/tests -v
+第二条只跑三个纯假数据测试，不执行real_source，不运行导入生成器。基点Agent107是历史，不冒充当前新模块通过；本轮需完整实际退出码和数量。
+schema门禁：本任务不改schema/interface/资源/校验器，先机械核对输入与已验证基点相同，写schema-reuse.json，引用MA9-evidence/20260923-combined-integration/results.json及05D原schema27项exit0；明确复用不重跑。输入任何不同则停止复用并报告；确需运行的正确命令为：
+& $lanePython -X utf8 tools/validate_schema.py --schema-dir E:/hzz/work/MA9/deps/tools --resource-dirs assets/resource --exclude-dirs assets/resource/announcement --interface-files assets/interface.json
+所有长进程续等到最终退出。失败最多两轮有界修复仍不过则返回总控；不自动升max、不购买额度或重置。不得读取六个大型multiplayer_loop分片，不生成data/generated，不触根外仓库。
 
-结束条件：受控文件保持不变，针对性测试有最终退出码，完成证据化能力清单及一个最小下一任务。回传项目名、实际模型/平台/档位、cwd/branch/起止完整SHA、git状态、命令/退出码/数量、缺陷行号/复现、建议任务、证据绝对路径与剩余风险。总控决定是否授权写入和是否需要独立review；本席不提交、不推送、不打包、不启动GUI/ADB/MuMu，不开赛、不扣票、不购买。04继续暂停。
+结束条件：仅两个登记新文件，全部适用门禁通过，git diff --check干净，行为明确区分请求确认/确认允许/实际完成，未产生任何设备/I-O副作用。按用户政策自动本地提交一次完整交付；只暂存自己的文件，不合入main、不推送、不打包、不发布、不启动GUI/ADB/MuMu/游戏。
+回传项目、实际模型/平台/档位、cwd/branch/起止完整SHA、commit、文件清单/stat、公开API简述、命令/最终退出码/数量、复用证明、证据路径、剩余风险。总控独立验收后另派新上下文只读复核（Qwen3.7-Max仅候选，平台档位不编造；复核不得由owner自评代替）。完成本任务不代表进攻全流程或实机通过。
