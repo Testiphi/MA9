@@ -42,3 +42,5 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 当前唯一下一步（优先于上面历史附记）：07B b063f56cf988bf2544362c3d861cc51ecbe6597d总控验收被两条停止语义反例阻断，未合入；prompt07现为07B1（ds-v4.1flash high新对话），cwd MA9-worktrees/duel-attack、branch lane/duel-attack、起始HEAD=b063f56cf988bf2544362c3d861cc51ecbe6597d。证据20260923-07B-orchestrator/repro.py+log，修复后再独立review。基点107+新增26=133无计数异常。不要重跑已完成07A或误称07B已验收。总控可继续自动压缩，不需要按固定轮数重开；若新开，先读本文件与state并核对现场。
 
 最新07状态：be381dbc1488cce4ff9e9c1111e50b40421a489d已修两停止分支，总控repro2/Agent139/规划3/tools29+1skip与8192有限安全矩阵全过，schema34输入复用27。尚未合入；当前唯一下一提示词为07R-attack-review.md，Qwen3.7-Max新只读对话、平台默认设置。关注stop只是暂停自动推进，不是退出或证明已输/已结算；owner预算已用完，不擅自重派无限修复。
+
+07R当前模型已按用户可用列表更新为Qwen3.8-Max（非历史3.7），默认平台思考设置；目标仍be381dbc1488cce4ff9e9c1111e50b40421a489d，只读复核提示词07R-attack-review.md。3.8-Flash未派发，不自动max。

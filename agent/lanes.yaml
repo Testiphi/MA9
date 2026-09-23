@@ -192,7 +192,7 @@ model_tiers:
     efforts: [low, high, max]
     note: 独立只读复核；07 在依赖满足后使用 high。
   qwen:
-    product: Qwen3.7-Max
+    product: Qwen3.8-Max
     efforts: []
     note: 07R独立只读复核有界试点；平台默认思考设置，Max是模型名，不编造high/max档位或等性能承诺。
   glm_flash:

@@ -374,7 +374,7 @@
         "new_tests": 26,
         "owner_total": 133,
         "merged": false,
-        "independent_review": "07R_Qwen3.7-Max_fresh_read_only_prompt_ready",
+        "independent_review": "07R_Qwen3.8-Max_fresh_read_only_prompt_ready",
         "repair_round": "second_bounded_round_including_owner_initial_fix",
         "repaired_delivery": "be381dbc1488cce4ff9e9c1111e50b40421a489d",
         "repaired_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-07B1-orchestrator/results.json",
@@ -389,14 +389,15 @@
       },
       "reviewer_task": {
         "project": "MA9-07R-离线进攻状态决策独立复核",
-        "model": "Qwen3.7-Max",
+        "model": "Qwen3.8-Max",
         "effort": "platform_default_actual_setting_must_be_reported",
         "prompt": "agent/orchestration/prompts/07R-attack-review.md",
         "base": "72e32dad93165f3c34dc022096c9222c9a1e0977",
         "head": "be381dbc1488cce4ff9e9c1111e50b40421a489d",
         "scope": "whole_module_and_tests_not_only_fix_diff",
         "special_attention": "stop halts automation, does not exit or prove challenge settled/lost; current reason/comments need independent judgement",
-        "first_MA9_qwen_trial": true
+        "first_MA9_qwen_trial": true,
+        "selection_note": "User has3.8-Max and3.8-Flash; chooseMax for bounded independent correctness review; Flash not dispatched; no MA9 equivalence claim."
       }
     }
   },
@@ -407,7 +408,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户用Qwen3.7-Max全新对话执行07R只读复核；平台默认思考设置，不自动max。行为门禁已绿，尚未合入，重点审stop不等于退出/已结算的语义。",
+  "next": "用户用Qwen3.8-Max全新对话执行07R-attack-review.md；平台默认思考设置如实记录，不自动max，Flash暂不用于本次验收门禁。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
