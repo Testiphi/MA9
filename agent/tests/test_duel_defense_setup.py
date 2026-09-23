@@ -132,9 +132,9 @@ class DuelDefenseSetupFlowTest(unittest.TestCase):
         return root
 
     @staticmethod
-    def _tracks():
+    def _tracks(big="Map"):
         return {"complete": True, "tracks": [
-            {"big": "Map", "small": str(index)} for index in range(1, 6)]}
+            {"big": big, "small": str(index)} for index in range(1, 6)]}
 
     @staticmethod
     def _scan(_context, _vehicle_class, _catalog, **kwargs):
@@ -210,6 +210,48 @@ class DuelDefenseSetupFlowTest(unittest.TestCase):
             "对决_防守_进入第4赛道选车",
             "对决_防守_进入第5赛道选车",
         ])
+
+    def test_plan_aborts_without_assigning_when_map_order_changes_after_scan(self) -> None:
+        """The earliest guard: a re-read that swaps two maps must stop the plan.
+
+        The two reads must be independent lists. Building the second read as a
+        shallow copy of the first would let both reads observe one mutation, so
+        the guard would never see a difference and the test would pass vacuously.
+        """
+        with tempfile.TemporaryDirectory() as temporary:
+            context = _Context()
+            # The shared fixture names every map "Map", so the ordering signal
+            # lives in the small-map column. Give the two reads distinct names
+            # and swap the first two entries of the second read only.
+            first_read = self._tracks("Map")
+            swapped = self._tracks("Map")
+            swapped["tracks"][0]["small"], swapped["tracks"][1]["small"] = (
+                swapped["tracks"][1]["small"], swapped["tracks"][0]["small"])
+            self.assertNotEqual(
+                [(row["big"], row["small"]) for row in swapped["tracks"]],
+                [(row["big"], row["small"]) for row in first_read["tracks"]])
+            root = self._root(temporary)
+            with patch("ma9_agent.duel_defense_setup._read_tracks",
+                       side_effect=[first_read, swapped]) as read_tracks, \
+                    patch("ma9_agent.duel_defense_setup._frame", return_value=object()), \
+                    patch("ma9_agent.duel_defense_setup.scan_duel_vehicles",
+                          side_effect=self._scan), \
+                    patch("ma9_agent.duel_defense_setup.assign_visible") as assign, \
+                    patch("ma9_agent.duel_defense_setup.time.sleep"):
+                with self.assertRaisesRegex(
+                        RuntimeError, "defense map order changed after the garage scan"):
+                    run_defense_setup(context, root, {"mode": "plan"})
+            progress = json.loads(
+                (root / "debug/duel_defense_gui_setup.json").read_text(encoding="utf-8"))
+        self.assertEqual(read_tracks.call_count, 2)
+        self.assertEqual(progress["status"], "stopped")
+        self.assertEqual(progress["error"],
+                         "defense map order changed after the garage scan")
+        self.assertFalse(progress["starts_race"])
+        self.assertEqual(progress["assigned"], [])
+        assign.assert_not_called()
+        self.assertFalse(any("开始" in entry for entry in context.entries))
+        self.assertEqual(context.tasker.controller.clicks, [(32, 25)])
 
     def test_track_reader_waits_through_black_transition(self) -> None:
         incomplete = {"complete": False, "tracks": [], "observed_groups": 0}
