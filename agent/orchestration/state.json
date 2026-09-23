@@ -262,10 +262,10 @@
       }
     },
     "duel-attack": {
-      "phase": "07A_read_only_planning_completed_next_task_not_dispatched",
+      "phase": "07B_offline_implementation_preparing",
       "depends_on": "duel-defense",
       "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-attack",
-      "model": "glm",
+      "model": "deepseek",
       "branch": "lane/duel-attack",
       "effort": "high",
       "head": "2876a4a25f5dcc7101963bfccd97ae23f6f41ba6",
@@ -339,8 +339,24 @@
           "agent/ma9_agent/duel_attack_session.py",
           "agent/tests/test_duel_attack_session.py"
         ],
-        "registration_authorized": false,
+        "registration_authorized": true,
         "implementation_started": false
+      },
+      "implementation_task": {
+        "project": "MA9-07B-纯离线进攻决策与候选衔接",
+        "model": "ds-v4.1flash",
+        "effort": "high",
+        "owns": [],
+        "owns_new": [
+          "agent/ma9_agent/duel_attack_session.py",
+          "agent/tests/test_duel_attack_session.py"
+        ],
+        "owns_generated": [],
+        "device_allowed": false,
+        "code_not_started": true,
+        "review": "separate_read_only_review_required_after_delivery",
+        "qwen": "candidate_only_no_unverified_effort_enum",
+        "max_policy": "do_not_start_max; only consider after bounded reproducible hard failure"
       }
     }
   },
@@ -351,7 +367,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "07A只读规划已完成并核对产物；下一步由总控定义/登记纯离线进攻状态机任务，尚未放行写入。Qwen3.7-Max仅讨论候选，不声明等性能或自动切换。",
+  "next": "总控准备07B完整提示词：ds-v4.1flash high，仅两个已登记新增文件，纯离线状态决策/候选衔接，无识别/点击/设备/真实包；交付后独立复核。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

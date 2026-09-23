@@ -490,7 +490,7 @@ lanes:
     scheduling: after_defense_stable
     title: 擂台③ 进攻闭环
     branch: lane/duel-attack
-    model: glm
+    model: deepseek
     effort: high
     needs_device: true
     depends_on: [duel-defense]
@@ -500,6 +500,9 @@ lanes:
       - agent/tests/test_duel_selection.py
       - docs/zh_cn/develop/duel_selection.md
       - docs/zh_cn/develop/blueprint_safe_selection.md
+    owns_new:
+      - agent/ma9_agent/duel_attack_session.py
+      - agent/tests/test_duel_attack_session.py
     owns_generated:
       - data/generated/duel_auto_candidates.json
     external:
@@ -512,7 +515,7 @@ lanes:
     notes: >
       全项目唯一的 frontier-hard 推理：plan_attack 是回溯 + Pareto 前沿 + 互斥，
       _repair_descending_ratings 用 DP 恢复被 OCR 截掉的千位。
-      使用 GLM-5.3 high 人工中转；困难问题返回总控，不自动升级。
+      07B纯离线状态决策由ds-v4.1flash high实施；07A已由GLM-5.3完成。独立复核另行派发，困难问题返回总控，不自动升max。
       防守管理稳定后启动；最终由 Astra 编排层复核并决定是否合入。
 
 # 禁改清单：由工具产出，任何 lane 都不得手改
