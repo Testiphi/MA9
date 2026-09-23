@@ -73,6 +73,42 @@
 
 请参考 [FAQ](./faq.md)
 
+## 便携包运行根与开发兼容
+
+项目里有两套各自独立的数据根查找函数，判据不同，不要合并：桌面选车顺序 GUI 用
+`tools/selection_gui.py::find_project_root`（要求 `data/generated/vehicle_catalog.json` 与
+`data/generated/champion_rotation.json`），Agent 运行时用 `agent/runtime_action.py::find_project_root`
+（要求 `data/multiplayer_profile.json`）。两者的查找优先级一致。
+
+**优先级（从高到低）**
+
+1. 显式配置根：环境变量 `MA9_PROJECT_ROOT`（GUI 实际由启动器以 `configured` 传入）。有效即返回；
+   路径存在但缺少该函数所需数据时直接抛错，**不回退**到标记或祖先目录。
+2. 显式便携根标记：包根下的普通空文件 `.ma9-portable-root`。
+3. 无标记时的原有行为：按候选顺序（exe 所在目录、当前工作目录，Agent 还包括模块目录）展开祖先，
+   优先返回带 `config/garage.json` 的账号根，否则退回首个带数据的目录。
+
+**标记的语义是「主动隔离」**
+
+查找依次从可执行文件目录、当前工作目录向祖先遍历，**并行时不交叉**：命中第一个标记即停止，
+不再向更外层查找。若该标记目录缺少本函数所需数据则抛 `FileNotFoundError`，
+**不越过标记**去读另一个账号的数据。同一层起点之间 exe 标记优先于 cwd 标记。
+开发模式（源码根、`install/`）不创建标记，因此仍与 Agent 共用同一个祖先账号根。
+
+**标记只由组包工具在新包根产生**
+
+唯一入口是 `tools/prepare_portable_preview.py`，默认输出
+`build/portable/MA9-preview/.ma9-portable-root`。它是被忽略的包副本产物，不是仓库根文件。
+组包在必需文件与隐私排除检查全部通过后才写入标记，失败不会留下看似完成的标记。
+不要在源码根、开发 `install/` 或既有发行包内手动补标记，也不要把用户 `config/`、日志复制进包内。
+
+**临时目录环境**
+
+本机 shell 导出了 `TMPDIR`，而 CPython 的 `tempfile` 候选顺序是 **TMPDIR → TEMP → TMP**。
+只设置 `TMP`/`TEMP` 不会移动夹具落点：夹具会落到系统临时目录，凡依赖「夹具位于仓库内」的
+用例（例如祖先账号根抢占）会得到相反结论。运行测试前请同时把 **`TMPDIR`、`TMP`、`TEMP`**
+三者指向当前任务的证据临时目录，并打印 `tempfile.gettempdir()` 确认实际落点。
+
 ## 更多操作
 
 请参考 [个性化配置](./custom_configure.md)（可选）

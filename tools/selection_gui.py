@@ -15,24 +15,58 @@ from ma9_agent.selection_editor import SelectionEditor
 from ma9_agent.selection_strategy import LEAGUES
 
 
+PORTABLE_ROOT_MARKER = ".ma9-portable-root"
+
+
+def has_catalog(path: Path) -> bool:
+    """Report whether a root carries the catalog the selection editor reads."""
+    return (path / "data/generated/vehicle_catalog.json").is_file() and \
+        (path / "data/generated/champion_rotation.json").is_file()
+
+
+def _portable_root(starts: tuple[Path, ...]) -> Path | None:
+    """Return the first marked isolation boundary, nearest ancestor first.
+
+    A marker is a plain empty file at a portable package root. The first marker
+    wins and is never crossed, so one account's GUI cannot read another
+    account's catalog.
+    """
+    seen: list[Path] = []
+    for start in starts:
+        for candidate in (start, *start.parents):
+            if candidate in seen:
+                continue
+            seen.append(candidate)
+            if (candidate / PORTABLE_ROOT_MARKER).is_file():
+                return candidate
+    return None
+
+
 def find_project_root(executable: Path, working_directory: Path,
                       configured: str | None = None) -> Path:
-    """Find data beside a release exe or above a development build exe."""
-    candidates: list[Path] = []
+    """Find data beside a release exe or above a development build exe.
+
+    Priority: an explicit configured root, then an explicit portable package
+    marker, then the original account-root-first search with a data-root
+    fallback.
+    """
     if configured:
-        candidates.append(Path(configured).resolve())
+        root = Path(configured).resolve()
+        if has_catalog(root):
+            return root
+        raise FileNotFoundError(f"MA9_PROJECT_ROOT 中缺少车辆目录：{root}")
+    # A portable package opts into isolation. Search the executable's ancestry
+    # before cwd so launching it from another account cannot redirect it.
+    if (marked := _portable_root((executable.resolve().parent,
+                                  working_directory.resolve()))) is not None:
+        if has_catalog(marked):
+            return marked
+        raise FileNotFoundError(f"便携包根缺少车辆目录：{marked}")
+
+    candidates: list[Path] = []
     for start in (executable.resolve().parent, working_directory.resolve()):
         candidates.extend((start, *start.parents))
     candidates = list(dict.fromkeys(candidates))
-
-    def has_catalog(path: Path) -> bool:
-        return (path / "data/generated/vehicle_catalog.json").is_file() and \
-            (path / "data/generated/champion_rotation.json").is_file()
-
-    if configured:
-        if has_catalog(candidates[0]):
-            return candidates[0]
-        raise FileNotFoundError(f"MA9_PROJECT_ROOT 中缺少车辆目录：{candidates[0]}")
     return next((path for path in candidates if has_catalog(path) and
                  (path / "config/garage.json").is_file()),
                 next((path for path in candidates if has_catalog(path)),
