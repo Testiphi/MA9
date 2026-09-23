@@ -15,11 +15,16 @@ from selection_gui import find_project_root
 class ControlledFilesystem:
     """Confine root lookup to a fixture so the host's real account is invisible.
 
-    Python 3.12 ``Path.is_file``/``Path.exists`` no longer take a self path
-    argument, so no public signature is patched. A scratch instance is built
-    with the original constructor and only its read methods are restricted, so
-    the patched methods keep reporting host truth for every path inside the
-    fixture while denying anything the test layout does not contain.
+    The gate patches ``Path.is_file``/``Path.exists`` with plain functions. A
+    plain function replacing an ordinary method still receives the bound ``self``
+    path as its single argument (``Path.is_file`` is an ordinary method, not a
+    slot wrapper), so the gate can decide per path whether to consult the
+    original method.
+
+    Only existence checks *inside* the fixture are delegated to the original
+    method and therefore report host truth; every path outside the fixture
+    returns ``False``. This is accounting-style scoping, not a blanket pass:
+    files used by a test must still be created for real inside the fixture.
     """
 
     def __init__(self, root: Path):
@@ -167,6 +172,27 @@ class PortableMarkerTest(unittest.TestCase):
             package = self._package(account / "build/portable", marker=False)
             (package / "config").mkdir()
             (package / "config/garage.json").write_text("{}")
+            with ControlledFilesystem(account):
+                self.assertEqual(
+                    find_project_root(package / "MFAAvalonia.exe", package), package)
+
+    def test_unmarked_adjacent_catalog_without_garage_still_defers_to_ancestor(self) -> None:
+        """Adjacent catalog alone must not outrank an unmarked garage ancestor.
+
+        The package carries its own catalog and rotation but no garage, so the
+        old account-root-first search still resolves to the garage-bearing
+        ancestor. Writing the marker turns the same layout into an explicit
+        boundary, which is the contrast half of this geometry.
+        """
+        with tempfile.TemporaryDirectory() as directory:
+            account = self._account(Path(directory) / "account")
+            self._catalog(account)
+            package = self._package(account / "build/portable", marker=False)
+            self.assertFalse((package / "config/garage.json").exists())
+            with ControlledFilesystem(account):
+                self.assertEqual(
+                    find_project_root(package / "MFAAvalonia.exe", package), account)
+            (package / selection_gui.PORTABLE_ROOT_MARKER).write_text("")
             with ControlledFilesystem(account):
                 self.assertEqual(
                     find_project_root(package / "MFAAvalonia.exe", package), package)
