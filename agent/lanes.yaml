@@ -113,6 +113,14 @@ support_roles:
     effort: null
     transport: external_user_relay
     mode: read_only
+  qwen_flash_reserve:
+    project: MA9-QF-小任务与机械核验备用
+    model: qwen_flash
+    effort: null
+    transport: external_user_relay
+    mode: read_only
+    scheduling: inactive_reserve
+    notes: 用户报告当前平台免费不限量，仅记录该平台体验；有界任务逐次派发，不保证与Max等效。
   build_reserve:
     project: MA9-M-构建问题备用
     model: minimax
@@ -127,7 +135,7 @@ execution_transports:
     mode: orchestrator_only
     notes: 禁止自动启动 GPT 子智能体；总控保留在用户新建的 MA9 对话。
   external_user_relay:
-    models: [deepseek, hy4, hy3, glm, glm_flash, minimax, kimi, qwen]
+    models: [deepseek, hy4, hy3, glm, glm_flash, minimax, kimi, qwen, qwen_flash]
     mode: fresh_conversation_user_relay
     procedure:
       - 总控生成独立且完整的提示词；用户选择指定模型并新建对话
@@ -195,6 +203,10 @@ model_tiers:
     product: Qwen3.8-Max
     efforts: []
     note: 07R独立只读复核有界试点；平台默认思考设置，Max是模型名，不编造high/max档位或等性能承诺。
+  qwen_flash:
+    product: Qwen3.8-Flash
+    efforts: []
+    note: 用户当前平台可用的低成本备用，实际档位如实记录；未自动派发或替代关键门禁。
   glm_flash:
     product: GLM-5.3-Flash
     efforts: []
@@ -505,9 +517,9 @@ lanes:
       - agent/tests/test_duel_selection.py
       - docs/zh_cn/develop/duel_selection.md
       - docs/zh_cn/develop/blueprint_safe_selection.md
-    owns_new:
       - agent/ma9_agent/duel_attack_session.py
       - agent/tests/test_duel_attack_session.py
+    owns_new: []
     owns_generated:
       - data/generated/duel_auto_candidates.json
     external:

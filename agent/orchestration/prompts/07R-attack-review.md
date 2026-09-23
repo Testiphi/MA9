@@ -1,5 +1,7 @@
 # MA9-07R-离线进攻状态决策独立复核
 
+状态：已完成，无行为阻塞；总控已接收并做F1/F2最小集成更正，历史任务禁止重复派发。
+
 模型：Qwen3.8-Max；档位：平台默认思考设置（实际可用档位如实记录）。Max是模型名称，不自动选择max推理档，不伪称已切high。你是新的独立只读reviewer，与ds-v4.1flash owner分开；本轮为MA9首次有界Qwen复核试点，不保证与GLM等效。
 用户新建外部对话粘贴完整提示词；不得依赖旧聊天、创建下级智能体/对话/worktree，不能代owner改代码。
 cwd：E:/hzz/work/MA9/MA9-worktrees/duel-attack

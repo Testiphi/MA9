@@ -262,7 +262,7 @@
       }
     },
     "duel-attack": {
-      "phase": "07B1_local_behavior_checks_passed_07R_pending",
+      "phase": "07B_offline_decisions_integrated_recognition_not_implemented",
       "depends_on": "duel-defense",
       "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-attack",
       "model": "deepseek",
@@ -362,7 +362,7 @@
       },
       "implementation_acceptance": {
         "delivery": "b063f56cf988bf2544362c3d861cc51ecbe6597d",
-        "result": "behavior_checks_passed_independent_review_pending",
+        "result": "accepted_integrated_with_orchestrator_reason_correction",
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-07B-orchestrator/results.json",
         "repro_exit": 1,
         "failures": 2,
@@ -373,8 +373,8 @@
         "base_tests": 107,
         "new_tests": 26,
         "owner_total": 133,
-        "merged": false,
-        "independent_review": "07R_Qwen3.8-Max_fresh_read_only_prompt_ready",
+        "merged": true,
+        "independent_review": "07R_no_blocking_defect_reports_and_logs_checked",
         "repair_round": "second_bounded_round_including_owner_initial_fix",
         "repaired_delivery": "be381dbc1488cce4ff9e9c1111e50b40421a489d",
         "repaired_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-07B1-orchestrator/results.json",
@@ -385,6 +385,25 @@
           "matrix": 8192,
           "attack_regression": 3,
           "tools_skipped": 1
+        },
+        "integration": {
+          "reviewed_commit": "be381dbc1488cce4ff9e9c1111e50b40421a489d",
+          "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-07-integration/results.json",
+          "agent": 139,
+          "tools": 30,
+          "tools_skipped": 0,
+          "exit_codes": [
+            0,
+            0
+          ],
+          "matrix_cases": 8192,
+          "non_reason_output_differences": 0,
+          "reason_only_cases": 384,
+          "F1": "neutral pause-for-verification text, no settled/lost claim, regression assertion added",
+          "F2": "duplicate priority item removed",
+          "F3": "owner historical overinterpretation corrected in orchestration record; source evidence unchanged",
+          "device": "not_run",
+          "recognition": "not_implemented"
         }
       },
       "reviewer_task": {
@@ -397,7 +416,10 @@
         "scope": "whole_module_and_tests_not_only_fix_diff",
         "special_attention": "stop halts automation, does not exit or prove challenge settled/lost; current reason/comments need independent judgement",
         "first_MA9_qwen_trial": true,
-        "selection_note": "User has3.8-Max and3.8-Flash; chooseMax for bounded independent correctness review; Flash not dispatched; no MA9 equivalence claim."
+        "selection_note": "User has3.8-Max and3.8-Flash; chooseMax for bounded independent correctness review; Flash not dispatched; no MA9 equivalence claim.",
+        "result": "completed_no_blocking_defect",
+        "identity_note": "registeredQwen3.8-Max label; reviewer cannot self-verify underlying identity; no independent effort switch",
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-07R-attack-review/results.json"
       }
     }
   },
@@ -408,7 +430,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户用Qwen3.8-Max全新对话执行07R-attack-review.md；平台默认思考设置如实记录，不自动max，Flash暂不用于本次验收门禁。",
+  "next": "纯离线07B已集成，下一阶段只读进攻识别需要目标MuMu1280x720原图；先一张含混合槽状态的五图进攻页即可，无需额外开赛或整套重拍。Qwen3.8-Flash登记备用，未派发。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -599,5 +621,12 @@
     "ask_each_time": false,
     "scope": "only_authorized_changed_files_exclude_private_evidence_and_user_workbuddy",
     "push": "separate_remote_action_follow_existing_authorization_and_host_review"
+  },
+  "qwen_backup_policy": {
+    "qwen_max": "user reports quota insufficient for sustained use; do not default to repeatedMax reviews",
+    "qwen_flash": "Qwen3.8-Flash available as reserve",
+    "cost_statement": "user reports free/unlimited on current platform, not independently verified or general pricing",
+    "dispatch": "bounded small task only, fresh complete prompt and independent local validation; not auto dispatched",
+    "effort": "platform_actual_default_no_invented_enums"
   }
 }
