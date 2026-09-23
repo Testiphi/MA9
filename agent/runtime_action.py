@@ -69,6 +69,15 @@ def find_project_root() -> Path:
         if (root / "data/multiplayer_profile.json").is_file():
             return root
         raise FileNotFoundError(f"MA9_PROJECT_ROOT does not contain runtime data: {root}")
+    # Portable packages opt into isolation. Search the executable's ancestry
+    # first so launching it from another account's cwd cannot redirect it.
+    for start in (Path(sys.executable).resolve().parent, Path.cwd(),
+                  Path(__file__).resolve().parent):
+        for candidate in (start, *start.parents):
+            if (candidate / ".ma9-portable-root").is_file():
+                if not (candidate / "data/multiplayer_profile.json").is_file():
+                    raise FileNotFoundError(f"MA9 portable root does not contain runtime data: {candidate}")
+                return candidate
     candidates: list[Path] = []
     for start in (Path.cwd(), Path(sys.executable).resolve().parent,
                   Path(__file__).resolve().parent):

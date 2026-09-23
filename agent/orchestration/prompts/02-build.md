@@ -1,50 +1,44 @@
-# MA9-02B-f5472bc隔离测试包
+# MA9-02C-运行根隔离诊断（只读，不构建）
 
-模型：ds-v4.1flash / high。用户在外部平台新建独立对话粘贴本文件；不依赖旧聊天，不创建子智能体、对话或worktree，不联系其他lane。
-本次已完成并经总控验包：以下保留为02B历史派发内容，禁止再次执行或覆盖已完成包。当前等待用户实机，不再派发构建。原任务仅构建与验包，不改业务代码或构建工具。你是02的临时构建执行者，使用05已验收源码；02原CI交付保持原样。
+模型：ds-v4.1flash / high；用户在WorkBuddy或选定平台全新对话粘贴本文件。独立上下文，不创建对话/子智能体/worktree，不联系其他lane。
+本次只读诊断：05已实机成功，但总控集成tools路径测试失败。查清根目录选择规则和最小改进提案，不改代码、不打包、不要求用户重复实机。
 
-cwd必须为 E:/hzz/work/MA9/MA9-worktrees/duel-scan
-分支必须为 lane/duel-scan
-构建基点与起止HEAD均必须为 f5472bce3443fde42df17ad8a1819e18b46a2059。
-修复审查范围为0850f33d4f3a127ed79ba7c62a0d25a6282a6845..f5472bce3443fde42df17ad8a1819e18b46a2059。
-主仓库现场HEAD=55a8c1c0d5590206d16cce539767175436c86d19，仅编排文件有总控未提交改动和用户.workbuddy/，不可清理。
-严禁在lane/build-ci（03c6d9751f8b5f31865501d1954b2486568afd76）打包；它没有本次05修复。无需整合02提交，不checkout/merge/cherry-pick/reset，不覆盖旧包或install。
+cwd：E:/hzz/work/MA9/MA9-worktrees/duel-scan
+分支：lane/duel-scan
+诊断基点、起始与结束HEAD：f5472bce3443fde42df17ad8a1819e18b46a2059。
+主仓库main当前HEAD：d118f5254e4c99df40488779f388fc24a7730e62，只有总控编排更新和用户.workbuddy；不要清理。
+05修复基点0850f33d4f3a127ed79ba7c62a0d25a6282a6845，契约A=bd9a535336750d8fae3799f20d321498e21f5b00、B=ab13bf9ec91f916754aa0910bd1138e2f038d0a5，均复用，不能重新冻结。02原分支lane/build-ci的03c6d9751f8b5f31865501d1954b2486568afd76保留，不在那条旧分支诊断/打包05。
 
-必读：
+必读文件：
 - E:/hzz/work/MA9/docs/zh_cn/develop/multi_agent_plan.md
-- E:/hzz/work/MA9/agent/lanes.yaml（主仓库为当前权威）
+- E:/hzz/work/MA9/agent/lanes.yaml
 - E:/hzz/work/MA9/agent/orchestration/state.json
 - E:/hzz/work/MA9/agent/orchestration/migration_20260923.md
-- E:/hzz/work/MA9/MA9-evidence/20260923-05R-accepted/05R-review.md
-- cwd下tools/build_agent.py、tools/build_windows_package.ps1（只读参考）、docs/zh_cn/develop/duel_offline_recognition.md。
-冻结A=bd9a535336750d8fae3799f20d321498e21f5b00，B=ab13bf9ec91f916754aa0910bd1138e2f038d0a5；核对A→B→HEAD祖先，不重新冻结。
+- E:/hzz/work/MA9/MA9-evidence/20260923-05-main-integration/results.json、tools.log
+- E:/hzz/work/MA9/MA9-evidence/20260923-091020-D-five-assigned/acceptance.json
+- cwd下agent/runtime_action.py（只需根目录选择与防守入口）、agent/tests/test_runtime_root.py、tools/selection_gui.py（根目录选择）、tools/tests/test_selection_gui_path.py。
+主仓库编排配置为权威；lane中的旧模型与路径不适用。
 
-精确受控文件边界：owns=[]；owns_new=[]；owns_generated=[]。所有受控源码、测试、配置、schema和生成物只读；包括assets/interface.json及五个契约模块。不能因为属于02就改工具。构建失败若需要受控修改，保存日志返回总控重新登记。
-唯一允许本地写入的范围（均在MA9内）：
-1. cwd/build/agent/win-x64/：现有构建工具工作产物，可以由构建工具更新。
-2. cwd/build/user-test-ordering-f5472bc/：本次新包及TEST-BUILD.json、实机验证说明.txt；存在即停止，不覆盖。
-3. E:/hzz/work/MA9/MA9-evidence/20260923-02B-f5472bc/：新证据目录，存在即停止。允许新增assemble_package.py、verify_package.py、build-agent.log、package-resources.json、compiled-modules.json、smoke.log、results.json、report.md；必要脚本缓存仅在此目录。
-工具临时文件和缓存必须重定向到cwd/build/agent/win-x64/内；不得写MA9根外。不得修改任何历史脚本、证据、旧测试包或用户config/logs。
-六个大型multiplayer_loop分片不可读入模型上下文；工具可按字节复制及计算哈希。data/generated只复制本次包必需既有文件，不生成。
+现场已知：
+1. 新包f5472bc用户实机耗时449.013秒，业务five_assigned、五个唯一D级车、starts_race=false、终屏阵容页，总控确认运行PID9184对应新包Agent。
+2. find_project_root偏好候选祖先中含config/garage.json的账号根，故业务JSON落主仓库debug，框架日志在包debug。运行的两份业务数据与包内JSON结构相同，仅CRLF/LF不同；实机成功有效，但不能宣称隔离包的数据完全隔离。
+3. 总控合并候选Agent101通过；tools13项中12通过、test_release_exe_uses_adjacent_data失败：临时install在MA9内时返回MA9账号根。TMP/TEMP放MA9内是当前用户写入边界，不能挪根外逃避问题。相关三个文件在main与05中完全一致，非05新增回归；合并已安全撤回。
+4. 开发构建寻找祖先账号配置是既有设计，不能简单删除该兼容行为。发行包相邻数据、显式MA9_PROJECT_ROOT与开发构建优先级需要明确区分。
 
-环境与开工检查（每次命令cwd均为上述lane根）：
-PowerShell解析 $lanePython = if ($env:MA9_PYTHON) { $env:MA9_PYTHON } else { 'E:/hzz/work/MA9/.venv/Scripts/python.exe' }
-验证存在并 & $lanePython -X utf8 --version；找不到停止，不改用PATH。当前总控验证为Python 3.14.4。
-所有Python命令带-X utf8；禁止PYTHONPATH指向main。Git用命令级-c safe.directory=E:/hzz/work/MA9/MA9-worktrees/duel-scan，不改全局设置。
-git status --short、rev-parse HEAD、branch --show-current、log -3及祖先检查；HEAD/分支不符或受控文件脏则停止上报，不修现场。
+精确写入边界：owns=[]、owns_new=[]、owns_generated=[]。所有受控文件只读，尤其runtime_action.py属于总控契约；tools/selection_gui.py及其测试尚未登记普通lane owner。五契约模块和schema、assets/interface.json也只读。
+允许新建私有输出仅 E:/hzz/work/MA9/MA9-evidence/20260923-02C-root-diagnosis/ 下的report.md、results.json、path-tests.log、reproduce.py及tmp/测试夹具。目录已存在则停止报告，不覆盖证据。所有临时文件必须在该tmp/内；禁止删除或更改现有账号config、历史包、日志及回收站。
+不得读取六个大型multiplayer_loop分片；data/generated只读，仅按需结构或哈希比较，不能重新生成。不得读写根外MutualExclusionAllocator。禁止ADB/MuMu、GUI、游戏操作、提交/合并/推送。
 
-构建与核验：
-1. 在上述cwd运行 & $lanePython -X utf8 tools/build_agent.py，日志保存证据目录/build-agent.log；捕获实际最终退出码。不要传--clean删除既有根目录；工具自身正常更新构建产物允许。长进程必须等到退出，不以输出结束推定成功。
-2. 历史 E:/hzz/work/MA9/MA9-evidence/select-button-fix/assemble_package.py 仅作参考：其ROOT仍是迁移前路径且DEST为旧包，不得原样运行或修改。新assemble_package.py必须断言当前根、完整HEAD和干净状态，并拒绝覆盖目标。
-3. 仅UI/原生运行库/OCR模型可复用主仓库缓存build/mfa、deps、assets/resource/model/ocr。业务源码、受控资源、数据、interface必须来自本lane的f5472bc；Agent必须是本次构建。禁止整体复制旧测试包，排除config/debug/logs/backup/temp及缓存中任何旧业务资源和Agent。
-4. 包内interface副本只允许设置版本v0.0.0-duel-ordering-f5472bc和agent.child_exec='./agent/ma9-agent/ma9-agent.exe'、child_args=[]；源assets/interface.json不能改。按需复制LICENSES、README/LICENSE/NOTICE及历史组包列出的数据。旧资源不得残留。
-5. 每个受控资源/数据逐文件SHA256与lane源一致并记录来源清单；记录本次Agent完整目录清单及哈希，包内可执行文件与本次dist一致。TEST-BUILD.json记录完整SHA、版本、Python、构建命令/cwd/退出码、源码与Agent哈希、资源验证及review、device_test='not_run'。历史校验必须标明复用。
-6. 写verify_package.py，用PyInstaller archive读取器提取PYZ，核对duel_vehicle_screen、duel_vehicle_runtime、duel_defense_setup、duel_selection与本lane源码compile所得代码对象，递归比较代码及所有常量（含数值），忽略仅文件路径元数据差异；缺模块或差异必须非零退出。debug/pyz_probe.py只可参考：其比较忽略部分数值常量、出现不一致仍返回0，不能仅看它exit0。
-7. 不传socket参数运行新包agent/ma9-agent/ma9-agent.exe一次，预期Usage和exit1；设置短超时，记录实际输出与退出码，不把任意exit1当成功。不得启动MFAAvalonia、ADB/MuMu或连接游戏。
-8. 编写实机操作卡：准确MFAAvalonia.exe绝对路径；用户停止旧任务后运行此新包，选择“对决资格赛：自动配置五辆弱防车（不开始比赛）”，明确D级。成功须业务JSON five_assigned、五车互斥、starts_race=false且停阵容页；already_configured仅代表保留已有阵容，不算本轮五车赋值通过。记录耗时和终屏，回传总控核对包内debug/duel_defense_gui_setup.json、duel_vehicle_scan_live.json、duel_tracks_live.json、duel_defense_plan_live.json、maafw.log及on_error截图。禁止用GUI完成提示替代业务JSON。
+任务：
+A. 从实际源码解释两套find_project_root的候选顺序、账号根优先及显式override；关联本次日志落点和测试失败，不把两套函数误当同一函数。
+B. 构造位于MA9内的最小只读复现：发行包有完整相邻数据但祖先有账号配置；开发build无相邻数据应回退祖先；有效/无效显式override。仅在临时夹具创建数据，不操作真实账号目录，不改生产模块。
+C. 给出最小策略提案与测试矩阵：如何识别发行根/开发根，如何避免误读另一个账号，如何维持原开发兼容和明确override优先。区分真正产品行为修正、测试环境隔离和仅操作卡修正；不能只改断言或屏蔽失败。
+D. 列出建议修改文件及owner：涉及runtime_action只能总控亲自改；GUI及测试须总控先登记。以文件/行号、行为前后和兼容风险回传，禁止直接实施补丁或扩写跨lane功能。
 
-本次纯构建不修改受控文件，不重复完整schema/npm/业务测试。复用MA9-evidence/20260923-05D-acceptance/results.json中Agent101、tools12+1skip、schema27 exit0和05R 37项证据；不是本次重跑。仅验证新产物与源码绑定、资源一致、离线启动及最终git diff --check/status。
-注意：debug/ocr-call-*.json已陈旧，不能用作23:18:23.444证据；原件不改。原始日志在MA9-evidence/20260922-231746-ordering-handoff/maafw.log。
-
-结束条件：构建最终exit0、包完整、四模块一致、资源及数据哈希一致、离线Usage/exit1符合预期、起止HEAD一致且受控工作区仍干净。失败保留现场并给确切阻塞；不自行扩大边界、不反复无界重试。完成仅回传总控，不能自行宣布实机放行或合并。
-回传：项目MA9-02B-f5472bc隔离测试包；模型实际标签/平台/档位；cwd/branch/起止完整SHA；所有命令及最终退出码；包目录和运行入口；TEST-BUILD.json路径、exe哈希、模块/资源核验结果；证据/脚本绝对路径；git状态/diff；复用与实跑分开；剩余风险。不得提交、推送、发布或更新安装目录。04暂停，06/07等待，未授权操作根外MutualExclusionAllocator。
+开工核对cwd、git status --short、branch --show-current、rev-parse HEAD、最近3提交；不符停止，不checkout/reset/merge。Git dubious ownership只用命令级-c safe.directory=E:/hzz/work/MA9/MA9-worktrees/duel-scan，不改全局配置。
+Python优先MA9_PYTHON，否则E:/hzz/work/MA9/.venv/Scripts/python.exe；存在才运行-X utf8 --version，不存在停止，不替换PATH。所有Python命令-X utf8，cwd始终lane根，禁止从main导入lane源码。TMP/TEMP设为上述新证据目录的tmp；不移除或绕过宿主守卫。
+最低复现命令（用解析出的$lanePython）：
+& $lanePython -X utf8 -m unittest discover -s tools/tests -p test_selection_gui_path.py -v
+这在根内tmp预计1通过1失败，保留实际最终退出码，不当新失败盲目重复。私有reproduce.py仅如有必要才写；执行也带-X utf8。不重跑全量schema/npm/Agent或构建。总控集成证据可引用但标明复用。
+结束条件：解释失败机制、有界复现、提出明确最小方案与owner边界；受控文件不变。如果信息不足明确缺项，不猜测已修复。
+回传：项目名、实际模型/平台/档位、cwd/branch/起止完整SHA、git状态、复现命令/退出码/断言、文件行号、最小方案、兼容性风险、证据绝对路径和需要总控裁决的选择。该诊断不代表05失败或06放行；04暂停，06/07等待。

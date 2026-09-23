@@ -43,7 +43,7 @@
     },
     "duel-scan": {
       "project": "MA9-05-擂台车库遍历",
-      "phase": "D_device_accepted_integration_pending",
+      "phase": "D_device_passed_integration_blocked_by_existing_root_resolution",
       "model": "deepseek",
       "effort": "high",
       "branch": "lane/duel-scan",
@@ -52,7 +52,7 @@
       "review": "GLM-5.3_high_no_blockers_report_and_37_test_logs_checked",
       "device": "D_five_assigned_unique_starts_race_false_lineup_confirmed",
       "merged": false,
-      "next": "总控检查05完整边界并合入；集成后归还两个defense_setup文件给06。",
+      "next": "用户以ds-v4.1flash high全新对话执行02D根隔离窄修复；runtime契约增量已由总控完成，外部不得改契约。05实机成功保留，待GUI/组包与独立复核通过后再恢复集成。",
       "head": "f5472bce3443fde42df17ad8a1819e18b46a2059",
       "pilot_report": "agent/orchestration/duel_scan_pilot_report.md",
       "pilot_tests": {
@@ -171,6 +171,22 @@
         "runtime_root": "E:/hzz/work/MA9",
         "input_data": "parsed_equal_CRLF_LF_only",
         "other_classes": "not_device_verified"
+      },
+      "integration_gate": {
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-05-main-integration/results.json",
+        "agent": "101_passed_exit_0",
+        "tools": "12_passed_1_failed_exit_1",
+        "failed_test": "test_selection_gui_path.SelectionGuiPathTest.test_release_exe_uses_adjacent_data",
+        "trigger": "TMP/TEMP位于MA9根内时，祖先config/garage.json抢占发行版相邻数据",
+        "unchanged_files": [
+          "tools/selection_gui.py",
+          "tools/tests/test_selection_gui_path.py",
+          "agent/runtime_action.py"
+        ],
+        "scope": "existing_root_policy_not_05_regression",
+        "merge": "aborted_safely_before_commit",
+        "main_head": "d118f5254e4c99df40488779f388fc24a7730e62",
+        "ownership": "defense_setup仍归05，06/07不放行"
       }
     },
     "duel-defense": {
@@ -192,7 +208,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "总控检查05完整边界并合入；集成后归还两个defense_setup文件给06。",
+  "next": "用户以ds-v4.1flash high全新对话执行02D根隔离窄修复；runtime契约增量已由总控完成，外部不得改契约。05实机成功保留，待GUI/组包与独立复核通过后再恢复集成。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -255,5 +271,33 @@
     },
     "verification": "existing_results_and_log_tails_checked_no_duplicate_test_run",
     "review_prompt": "completed_GLM-5.3_review_accepted"
+  },
+  "root_isolation": {
+    "phase": "runtime_increment_passed_GUI_packaging_pending_02D",
+    "decision": "M-alpha",
+    "marker": ".ma9-portable-root",
+    "priority": [
+      "explicit_override_fail_closed",
+      "first_marked_root_executable_then_cwd_then_runtime_module",
+      "legacy_account_root_then_data"
+    ],
+    "unmarked_behavior": "unchanged",
+    "invalid_marker_data": "raise_no_ancestor_fallback",
+    "owner_runtime": "orchestrator",
+    "owner_GUI_and_packaging": "build",
+    "diagnosis": "E:/hzz/work/MA9/MA9-evidence/20260923-02C-root-diagnosis",
+    "runtime_tests": "E:/hzz/work/MA9/MA9-evidence/20260923-root-contract/green-results.json",
+    "runtime_counts": {
+      "agent": 86,
+      "root": 9
+    },
+    "negative_control": "3_new_behavior_failures_old_code",
+    "temp_policy": "TMPDIR_TMP_TEMP_all_root_contained_actual_gettempdir_recorded",
+    "worktree": "E:/hzz/work/MA9/MA9-worktrees/root-isolation",
+    "branch": "codex/root-isolation",
+    "base": "pending_commit_resolution",
+    "external_model": "ds-v4.1flash high",
+    "review": "pending_independent_GLM-5.3_high_after_02D",
+    "five_contract_modules_and_AB": "unchanged"
   }
 }

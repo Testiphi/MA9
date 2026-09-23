@@ -139,6 +139,66 @@ class FrozenPublicContractTest(unittest.TestCase):
 
 
 class RuntimeRootTest(unittest.TestCase):
+    def test_marked_package_beats_ancestor_account_root(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "account"
+            package = root / "build/portable"
+            for path in (root, package):
+                (path / "data").mkdir(parents=True)
+                (path / "data/multiplayer_profile.json").write_text("{}")
+            (root / "config").mkdir()
+            (root / "config/garage.json").write_text("{}")
+            (package / ".ma9-portable-root").touch()
+            with patch.dict("os.environ", {"MA9_PROJECT_ROOT": ""}), \
+                    patch("runtime_action.Path.cwd", return_value=root), \
+                    patch("runtime_action.sys.executable", str(package / "agent/ma9-agent/ma9-agent.exe")):
+                self.assertEqual(find_project_root(), package)
+
+    def test_executable_package_marker_precedes_working_directory_marker(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            executable_root = Path(directory) / "package"
+            working_root = Path(directory) / "other-package"
+            for path in (executable_root, working_root):
+                (path / "data").mkdir(parents=True)
+                (path / "data/multiplayer_profile.json").write_text("{}")
+                (path / ".ma9-portable-root").touch()
+            with patch.dict("os.environ", {"MA9_PROJECT_ROOT": ""}), \
+                    patch("runtime_action.Path.cwd", return_value=working_root), \
+                    patch("runtime_action.sys.executable", str(executable_root / "agent/ma9-agent/ma9-agent.exe")):
+                self.assertEqual(find_project_root(), executable_root)
+
+    def test_incomplete_marked_package_never_falls_back_to_account(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "account"
+            package = root / "portable"
+            (root / "data").mkdir(parents=True)
+            (root / "data/multiplayer_profile.json").write_text("{}")
+            (root / "config").mkdir()
+            (root / "config/garage.json").write_text("{}")
+            package.mkdir()
+            (package / ".ma9-portable-root").touch()
+            with patch.dict("os.environ", {"MA9_PROJECT_ROOT": ""}), \
+                    patch("runtime_action.Path.cwd", return_value=root), \
+                    patch("runtime_action.sys.executable", str(package / "agent/ma9-agent/ma9-agent.exe")):
+                with self.assertRaisesRegex(FileNotFoundError, "portable root"):
+                    find_project_root()
+
+    def test_explicit_root_precedes_marker_and_invalid_override_never_falls_back(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "explicit"
+            package = Path(directory) / "portable"
+            for path in (root, package):
+                (path / "data").mkdir(parents=True)
+                (path / "data/multiplayer_profile.json").write_text("{}")
+            (package / ".ma9-portable-root").touch()
+            with patch("runtime_action.Path.cwd", return_value=package), \
+                    patch("runtime_action.sys.executable", str(package / "agent/ma9-agent/ma9-agent.exe")):
+                with patch.dict("os.environ", {"MA9_PROJECT_ROOT": str(root)}):
+                    self.assertEqual(find_project_root(), root)
+                with patch.dict("os.environ", {"MA9_PROJECT_ROOT": str(root / "missing")}):
+                    with self.assertRaisesRegex(FileNotFoundError, "MA9_PROJECT_ROOT"):
+                        find_project_root()
+
     def test_development_install_uses_gui_account_root(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "MA9"

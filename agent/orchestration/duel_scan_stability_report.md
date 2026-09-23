@@ -156,3 +156,20 @@ Agent SHA256=77388c345c16d8ae25bb3ac3c1864efc489fe68ef88407a6bf7b08673395d3f6。
 证据冻结MA9-evidence/20260923-091020-D-five-assigned/acceptance.json及四份业务JSON、框架日志快照、包元数据。用户终屏图保留在本对话，未误用历史debug图片。
 发现既有find_project_root偏好带config/garage.json的祖先账号根，本次业务JSON实际在主仓库debug，而框架日志在新包debug。运行数据首次字节哈希核对因CRLF/LF不同失败，后续文本换行归一化与JSON结构比对全部一致；不是包源码导入main，不声称包内数据完全隔离。记录为契约/构建后续观察，不修改本次代码。
 只认可D级本次实机，不推断R/S/A/B/C或账号冲突恢复路径通过。满足05本次修复合入门禁，进入总控集成检查。总控当前无法切换推理档位，不声称已切high。
+
+## 2026-09-23 集成门禁失败（不撤销D级实机成功）
+
+总控先提交验收记录d118f5254e4c99df40488779f388fc24a7730e62，再进行未提交合并。8个业务改动全部符合05边界，合并后的agent/tools/assets/data/deps与已验收lane一致（排除编排元数据），无冲突。
+集成测试在main cwd、所有临时输出置于MA9内：Agent101通过exit0；tools13项中12通过、1失败exit1（32.49秒）。失败为test_release_exe_uses_adjacent_data：期望临时install目录，却返回带config/garage.json的MA9祖先根。本机私有截图存在，原有截图测试本轮也通过，无skip。
+tools/selection_gui.py、路径测试和agent/runtime_action.py均未被05或合并修改；该失败暴露既有账号根优先策略与根内隔离包的冲突，并非05排序修复回归。历史验证不能覆盖本次新增的根内临时目录环境。
+证据：MA9-evidence/20260923-05-main-integration/{results.json,agent.log,tools.log}。schema输入与f5472bc一致，复用27项通过，不把tools失败覆盖为成功。
+已核对暂存仅本轮8文件且无未暂存受控改动，安全git merge --abort；main仍d118f52，05分支f5472bc及用户.workbuddy未动。未合入业务、未推送，两个defense_setup文件尚未归还06，06/07不放行。
+下一任务02C：ds-v4.1flash high只读诊断运行根选择及最小修正提案。runtime_action归契约总控；selection_gui.py及其测试当前未登记普通lane owner，外部不得擅改。无需用户重复刚完成的D级实机。
+
+## 2026-09-23 02C诊断裁决与总控运行根增量
+
+核对02C实际report/results/path-tests/reproduce后采纳M-α；明确选用包根普通空文件.ma9-portable-root，不以interface/profile存在代替显式选择。override优先且无效即失败；标记按可执行文件祖先、cwd祖先、Agent模块祖先查找，首个标记缺本函数必要数据即失败，不越界回退。无标记保持既有账号根逻辑，不采用M-β。两函数数据有效性判据不合并。
+由总控亲自修改runtime_action.py和test_runtime_root.py；修复前3项新增行为断言失败，修复后9项根测试通过，当前main Agent86项通过，最终退出码均0。05业务尚未合入，因此不是f5472bc的105项集成结论。证据MA9-evidence/20260923-root-contract，TMPDIR/TMP/TEMP全部指向其tmp，已记录实际tempfile.gettempdir。
+02C报告曾只设TMP/TEMP导致一轮夹具落根外；该观察不构成今后根外写入授权，本总控不复跑此对照。后续强制同时设置三者。历史总控运行的具体TMPDIR未记录，不倒填；其失败traceback已证明实际夹具在根内。
+GUI及其测试、install.py、prepare_portable_preview.py登记归build；只允许02D改GUI、其测试、便携preview脚本及新便携工具测试。install.py本轮只读，保留开发install不标记；标记只在新便携包生成，禁止追补到05已验证包或真实账号目录。
+契约A/B、五模块、schema、interface源不变，不重新冻结。02原03c6d975交付不动，另建codex/root-isolation有界工作区。GUI修复与独立GLM复核未完成前不合并05、不归还06文件、不启动06/07，04暂停。

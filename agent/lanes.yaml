@@ -294,13 +294,22 @@ lanes:
       - tools/build_selection_gui.py
       - tools/build_windows_package.ps1
       - tools/configure.py
+      - tools/selection_gui.py
+      - tools/tests/test_selection_gui_path.py
+      - tools/install.py
+      - tools/prepare_portable_preview.py
       - docs/zh_cn/develop/how_to_develop.md
+    owns_new:
+      - tools/tests/test_portable_preview.py
     verify_extra:
       - npm ci
       - npm run check
     verify_environment:
       NODE_OPTIONS: "--max-old-space-size=6144"
     notes: >
+      20260923登记运行根隔离文件归属；具体任务仍按提示词缩窄。
+      .ma9-portable-root仅由便携包组装工具在新包根生成，是本地构建产物，
+      不在源码根或开发install默认创建，不复制用户config；runtime_action由总控修改。
       CI 是全体 lane 共享的闸门，本席一坏全部堵死 —— 必须与其他 lane 隔离。
       风险在长工具链可靠性而非判断力，且出错在 30 秒内必然暴露，是最安全的投产席位。
 
