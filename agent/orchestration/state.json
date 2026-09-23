@@ -205,7 +205,7 @@
       }
     },
     "duel-defense": {
-      "phase": "06A_read_only_audit_prompt_ready",
+      "phase": "configuration_stage_closed_07_read_only_planning_allowed",
       "depends_on": "duel-scan",
       "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-defense",
       "branch": "lane/duel-defense",
@@ -214,13 +214,41 @@
       "ownership": "defense_setup and its test explicitly returned by orchestrator",
       "base_commit": "550c01dc95af0e5bc2cb16f8ccc70b316b88980d",
       "head": "550c01dc95af0e5bc2cb16f8ccc70b316b88980d",
-      "prompt": "agent/orchestration/prompts/06-duel-defense.md"
+      "prompt": "agent/orchestration/prompts/06-duel-defense.md",
+      "audit_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-06A-defense-audit/results.json",
+      "closeout": {
+        "scope": "five-car configuration only, not five races or daily duel loop",
+        "verdict": "no_blocking_reproducible_defect_in_reviewed_scope",
+        "targeted": "17_passed_exit0_report_and_log_checked_not_rerun",
+        "device_direct": [
+          "G1_D_five_assigned_unique_starts_race_false_lineup"
+        ],
+        "offline_or_code_only": [
+          "G2_preserve_existing_lineup",
+          "G3_resume_partial_lineup",
+          "G4_map_order",
+          "G5_bounded_stop",
+          "G6_class_fallback",
+          "G7_account_recovery",
+          "G8_GUI_parameters"
+        ],
+        "corrections": [
+          "5_live_plus_3_offline_count_is_unsupported",
+          "resumed_from_slot_1_does_not_prove_midway_resume",
+          "no_already_configured_hit_does_not_prove_preservation_path",
+          "absence_of_Start_text_in_log_is_not_standalone_proof_of_no_start_click"
+        ],
+        "followup": "optional map-order regression test belongs to06",
+        "full_daily_loop_complete": false
+      }
     },
     "duel-attack": {
-      "phase": "waiting_defense_stable",
+      "phase": "07A_read_only_planning_preparing",
       "depends_on": "duel-defense",
-      "worktree": null,
-      "model": "glm"
+      "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-attack",
+      "model": "glm",
+      "branch": "lane/duel-attack",
+      "effort": "high"
     }
   },
   "evidence": {
@@ -230,7 +258,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户用ds-v4.1flash high全新对话执行06A只读防守门禁审计，提示词06-duel-defense.md；05和根隔离已合入。07等06结论，04暂停。",
+  "next": "06配置阶段已按限定范围闭环；用户用GLM-5.3 high全新对话执行07A只读进攻规划审计，不能写代码/操作设备/开赛，04暂停。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -355,7 +383,7 @@
     "merge_commit": "380b051afceac70af1f31471c0339de071a076ce"
   },
   "remote_sync": {
-    "status": "blocked_auto_review_explicit_payload_destination_confirmation_required",
+    "status": "user_explicitly_confirmed_push_pending_execution",
     "attempt": "git push origin main",
     "destination": "https://github.com/Testiphi/MA9.git",
     "payload_head": "b8baaaa5e7fa47b823037387867fd3cd7b2652b4",
@@ -363,8 +391,9 @@
     "executed": false,
     "remote_ci": "not_confirmed",
     "reason": "Auto-review did not recognize explicit authorization for exporting the repository contents and 34 local commits to this destination",
-    "next": "Ask user to approve this destination and payload; no workaround or indirect retry",
-    "payload_update": "The recorded 34-commit push attempt was blocked before execution. This local policy-record commit adds one more commit; recompute HEAD and outgoing count before requesting push approval."
+    "next": "Commit current authorized orchestration updates, then ordinary push origin main and verify remote SHA; do not infer CI pass.",
+    "payload_update": "The recorded 34-commit push attempt was blocked before execution. This local policy-record commit adds one more commit; recompute HEAD and outgoing count before requesting push approval.",
+    "authorization": "2026-09-23 user message: 确认推送。 Destination remains https://github.com/Testiphi/MA9.git; ordinary main push, no force."
   },
   "git_commit_policy": {
     "approved_at": "2026-09-23",

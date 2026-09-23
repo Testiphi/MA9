@@ -193,3 +193,10 @@ GUI及其测试、install.py、prepare_portable_preview.py登记归build；只�
 05的D级449.013秒实机成功保持限定；新标记包没有实机结论，R/S/A/B/C与账号恢复实机覆盖仍未扩展。
 总控现明确将agent/ma9_agent/duel_defense_setup.py及agent/tests/test_duel_defense_setup.py从05归还06，lanes.yaml已反映单一owner。下一06A仅只读梳理剩余防守门禁和最小下一步，不授权开赛、设备操作或重写已成功流程；07等待06结论，04暂停。
 02R低/信息级建议登记后续，不为非阻塞事项无限返工；runtime测试归总控、GUI文档/测试归02，原02D报告与原始日志不覆盖。
+
+## 2026-09-23 06A接收：配置阶段闭环，07仅只读规划
+
+核对06A report/results、defense-tests.log、tmp/probe-results.json与probe_boundaries.py，目标550c01dc95af0e5bc2cb16f8ccc70b316b88980d且工作区干净；17项通过，记录exit0。组合Agent105/tools29/schema27沿用，不重复同阶段测试。
+接受当前五车配置阶段“无阻塞”并关闭该有限阶段；不把它写成五场防守比赛、所有等级或完整日常闭环完成。地图顺序守卫回归覆盖缺口为06可选后续；07错误消息及根隔离文档/测试仍按既定owner。
+总控更正统计：G1有D级直接实机证据；G2–G8仅离线/代码证据。resumed_from_slot=1并不证明中途断点恢复，未命中already_configured分支不证明阵容保留路径实机通过；因此不采信“5项实机+3项离线”。未出现Start命名点击也不能单独证明无开赛，以既有业务JSON、完整流程与用户终屏共同支持G1。原始06A报告不改。
+允许07A只读规划，禁止写06文件、进攻实机/扣票/开赛/领奖/购买，不触碰根外MutualExclusionAllocator。用户本次明确“确认推送”，授权按既定origin https://github.com/Testiphi/MA9.git 普通推送main，不强推；本轮编排更新完成后执行并核对远端SHA。
