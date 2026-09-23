@@ -20,6 +20,15 @@ SOURCE_UI = ROOT / "install"
 BASE = ROOT / "build/portable"
 DESTINATION = BASE / "MA9-preview"
 AGENT = ROOT / "build/agent/win-x64/dist/ma9-agent"
+PORTABLE_MARKER = ".ma9-portable-root"
+PRIVATE_DIRECTORY_NAMES = ("debug", "logs", "config", "captures", "downloads")
+REQUIRED_FILES = ("MFAAvalonia.exe", "MFAAvalonia.dll", "MFAAvalonia.deps.json",
+                  "MFAAvalonia.runtimeconfig.json", "libloader.dll", "appsettings.json",
+                  "LICENSE", "NOTICE")
+REQUIRED_DIRECTORIES = ("libs", "plugins", "runtimes", "LICENSES")
+REQUIRED_DATA_FILES = ("data/multiplayer_profile.json", "data/generated/champion_rotation.json",
+                       "data/generated/vehicle_catalog.json", "data/generated/duel_auto_candidates.json",
+                       "data/sources/multiplayer_tracks.json")
 TASKS = {"多人运行时_数据自检", "多人循环3局_入口", "多人循环20局_入口",
          "通用_账号被顶_识别", "对决_防守自动规划入口", "对决_防守自动配置入口"}
 
@@ -37,6 +46,27 @@ def _copy_dir(source: Path, target: Path) -> None:
     shutil.copytree(source, target)
 
 
+def assert_preview_complete(target: Path) -> None:
+    """Fail before the isolation marker can exist on an incomplete package.
+
+    A marker on a half-built package would be worse than no marker: the GUI and
+    the runtime would trust the package and stop searching outward.
+    """
+    missing = [name for name in (*REQUIRED_FILES,
+                                 *(f"{name}/" for name in REQUIRED_DIRECTORIES),
+                                 *REQUIRED_DATA_FILES)
+               if not (target / name).is_file() and not (target / name).is_dir()]
+    if missing:
+        raise RuntimeError(f"preview is missing required entries: {missing}")
+    if not (target / "agent/ma9-agent/ma9-agent.exe").is_file():
+        raise FileNotFoundError("the standalone Agent is missing from the preview")
+    if not (target / "interface.json").is_file():
+        raise FileNotFoundError("interface.json is missing from the preview")
+    leaked = [name for name in PRIVATE_DIRECTORY_NAMES if (target / name).exists()]
+    if leaked or any(path.name == "garage.json" for path in target.rglob("garage.json")):
+        raise RuntimeError(f"private or temporary directories leaked into preview: {leaked}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--zip", action="store_true", help="also create MA9-preview.zip")
@@ -51,17 +81,13 @@ def main() -> None:
         shutil.rmtree(target)
     target.mkdir(parents=True)
 
-    for name in ("MFAAvalonia.exe", "MFAAvalonia.dll", "MFAAvalonia.deps.json",
-                 "MFAAvalonia.runtimeconfig.json", "libloader.dll", "appsettings.json",
-                 "LICENSE", "NOTICE"):
+    for name in REQUIRED_FILES:
         _copy_file(SOURCE_UI / name, target / name)
-    for name in ("libs", "plugins", "runtimes", "LICENSES"):
+    for name in REQUIRED_DIRECTORIES:
         _copy_dir(SOURCE_UI / name, target / name)
     _copy_dir(AGENT, target / "agent/ma9-agent")
     _copy_dir(ROOT / "assets/resource", target / "resource")
-    for name in ("data/multiplayer_profile.json", "data/generated/champion_rotation.json",
-                 "data/generated/vehicle_catalog.json", "data/generated/duel_auto_candidates.json",
-                 "data/sources/multiplayer_tracks.json"):
+    for name in REQUIRED_DATA_FILES:
         _copy_file(ROOT / name, target / name)
 
     with (ROOT / "assets/interface.json").open(encoding="utf-8") as stream:
@@ -92,13 +118,13 @@ def main() -> None:
         "出现异常时请停止任务，保留 debug 目录，并记录模拟器版本、分辨率、\n"
         "开始任务时所在页面和最后停留页面。公开发送日志前请检查本机路径和游戏昵称。\n",
         encoding="utf-8")
-    unexpected = [name for name in ("debug", "logs", "config", "captures", "downloads")
-                  if (target / name).exists()]
-    if unexpected:
-        raise RuntimeError(f"private or temporary directories leaked into preview: {unexpected}")
+    # The package may only declare itself isolated once it is verifiably complete.
+    assert_preview_complete(target)
+    (target / PORTABLE_MARKER).write_text("")
     count = sum(1 for path in target.rglob("*") if path.is_file())
     size = sum(path.stat().st_size for path in target.rglob("*") if path.is_file())
     print(f"Staged {count} files ({size / 1024**2:.1f} MiB) at {target}")
+    print(f"Portable root marker: {target / PORTABLE_MARKER}")
     if args.zip:
         archive = shutil.make_archive(str(BASE / "MA9-preview"), "zip", root_dir=BASE,
                                       base_dir=target.name)
