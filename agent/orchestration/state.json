@@ -264,19 +264,38 @@
         "original_defense_wording": "防守一定需要五张有效票才可，一旦有一张图被中断需要重新从头防守",
         "interpretation_limit": "Do not infer ticket consumption/count from the wording; confirm UI semantics when necessary",
         "historical_conflict": "user corrects earlier interruption-loss record as defense context; do not apply it automatically to attack, preserve raw records",
-        "next_observation": "Request missing image8 optional reward and third-win single-race result with Return to lobby; no need for an entire flow reshoot at this stage",
+        "next_observation": "No further full-flow screenshots needed now; final ranking and1280x720MuMu layout remain later implementation evidence if required.",
         "device_control_authorized": false,
         "screenshot_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-attack-three-win-user-confirmed/manifest.json",
         "received_images": 7,
         "manual_confirmation_guard": "at least 3 distinct winning slots AND explicit victory wording in Finish confirmation; unknown/loss wording must not be treated as success",
-        "optional_rewards": "after daily hand progress tap, handle recognized optional reward page and Continue before ranking; user-described, image8 missing",
+        "optional_rewards": "image now received: Congratulations reward page with gauntlet currency900 and Continue. Treat currency/type/count as variable; optional branch then verify ranking.",
         "image_limits": "p1-p6=2420x1668,p7=1567x1080; UI-flow evidence, not1280x720 MuMu templates or automated validation",
         "counting_guards": [
           "GP delta is not hand increment",
           "daily25/22 is cumulative; no known per-run delta",
           "ticket0/5,1/5,2/5 is not race progress",
           "three separate challenge pairs, not one sequence"
-        ]
+        ],
+        "supplemental_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-attack-three-win-supplement/manifest.json",
+        "total_received_images": 12,
+        "third_win_results": "three independent Race#3 victory examples with three green win slots and Return to lobby; linked to previous overview/confirmation pairs",
+        "two_win_two_loss_guard": {
+          "slots": [
+            "loss",
+            "win",
+            "win",
+            "loss",
+            "unplayed"
+          ],
+          "wins": 2,
+          "losses": 2,
+          "remaining": 1,
+          "user_rule": "must continue fifth race, no early finish",
+          "visible_finish_button_is_not_permission": true
+        },
+        "count_semantics": "race number3 or completed race count is not3wins; count distinct winning slots once per challenge; highlighted next slot4/5 is not a win; unreadable/conflicting statuses require bounded retry/stop",
+        "missing_images": "previously requested reward page and third-win result pages received; terminal ranking not in supplied batches"
       }
     }
   },
@@ -287,7 +306,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "07A待GLM恢复，以新增三胜完成确认截图为只读流程证据；优先补缺失图8与第三胜成绩页，不要求全流程或重跑D配置。",
+  "next": "07A待GLM恢复，已具备三胜返回大厅/完成确认/每日累计奖励/可选奖励页及2胜2负不得提前结算的正反例，暂不要求补全流程。仍仅只读规划，不操作设备。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
