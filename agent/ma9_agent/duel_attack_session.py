@@ -16,21 +16,27 @@ with the same snapshot never accumulate wins.
 Boundary priority used by ``decide_attack_action`` (first match wins)
 ---------------------------------------------------------------------
 1. Malformed snapshot or unsupported enum value -> :class:`ValueError`.
-2. Any slot ``unknown``, or a confirmation reading of ``unknown`` when a
-   confirmation is required -> ``bounded_reread``; the caller feeds the
-   returned ``next_unknown_attempts`` back in. At the budget it becomes
-   ``stop`` with ``requires_live_verification`` still true.
-3. Confirmed ``loss`` -> ``stop``; a confirmed loss is never success.
+2. A confirmed ``loss`` -> ``stop``, whatever the slots say, including when an
+   unreadable slot is also present; a confirmed loss is never success and is
+   never reread into something better, because the decisive reading outranks an
+   unresolved one.
+3. Any slot ``unknown``, or a confirmation reading of ``unknown`` -> ``bounded_reread``;
+   the caller feeds the returned ``next_unknown_attempts`` back in. At the
+   budget it becomes ``stop`` with ``requires_live_verification`` still true.
 4. ``wins >= 3`` with ``win`` confirmation -> ``confirm_finish`` with
    ``early_finish_allowed=True`` (the only combination that sets it).
 5. ``wins >= 3`` with ``not_seen`` confirmation -> ``request_finish_confirmation``;
    never a claimed settlement and never permission to press Finish.
-6. ``wins >= 3`` with a slot still unplayed -> ``continue_race`` with that slot
-   pending. A visible Finish button is not an input and cannot widen this.
-7. All five slots decided with ``wins < 3`` -> ``stop`` with an explicit
-   terminal reason; no sixth race is proposed.
-8. ``wins < 3`` with unplayed slots and no contradiction -> ``continue_race``
-   for the lowest-numbered unplayed slot.
+6. A ``win`` confirmation that contradicts a fully readable challenge below
+   the target (``wins < 3``) -> ``stop``, whether or not a slot is still
+   unplayed. A reading claiming victory cannot authorise progress the snapshot
+   rules out, so no sixth race and no finish is advised.
+7. ``wins >= 3`` -> the confirmation decides the stage: ``win`` finishes,
+   ``not_seen`` requests the reading. Three wins is not yet a settlement, and a
+   visible Finish button is not an input.
+8. ``wins < 3`` in every other case -> ``continue_race`` for the
+   lowest-numbered unplayed slot, or ``stop`` with an explicit terminal reason
+   when no slot is left to play.
 
 Slot numbering, statuses and confirmation values are normalised enums produced
 by a future recognition layer; this module performs no text parsing. The
@@ -163,9 +169,8 @@ def decide_attack_action(
                 if statuses[slot] == "unplayed"]
     unknown = [slot for slot in range(1, SLOT_COUNT + 1)
                if statuses[slot] == "unknown"]
-    # ``not_seen`` means no dialog was on screen; ``win`` is a decisive reading.
-    # Only an unreadable reading is retried; a confirmed loss is never retried
-    # into something better.
+    # ``not_seen`` means no dialog was on screen; ``win`` and ``loss`` are both
+    # decisive readings. Only an unreadable reading is retried.
     confirmation_unreadable = confirmation_result == "unknown"
 
     def reread_or_stop(reason: str) -> dict[str, Any]:
@@ -183,14 +188,9 @@ def decide_attack_action(
             confirmation=confirmation_result,
             attempts_next=attempts + 1, early_finish_allowed=False)
 
-    # Priority 2: unreadable evidence is never resolved by guessing a result.
-    if unknown:
-        return reread_or_stop(
-            "slot status unreadable: " + ", ".join(str(slot) for slot in unknown))
-    if confirmation_unreadable:
-        return reread_or_stop("finish confirmation reading is unreadable")
-
-    # Priority 3: an explicitly confirmed loss is a failure, not a win.
+    # Priority 2: an explicitly confirmed loss is a decisive failure. It stops
+    # immediately, ahead of any unreadable slot or confirmation, because waiting
+    # for another reading cannot turn a loss into a win.
     if confirmation_result == "loss":
         return _result(
             wins=wins, losses=losses, unplayed=unplayed, unknown=unknown,
@@ -200,8 +200,16 @@ def decide_attack_action(
             confirmation=confirmation_result,
             attempts_next=0, early_finish_allowed=False)
 
+    # Priority 3: unreadable evidence is never resolved by guessing a result.
+    if unknown:
+        return reread_or_stop(
+            "slot status unreadable: " + ", ".join(str(slot) for slot in unknown))
+    if confirmation_unreadable:
+        return reread_or_stop("finish confirmation reading is unreadable")
+
+    # Priorities 4 and 5: three wins is not yet a settlement. Only a ``win``
+    # confirmation may accept it; anything else still has to be read.
     if wins >= WIN_TARGET:
-        # Priority 4: the only combination that permits an early finish.
         if confirmation_result == "win":
             return _result(
                 wins=wins, losses=losses, unplayed=unplayed, unknown=unknown,
@@ -210,7 +218,6 @@ def decide_attack_action(
                        "confirmation; the confirmation may be accepted",
                 confirmation=confirmation_result,
                 attempts_next=0, early_finish_allowed=True)
-        # Priority 5: enough wins, but the dialog has not been read as victory.
         return _result(
             wins=wins, losses=losses, unplayed=unplayed, unknown=unknown,
             next_action=_REQUEST_CONFIRMATION,
@@ -219,7 +226,27 @@ def decide_attack_action(
             confirmation=confirmation_result,
             attempts_next=0, early_finish_allowed=False)
 
-    # Priority 7: five decided slots short of the target is a terminal state.
+    # Priority 6: a decisive ``win`` reading that the snapshot contradicts must
+    # not be read as progress. With fewer than three distinct winning slots the
+    # target is out of reach, so the claim stops instead of authorising a
+    # continuation the snapshot cannot support. This holds whether or not a slot
+    # was still unplayed: a challenge already known to be lost is not replayed
+    # on the strength of a reading that disagrees with the counted slots.
+    if confirmation_result == "win":
+        pending = (f" slot(s) {', '.join(str(slot) for slot in unplayed)} "
+                   "are still unplayed but " if unplayed else
+                   "every slot is already decided and ")
+        return _result(
+            wins=wins, losses=losses, unplayed=unplayed, unknown=unknown,
+            next_action=_STOP,
+            reason=f"contradiction: a decisive victory confirmation cannot be "
+                   f"reconciled with {wins} win(s) short of the "
+                   f"{WIN_TARGET}-win target; {pending}the challenge is settled "
+                   "below the target, so no further race or finish is advised",
+            confirmation=confirmation_result,
+            attempts_next=0, early_finish_allowed=False)
+
+    # Priority 8: five decided slots short of the target is a terminal state.
     if not unplayed:
         return _result(
             wins=wins, losses=losses, unplayed=unplayed, unknown=unknown,
@@ -230,7 +257,7 @@ def decide_attack_action(
             confirmation=confirmation_result,
             attempts_next=0, early_finish_allowed=False)
 
-    # Priorities 6 and 8: keep racing the lowest unplayed slot.
+    # Priority 8: wins below the target with a slot still open keep racing it.
     return _result(
         wins=wins, losses=losses, unplayed=unplayed, unknown=unknown,
         next_action=_CONTINUE,

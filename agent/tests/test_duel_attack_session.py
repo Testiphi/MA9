@@ -196,11 +196,13 @@ class AttackSessionTest(unittest.TestCase):
         self.assertEqual(recovered["next_action"], "continue_race")
 
     def test_code_decisions_still_reset_the_counter(self) -> None:
-        # A confirmed loss stops as well, but stop is not a success path and the
-        # module keeps the spent budget visible rather than resetting it.
+        # A decided, readable snapshot leaves no reading outstanding, so the
+        # spent budget is reset to zero. A confirmed loss is a decided outcome
+        # too: it stops immediately and keeps no pending reread.
         for statuses, confirmation in (
                 (("win", "win", "win", "loss", "unplayed"), "win"),
                 (("win", "win", "win", "loss", "unplayed"), None),
+                (("win", "win", "win", "loss", "unplayed"), "loss"),
                 (("loss", "loss", "loss", "loss", "loss"), None)):
             with self.subTest(slots=statuses, confirmation=confirmation):
                 decision = decide_attack_action(
@@ -261,15 +263,116 @@ class AttackSessionTest(unittest.TestCase):
         self.assertEqual(decision["wins"], 0)
 
     def test_confirmed_win_with_insufficient_wins_is_not_released(self) -> None:
+        """A confirmed win cannot authorise progress the snapshot rules out."""
         for statuses in (("loss", "win", "win", "loss", "unplayed"),
                          ("win", "win", "loss", "loss", "loss"),
                          ("loss", "loss", "win", "unplayed", "unplayed")):
             with self.subTest(slots=statuses):
                 decision = decide_attack_action(snapshot(*statuses), "win")
+
                 self.assertLess(decision["wins"], 3)
-                self.assertFalse(decision["early_finish_allowed"])
+                self.assertEqual(decision["unknown_slots"], [])
+                # The stop is the assertion under test: a contradiction never
+                # yields a finish, and it never yields another race either.
+                self.assertEqual(decision["next_action"], "stop")
                 self.assertNotEqual(decision["next_action"], "confirm_finish")
+                self.assertNotEqual(decision["next_action"], "request_finish_confirmation")
+                self.assertNotEqual(decision["next_action"], "continue_race")
+                self.assertFalse(decision["early_finish_allowed"])
+                self.assertIn("contradiction", decision["reason"])
                 self.assert_no_execution(decision)
+
+    def test_confirmed_win_contradiction_stops_at_zero_one_and_two_wins(self) -> None:
+        """Every insufficient win count stops, with and without a pending slot."""
+        cases = (
+            (("loss", "loss", "loss", "loss", "loss"), 0, []),
+            (("win", "loss", "loss", "loss", "loss"), 1, []),
+            (("win", "win", "loss", "loss", "loss"), 2, []),
+            (("loss", "win", "win", "loss", "unplayed"), 2, [5]),
+            (("loss", "unplayed", "loss", "loss", "loss"), 0, [2]),
+            (("win", "unplayed", "loss", "loss", "loss"), 1, [2]),
+            (("loss", "loss", "win", "unplayed", "unplayed"), 1, [4, 5]),
+        )
+        for statuses, expected_wins, expected_unplayed in cases:
+            with self.subTest(slots=statuses):
+                decision = decide_attack_action(snapshot(*statuses), "win")
+
+                self.assertEqual(decision["wins"], expected_wins)
+                self.assertEqual(decision["unplayed_slots"], expected_unplayed)
+                self.assertEqual(decision["next_action"], "stop")
+                self.assertFalse(decision["early_finish_allowed"])
+                self.assert_no_execution(decision)
+                self.assertIn("contradiction", decision["reason"])
+
+    def test_confirmed_win_contradiction_replaces_every_racing_advice(self) -> None:
+        """A pending slot does not survive a contradicted victory claim."""
+        decision = decide_attack_action(
+            snapshot("loss", "win", "win", "loss", "unplayed"), "win")
+
+        self.assertEqual(decision["unplayed_slots"], [5])
+        self.assertEqual(decision["next_action"], "stop")
+        self.assertNotEqual(decision["next_action"], "continue_race")
+        self.assertEqual(decision["next_unknown_attempts"], 0)
+
+        # Without the contradicting confirmation the same snapshot keeps racing.
+        plain = decide_attack_action(
+            snapshot("loss", "win", "win", "loss", "unplayed"))
+        self.assertEqual(plain["next_action"], "continue_race")
+        self.assertEqual(plain["unplayed_slots"], [5])
+
+    def test_insufficient_wins_without_a_win_confirmation_still_continues(self) -> None:
+        """Only the win reading stops; honest readings keep the challenge alive."""
+        for confirmation in ("not_seen", None):
+            with self.subTest(confirmation=confirmation):
+                decision = decide_attack_action(
+                    snapshot("loss", "win", "win", "loss", "unplayed"), confirmation)
+                self.assertEqual(decision["next_action"], "continue_race")
+                self.assertFalse(decision["early_finish_allowed"])
+
+
+class AttackSessionLossStopTest(unittest.TestCase):
+    """A decisive loss stops at once, whatever a still-unreadable slot says."""
+
+    def assert_no_execution(self, decision: dict) -> None:
+        self.assertFalse(decision["starts_race"])
+        self.assertTrue(decision["requires_live_verification"])
+
+    def _assert_loss_stop(self, decision: dict, unknown_slots: list[int]) -> None:
+        self.assertEqual(decision["next_action"], "stop", decision)
+        self.assertNotEqual(decision["next_action"], "bounded_reread")
+        self.assertNotEqual(decision["next_action"], "continue_race")
+        self.assertNotEqual(decision["next_action"], "confirm_finish")
+        self.assertFalse(decision["early_finish_allowed"])
+        self.assertIn("loss", decision["reason"])
+        self.assertEqual(decision["unknown_slots"], unknown_slots)
+        self.assert_no_execution(decision)
+
+    def test_explicit_loss_with_a_three_win_snapshot_stops_immediately(self) -> None:
+        # The orchestrator counter-example: three wins and an unreadable slot
+        # must not delay a decisive loss by one bounded reread.
+        decision = decide_attack_action(
+            snapshot("win", "win", "win", "unknown", "unplayed"), "loss", 0)
+
+        self.assertEqual(decision["wins"], 3)
+        self._assert_loss_stop(decision, [4])
+        self.assertEqual(decision["next_unknown_attempts"], 0)
+
+    def test_explicit_loss_with_unknown_slot_ignores_the_reread_budget(self) -> None:
+        """0, 1 and 2 spent attempts all stop; the budget is never consumed."""
+        entries = snapshot("win", "win", "win", "unknown", "unplayed")
+
+        for spent in range(UNKNOWN_ATTEMPT_BUDGET):
+            with self.subTest(unknown_attempts=spent):
+                decision = decide_attack_action(entries, "loss", spent)
+
+                self.assertEqual(decision["next_unknown_attempts"], 0)
+                self._assert_loss_stop(decision, [4])
+
+    def test_explicit_loss_with_an_unreadable_confirmation_still_stops(self) -> None:
+        decision = decide_attack_action(
+            snapshot("loss", "loss", "loss", "loss", "loss"), "loss", 0)
+
+        self._assert_loss_stop(decision, [])
 
 
 class AttackCandidateGlueTest(unittest.TestCase):
