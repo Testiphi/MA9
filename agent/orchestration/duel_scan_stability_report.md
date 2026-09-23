@@ -173,3 +173,15 @@ tools/selection_gui.py、路径测试和agent/runtime_action.py均未被05或合
 02C报告曾只设TMP/TEMP导致一轮夹具落根外；该观察不构成今后根外写入授权，本总控不复跑此对照。后续强制同时设置三者。历史总控运行的具体TMPDIR未记录，不倒填；其失败traceback已证明实际夹具在根内。
 GUI及其测试、install.py、prepare_portable_preview.py登记归build；只允许02D改GUI、其测试、便携preview脚本及新便携工具测试。install.py本轮只读，保留开发install不标记；标记只在新便携包生成，禁止追补到05已验证包或真实账号目录。
 契约A/B、五模块、schema、interface源不变，不重新冻结。02原03c6d975交付不动，另建codex/root-isolation有界工作区。GUI修复与独立GLM复核未完成前不合并05、不归还06文件、不启动06/07，04暂停。
+
+## 2026-09-23 02D本地验收与02R派发
+
+02D交付a7d9910cc945072efbf6ccb9b3d38f4f949a6e87，相对490cbb9仅5个授权文件，工作区干净，diff --check通过。总控独立Agent86通过、tools29项中28通过/1既有私有截图跳过，进程exit0；34项schema输入重新计算SHA256均与05D记录相同，复用27项exit0，不重跑schema。证据MA9-evidence/20260923-02D-orchestrator/results.json含owner证据哈希。
+纠正owner回传：真实嵌套for循环先穷尽exe祖先再查cwd，不交替遍历；总控用深层exe祖先标记对立即cwd标记的双函数探针独立证实。按钮PNG属于05的0850f33，不是runtime增量。原始证据不改。GUI测试注释与文档候选顺序描述需独立review检查；不因回传错误修改正确的遍历实现。
+02R使用GLM-5.3 high全新只读对话，范围d118f52..a7d9910，同时审总控runtime与02D GUI/组包/测试，不仅审owner部分。未构建真实新包，未操作设备，未合入02D或05，06/07继续等待，04暂停。
+
+## 2026-09-23 02R接收并恢复集成
+
+已核对02R report/results、runtime/gui/preview日志和P1–P6探针结果。目标a7d9910cc945072efbf6ccb9b3d38f4f949a6e87未变且工作区干净；接受GLM-5.3 high“无阻塞”。三组9/11/7项通过，报告记录最终exit0；preview首轮宿主超时后取得的最终重跑结果与首次中断分开看待。
+代码按已复核版本集成，不为低/信息级发现扩修。F1/F2/F3总控更正已有记录，原始日志不改；F4/F6与GUI相邻catalog覆盖登记给build后续；F5 runtime模块链测试必须归总控（reviewer将整项列02D不改变契约单owner）。F7/F8记录不改。
+新标记包无实机结论；05无标记f5472bc的D级449.013秒成功有效。开始组合集成门禁，未通过前不归还06文件、不放行06/07。关键阶段当前无法主动切high，不声称已切档。

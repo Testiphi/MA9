@@ -52,7 +52,7 @@
       "review": "GLM-5.3_high_no_blockers_report_and_37_test_logs_checked",
       "device": "D_five_assigned_unique_starts_race_false_lineup_confirmed",
       "merged": false,
-      "next": "用户以ds-v4.1flash high全新对话执行02D根隔离窄修复；runtime契约增量已由总控完成，外部不得改契约。05实机成功保留，待GUI/组包与独立复核通过后再恢复集成。",
+      "next": "用户以GLM-5.3 high全新对话执行02R-root-review.md，只读复核d118f52..a7d9910整个根隔离改动；通过后总控处理必要更正并恢复集成。05实机成功保留，06/07等待。",
       "head": "f5472bce3443fde42df17ad8a1819e18b46a2059",
       "pilot_report": "agent/orchestration/duel_scan_pilot_report.md",
       "pilot_tests": {
@@ -208,7 +208,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户以ds-v4.1flash high全新对话执行02D根隔离窄修复；runtime契约增量已由总控完成，外部不得改契约。05实机成功保留，待GUI/组包与独立复核通过后再恢复集成。",
+  "next": "总控合入已独立复核的根隔离与05修复，运行组合集成门禁；通过后归还06文件并准备窄任务。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -273,7 +273,7 @@
     "review_prompt": "completed_GLM-5.3_review_accepted"
   },
   "root_isolation": {
-    "phase": "runtime_increment_passed_GUI_packaging_pending_02D",
+    "phase": "review_accepted_integration_pending",
     "decision": "M-alpha",
     "marker": ".ma9-portable-root",
     "priority": [
@@ -295,9 +295,40 @@
     "temp_policy": "TMPDIR_TMP_TEMP_all_root_contained_actual_gettempdir_recorded",
     "worktree": "E:/hzz/work/MA9/MA9-worktrees/root-isolation",
     "branch": "codex/root-isolation",
-    "base": "pending_commit_resolution",
+    "base": "490cbb9ad1f103eb38e4da58e030a4b11ddccf2e",
     "external_model": "ds-v4.1flash high",
-    "review": "pending_independent_GLM-5.3_high_after_02D",
-    "five_contract_modules_and_AB": "unchanged"
+    "review": "GLM-5.3_high_02R_no_blockers_evidence_checked",
+    "five_contract_modules_and_AB": "unchanged",
+    "prompt": "agent/orchestration/prompts/02R-root-review.md",
+    "head": "a7d9910cc945072efbf6ccb9b3d38f4f949a6e87",
+    "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260923-02D-orchestrator/results.json",
+    "report_corrections": [
+      "Actual traversal exhausts exe ancestry before cwd, not interleaved",
+      "05 detail_select_text.png belongs to 0850f33, not runtime increment",
+      "pre-fix agent/tools logs overwritten; only preserved red.log is baseline evidence"
+    ],
+    "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260923-02R-root-review/results.json",
+    "followups": [
+      {
+        "ids": "F1_F2_F3",
+        "owner": "orchestrator_record",
+        "status": "corrections_recorded_original_evidence_unchanged"
+      },
+      {
+        "ids": "F4_F6_F5_GUI",
+        "owner": "build",
+        "status": "nonblocking_followup_not_dispatched",
+        "scope": "docs wording, ControlledFilesystem comment, GUI adjacent catalog compatibility test"
+      },
+      {
+        "ids": "F5_runtime",
+        "owner": "orchestrator",
+        "status": "nonblocking_module_chain_test_followup"
+      },
+      {
+        "ids": "F7_F8",
+        "status": "record_only_no_change"
+      }
+    ]
   }
 }
