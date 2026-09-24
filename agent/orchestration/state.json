@@ -452,6 +452,32 @@
         "remaining": "MuMu matchresults/win-loss slotbadges/finishconfirm/dailyprogress/rewardreturn after09notyetprovided",
         "images": "private untracked originalcaptures remainuntouched; snapshotsignored",
         "automated_OCR": "notrun_or_claimed"
+      },
+      "validation_strategy": {
+        "source": "2026-09-24 user proposal: daily attack expires; use a non-grouped account defense lineup for reusable selection/strategy application checks",
+        "status": "feasible_plan_recorded_not_implemented",
+        "preferred_environment": "user-operated non-grouped test-account defense lineup",
+        "agent_device_authorization": false,
+        "shared_scope": [
+          "class navigation andscrolling",
+          "targetvehicle identity/performance/stars checks",
+          "occupied_elsewhere andselection availability",
+          "five unique planned vehicles mapped toslots",
+          "after-selection verification andbounded recovery"
+        ],
+        "nontransferable": [
+          "attack opponent selection andDC reward preference",
+          "attack-specific entry button andreturn-page guards",
+          "challenge ticket consumption",
+          "wins/losses andthree-win confirmation",
+          "reward progress andranking return",
+          "actual winrate/track performance"
+        ],
+        "implementation_gap": "run_defense_setup only supportsweakest_current andpreservescomplete lineup; requires explicit bounded plan-application test entry/common executor without changingformalweak-defense behavior",
+        "account_isolation": "fresh isolated runtime package/accountroot, validate actualtest-account ownedcars; old unmarked package must not silentlyusemain config/garage; never hand-add marker tooldagent",
+        "acceptance": "reportactualsourceaccount/environment/plan/observedassignedIDs/slotmap; five unique matches; starts_race=false; stoponlineup; already_configured alone is not a successfulnew application",
+        "rules": "attack ordinaryfuel policy remains attack-specific; do not inferdefense fuel rules",
+        "remaining_attack_check": "brief realattack entry+representative selection/return smoke test before claiming fullportability"
       }
     }
   },
@@ -462,7 +488,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "现有12张MuMu1280x720样本足够推进07C只读页面/对手等级识别（优先01-05）；先处理页面ROI分离、自动候选空项和进攻免普通燃油规则接缝，不等后续比赛截图，不授权点击挑战或设备操作。",
+  "next": "按用户提出的验证路线设计共用五车计划应用：先在不进组测试号防守页由用户串行验证选择链路，显式账号隔离、仅选车不开赛；进攻择敌只读识别可独立推进，正式攻防入口与结算仍分别验收。尚未派发写代码或操作设备。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
