@@ -4,7 +4,7 @@ This module answers exactly one question about an already-open five-slot Duel
 lineup screenshot (the ``资格赛`` qualifier or the ``挑战`` challenge page):
 **which of the five slots is currently expanded**.
 
-Hard scope limits (05E):
+Hard scope limits (05E, tightened in 05E1):
 
 * pure observation - no click, no garage entry, no vehicle assignment, no
   ``Controller``, no ADB, no ``scan``/``assign_visible`` call, no logging and
@@ -13,7 +13,12 @@ Hard scope limits (05E):
   is read or required;
 * a slot is never inferred from a page title, a map name, a green button alone
   or from a caller-supplied expectation.  The returned ordinal is *geometry of
-  the expanded region* only.
+  the expanded region* only;
+* **no execution permission is reported.**  There is deliberately no
+  ``can_click`` / ``action_ready`` field: this module answers "where is the
+  expanded cell", never "may I act".  Wiring the observer to a selection entry
+  additionally requires page-provenance evidence, a settled-frame rule and
+  entry/return slot evidence supplied by the caller.
 
 Slot identity model
 -------------------
@@ -25,11 +30,78 @@ The strip is left-anchored, so the expanded cell's right boundary is::
     panel_right(n) = PANEL_RIGHT_BASE + SLOT_PITCH * (n - 1)
 
 The committed static condition ``assets/resource/pipeline/duel_slot_navigation.json``
-locates the same boundary through the expanded cell's selection button
-(``ColorMatch`` ROIs at x = 589/701/816/930/1045, ``method`` 4 == ``cv2.COLOR_BGR2RGB``,
-lower/upper ``(180,240,0)``-``(210,255,40)``).  This module re-uses that colour
-and geometry but strips the entry ``Click``/``next`` actions and the
-defence-only title template, so no pipeline node is executed here.
+also sits on this 114 px grid, but through a **different anchor**: its
+``ColorMatch`` ROIs (x = 589/701/816/930/1045, ``method`` 4 == ``cv2.COLOR_BGR2RGB``,
+lower/upper ``(180,240,0)``-``(210,255,40)``, y ~ 500-503, 20x13, ``count`` 120)
+lie *inside the selection button*, not on the panel boundary.  This module
+re-uses that colour and pitch, strips the entry ``Click``/``next`` actions and
+the defence-only title template, and locates the panel edge itself; no pipeline
+node is executed here.
+
+Two **necessary** geometry checks, and one optional corroboration
+---------------------------------------------------------------
+The two cues below are what actually gates a slot; they are necessary **and
+they are correlated**, because the bright run is required to contain the
+button's right edge and to end only 55-150 px beyond it.  Both resolve the same
+green connected component, so agreement between them confirms the calibrated
+layout, not two independent findings:
+
+1. the single bright-green selection button in the button band, matching the
+   observed size/area class, and its centre on the slot grid (``BUTTON_TOLERANCE``);
+2. the bright column-profile run that carries that button, whose right end must
+   land on the slot grid (``SLOT_TOLERANCE``) and match the slot derived from
+   the button centre.
+
+Collapsed-cell markers are **corroboration only, and only when they exist**: a
+collapsed cell that already holds a car carries no marker, so a normal
+already-assigned lineup (this is the common steady state) legitimately has zero
+markers.  A missing marker is therefore never a failure, and a partial marker
+set is reported as-is.  Nothing here can prove the frame came from the real
+game page, that OCR runs end-to-end, or that selection is allowed.
+
+Verification basis (why ``slot_verified`` is not a licence)
+-----------------------------------------------------------
+Every result carries ``verification_basis`` and ``title_guard_passed``:
+
+* ``geometry_only`` - ``ocr`` was not supplied; the calibrated geometry agreed
+  and a slot is returned, but no page identity was checked;
+* ``geometry_and_title`` - a strict, confident lineup title was found in the
+  title region *and* the geometry agreed;
+* ``rejected`` - no slot is returned (any refusal reason).
+
+``slot_verified`` is ``True`` exactly in the first two cases and means "the
+calibrated lineup geometry was found".  ``title_guard_passed`` is ``True`` only
+for ``geometry_and_title``.  A refusal keeps the detected title evidence in
+``evidence.title_conflicts`` even when the frame is rejected on geometry first,
+so a caller can always tell "no title seen" from "vetoing title seen".
+
+Caller-supplied OCR title guard
+-------------------------------
+The guard inspects caller-supplied normalised entries
+(``{"text": str, "box": [x, y, w, h], "confidence": float}``); it runs no OCR
+engine of its own.  Rules, all of them strict:
+
+* the title region is ``LINEUP_TITLE_ROI``, i.e. the ROI of the already-committed
+  same-page ``TemplateMatch`` on ``navigation/duel/defense_qualifier_title.png``
+  (roi ``[62, 86, 110, 52]``, threshold ``0.9``) - not a wider hand-chosen band;
+* a box counts only if its **centre** lies inside that region and the box is
+  usable (four finite numbers, positive width and height); unusable boxes and
+  malformed rows are ignored without raising;
+* the text must equal ``资格赛`` or ``挑战`` as the **whole** string once
+  surrounding whitespace is removed.  No substring or prefix matching, so
+  ``好友挑战`` / ``每日挑战次数:3`` / ``资格赛奖励`` never confirm a page;
+* ``confidence`` must be a finite number inside ``0.0 .. 1.0`` and at least
+  ``TITLE_CONFIDENCE_FLOOR`` (0.90).  ``bool``, missing, ``NaN``, infinities and
+  out-of-range values are invalid, and a row below the floor is not evidence;
+* two *different* legal titles confirmed in the region is a
+  ``page_title_conflict`` (``expanded_slot=None``); repeating the *same* title is
+  not a conflict; the garage title ``车辆选择`` remains veto evidence;
+* with explicit OCR but no credible legal title the result stays
+  ``page_title_missing`` + ``expanded_slot=None`` - it never falls back to
+  ``geometry_only``.
+
+The region and these thresholds still need validation once a real OCR source is
+wired; nothing in this module claims a real-OCR pass.
 
 ``PANEL_RIGHT_BASE``, ``SLOT_PITCH`` and ``BUTTON_CENTER_BASE`` are calibrated
 against the committed resources plus the fixed 1280x720 samples listed in the
@@ -39,7 +111,7 @@ screenshot is refused (``unsupported_size``) instead of being silently scaled.
 
 from __future__ import annotations
 
-from typing import Any, Iterable, Sequence
+from typing import Any, Iterable
 
 import cv2
 import numpy as np
@@ -81,7 +153,9 @@ PANEL_RIGHT_EXTENSION = (55, 150)
 
 #: A collapsed cell marker is a narrow bright run outside the expanded panel.
 #: The upper bound stays well below ``PANEL_RUN_MIN_WIDTH`` so a panel can never
-#: be mistaken for a marker; observed markers are 19-41 px wide.
+#: be mistaken for a marker; observed markers are 19-41 px wide.  Markers are
+#: corroboration only and are absent whenever the collapsed cells already hold a
+#: car.
 COLLAPSED_MARKER_MAX_WIDTH = 60
 COLLAPSED_MARKER_MIN_WIDTH = 8
 
@@ -92,8 +166,13 @@ BUTTON_TOLERANCE = 40
 
 #: Page titles that identify a Duel lineup page (qualifier / challenge).
 LINEUP_TITLES = ("资格赛", "挑战")
-#: Title region of the lineup page, as ``(x, y, w, h)``.
-LINEUP_TITLE_ROI = (55, 70, 250, 120)
+#: Title region of the lineup page, as ``(x, y, w, h)``.  This is the ROI of the
+#: committed same-page ``TemplateMatch`` (``defense_qualifier_title.png``) in
+#: ``assets/resource/pipeline/duel_slot_navigation.json``; do not widen it
+#: without evidence.  A test locks the two values together.
+LINEUP_TITLE_ROI = (62, 86, 110, 52)
+#: Minimum OCR confidence before a title row counts as evidence.
+TITLE_CONFIDENCE_FLOOR = 0.90
 #: Title of the Duel garage page, which is *not* a lineup page.
 SELECTION_PAGE_TITLE = "车辆选择"
 
@@ -107,14 +186,78 @@ REASON_MARKER_CONFLICT = "collapsed_marker_conflict"
 REASON_TITLE_MISSING = "page_title_missing"
 REASON_TITLE_CONFLICT = "page_title_conflict"
 
+#: No OCR was supplied; the calibrated geometry agreed, page identity unchecked.
+BASIS_GEOMETRY_ONLY = "geometry_only"
+#: A strict confident lineup title confirmed the page and the geometry agreed.
+BASIS_GEOMETRY_AND_TITLE = "geometry_and_title"
+#: No slot is returned.
+BASIS_REJECTED = "rejected"
+
+#: Numeric types accepted for OCR box coordinates and confidence.  ``bool`` is
+#: excluded separately because it is an ``int`` subclass but never a reading.
+_NUMERIC_TYPES = (int, float, np.integer, np.floating)
+
+
+def _finite_number(value: Any) -> float | None:
+    """Return ``value`` as a finite ``float``, or ``None`` when unusable."""
+    if isinstance(value, bool) or not isinstance(value, _NUMERIC_TYPES):
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError, OverflowError):
+        return None
+    if number != number or number in (float("inf"), float("-inf")):
+        return None
+    return number
+
+
+def _usable_box(box: Any) -> tuple[float, float, float, float] | None:
+    """Return a usable ``(x, y, w, h)`` box, or ``None``.
+
+    Rejects anything that is not four finite numbers with a positive width and
+    height, so a malformed OCR row can never be mistaken for a hit and can never
+    raise out of the observer.
+    """
+    try:
+        values = list(box)
+    except TypeError:
+        return None
+    if len(values) < 4:
+        return None
+    numbers = [_finite_number(value) for value in values[:4]]
+    if any(number is None for number in numbers):
+        return None
+    left, top, width, height = numbers  # type: ignore[misc]
+    if width <= 0 or height <= 0:
+        return None
+    return left, top, width, height
+
 
 def _result(page: str, slot: int | None, reason: str, *,
-            title: str | None = None, ocr_used: bool = False,
+            reading: dict[str, Any], ocr_used: bool,
             **evidence: Any) -> dict[str, Any]:
+    """Assemble one report row, deriving basis/guard and injecting title evidence."""
+    title = reading["title"]
+    accepted = slot is not None and reason == REASON_VERIFIED
+    guard_passed = bool(accepted and title is not None)
+    if not accepted:
+        basis = BASIS_REJECTED
+    elif guard_passed:
+        basis = BASIS_GEOMETRY_AND_TITLE
+    else:
+        basis = BASIS_GEOMETRY_ONLY
+    evidence["title_region"] = list(LINEUP_TITLE_ROI)
+    evidence["title_region_matches"] = list(reading["matches"])
+    #: Detected in-region titles that make the page identity non-unique or
+    #: contradict the lineup page; always a list, empty when there is none.
+    evidence["title_conflicts"] = list(reading["conflicts"])
+    evidence["title_rows"] = dict(reading["rows"])
     return {
         "page": page,
         "expanded_slot": slot,
-        "slot_verified": slot is not None and reason == REASON_VERIFIED,
+        "slot_verified": accepted,
+        "verification_basis": basis,
+        "title_guard_passed": guard_passed,
         "reason": reason,
         "page_title": title,
         "ocr_used": ocr_used,
@@ -230,6 +373,9 @@ def _markers(profile: np.ndarray, panel_left: int, panel_right: int) -> list[dic
     bright run's left end is content-dependent (the attack layout puts the
     player/opponent block on the panel's dark left half), while the model knows
     the panel always starts at ``panel_right - EXPANDED_WIDTH``.
+
+    Markers are corroboration only; an empty list is a normal state for an
+    already-assigned lineup and is never treated as a failure.
     """
     found = []
     for left, right in _runs(profile, min_width=COLLAPSED_MARKER_MIN_WIDTH):
@@ -246,34 +392,82 @@ def _markers(profile: np.ndarray, panel_left: int, panel_right: int) -> list[dic
     return found
 
 
-def _title_from_ocr(ocr: Iterable[dict[str, Any]] | None) -> tuple[str | None, str | None]:
-    """Return ``(matched_title, conflict)`` from caller-supplied OCR entries.
+def _read_title(ocr: Iterable[dict[str, Any]] | None) -> dict[str, Any]:
+    """Read the page identity from caller-supplied OCR entries.
 
-    Only boxes whose centre falls inside the lineup title region are inspected.
-    Map names, opponent names and every other string are ignored by design, and
-    a row without a usable box is skipped rather than guessed at.
+    Returns ``{"title", "conflicts", "matches", "rows"}``:
+
+    * ``title`` - the single confirmed page title, or ``None`` when no title was
+      confirmed or when two different legal titles disagree;
+    * ``conflicts`` - the confirmed in-region titles that make the page identity
+      non-unique or contradict the lineup page (empty when there is none);
+    * ``matches`` - every strict in-region match, in encounter order, duplicates
+      included (an audit trail for the conflict rule);
+    * ``rows`` - the accounting ``supplied == invalid + outside_region + in_region``.
+
+    Rows are validated defensively: a malformed entry, an unusable box or an
+    invalid/low ``confidence`` is ignored and counted, never treated as a hit and
+    never allowed to raise.
     """
+    reading: dict[str, Any] = {
+        "title": None,
+        "conflicts": [],
+        "matches": [],
+        "rows": {"supplied": 0, "invalid": 0, "outside_region": 0, "in_region": 0},
+    }
     if ocr is None:
-        return None, None
+        return reading
+    try:
+        rows = list(ocr)
+    except TypeError:
+        return reading
+
     left, top, width, height = LINEUP_TITLE_ROI
-    matched: str | None = None
-    for row in ocr:
-        if not isinstance(row, dict) or not row.get("text"):
+    counts = reading["rows"]
+    confirmed: list[str] = []
+    for row in rows:
+        counts["supplied"] += 1
+        if not isinstance(row, dict):
+            counts["invalid"] += 1
             continue
-        box = row.get("box")
-        if not isinstance(box, Sequence) or len(box) < 4:
+        text = row.get("text")
+        if not isinstance(text, str) or not text.strip():
+            counts["invalid"] += 1
             continue
-        bx, by, bw, bh = (float(value) for value in box[:4])
-        center_x, center_y = bx + bw / 2, by + bh / 2
+        confidence = _finite_number(row.get("confidence"))
+        if (confidence is None or not 0.0 <= confidence <= 1.0
+                or confidence < TITLE_CONFIDENCE_FLOOR):
+            counts["invalid"] += 1
+            continue
+        box = _usable_box(row.get("box"))
+        if box is None:
+            counts["invalid"] += 1
+            continue
+        center_x = box[0] + box[2] / 2
+        center_y = box[1] + box[3] / 2
         if not (left <= center_x <= left + width and top <= center_y <= top + height):
+            counts["outside_region"] += 1
             continue
-        text = str(row["text"])
-        if SELECTION_PAGE_TITLE in text:
-            return matched, SELECTION_PAGE_TITLE
-        for title in LINEUP_TITLES:
-            if title in text:
-                matched = title
-    return matched, None
+        counts["in_region"] += 1
+        stripped = text.strip()
+        if stripped in LINEUP_TITLES or stripped == SELECTION_PAGE_TITLE:
+            confirmed.append(stripped)
+
+    reading["matches"] = confirmed
+    distinct: list[str] = []
+    for candidate in confirmed:
+        if candidate not in distinct:
+            distinct.append(candidate)
+    legal = [candidate for candidate in distinct if candidate in LINEUP_TITLES]
+    if SELECTION_PAGE_TITLE in distinct:
+        reading["title"] = SELECTION_PAGE_TITLE
+        reading["conflicts"] = distinct
+    elif len(legal) > 1:
+        reading["title"] = None
+        reading["conflicts"] = legal
+    elif legal:
+        reading["title"] = legal[0]
+    return reading
 
 
 def _cells(slot: int, panel_left: int, panel_right: int) -> list[dict[str, Any]]:
@@ -299,51 +493,64 @@ def observe_lineup_slot(frame: np.ndarray, *,
 
     ``frame`` must be a ``uint8`` BGR image already captured by the caller; OCR
     stays outside and may be handed in as normalised entries
-    (``{"text": str, "box": [x, y, w, h]}``) that are used for the page-title
-    guard only.  The result is a pure function of the arguments: the same input
-    always yields the same output, and no global state is read or written.
+    (``{"text": str, "box": [x, y, w, h], "confidence": float}``) that are used
+    for the page-title guard only.  The result is a pure function of the
+    arguments: the same input always yields the same output, and no global state
+    is read or written.
 
-    ``expanded_slot`` is ``1..5`` only when the frame is the five-slot lineup
-    with exactly one expanded cell and every geometric cue agrees: the single
-    expanded selection button, the expanded panel edge on the slot grid, and
-    the collapsed-cell markers on their own grid.  Anything unclear - wrong
-    size, no expanded cell, several candidates, an occluded or unreadable
-    panel, markers off the cell grid, a mismatching page title - yields
-    ``expanded_slot=None`` with ``slot_verified=False``.  There is no fallback
-    to slot 1, and an expected slot can never be handed in.
+    ``expanded_slot`` is ``1..5`` only when the two necessary geometry checks
+    agree: one expanded selection button whose centre sits on the slot grid, and
+    the bright panel run carrying it whose right end lands on the same slot grid
+    position.  Anything unclear - wrong size, no expanded cell, several
+    candidates, an occluded or unreadable panel, markers off the cell grid - or a
+    mismatching page title when OCR is supplied, yields ``expanded_slot=None``
+    with ``slot_verified=False``.  There is no fallback to slot 1, and an
+    expected slot can never be handed in.
+
+    ``verification_basis`` and ``title_guard_passed`` describe *what* was
+    verified - ``geometry_only`` when no OCR was supplied, ``geometry_and_title``
+    when a strict confident title also confirmed the page, ``rejected`` when no
+    slot is returned.  ``slot_verified`` means "the calibrated lineup geometry
+    was found"; it is an observation, not an action authorisation, and this
+    function deliberately reports no permission field.
     """
     image = _as_frame(frame)
     height, width = image.shape[:2]
     size = [width, height]
+    # Read the title first so every result - including geometry-first refusals -
+    # carries the same title evidence.
+    reading = _read_title(ocr)
+    ocr_used = ocr is not None
 
     if (width, height) != SUPPORTED_SIZE:
-        return _result("not_lineup", None, REASON_UNSUPPORTED_SIZE, size=size,
-                       supported=list(SUPPORTED_SIZE))
-
-    title, conflict = _title_from_ocr(ocr)
-    ocr_used = ocr is not None
+        return _result("not_lineup", None, REASON_UNSUPPORTED_SIZE,
+                       reading=reading, ocr_used=ocr_used,
+                       size=size, supported=list(SUPPORTED_SIZE))
 
     candidates = _button_candidates(image)
     if not candidates:
-        return _result("not_lineup", None, REASON_NO_BUTTON, title=title,
-                       ocr_used=ocr_used, size=size, button_candidates=0)
+        return _result("not_lineup", None, REASON_NO_BUTTON,
+                       reading=reading, ocr_used=ocr_used,
+                       size=size, button_candidates=0)
     if len(candidates) > 1:
-        return _result("ambiguous", None, REASON_MULTIPLE_BUTTONS, title=title,
-                       ocr_used=ocr_used, size=size,
-                       button_candidates=len(candidates),
+        return _result("ambiguous", None, REASON_MULTIPLE_BUTTONS,
+                       reading=reading, ocr_used=ocr_used,
+                       size=size, button_candidates=len(candidates),
                        buttons=[row["box"] for row in candidates])
 
     button = candidates[0]
     profile = _strip_profile(image)
     run = _panel_run(profile, button)
     if run is None:
-        return _result("not_lineup", None, REASON_PANEL_UNVERIFIED, title=title,
-                       ocr_used=ocr_used, size=size, button=button)
+        return _result("not_lineup", None, REASON_PANEL_UNVERIFIED,
+                       reading=reading, ocr_used=ocr_used,
+                       size=size, button=button)
 
     extension = run[1] - button["right"]
     if not PANEL_RIGHT_EXTENSION[0] <= extension <= PANEL_RIGHT_EXTENSION[1]:
-        return _result("not_lineup", None, REASON_PANEL_UNVERIFIED, title=title,
-                       ocr_used=ocr_used, size=size, button=button,
+        return _result("not_lineup", None, REASON_PANEL_UNVERIFIED,
+                       reading=reading, ocr_used=ocr_used,
+                       size=size, button=button,
                        panel_bright_run=list(run), panel_extension=extension)
 
     slot_panel, panel_residual = _slot_from(
@@ -351,8 +558,9 @@ def observe_lineup_slot(frame: np.ndarray, *,
     slot_button, button_residual = _slot_from(
         float(button["center_x"]), BUTTON_CENTER_BASE, BUTTON_TOLERANCE)
     if slot_panel is None or slot_button is None or slot_panel != slot_button:
-        return _result("ambiguous", None, REASON_SLOT_CONFLICT, title=title,
-                       ocr_used=ocr_used, size=size, button=button,
+        return _result("ambiguous", None, REASON_SLOT_CONFLICT,
+                       reading=reading, ocr_used=ocr_used,
+                       size=size, button=button,
                        panel_bright_run=list(run), slot_from_panel=slot_panel,
                        slot_from_button=slot_button,
                        panel_residual=round(panel_residual, 1),
@@ -375,8 +583,9 @@ def observe_lineup_slot(frame: np.ndarray, *,
             if best is None or distance < best[0]:
                 best = (distance, index)
         if best is None or best[0] > SLOT_TOLERANCE:
-            return _result("ambiguous", None, REASON_MARKER_CONFLICT, title=title,
-                           ocr_used=ocr_used, size=size, button=button,
+            return _result("ambiguous", None, REASON_MARKER_CONFLICT,
+                           reading=reading, ocr_used=ocr_used,
+                           size=size, button=button,
                            panel=panel, collapsed_markers=markers,
                            collapsed_cell_centers={str(key): value
                                                    for key, value in centers.items()})
@@ -384,17 +593,25 @@ def observe_lineup_slot(frame: np.ndarray, *,
         resolved.append({**marker, "slot": best[1],
                          "offset": round(marker["center_x"] - centers[best[1]], 1)})
 
-    if conflict is not None:
-        return _result("not_lineup", None, REASON_TITLE_CONFLICT, title=conflict,
-                       ocr_used=ocr_used, size=size, button=button,
-                       panel=panel, slot_from_panel=slot)
-    if ocr_used and title is None:
-        return _result("ambiguous", None, REASON_TITLE_MISSING, title=None,
-                       ocr_used=ocr_used, size=size, button=button,
-                       panel=panel, slot_from_panel=slot)
+    if reading["conflicts"]:
+        # A veto title names another page; two disagreeing lineup titles are an
+        # ambiguous page.  Either way no slot is reported, and the detected
+        # titles stay visible in ``evidence.title_conflicts``.
+        page = ("not_lineup" if SELECTION_PAGE_TITLE in reading["conflicts"]
+                else "ambiguous")
+        return _result(page, None, REASON_TITLE_CONFLICT,
+                       reading=reading, ocr_used=ocr_used,
+                       size=size, button=button, panel=panel, slot_from_panel=slot)
+    if ocr_used and reading["title"] is None:
+        # Explicit OCR evidence that names no lineup page: refuse, and do not
+        # fall back to a geometry-only verdict.
+        return _result("ambiguous", None, REASON_TITLE_MISSING,
+                       reading=reading, ocr_used=ocr_used,
+                       size=size, button=button, panel=panel, slot_from_panel=slot)
 
     return _result(
-        "duel_lineup", slot, REASON_VERIFIED, title=title, ocr_used=ocr_used,
+        "duel_lineup", slot, REASON_VERIFIED,
+        reading=reading, ocr_used=ocr_used,
         size=size,
         button=button,
         panel=panel,
