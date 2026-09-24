@@ -205,7 +205,7 @@
       },
       "maintenance_task": {
         "project": "MA9-05E-阵容页槽位只读观察",
-        "phase": "scope_registered_preparing_prompt",
+        "phase": "05E_prompt_ready",
         "model": "ds-v4.1flash",
         "effort": "high",
         "owns": [],
@@ -216,7 +216,9 @@
         "scope": "observe unique expanded slot1to5 on already-open lineup, no map-name recognition or entry clicks",
         "write_old_runtime": false,
         "device_allowed": false,
-        "why_first": "garage screen has no reliable slot ordinal; need pre-entry slot evidence andreturn-pageverification before genericselectiontestentry"
+        "why_first": "garage screen has no reliable slot ordinal; need pre-entry slot evidence andreturn-pageverification before genericselectiontestentry",
+        "base_commit": "02ee41c239bf45734ba3fa5ee44dc9dc7889ec5c",
+        "prompt": "agent/orchestration/prompts/05-duel-scan.md"
       }
     },
     "duel-defense": {
