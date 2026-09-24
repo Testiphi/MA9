@@ -60,7 +60,7 @@ owns_generated: []
 3. 稳定错误槽和进攻页拒绝；无效请求（含未确认拥有）在任何上下文调用前拒绝。
 4. entry False/异常不scan；旧scan失败不写assigned；choose=False停详情且无后置赋值宣称。
 5. choose=True回正确槽成功；回错槽/不稳定/不匹配车型报告assignment_unverified且保留已尝试事实，不做额外点击/纠正。
-6. 不得mock新模块被测流程返回值；可以stub依赖的截图/OCR/旧scan与入口回调。至少有案例让真实observe_lineup_slot处理合成或允许的静态帧，以免只测试伪造slot报告。原188?基线以186实际日志为准，不猜新总数。
+6. 不得mock新模块被测流程返回值；可以stub依赖的截图/OCR/旧scan与入口回调。至少有案例让真实observe_lineup_slot处理合成或允许的静态帧，以免只测试伪造slot报告。基点Agent全套为186项；新增后的总数以实际日志为准。
 7. 旧选车runtime定向测试保持；不得加skip或放宽已有门禁。
 
 证据与命令：
