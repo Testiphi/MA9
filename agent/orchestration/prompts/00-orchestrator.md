@@ -110,3 +110,6 @@ user-test-slot-da22bf1/MA9-preview，版本v0.0.0-slot-locate-da22bf1，exe75388
 
 ## 最新02H实机：已点Nevera但详情读数触发退回
 20260925-001628-nevera-detail-live冻结business/log。列表4837，详情ROI[900,90,210,90]两次OCR37/4,897，解析4897，触发list_detail_rating_mismatch重试32,25返回，后续selection_lost；不是成功。名字修复已实机识别/点击验证，需完整详情截图确认ROI及分数，用户手动打开但不要选择；不得关闭一致性检查或反复跑旧包。
+
+## 最新用户裁决：05J名称优先，不需详情截图
+当前优先跑通名称匹配及单槽选车，性能差异不作本测试阻塞。05J-name-first.md派ds-v4.1flash high请求，源da22bf1，只4Python文件；scan新增verify_list_detail_rating默认True保持旧防守，SlotSelectionRequest默认False按用户新要求；显式expected_performance/stars、身份/占用/按钮/同槽仍检查。不重写性能OCR、不猜4837、不做车库扫描存储（仅后续想法），GUI暂仍choosefalse，选择模式由总控后续接线。

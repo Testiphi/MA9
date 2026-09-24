@@ -621,13 +621,31 @@
         "detail_raw": "37/4,897",
         "scope": "do not disable consistency guard; establish correct detail ROI and fractional parsing",
         "list_rating": 4837,
-        "phase": "diagnosed_need_full_detail_frame",
+        "phase": "user_authorized_name_first_no_detail_image_needed",
         "package_source": "da22bf1bc844d762d75fb70977284dced7b09e11",
         "final_reason": "selection_lost",
         "parsed_detail": 4897,
         "return_reason": "existing list_detail_rating_mismatch retry",
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-001628-nevera-detail-live",
         "device_allowed": false
+      },
+      "name_first_task": {
+        "owns_generated": [],
+        "phase": "prompt_ready",
+        "project": "MA9-05J-name-first",
+        "base": "da22bf1bc844d762d75fb70977284dced7b09e11",
+        "device_allowed": false,
+        "owns": [
+          "agent/ma9_agent/duel_vehicle_runtime.py",
+          "agent/tests/test_duel_vehicle_runtime.py",
+          "agent/ma9_agent/duel_slot_selection.py",
+          "agent/tests/test_duel_slot_selection.py"
+        ],
+        "owns_new": [],
+        "policy": "scan verify_list_detail_rating defaultTrue; single-slot request defaultFalse; explicit expectations and identity/occupancy/button/same-slot guards retained",
+        "model": "ds-v4.1flash",
+        "prompt": "agent/orchestration/prompts/05J-name-first.md",
+        "effort": "high_requested_actual_platform_reported"
       }
     },
     "duel-defense": {
@@ -915,7 +933,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "02H实机已识别并点击Nevera，但详情ROI读37/4,897被_current_rating取4897，与列表4837冲突触发返回重试，最终selection_lost。冻结证据并离线复现解析；需要用户手动打开Nevera详情原始截图验证ROI，不再跑自动化，不关闭一致性护栏。",
+  "next": "用户裁决当前以名称匹配先跑通指定选车，不需补详情截图。05J-name-first.md授权4文件：旧scan默认跨页分数比较保留，单槽薄适配默认关闭隐式分数比较，身份/显式期待/占用/同槽守卫不变；后续总控单次选择接线，当前旧包不重跑。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1121,5 +1139,6 @@
     "principle": "advance on observed stable target page, bounded deadline not short poll-count assumption",
     "rollout": "current entry first; other transitions audited when touched or evidence identifies a defect",
     "early_success": "two verified target samples then proceed immediately"
-  }
+  },
+  "future_garage_inventory": "User idea only: recognize owned garage and save locally later; not in current implementation scope"
 }
