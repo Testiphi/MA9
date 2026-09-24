@@ -56,3 +56,5 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 当前05E已交付cdeee38cf99ff5efe066f0d189bf6b647eb9ac17，总控Agent162/tools29+1skip/18静态回放通过，未合入。唯一下一任务05ER-lineup-review.md，Qwen3.8-Flash新只读对话，平台实际默认档。关注折叠标记可选、无OCR几何判定限制、旧防守版式不能替代进攻2–5实机。尚未接选择入口或获得Agent设备权限。
 
 最新唯一下一任务05E1：05ER Flash已完成静态复核，未放行接线。总控已复现弱标题门禁，05-duel-scan.md现为05E1窄修复（ds-v4.1flash high），基点cdeee38cf99ff5efe066f0d189bf6b647eb9ac17，仍只改槽位观察器/测试两个文件；几何阈值不改。当前未合入/未接设备。
+
+最新05E1：17371c9d96eb2caaaf3083c26ca87b16a40bf2ee已交付，总控Agent186/tools29+1skip、18几何等价与6旧伪正例拒绝通过；ImportError不算行为红。当前下一05E1R短复核，Qwen3.8-Flash，提示词05ER-lineup-review.md；未合入/未接线。后续可先限定防守验证，不必等待进攻所有槽图。

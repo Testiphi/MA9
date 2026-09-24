@@ -205,7 +205,7 @@
       },
       "maintenance_task": {
         "project": "MA9-05E-阵容页槽位只读观察",
-        "phase": "05ER_static_review_accepted_05E1_before_wiring",
+        "phase": "05E1_local_checks_passed_short_review_pending",
         "model": "ds-v4.1flash",
         "effort": "high",
         "owns": [],
@@ -236,7 +236,7 @@
           "effort": "actual_platform_default",
           "prompt": "agent/orchestration/prompts/05ER-lineup-review.md",
           "mode": "fresh_read_only",
-          "status": "completed_no_blocker_for_static_scope_only"
+          "status": "05E1R_short_review_prompt_ready"
         },
         "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-05ER-lineup-review/results.json",
         "hardening": {
@@ -254,7 +254,17 @@
             "both valid titles last wins"
           ],
           "wiring_allowed": false,
-          "deferred": "grid simplification, attack2to5, live transitions, nativeOCR wiring"
+          "deferred": "grid simplification, attack2to5, live transitions, nativeOCR wiring",
+          "status": "implemented_and_locally_verified"
+        },
+        "hardened_delivery": "17371c9d96eb2caaaf3083c26ca87b16a40bf2ee",
+        "hardened_acceptance": "E:/hzz/work/MA9/MA9-evidence/20260924-05E1-orchestrator/results.json",
+        "hardened_counts": {
+          "tools_skipped": 1,
+          "behavior_false_positives_fixed": 6,
+          "agent": 186,
+          "tools_passed": 29,
+          "replay_geometry_unchanged": 18
         }
       }
     },
@@ -543,7 +553,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05ER静态范围结论已接收；用户以ds-v4.1flash high新对话执行05E1标题门禁/证据语义收口，当前不合入、不接选择执行。Flash独立复核提供了可复现证据，继续作为有界review备选。",
+  "next": "用户以Qwen3.8-Flash全新对话执行05E1R短复核，仅标题门禁与证据语义delta；总控本地通过但未合入，后续先限定防守测试路径接线，不等待无关进攻全槽图。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
