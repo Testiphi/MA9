@@ -54,3 +54,5 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 当前唯一新派发任务：05E阵容页槽位只读观察，ds-v4.1flash high，完整提示词05-duel-scan.md。05工作区已快进02ee41c239bf45734ba3fa5ee44dc9dc7889ec5c，新增duel_lineup_slot.py及测试。用户要求入口与地图解耦；先可靠观察唯一展开槽，未知不能默认1，不接入口/选车点击/地图名。其后才做带槽位核验的共用选车；当前仍无Agent设备权限。
 
 当前05E已交付cdeee38cf99ff5efe066f0d189bf6b647eb9ac17，总控Agent162/tools29+1skip/18静态回放通过，未合入。唯一下一任务05ER-lineup-review.md，Qwen3.8-Flash新只读对话，平台实际默认档。关注折叠标记可选、无OCR几何判定限制、旧防守版式不能替代进攻2–5实机。尚未接选择入口或获得Agent设备权限。
+
+最新唯一下一任务05E1：05ER Flash已完成静态复核，未放行接线。总控已复现弱标题门禁，05-duel-scan.md现为05E1窄修复（ds-v4.1flash high），基点cdeee38cf99ff5efe066f0d189bf6b647eb9ac17，仍只改槽位观察器/测试两个文件；几何阈值不改。当前未合入/未接设备。

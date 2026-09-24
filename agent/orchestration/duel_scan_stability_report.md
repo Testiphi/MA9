@@ -315,3 +315,11 @@ s05明确第1局输、第2/3局赢、第4局输、第5局未打，即2胜2负。
 实际交付cdeee38cf99ff5efe066f0d189bf6b647eb9ac17仅两个登记新增文件，工作区干净。总控独立Agent162、tools29+1既有截图skip均exit0；重新调用观察器回放18张（8正/10负），重复结果一致，人工冻结标题接线符合，额外8张真实正例变暗60%后均拒绝。证据MA9-evidence/20260924-05E-orchestrator，不覆盖owner输出；schema输入相对基点未变复用27项exit0。
 范围纠正：折叠标记是存在时佐证，不是始终存在的第三路硬门禁；只证明静态几何/人工标题回放，不证明完整OCR、过渡动画或进攻2–5槽。未检测到几种Python OCR包不能证明MaaFW原生OCR不可用；此轮仅未执行真实OCR。tools skip实际属于test_account_conflict，不是owner results误写的test_selection_gui_path。
 当前不合入、不接实机选车入口。独立05ER用Qwen3.8-Flash新只读对话作有界试点，重点审内容亮区边界、容差、无标记路径、页面标题与拒绝范围。无需重复全套或消耗Max额度，不自动创建对话/子智能体。
+
+## 2026-09-24 05ER接收与接线前收口裁决
+
+已核对Flash独立report/results、targeted23通过日志与扰动探针记录，cdeee38实际完整HEAD未变。接受其“当前静态几何范围无阻塞”，不把它转换成执行接线放行。报告expected_head字段存在短写错误，以实际起止完整SHA cdeee38cf99ff5efe066f0d189bf6b647eb9ac17为准。
+总控独立在真实attack09正例图复现：好友挑战/.99、挑战/.01、挑战与资格赛双高置信标题，当前都返回slot1/verified。下轮05E1只处理F1/F3验证依据、F4标题精确/置信度/冲突、F5诊断保留、少量相应测试与AST常见I/O检查；不重写几何，不把F9简化及缺实机样本全部塞入本轮。
+明确geometry-only不是页面已语义确认；折叠标记是可选佐证，不能对已放车的真实无标记状态强行加四标记门禁。新增verification_basis/title_guard_passed用于表达证据范围，slot_verified不得单独作为动作许可。
+标题按窄ROI与精确白名单、高置信要求收口，后续真实OCR接线仍须独立验证。动态稳定帧、进攻2–5与入页/回页同槽属于后续条件，不取消正式防守地图保护。原owner/reviewer证据不改，当前不合入、不打包、不操作设备。
+本次Flash试点给出有用的定量反例，不能据单任务推断与Max/GLM等性能。外部owner继续ds-v4.1flash high；用户手工新对话，不自动开模型。

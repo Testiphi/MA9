@@ -1,70 +1,63 @@
-# MA9-05E-阵容页槽位只读观察（选车入口解耦第一步）
+# MA9-05E1-槽位观察器标题门禁与证据语义收口
 
-模型：ds-v4.1flash / high。用户在外部平台全新对话粘贴完整提示词；平台无独立档位开关如实记录，不自动max，不创建子智能体/对话/worktree。
+模型：ds-v4.1flash / high。用户在外部平台全新对话粘贴本文件；平台无独立档位如实记录，不自动max，不创建下级智能体/对话/worktree。
 cwd：E:/hzz/work/MA9/MA9-worktrees/duel-scan
 branch：lane/duel-scan
-完整基点与预期起始HEAD：02ee41c239bf45734ba3fa5ee44dc9dc7889ec5c。
-总控已从干净f5472bc快进到此基点；保留历史测试包和证据，不能用旧f5472bc起步或重建旧包。不checkout/reset/merge，现场不符报告。
+完整基点与预期起始HEAD：cdeee38cf99ff5efe066f0d189bf6b647eb9ac17。
+原实现起点02ee41c239bf45734ba3fa5ee44dc9dc7889ec5c。05ER判定当前静态范围无阻塞，本次是接线前的有界收口，不重写已通过的几何算法。
 契约A=bd9a535336750d8fae3799f20d321498e21f5b00、B=ab13bf9ec91f916754aa0910bd1138e2f038d0a5，验证祖先复用，不重新冻结。
-
-用户目标：推广选车页功能与鲁棒性，不长期占用有时效的进攻页面；未来先用不进组测试号防守页验证共用选车，隔离防守进入选车的入口，只保留第几图/槽位判断，进攻地图名称后接。
-本次只做第一块：从已打开的五槽阵容截图，可靠读出唯一展开槽位1..5。不点击、不进入选车、不分配车辆、不接地图名称或策略，也不改旧运行路径。
-
-为什么先做：现有duel_vehicle_runtime.scan/assign_visible已基本独立于入口；_finish_target选择后只看车型和“更换车辆”而不看槽位。选车页本身无可靠1..5编号，需要外层在入页前保存槽位上下文、回阵容后复核。defense_setup._current_unselected_slot失败默认1的旧行为不能复用为新观察器的证据。
 
 必读：
 E:/hzz/work/MA9/docs/zh_cn/develop/multi_agent_plan.md
-E:/hzz/work/MA9/agent/lanes.yaml（05新增文件与总控/06/07边界）
+E:/hzz/work/MA9/agent/lanes.yaml（05边界）
 E:/hzz/work/MA9/agent/orchestration/state.json
 E:/hzz/work/MA9/agent/orchestration/migration_20260923.md
-E:/hzz/work/MA9/MA9-evidence/20260923-184330-attack-mumu-intake/manifest.json
-本cwd的agent/ma9_agent/duel_vehicle_runtime.py（选车与选择后核验）、duel_defense_setup.py（只读_current_unselected_slot）、assets/resource/pipeline/duel_slot_navigation.json（仅只读几何/识别条件，不执行节点）、agent/tests/test_duel_vehicle_runtime.py。
+E:/hzz/work/MA9/MA9-evidence/20260924-05ER-lineup-review/report.md、results.json、tmp/counterexamples2.json、tmp/probe3.json
+E:/hzz/work/MA9/MA9-evidence/20260924-05E-orchestrator/results.json
+本cwd下agent/ma9_agent/duel_lineup_slot.py及agent/tests/test_duel_lineup_slot.py。
 
 精确边界：
-owns: []
-owns_new:
+owns:
 - agent/ma9_agent/duel_lineup_slot.py
 - agent/tests/test_duel_lineup_slot.py
+owns_new: []
 owns_generated: []
-只有这两文件可新增；已存在则停止报告。原runtime、screen、defense_setup、旧测试、pipeline、interface、契约、schema、编排文档全部只读。不得新增模板资产/修改生成物/注册Agent入口/改GUI任务。不复制账号图片进受控测试夹具，不安装依赖。
+原runtime/defense_setup/旧测试/入口pipeline/interface/schema/配置/生成数据/编排文件全部只读。本次不接OCR执行引擎、不安装依赖、不接Controller或选车执行器，不新增模板，不改114节距、面板/按钮几何阈值，不调整既有攻防行为。
 
-功能要求：
-- 新模块为纯只读观察器，可接收1280x720图像及规范化OCR条目（如需要；OCR执行留外层）。不得收“预期槽位”后直接回显，必须从页面布局/观察证据判定。
-- 输出至少含page识别状态、expanded_slot(int1..5或None)、可解释reason与slot_verified。可以给出展开区几何供未来核验使用，但不要设计整个导航框架。
-- 确认是五槽阵容页且唯一展开位置时才返回槽位；看不清、遮挡、多个候选、非阵容页均slot=None/slot_verified=false。绝不能失败默认1、按地图名猜槽、把选车页标题当槽号。
-- 地图名、对手昵称、GP、票数、巴掌、车型不参与“第几槽”的身份定义。不得要求读取赛道参考表、不得调用plan_attack/弱车策略。
-- 可用页面标题（资格赛/挑战）和可见五槽结构等作为页面守卫，但不能仅靠某个绿色按钮推断槽位；大厅、车辆详情、选车列表、对手信息弹窗均必须拒绝。
-- 以几何/展开位置表达槽位；参考现有静态识别条件时剥离入口动作及“防守专属标题”依赖，不直接运行带Click的pipeline。
-- 当前无设备动作：不创建真实Controller、不连接ADB、不调用scan/assign_visible、不点击Start/选择/完成；本模块不读取文件/账号root，不写日志，调用方负责。
-- 明确支持尺寸与失败语义；不得将非16:9截图静默拉伸。输入不变、重复调用确定、无隐式全局会话状态。不要同时重写旧05/06/07。
+已知事实：
+18静态回放8正10负均通过，但attack09与defense01_selected真实正例标记数为0仍verified。因此折叠标记是存在时佐证，不可强制四标记，不可声称三路始终独立。
+总控在真实attack09图上复现：OCR'好友挑战'且confidence=.99、OCR'挑战'且confidence=.01、同框'挑战'与'资格赛'两高置信标题，当前全部slot=1/verified。这是本次标题门禁改进的精确输入，不修改原始图/报告。
 
-固定样本与期望（原文件只读）：
-新MuMu快照目录E:/hzz/work/MA9/MA9-evidence/20260923-184330-attack-mumu-intake/
-正例：06进入挑战后的五槽界面尚未选车.png、09五辆车全部配置完成自动选车无策略.png，均展开第1槽。
-反例：该目录01大厅、02三档对手、03/04/05对手信息弹窗、07两张选车列表、08三张车辆详情；均不得返回任何阵容展开槽。
-旧防守正例位于E:/hzz/work/MA9/captures/：
-多人游戏_对决_资格赛_防守_第1赛道展开_已选车_可开始.png
-多人游戏_对决_资格赛_防守_第2赛道展开_未选车.png
-多人游戏_对决_资格赛_防守_第3赛道展开_未选车.png
-多人游戏_对决_资格赛_防守_第4赛道展开_未选车.png
-多人游戏_对决_资格赛_防守_第5赛道展开_未选车.png
-分别预期1/2/3/4/5，先核对图片实际内容/尺寸。不要按文件名写if返回答案，文件名不传给观察器。
-实际图片回放须记录所用OCR的来源：真实离线OCR或人工冻结条目。若只能用人工OCR条目，明确只证明布局解析，不宣称完整OCR通过。可参考tools/check_daily_navigation.py或既有私有离线探针，但不得原样执行会覆盖旧证据或调用设备的脚本。
-当前缺进攻2–5展开样本，不能把防守正例当进攻全槽实机通过；输出报告准确限定覆盖。测试需含不确定/遮挡/非阵容等拒绝案例，不能靠无条件返回1让当前两正例过。
+只做以下收口：
+1. 修正文档：按钮中心+亮区右端是必要的两项相关几何检查；标记在存在时才佐证。已提交ColorMatch位置在按钮内，不是面板边界。不声称几何一致能证明真实游戏页面、端到端OCR或允许选车。
+2. 保持observe_lineup_slot(frame, *, ocr=None)签名和纯函数。保留现有geometry-only观察模式：ocr=None时几何正常可返回槽号，但新增verification_basis='geometry_only'、title_guard_passed=false；已有slot_verified仅表示标定几何一致，不是动作授权。有严格标题且几何通过时basis='geometry_and_title'、title_guard_passed=true；拒绝时basis='rejected'。不要添加can_click/action_ready一类执行许可。
+3. 标题区域按已提交同页标题位置收窄为(62,86,110,52)，使用OCR框中心判断是否位于区域；记录与18帧人工冻结标题坐标的回放覆盖。这个区域仍需将来真实OCR接线验证，不声称现已OCR实测通过。
+4. 标题文本只允许去除空白后的整串“资格赛”或“挑战”，不得子串/前缀放行“好友挑战”“每日挑战次数:3”“资格赛奖励”等。OCR条目必须有有限数值confidence且>=0.90（bool/缺失/NaN/Inf/越界0..1均无效），低于阈值不能确认标题。只处理规范化条目，不新增真实OCR。
+5. 同一区域内两个不同合法标题都是高置信时必须page_title_conflict、slot=None；重复相同标题不算冲突。区域内高置信“车辆选择”仍是否决证据。没有可信合法标题但显式提供OCR时，保持page_title_missing/slot=None，不回退geometry-only。
+6. 不可用box（非数值/NaN/Inf/非正宽高等）和无效条目忽略，不能把坏框当命中，也不要让普通OCR坏条目导致观察器崩溃；在测试中锁定。
+7. 已检出的标题冲突在几何早退时也要保留：evidence.title_conflicts统一为字符串列表，未冲突为空；早退可继续使用no_expanded_button等几何reason，但调用方仍能看出标题否决。不要改原始证据文件来修报告。
+8. AST门禁只辅助，不声称证明所有无副作用。补上review给出的常见文件I/O调用检查（imread/imreadmulti/fromfile/load/loadtxt/save等），或小范围patch常见I/O方法证明正常观察调用不使用它们；不要做通用沙箱框架。
 
-测试与证据：
-生产新模块+测试放上述两个文件。受控测试用小型合成输入/脱敏数值断言验证逻辑，不提交账号原图。真实截图回放在新私有证据目录E:/hzz/work/MA9/MA9-evidence/20260924-05E-lineup-slot/，允许report.md、results.json、replay.py、replay-results.json、targeted.log、agent.log、tools.log、schema-reuse.json及tmp/；目录存在停止报告，不覆盖旧记录。
-Python优先MA9_PYTHON，否则E:/hzz/work/MA9/.venv/Scripts/python.exe；先检查存在并-X utf8 --version，缺失停止不换PATH。所有Python-X utf8、cwd为本05根，不从main导入业务源码（只读主仓库图片不等于源码导入）。TMPDIR/TMP/TEMP三者设为本证据tmp，记录实际tempfile.gettempdir。
-Git仅-c safe.directory=E:/hzz/work/MA9/MA9-worktrees/duel-scan；开工/结束核对status、branch、完整HEAD、最近3提交，不改全局设置、不清理用户captures/.workbuddy/旧包。
+需要新增/加强的测试：
+- geometry-only两种真实无标记状态保持可观察，并明确basis/title_guard_passed；有有效标题才geometry_and_title。
+- 子串伪标题、低confidence、缺confidence、两个不同标题、相同标题重复、标题区外文本。
+- 非法/不可用OCR框的安全忽略；几何早退仍保存标题冲突。
+- 部分标记保持既有佐证语义，不能把缺四标记误判为已选阵容失败。
+- 正常旧18帧样本仍正确；已标为缺失的进攻2–5/动态过渡不新增虚假通过声明。
+不要重构网格计算（F9暂不做）、不要为合成假图验证而改变生产几何阈值；手绘结构图通过几何本身不是本轮要求消除的漏洞，关键是验证依据与动作权限分开。
 
-验收命令（$lanePython为解析路径）：
+证据/环境：
+新目录E:/hzz/work/MA9/MA9-evidence/20260924-05E1-title-guard/（存在停止，不覆盖）；允许report.md、results.json、red.log、green.log、targeted.log、agent.log、tools.log、replay.py、replay-results.json、schema-reuse.json及tmp/。原05E/05ER证据只读，不运行旧replay.main覆盖它。
+Python优先MA9_PYTHON，否则E:/hzz/work/MA9/.venv/Scripts/python.exe；验证存在并-X utf8 --version，缺失停止不换PATH。所有Python-X utf8、cwd本lane；TMPDIR/TMP/TEMP同时设为新证据tmp，记录实际gettempdir。只读主仓库原图允许，不从main导入业务源码。
+Git只用-c safe.directory=E:/hzz/work/MA9/MA9-worktrees/duel-scan；核对status/branch/完整HEAD/最近3提交，现场不符停止，不reset/checkout/merge，不改全局Git。
+
+命令（$lanePython为解析路径）：
 & $lanePython -X utf8 -m unittest discover -s agent/tests -p test_duel_lineup_slot.py -v
 & $lanePython -X utf8 -m unittest discover -s agent/tests -v
 & $lanePython -X utf8 -m unittest discover -s tools/tests -v
-真实回放replay.py也带-X utf8，cwd本lane，记录观察器输出、实际期望和最终退出码。把原图与人工真值输入是否参与OCR明确区分。
-schema输入应不变，机械核对相对基点仅新增两文件，保存schema-reuse.json，复用MA9-evidence/20260923-07-integration/results.json引用的27项exit0。不重跑无变化schema/npm、不重建大分片。输入变化则不得复用，应先上报。
-全套测试最终退出码必须获得，长命令续等；失败最多两轮有界修复，不自动升max。若发现单靠现有截图无法可靠判断，给最小反例与缺哪种画面，不硬凑通过。
+新私有replay.py带-X utf8，仅用旧18帧清单回放当前观察器，使用本轮标题规则准备人工冻结条目，明确OCR来源是人工，记录每张期望/输出/basis/标题guard；不得传文件名或期望槽位到观察器。原geometry结果应保持，标题伪正例红转绿单独留日志。
+schema输入不变，机械证明仅两文件改动，复用05E/05ER引用的schema27exit0并写schema-reuse.json，不重跑不相关npm/schema、不生成大分片。所有命令取得最终退出码；失败日志不覆盖，有界修复最多两轮，不自动max。
 
-结束条件：所有适用测试通过，真实样本回放与拒绝场景有证据、覆盖如实限定、只有两个新增文件、git diff --check干净。按用户政策自动本地提交，不合入main、不推送、不打包、不实机。
-回传项目、实际模型/平台/档位、cwd/branch、起止完整SHA/commit、diff/stat、API与拒绝语义、验证命令/退出码/数量、每张私有样本的输出、OCR来源、复用证据和剩余风险。总控验收后再决定单槽执行入口接线；不得自行取消正式防守的地图顺序/已有阵容保护。
-六个大型multiplayer_loop分片不读入上下文，data/generated只读，根外MutualExclusionAllocator不读写。04暂停。此任务不验证择敌、扣票、三胜结算或胜率。
+结束条件：标题反例正确拒绝、无标题不冒充完整页面验证、原几何回放保持、全套适用门禁通过、diff --check干净且只有两文件变化。自动本地提交一次完整交付，不合入main、不推送、不打包、不实机。
+回传项目、实际模型/平台/档位、cwd/branch/起止完整SHA/commit、diff/stat、API新增字段/拒绝语义、红绿反例及退出码、回放与人工OCR来源、复用证据与未覆盖范围。总控验收后再安排短复核和单槽接线。
+不得Controller/ADB/MuMu/游戏点击，不验证择敌/扣票/胜率。六个大型分片不读入上下文，data/generated只读，根外MutualExclusionAllocator不读写。任何后续执行接线必须另有页面来源核验、稳定帧一致与入页/回页同槽证据；本模块单独通过不代表可安全选车。
