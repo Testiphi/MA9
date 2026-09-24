@@ -440,10 +440,20 @@
             "agent/tests/test_duel_slot_entry.py"
           ],
           "effort": "high_requested_actual_platform_reported",
-          "phase": "prompt_ready",
+          "phase": "local_accepted_pending_05G1R",
           "scope": "arrival only max120samples monotonic30s interval0.3, keep2consecutive/1click",
           "model": "ds-v4.1flash",
-          "user_loading_note": "user observes pronounced lag after click and other page transitions; do not repeat input while waiting"
+          "user_loading_note": "user observes pronounced lag after click and other page transitions; do not repeat input while waiting",
+          "delivery": "f074163fb77a163f76b73239a10842c03f07a90c",
+          "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260924-05G1-orchestrator/results.json",
+          "counts": {
+            "tools": 30,
+            "agent": 265,
+            "all_exit": 0,
+            "tools_skipped": 1
+          },
+          "review_prompt": "agent/orchestration/prompts/05G1R-wait-review.md",
+          "reviewer": "Qwen3.8-Flash actual platform default"
         }
       },
       "test_wiring_task": {
@@ -800,7 +810,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "真实定位未通过：cf8815b包入页后首个选车标题恰在6次预算末帧，连续两帧门禁无机会完成，scan未调用。冻结证据并复现red exit1，用户派05G1窄修复；不再试旧包，不为露出车名扩修识别。",
+  "next": "05G1 f074163总控离线验收通过Agent265/tools29+1skip exit0；用户全新Flash执行05G1R短复核，再准备准确新包。cf8815b旧包仍未定位通过，不重跑旧包。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
