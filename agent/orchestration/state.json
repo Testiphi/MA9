@@ -307,7 +307,7 @@
       },
       "slot_selection_task": {
         "project": "MA9-05F-防守单槽选车薄适配",
-        "phase": "05F_locally_verified_pending_05FR",
+        "phase": "05FR_accepted_offline_real_entry_development_next",
         "model": "ds-v4.1flash",
         "effort": "high_requested_actual_platform_reported",
         "owns": [],
@@ -330,7 +330,31 @@
         },
         "review_prompt": "agent/orchestration/prompts/05FR-slot-review.md",
         "reviewer": "Qwen3.8-Flash actual platform default",
-        "merged": false
+        "merged": false,
+        "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-05FR-slot-review/results.json",
+        "review_result": "no_blocker_30_plus14_exit0_eight_probe_outputs_checked",
+        "review_limits": "probe exit0 means script executed; printed outputs checked against expectations, not assumed assertions; no device validation",
+        "followups": [
+          "entry callback must not mutate nested evidence",
+          "entry_attempted and selection_attempted report correction retained",
+          "account data-root binding and real frame freshness still pending"
+        ]
+      },
+      "slot_entry_task": {
+        "device_allowed": false,
+        "owns": [],
+        "model": "ds-v4.1flash",
+        "base_commit": "f9182dac671e19e9e9a0d8a3af3c334df46c9a5d",
+        "project": "MA9-05G-防守当前槽选车入口回调",
+        "effort": "high_requested_actual_platform_reported",
+        "phase": "prompt_ready",
+        "owns_new": [
+          "agent/ma9_agent/duel_slot_entry.py",
+          "agent/tests/test_duel_slot_entry.py"
+        ],
+        "prompt": "agent/orchestration/prompts/05G-slot-entry.md",
+        "scope": "single defensive current-slot entry callback; fresh recheck one click bounded arrival verification; offline tests only",
+        "owns_generated": []
       }
     },
     "duel-defense": {
@@ -618,7 +642,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05F f9182da总控离线验收Agent216/tools29+1skip exit0；用户用全新Qwen3.8-Flash只读会话执行05FR。真实入口/账号隔离/测试包尚未放行，不操作设备。",
+  "next": "05FR已收口，05F业务暂留lane未合入。用户ds-v4.1flash全新对话执行05G入口回调，基点f9182da，仅两新Python文件；后续总控账号根/GUI接线与实机另验。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

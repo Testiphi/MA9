@@ -63,6 +63,7 @@ orchestration_files:
     - agent/orchestration/prompts/05R-review.md
     - agent/orchestration/prompts/05ER-lineup-review.md
     - agent/orchestration/prompts/05FR-slot-review.md
+    - agent/orchestration/prompts/05G-slot-entry.md
     - agent/orchestration/prompts/06-duel-defense.md
     - agent/orchestration/prompts/07-duel-attack.md
     - agent/orchestration/prompts/07R-attack-review.md
@@ -474,6 +475,8 @@ lanes:
     owns_new:
       - agent/ma9_agent/duel_slot_selection.py
       - agent/tests/test_duel_slot_selection.py
+      - agent/ma9_agent/duel_slot_entry.py
+      - agent/tests/test_duel_slot_entry.py
       - assets/resource/image/navigation/duel/detail_select_text.png
     reviewer:
       model: qwen_flash

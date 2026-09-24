@@ -65,3 +65,6 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 
 ## 2026-09-24 最新：05F本地验收，待05FR
 05F交付f9182dac671e19e9e9a0d8a3af3c334df46c9a5d，仅两个新增文件。总控在lane独立Agent216、tools29+1skip均exit0；schema27复用，证据MA9-evidence/20260924-05F-orchestrator。下一份完整提示词05FR-slot-review.md给用户全新Qwen3.8-Flash只读复核。未合入、未推送、未设备测试；真实入口和账号根绑定仍待。公开helper预算/车型单侧证据/回调共享证据需review独立定级。
+
+## 2026-09-24 最新：05FR收口，05G入口回调待派发
+05FR报告/日志及8项输出已核对，无阻塞限离线模块；脚本exit0不等于8项断言，输出逐项检查。05F业务f9182da仍在lane，未合入/推送。05G-slot-entry.md授权两新文件实现当前防守槽入口回调，ds-v4.1flash请求high，禁止设备。必须不改写传入证据，重新核对同槽、一次点击、两帧确认选车页；账号数据根及GUI由总控下一阶段处理。
