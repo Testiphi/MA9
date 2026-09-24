@@ -69,7 +69,10 @@ def match_vehicle(ocr: list[dict[str, Any]], catalog: list[dict[str, Any]],
                      for car in catalog), key=lambda pair: pair[0], reverse=True)
     score, car = scored[0]
     second = scored[1][0] if len(scored) > 1 else 0.0
-    if score < .78 or score - second < .05:
+    # A unique complete name outranks a near-named variant (Nevera/Nevera R).
+    # Keep the ambiguity margin for every non-exact reading and exact ties.
+    unique_exact = score == 1.0 and second < 1.0
+    if score < .78 or (score - second < .05 and not unique_exact):
         if league is None or len(observed) < 6:
             return None
         matches = [row for row in catalog if row["league"] == league.label

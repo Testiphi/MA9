@@ -14,6 +14,37 @@ from ma9_agent.vehicle_screen import LEAGUE_CENTERS, match_vehicle, normalize, p
 
 
 class VehicleScreenTest(unittest.TestCase):
+    def test_exact_nevera_and_nevera_r_remain_distinct(self) -> None:
+        catalog = [{"id": "nevera", "title": "Rimac Nevera", "league": "宗师"},
+                   {"id": "nevera-r", "title": "Rimac Nevera R", "league": "传奇"}]
+        # Frozen first-page live OCR: full maker/model, not an inferred prefix.
+        rows = [{"text": "NEVERA", "confidence": .992889, "box": [436, 577, 76, 23]},
+                {"text": "RIMAC", "confidence": .986943, "box": [437, 558, 75, 22]}]
+        for ordering in (catalog, list(reversed(catalog))):
+            self.assertEqual(match_vehicle(rows, ordering)["id"], "nevera")
+            variant = [{**rows[0], "text": "NEVERA R"}, rows[1]]
+            self.assertEqual(match_vehicle(variant, ordering)["id"], "nevera-r")
+
+    def test_nevera_nonexact_and_duplicate_identity_still_refused(self) -> None:
+        catalog = [{"id": "nevera", "title": "Rimac Nevera", "league": "宗师"},
+                   {"id": "nevera-r", "title": "Rimac Nevera R", "league": "传奇"}]
+        words = [{"text": "Rimac Never", "confidence": .99, "box": [0, 0, 100, 20]}]
+        self.assertIsNone(match_vehicle(words, catalog))
+        exact = [{**words[0], "text": "Rimac Nevera"}]
+        self.assertIsNone(match_vehicle(exact, catalog + [{**catalog[0], "id": "duplicate"}]))
+        self.assertIsNone(match_vehicle([{**exact[0], "confidence": .69}], catalog))
+
+    def test_duel_card_keeps_fully_named_nevera_beside_variant(self) -> None:
+        from ma9_agent.duel_vehicle_screen import read_visible_cards
+        catalog = [{"id": "nevera", "title": "Rimac Nevera", "class": "S"},
+                   {"id": "nevera-r", "title": "Rimac Nevera R", "class": "R"}]
+        rows = [{"text": "NEVERA", "confidence": .992889, "box": [436, 577, 76, 23]},
+                {"text": "RIMAC", "confidence": .986943, "box": [437, 558, 75, 22]}]
+        cards = read_visible_cards(np.zeros((720, 1280, 3), dtype=np.uint8), rows, catalog)
+        self.assertEqual([c["vehicle"]["id"] for c in cards], ["nevera"])
+        self.assertEqual(cards[0]["class"], "S")
+        self.assertEqual(cards[0]["card"][0], 432)
+
     def test_league_centers_and_ambiguous_selection(self) -> None:
         self.assertEqual(len(LEAGUE_CENTERS), len(League))
         self.assertEqual(tuple(sorted(set(LEAGUE_CENTERS))), LEAGUE_CENTERS)
