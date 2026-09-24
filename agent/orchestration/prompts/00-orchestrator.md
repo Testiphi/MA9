@@ -98,3 +98,6 @@ f074163fb77a163f76b73239a10842c03f07a90c只两文件，120/30s/.3等待；总控
 
 ## 最新02G验包完成，等待用户重试
 新包user-test-slot-f074163/MA9-preview，界面版本v0.0.0-slot-locate-f074163，exe c96cbdd31a3cd4c4e4bed0d0f7ed5ce22735abd8e584528e0035fbdca59bd555。总控20260924-02G-orchestrator独立7模块/全部hash/4OCR来源/配置绑定通过，runtime旧版4差异和entry旧版490差异两个比较进程exit1，无socket冒烟exit1。仍未实机通过；用户单次自检+第1槽Nevera只定位，助手不设备操作。
+
+## 最新05I：Nevera全名被近名R挤掉已修，待05IR
+02G实机已进入扫描，13页target_not_found到A边界，selection_attempted=false/starts_race=false。四首屏OCR完整RIMAC/NEVERA，被1.0与.95652差距<.05拒绝。总控独占vehicle_screen最小修复da22bf1bc844d762d75fb70977284dced7b09e11，唯一精确匹配优先；Agent268/tools30 exit0，真实OCR4帧恢复、10140矩阵仅30唯一精确变化。lane已快进da22bf1；05IR-exact-name-review.md交Flash全新只读复核，旧包不重跑。

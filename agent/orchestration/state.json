@@ -95,7 +95,7 @@
           "entry_negative_exit": 1,
           "private_config": "new_absolute_root_slot1_Nevera_chooseFalse"
         },
-        "device_test": "not_run"
+        "device_test": "entry_passed_scan_target_not_found"
       }
     },
     "vehicle": {
@@ -500,7 +500,7 @@
           "preserve formal defense and all existing GUI tasks",
           "user serial device testing only after build verification"
         ],
-        "phase": "02G_package_verified_waiting_user_retry",
+        "phase": "live_nevera_exact_match_failure_repaired_pending_review",
         "scope": "explicit isolated runtime root and dedicated request/profile; default locate only; one GUI/Agent test route",
         "device_allowed": false,
         "requested_user_inputs": [
@@ -557,6 +557,26 @@
           "ready": 1,
           "locator_success": false
         }
+      },
+      "exact_name_repair": {
+        "delivery": "da22bf1bc844d762d75fb70977284dced7b09e11",
+        "project": "MA9-05I",
+        "phase": "implemented_verified_pending_05IR",
+        "base": "354a5d56fdfcd0fedd5adbebbd55a8fe41d1fe0c",
+        "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-2300-nevera-scan-live",
+        "owner": "orchestrator",
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260924-05I-exact-name/results.json",
+        "counts": {
+          "tools": 30,
+          "replayed_real_ocr_frames": 4,
+          "agent": 268,
+          "changed_only_unique_exact": 30,
+          "matrix": 10140
+        },
+        "review_prompt": "agent/orchestration/prompts/05IR-exact-name-review.md",
+        "scope": "unique normalized exact match outranks near variant; fuzzy/tie/league rules retained",
+        "device": "new_fix_not_run",
+        "cause": "Nevera exact1.0 vs NeveraR .95652 below.05 margin, four full OCR name frames rejected"
       }
     },
     "duel-defense": {
@@ -844,7 +864,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "02G f074163修复包已独立验包通过，等待用户账号/第1槽/Nevera仅定位单次重试；用户先自检再运行定位，失败不连续重试，成功须新包业务JSON和详情截图。旧包/旧失败证据保留，助手无设备权限。",
+  "next": "02G入页等待通过，但Nevera首屏完整OCR因共享匹配器近名差距被拒，扫13页至A边界无目标。总控已最小修复da22bf1并268/30测试和4帧回放通过，用户全新Flash执行05IR窄复核，再新包；不重跑旧包。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

@@ -69,6 +69,7 @@ orchestration_files:
     - agent/orchestration/prompts/05GR-entry-review.md
     - agent/orchestration/prompts/05G1-arrival-wait.md
     - agent/orchestration/prompts/05G1R-wait-review.md
+    - agent/orchestration/prompts/05IR-exact-name-review.md
     - agent/orchestration/prompts/05HR-wiring-review.md
     - agent/orchestration/prompts/06-duel-defense.md
     - agent/orchestration/prompts/07-duel-attack.md
