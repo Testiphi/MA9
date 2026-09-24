@@ -49,7 +49,7 @@
         "owner_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-02F-cf8815b/results.json",
         "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260924-02F-orchestrator/results.json",
         "exe_sha256": "86821b01b6cdbaf47fa62cf85af950fcbeed52e40b67eb286d6c4ce8168c5187",
-        "device_test": "not_run",
+        "device_test": "failed_entry_wait_budget_not_vehicle_scan",
         "checks": {
           "modules": 7,
           "smoke_exit": 1,
@@ -427,7 +427,23 @@
           "T1 max11 happy5 excludes outer05F andscan",
           "C1-C4 nonblocking retained no speculative expansion",
           "no static OCR failure requires code change"
-        ]
+        ],
+        "repair": {
+          "device_allowed": false,
+          "base": "cf8815b2268d07142b679b06272101e9f1b2191e",
+          "prompt": "agent/orchestration/prompts/05G1-arrival-wait.md",
+          "owns_generated": [],
+          "project": "MA9-05G1-arrival-wait",
+          "owns_new": [],
+          "owns": [
+            "agent/ma9_agent/duel_slot_entry.py",
+            "agent/tests/test_duel_slot_entry.py"
+          ],
+          "effort": "high_requested_actual_platform_reported",
+          "phase": "prompt_ready",
+          "scope": "arrival wait only max20samples monotonic15s, keep2consecutive/1click",
+          "model": "ds-v4.1flash"
+        }
       },
       "test_wiring_task": {
         "owner": "orchestrator",
@@ -439,7 +455,7 @@
           "preserve formal defense and all existing GUI tasks",
           "user serial device testing only after build verification"
         ],
-        "phase": "package_verified_waiting_user_single_slot_locate",
+        "phase": "user_live_entry_wait_failed_fix_pending",
         "scope": "explicit isolated runtime root and dedicated request/profile; default locate only; one GUI/Agent test route",
         "device_allowed": false,
         "requested_user_inputs": [
@@ -481,6 +497,20 @@
           "target_id": "car_d51e24a1fd5f83c0",
           "account_label": "private_bound_request",
           "automated_device_operation_authorized": false
+        },
+        "live_result": {
+          "business_status": "entry_failed",
+          "starts_race": false,
+          "entry_attempted": true,
+          "evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-211053-slot-entry-live",
+          "click_count": 1,
+          "scan_report": null,
+          "selection_attempted": false,
+          "nonready": 5,
+          "assignment_complete": false,
+          "arrival_samples": 6,
+          "ready": 1,
+          "locator_success": false
         }
       }
     },
@@ -769,7 +799,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "02F已独立验包通过，等待用户在指定新包中自检后执行第1槽Nevera仅定位；成功以业务JSON和详情截图核对，GUI完成不足。不要开启选择/五槽/开赛，不操作设备。",
+  "next": "真实定位未通过：cf8815b包入页后首个选车标题恰在6次预算末帧，连续两帧门禁无机会完成，scan未调用。冻结证据并复现red exit1，用户派05G1窄修复；不再试旧包，不为露出车名扩修识别。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

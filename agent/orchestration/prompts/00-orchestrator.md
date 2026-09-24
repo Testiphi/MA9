@@ -83,3 +83,6 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 
 ## 最新02F验包完成：等待用户仅定位实机
 包duel-scan/build/user-test-slot-cf8815b/MA9-preview，源码cf8815b；总控20260924-02F-orchestrator独立7模块/全部hash/cache来源/绑定/无socket冒烟通过，负对照同basename后4差异exit1（owner37含文件名差异），整体exit0。GUI版本仍1.0.0，TEST-BUILD标签v0.0.0-slot-locate-cf8815b，按准确路径识别新包。用户测试第1槽Nevera，choose=false，仅停详情。验收业务JSON located/目标ID/slot1/assignment_complete=false/starts_race=false加截图；尚未实机通过，助手不操作设备。
+
+## 最新：05H首次实机未定位，05G1等待预算修复
+冻结20260924-211053-slot-entry-live，business entry_failed/scan_report null；入口21:10:59.108单次点击后5次仍资格赛，第6次21:11:03.768才首次车辆选择。不是Nevera裁切识别故障，扫描未开始。旧6次预算无第2个稳定样本机会，离线实测red exit1，第7帧是合成重复不得冒充实机。05G1-arrival-wait.md派ds-v4.1flash high请求，只改entry及其测试，20次+monotonic15s双上限，2连续/1点击守卫不变；未修复/未构建新包，不操作设备。
