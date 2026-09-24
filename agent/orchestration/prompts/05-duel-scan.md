@@ -1,5 +1,7 @@
 # MA9-05E1-槽位观察器标题门禁与证据语义收口
 
+状态：本轮已完成并经05E1R独立复核、总控集成验收。以下为历史提示词，禁止重复派发；下一接线任务须另行登记。
+
 模型：ds-v4.1flash / high。用户在外部平台全新对话粘贴本文件；平台无独立档位如实记录，不自动max，不创建下级智能体/对话/worktree。
 cwd：E:/hzz/work/MA9/MA9-worktrees/duel-scan
 branch：lane/duel-scan

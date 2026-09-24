@@ -460,6 +460,8 @@ lanes:
     depends_on: [contract]
     owns:
       - agent/ma9_agent/duel_vehicle_runtime.py
+      - agent/ma9_agent/duel_lineup_slot.py
+      - agent/tests/test_duel_lineup_slot.py
       - agent/ma9_agent/duel_vehicle_screen.py
       - assets/resource/pipeline/duel_slot_navigation.json
       - assets/resource/pipeline/duel_runtime.json
@@ -469,8 +471,6 @@ lanes:
       - docs/zh_cn/develop/duel_offline_recognition.md
       # 20260923：实机与集成通过，两个defense_setup文件已归还06。
     owns_new:
-      - agent/ma9_agent/duel_lineup_slot.py
-      - agent/tests/test_duel_lineup_slot.py
       - assets/resource/image/navigation/duel/detail_select_text.png
     reviewer:
       model: qwen_flash

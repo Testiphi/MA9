@@ -329,3 +329,11 @@ s05明确第1局输、第2/3局赢、第4局输、第5局未打，即2胜2负。
 实际交付17371c9d96eb2caaaf3083c26ca87b16a40bf2ee，基点cdeee38，仅观察器与测试两个文件，工作区干净。总控复跑Agent186、tools29+1既有截图跳过均exit0；18样本geometry-only的page/slot/verified/reason与旧源码完全一致；人工冻结标题通过时正确标geometry_and_title。
 总控以git show cdeee38加载真实旧实现，同一真实帧的好友挑战、每日挑战次数、资格赛奖励、.01置信度、不同合法双标题、原宽ROI外侧文字6类旧伪正例在新版全部拒绝。证据MA9-evidence/20260924-05E1-orchestrator。接口ImportError仅兼容性失败，不计行为红；真正行为红绿来自这6项。
 本轮尚未真实OCR、未接线、未合入。安排Qwen3.8-Flash新上下文05E1R短复核，仅检查标题/字段/诊断保留delta，不重审整套几何、不重复schema或全量测试。进攻2–5缺图不阻止后续限定防守测试路径，但不能冒称攻防通用实机通过。
+
+## 2026-09-24 05E1R通过、原生OCR静态取证与观察器集成
+
+核对05E1R report/results、targeted47和6场景探针，目标17371c9d96eb2caaaf3083c26ca87b16a40bf2ee且工作区干净，接受“观察模块范围无阻塞”。R1内部空白、R2诊断粒度、R5辅助门禁不扩修；R3 precommit日志口径已由总控指定提交复跑补足；R4旧证据__pycache__保留，不为缓存做删除操作。
+总控进一步使用现有MaaFW原生OCR及未改的production ocr_roi，在只绑定内存CustomController的Tasker里读取18张已存图标题。全部设备输入方法deny，无ADB/MuMu/网络/AgentServer；图库帧直接传入OCR，不截屏真实设备。18/18符合槽位预期，8正例均geometry_and_title/title_guard_passed，标题置信度最低0.999099，真实box中心落在(62,86,110,52)内；进程exit0。证据MA9-evidence/20260924-native-lineup-title。由此不能再说解释器没有OCR能力；之前缺若干pip包仅是包探测结果。
+静态原生OCR成功不代表实时来源/稳定性/入出同槽或点击成功。进攻仍只验证slot1，防守1–5为旧静态帧；后续可先限定防守测试路径，不等待全部进攻图。
+main合并候选与17371c9的agent/tools/assets/data/deps一致（除编排元数据）。总控集成Agent186、tools30全过无skip、最终exit0，schema输入未变复用27；证据MA9-evidence/20260924-lineup-observer-integration。只读观察器两文件转入05 owns，未修改原防守行为、未接执行器。
+未来私有证据脚本一律尽量加-B/PYTHONDONTWRITEBYTECODE，避免只读导入在旧证据写缓存；本轮已如此执行。当前自动本地集成提交，不推送未确认的新payload。

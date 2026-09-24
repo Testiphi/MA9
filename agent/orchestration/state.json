@@ -205,7 +205,7 @@
       },
       "maintenance_task": {
         "project": "MA9-05E-阵容页槽位只读观察",
-        "phase": "05E1_local_checks_passed_short_review_pending",
+        "phase": "05E1_observer_integrated_native_static_OCR_verified_wiring_pending",
         "model": "ds-v4.1flash",
         "effort": "high",
         "owns": [],
@@ -236,7 +236,7 @@
           "effort": "actual_platform_default",
           "prompt": "agent/orchestration/prompts/05ER-lineup-review.md",
           "mode": "fresh_read_only",
-          "status": "05E1R_short_review_prompt_ready"
+          "status": "05E1R_completed_no_blocker_observer_only"
         },
         "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-05ER-lineup-review/results.json",
         "hardening": {
@@ -265,7 +265,45 @@
           "agent": 186,
           "tools_passed": 29,
           "replay_geometry_unchanged": 18
-        }
+        },
+        "short_review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-05E1R-title-review/results.json",
+        "integration": {
+          "source": "17371c9d96eb2caaaf3083c26ca87b16a40bf2ee",
+          "evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-lineup-observer-integration/results.json",
+          "agent": 186,
+          "tools": 30,
+          "skipped": 0,
+          "exit_codes": [
+            0,
+            0
+          ],
+          "schema": "27exit0reused_inputsunchanged",
+          "code_matches_reviewed": true
+        },
+        "native_ocr": {
+          "evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-native-lineup-title/results.json",
+          "process": "E:/hzz/work/MA9/MA9-evidence/20260924-native-lineup-title/process-result.json",
+          "samples": 18,
+          "passed": 18,
+          "positive_titles": 8,
+          "positive_min_confidence": 0.999099,
+          "roi": [
+            62,
+            86,
+            110,
+            52
+          ],
+          "actual_engine": "MaaFW_native_OCR_via_production_ocr_roi",
+          "device": "no_ADB_no_MuMu_no_network;in_memory_CustomController_all_input_actions_denied",
+          "exit_code": 0,
+          "scope": "saved_static_frames_only"
+        },
+        "remaining_wiring_gates": [
+          "live_frame_source/accountroot",
+          "consecutive_stable_observations",
+          "pre-entry_and_return_same_slot",
+          "defense_only_test_route_first;attack2to5notverified"
+        ]
       }
     },
     "duel-defense": {
@@ -553,7 +591,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户以Qwen3.8-Flash全新对话执行05E1R短复核，仅标题门禁与证据语义delta；总控本地通过但未合入，后续先限定防守测试路径接线，不等待无关进攻全槽图。",
+  "next": "只读槽位模块已集成，真实MaaFW原生OCR静态18帧通过；下一步限定防守测试号的稳定槽位上下文与入/回同槽核验，再接共用单槽选车，入口/地图仍外置。当前不操作设备、不授权自动点击。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
