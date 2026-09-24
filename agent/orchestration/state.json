@@ -125,7 +125,7 @@
           "smoke_exit": 1,
           "modules": 8
         },
-        "device_test": "not_run"
+        "device_test": "Nevera_identity_and_card_click_passed_detail_rating_mismatch_returned_selection_lost"
       }
     },
     "vehicle": {
@@ -530,7 +530,7 @@
           "preserve formal defense and all existing GUI tasks",
           "user serial device testing only after build verification"
         ],
-        "phase": "02H_verified_waiting_user_locate_retry",
+        "phase": "detail_rating_clipping_diagnosed_waiting_detail_image",
         "scope": "explicit isolated runtime root and dedicated request/profile; default locate only; one GUI/Agent test route",
         "device_allowed": false,
         "requested_user_inputs": [
@@ -615,6 +615,19 @@
           "duel_screen": 6
         },
         "remaining_risk": "F1 constructed suffix-loss/league probe, not device reproduction. Text-only exact match does not prove unclipped identity; no universal no-wrong-click guarantee. Current four full-name frames valid; 04 remains paused."
+      },
+      "detail_rating_issue": {
+        "final_status": "scan_incomplete",
+        "detail_raw": "37/4,897",
+        "scope": "do not disable consistency guard; establish correct detail ROI and fractional parsing",
+        "list_rating": 4837,
+        "phase": "diagnosed_need_full_detail_frame",
+        "package_source": "da22bf1bc844d762d75fb70977284dced7b09e11",
+        "final_reason": "selection_lost",
+        "parsed_detail": 4897,
+        "return_reason": "existing list_detail_rating_mismatch retry",
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-001628-nevera-detail-live",
+        "device_allowed": false
       }
     },
     "duel-defense": {
@@ -902,7 +915,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "02H da22bf1包已总控独立8模块/旧matcher负对照/包内名字探针/哈希/配置/无socket冒烟通过。用户新包自检后单次第1槽Nevera仅定位，等待业务JSON与详情截图；尚未实机成功，不重跑旧包、不操作设备。",
+  "next": "02H实机已识别并点击Nevera，但详情ROI读37/4,897被_current_rating取4897，与列表4837冲突触发返回重试，最终selection_lost。冻结证据并离线复现解析；需要用户手动打开Nevera详情原始截图验证ROI，不再跑自动化，不关闭一致性护栏。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

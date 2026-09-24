@@ -107,3 +107,6 @@ f074163fb77a163f76b73239a10842c03f07a90c只两文件，120/30s/.3等待；总控
 
 ## 2026-09-25 最新02H验包完成
 user-test-slot-da22bf1/MA9-preview，版本v0.0.0-slot-locate-da22bf1，exe753881c8d9dc3275fe346f637b763f35c5175c05242c0955875a06e2af9df464。总控20260925-02H-orchestrator独立8模块全同，matcher旧版23差异exit1，包内纯匹配探针exit0，全部hash/配置/冒烟通过。等待用户第1槽Nevera仅定位，choose=false；旧包证据不覆盖，不宣布实机成功。
+
+## 最新02H实机：已点Nevera但详情读数触发退回
+20260925-001628-nevera-detail-live冻结business/log。列表4837，详情ROI[900,90,210,90]两次OCR37/4,897，解析4897，触发list_detail_rating_mismatch重试32,25返回，后续selection_lost；不是成功。名字修复已实机识别/点击验证，需完整详情截图确认ROI及分数，用户手动打开但不要选择；不得关闭一致性检查或反复跑旧包。
