@@ -347,14 +347,19 @@
         "base_commit": "f9182dac671e19e9e9a0d8a3af3c334df46c9a5d",
         "project": "MA9-05G-防守当前槽选车入口回调",
         "effort": "high_requested_actual_platform_reported",
-        "phase": "prompt_ready",
+        "phase": "05G_locally_verified_pending_05GR",
         "owns_new": [
           "agent/ma9_agent/duel_slot_entry.py",
           "agent/tests/test_duel_slot_entry.py"
         ],
         "prompt": "agent/orchestration/prompts/05G-slot-entry.md",
         "scope": "single defensive current-slot entry callback; fresh recheck one click bounded arrival verification; offline tests only",
-        "owns_generated": []
+        "owns_generated": [],
+        "delivery": "7eedd3f0934ba89d8c1234e6534345e66c85a9df",
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260924-05G-orchestrator/results.json",
+        "review_prompt": "agent/orchestration/prompts/05GR-entry-review.md",
+        "reviewer": "Qwen3.8-Flash platform actual default",
+        "budget_correction": "callback max11 captures not9; happy5; excludes outer05F/scan"
       }
     },
     "duel-defense": {
@@ -642,7 +647,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05FR已收口，05F业务暂留lane未合入。用户ds-v4.1flash全新对话执行05G入口回调，基点f9182da，仅两新Python文件；后续总控账号根/GUI接线与实机另验。",
+  "next": "05G本地验收Agent242/tools29+1skip exit0，用户以全新Qwen3.8-Flash对话执行05GR独立复核；未合入业务/打包/实机。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
