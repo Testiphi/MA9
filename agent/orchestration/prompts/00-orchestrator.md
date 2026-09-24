@@ -80,3 +80,6 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 
 ## 最新05HR接收与02F测试包
 05HR无代码阻塞，但两定向实际exit21须保留，不能算exit0。总控同lane当前/旧版import均0，两定向各10exit0；未复现且不确定归因。独立probe实际7PASS+1链接宿主禁建，非8全跑。02F-slot-package.md锁定cf8815b，ds-v4.1flash请求high；使用新输出目录和薄包装调用原build/prepare，先原工具完备性+标记后私有request根绑定。包仅自检与单槽定位两GUI项。待回传验包，设备未放行。
+
+## 最新02F验包完成：等待用户仅定位实机
+包duel-scan/build/user-test-slot-cf8815b/MA9-preview，源码cf8815b；总控20260924-02F-orchestrator独立7模块/全部hash/cache来源/绑定/无socket冒烟通过，负对照同basename后4差异exit1（owner37含文件名差异），整体exit0。GUI版本仍1.0.0，TEST-BUILD标签v0.0.0-slot-locate-cf8815b，按准确路径识别新包。用户测试第1槽Nevera，choose=false，仅停详情。验收业务JSON located/目标ID/slot1/assignment_complete=false/starts_race=false加截图；尚未实机通过，助手不操作设备。

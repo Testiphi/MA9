@@ -43,9 +43,29 @@
         "source": "cf8815b2268d07142b679b06272101e9f1b2191e",
         "effort": "high_requested_actual_platform_reported",
         "branch": "lane/duel-scan",
-        "phase": "prompt_ready",
+        "phase": "orchestrator_verified_user_locate_test_ready",
         "project": "MA9-02F-cf8815b",
-        "prompt": "agent/orchestration/prompts/02F-slot-package.md"
+        "prompt": "agent/orchestration/prompts/02F-slot-package.md",
+        "owner_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-02F-cf8815b/results.json",
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260924-02F-orchestrator/results.json",
+        "exe_sha256": "86821b01b6cdbaf47fa62cf85af950fcbeed52e40b67eb286d6c4ce8168c5187",
+        "device_test": "not_run",
+        "checks": {
+          "modules": 7,
+          "smoke_exit": 1,
+          "negative_exit": 1,
+          "data_files": 5,
+          "process_exit": 0,
+          "negative_code_differences": 4,
+          "ui_files": 255,
+          "native_cache_files": 4,
+          "resource_files": 246,
+          "agent_files": 129
+        },
+        "corrections": [
+          "owner negative harness exit0 asserted mismatch; orchestrator actual comparator exit1 after matching basename, 4 code differences; owner37 includes filename metadata",
+          "TEST-BUILD label v0.0.0-slot-locate-cf8815b; GUI interface version remains1.0.0, identify by exact path and TEST-BUILD"
+        ]
       }
     },
     "vehicle": {
@@ -419,7 +439,7 @@
           "preserve formal defense and all existing GUI tasks",
           "user serial device testing only after build verification"
         ],
-        "phase": "05HR_accepted_orchestrator_exit0_package_prompt_ready",
+        "phase": "package_verified_waiting_user_single_slot_locate",
         "scope": "explicit isolated runtime root and dedicated request/profile; default locate only; one GUI/Agent test route",
         "device_allowed": false,
         "requested_user_inputs": [
@@ -450,7 +470,18 @@
         "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-05HR-wiring-review/results.json",
         "review_note": "review two suites printedOK but actualexit21; independent probes7passes plus1host-disallowed link test, not8fullyexecuted",
         "exit_audit": "E:/hzz/work/MA9/MA9-evidence/20260924-05HR-orchestrator/results.json",
-        "exit_audit_note": "same lane current import0 baseline import0 targeted10exit0 root10exit0; reviewer native atexit21 retained, not independently reproduced or conclusively historical"
+        "exit_audit_note": "same lane current import0 baseline import0 targeted10exit0 root10exit0; reviewer native atexit21 retained, not independently reproduced or conclusively historical",
+        "live_acceptance": {
+          "slot": 1,
+          "expected": "located; scan_report detail_verified target id; before slot1; assignment_complete false; starts_race false; stop on target detail",
+          "choose": false,
+          "target": "Rimac Nevera",
+          "operator": "user",
+          "evidence": "package debug/duel-slot-test-*.json plus screenshot; failures include framework logs",
+          "target_id": "car_d51e24a1fd5f83c0",
+          "account_label": "private_bound_request",
+          "automated_device_operation_authorized": false
+        }
       }
     },
     "duel-defense": {
@@ -738,7 +769,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户以ds-v4.1flash全新对话执行02F-slot-package.md，构建源必须duel-scan@cf8815b，不用旧02分支。新输出避免替换旧dist，先发行完备性及工具产标记后私有账号配置绑定。总控验包后才用户实机。",
+  "next": "02F已独立验包通过，等待用户在指定新包中自检后执行第1槽Nevera仅定位；成功以业务JSON和详情截图核对，GUI完成不足。不要开启选择/五槽/开赛，不操作设备。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
