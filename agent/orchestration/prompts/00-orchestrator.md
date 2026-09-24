@@ -77,3 +77,6 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 
 ## 最新05H：隔离账号GUI接线待独立复核
 总控cf8815b2268d07142b679b06272101e9f1b2191e，Agent252/tools30/两项变更schema均exit0；旧资源schema复用，非完整27重跑。新增GUI仅定位，拒绝choose=true，不读取garage；账号标签只为用户确认，不认证游戏身份。用户第1槽Nevera S/car_d51e24a1fd5f83c0已确认拥有，私有请求在05H证据。lane已快进cf8815b供05HR只读复核；提示词05HR-wiring-review.md，Qwen3.8-Flash默认档位。之后才准备准确构建源/私有绝对根配置，未设备/推送。
+
+## 最新05HR接收与02F测试包
+05HR无代码阻塞，但两定向实际exit21须保留，不能算exit0。总控同lane当前/旧版import均0，两定向各10exit0；未复现且不确定归因。独立probe实际7PASS+1链接宿主禁建，非8全跑。02F-slot-package.md锁定cf8815b，ds-v4.1flash请求high；使用新输出目录和薄包装调用原build/prepare，先原工具完备性+标记后私有request根绑定。包仅自检与单槽定位两GUI项。待回传验包，设备未放行。

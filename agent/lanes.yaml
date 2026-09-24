@@ -57,6 +57,7 @@ orchestration_files:
     - agent/orchestration/prompts/01-nav.md
     - agent/orchestration/prompts/02-build.md
     - agent/orchestration/prompts/02R-root-review.md
+    - agent/orchestration/prompts/02F-slot-package.md
     - agent/orchestration/prompts/03-vehicle.md
     - agent/orchestration/prompts/04-multiplayer-paused.md
     - agent/orchestration/prompts/05-duel-scan.md
