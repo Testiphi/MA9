@@ -202,6 +202,21 @@
         ],
         "schema": "27_passes_reused_34_inputs_equivalent",
         "remote_ci": "not_yet_confirmed"
+      },
+      "maintenance_task": {
+        "project": "MA9-05E-阵容页槽位只读观察",
+        "phase": "scope_registered_preparing_prompt",
+        "model": "ds-v4.1flash",
+        "effort": "high",
+        "owns": [],
+        "owns_new": [
+          "agent/ma9_agent/duel_lineup_slot.py",
+          "agent/tests/test_duel_lineup_slot.py"
+        ],
+        "scope": "observe unique expanded slot1to5 on already-open lineup, no map-name recognition or entry clicks",
+        "write_old_runtime": false,
+        "device_allowed": false,
+        "why_first": "garage screen has no reliable slot ordinal; need pre-entry slot evidence andreturn-pageverification before genericselectiontestentry"
       }
     },
     "duel-defense": {
@@ -455,7 +470,7 @@
       },
       "validation_strategy": {
         "source": "2026-09-24 user proposal: daily attack expires; use a non-grouped account defense lineup for reusable selection/strategy application checks",
-        "status": "feasible_plan_recorded_not_implemented",
+        "status": "user_confirmed_boundary_05E_slot_observer_first",
         "preferred_environment": "user-operated non-grouped test-account defense lineup",
         "agent_device_authorization": false,
         "shared_scope": [
@@ -477,7 +492,8 @@
         "account_isolation": "fresh isolated runtime package/accountroot, validate actualtest-account ownedcars; old unmarked package must not silentlyusemain config/garage; never hand-add marker tooldagent",
         "acceptance": "reportactualsourceaccount/environment/plan/observedassignedIDs/slotmap; five unique matches; starts_race=false; stoponlineup; already_configured alone is not a successfulnew application",
         "rules": "attack ordinaryfuel policy remains attack-specific; do not inferdefense fuel rules",
-        "remaining_attack_check": "brief realattack entry+representative selection/return smoke test before claiming fullportability"
+        "remaining_attack_check": "brief realattack entry+representative selection/return smoke test before claiming fullportability",
+        "boundary": "entry/navigation and map naming outside selection core; slot ordinal context retained; ambiguous slot must not default to1"
       }
     }
   },
@@ -488,7 +504,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "按用户提出的验证路线设计共用五车计划应用：先在不进组测试号防守页由用户串行验证选择链路，显式账号隔离、仅选车不开赛；进攻择敌只读识别可独立推进，正式攻防入口与结算仍分别验收。尚未派发写代码或操作设备。",
+  "next": "第一步05E只读槽位观察，由ds-v4.1flash high新对话仅新增模块/测试；识别唯一展开槽位，读不出拒绝，不接防守入口或地图名。其后才将槽位上下文接到现有选车页定位/选择后核验。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
