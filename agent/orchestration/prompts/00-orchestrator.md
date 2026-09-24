@@ -52,3 +52,5 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 2026-09-24最新验证路线：用户提出进攻每天清理、不能长期留页，后续共用选车/计划应用优先用不进组测试号防守页由用户验证。scan/assign_visible可复用，但现defense_setup仅weakest_current且完整阵容会already_configured，需专门入口；绑定独立测试账号数据根，不能沿用旧包的main车库。仅选车不开赛；进攻择敌/扣票/三胜/奖励仍进攻侧另验。当前未授权Agent操作设备或放行新代码任务。
 
 当前唯一新派发任务：05E阵容页槽位只读观察，ds-v4.1flash high，完整提示词05-duel-scan.md。05工作区已快进02ee41c239bf45734ba3fa5ee44dc9dc7889ec5c，新增duel_lineup_slot.py及测试。用户要求入口与地图解耦；先可靠观察唯一展开槽，未知不能默认1，不接入口/选车点击/地图名。其后才做带槽位核验的共用选车；当前仍无Agent设备权限。
+
+当前05E已交付cdeee38cf99ff5efe066f0d189bf6b647eb9ac17，总控Agent162/tools29+1skip/18静态回放通过，未合入。唯一下一任务05ER-lineup-review.md，Qwen3.8-Flash新只读对话，平台实际默认档。关注折叠标记可选、无OCR几何判定限制、旧防守版式不能替代进攻2–5实机。尚未接选择入口或获得Agent设备权限。
