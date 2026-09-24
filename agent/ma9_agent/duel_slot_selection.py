@@ -22,6 +22,9 @@ Scope limits (deliberately small - no plugin/state-machine framework):
 * the default mode only locates the target's detail (``choose=False``); it never
   clicks the select button, never claims an assignment and never starts a race
   (``starts_race`` is always ``False``);
+* the request's ``verify_list_detail_rating`` defaults to ``False`` (name-first
+  ruling) and is forwarded verbatim to the shared ``scan``; identity, explicit
+  expectation, occupancy, button and same-slot guards are untouched;
 * ``account_key`` is a **trace label only**.  It is not an identity proof of a
   game account; the real account/data-root binding belongs to the later
   orchestrator test entry.  This module reads no ``config``/``garage`` file and
@@ -102,6 +105,14 @@ class SlotSelectionRequest:
     supplied separately to :func:`select_vehicle_for_slot` because they are
     caller-owned data, not part of this request.  ``choose`` defaults to
     ``False``, so the safe "locate only" mode is the default.
+
+    ``verify_list_detail_rating`` defaults to ``False`` for this single-slot
+    route: the user's name-first ruling keeps the implicit "list score ==
+    detail score" comparison off so a visible few-tens score difference cannot
+    block locating an identity that the detail already names.  The formal
+    defence path (``scan``/``assign_visible``) keeps its strict ``True``
+    default; an explicit ``expected_performance``/``expected_stars`` and every
+    identity/occupancy/button/same-slot guard still apply.
     """
 
     expected_slot: int
@@ -109,6 +120,7 @@ class SlotSelectionRequest:
     vehicle_class: str
     account_key: str
     choose: bool = False
+    verify_list_detail_rating: bool = False
     expected_performance: int | None = None
     expected_stars: int | None = None
     page_hint: int | None = None
@@ -219,6 +231,8 @@ def _validate_request(request: SlotSelectionRequest, catalog: Any,
         raise ValueError("expected_slot must be an integer 1..5")
     if type(request.choose) is not bool:
         raise ValueError("choose must be boolean")
+    if type(request.verify_list_detail_rating) is not bool:
+        raise ValueError("verify_list_detail_rating must be boolean")
     if not isinstance(request.target_id, str) or not request.target_id.strip():
         raise ValueError("target_id must be a non-empty string")
     if not isinstance(request.vehicle_class, str) or request.vehicle_class not in CLASS_X:
@@ -329,6 +343,7 @@ def select_vehicle_for_slot(context: Any, request: SlotSelectionRequest,
             "target_id": request.target_id,
             "vehicle_class": request.vehicle_class,
             "choose": request.choose,
+            "verify_list_detail_rating": request.verify_list_detail_rating,
             "expected_performance": request.expected_performance,
             "expected_stars": request.expected_stars,
             "page_hint": request.page_hint,
@@ -375,7 +390,8 @@ def select_vehicle_for_slot(context: Any, request: SlotSelectionRequest,
                            max_pages=request.max_pages,
                            expected_performance=request.expected_performance,
                            expected_stars=request.expected_stars,
-                           page_hint=request.page_hint)
+                           page_hint=request.page_hint,
+                           verify_list_detail_rating=request.verify_list_detail_rating)
     except Exception as error:
         status = STATUS_ASSIGNMENT_UNVERIFIED if request.choose else STATUS_SCAN_INCOMPLETE
         return _finalize(report, status, f"scan_error:{type(error).__name__}")
