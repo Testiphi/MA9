@@ -74,3 +74,6 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 
 ## 2026-09-24 最新：05F/05G已合入，准备05H
 05GR证据已核对无阻塞；合入2263b027e7425c4facc9ef7fc18119b7e120715c，4文件与lane审查版本相同；main Agent242/tools30（本次无skip）均exit0，schema27按输入未变复用。真实MaaFW静态按钮/到达OCR18/18在20260924-native-slot-entry，8按钮正例、2到达正例、16到达反例；内存controller输入全拒，非设备。05H由总控实现隔离根/明确请求与账号确认/GUI-Agent单槽入口，默认只定位；已向用户询问账号标签、槽号、目标车。尚未打包/推送/实机。
+
+## 最新05H：隔离账号GUI接线待独立复核
+总控cf8815b2268d07142b679b06272101e9f1b2191e，Agent252/tools30/两项变更schema均exit0；旧资源schema复用，非完整27重跑。新增GUI仅定位，拒绝choose=true，不读取garage；账号标签只为用户确认，不认证游戏身份。用户第1槽Nevera S/car_d51e24a1fd5f83c0已确认拥有，私有请求在05H证据。lane已快进cf8815b供05HR只读复核；提示词05HR-wiring-review.md，Qwen3.8-Flash默认档位。之后才准备准确构建源/私有绝对根配置，未设备/推送。

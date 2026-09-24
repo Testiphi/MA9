@@ -404,14 +404,34 @@
           "preserve formal defense and all existing GUI tasks",
           "user serial device testing only after build verification"
         ],
-        "phase": "design_inputs_pending",
+        "phase": "implemented_locally_verified_pending_05HR",
         "scope": "explicit isolated runtime root and dedicated request/profile; default locate only; one GUI/Agent test route",
         "device_allowed": false,
         "requested_user_inputs": [
           "test account trace label",
           "slot1to5",
           "target vehicle name"
-        ]
+        ],
+        "delivery": "cf8815b2268d07142b679b06272101e9f1b2191e",
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260924-05H-test-wiring/results.json",
+        "private_request_template": "E:/hzz/work/MA9/MA9-evidence/20260924-05H-test-wiring/user-request.template.json",
+        "target": {
+          "id": "car_d51e24a1fd5f83c0",
+          "account_label": "stored_only_in_private_request",
+          "title": "Rimac Nevera",
+          "choose": false,
+          "class": "S",
+          "slot": 1,
+          "owned": "user_confirmed"
+        },
+        "tests": {
+          "schema_changed_inputs": 2,
+          "all_exit": 0,
+          "agent": 252,
+          "targeted": 10,
+          "tools": 30
+        },
+        "review_prompt": "agent/orchestration/prompts/05HR-wiring-review.md"
       }
     },
     "duel-defense": {
@@ -699,7 +719,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05F/05G已合入2263b02，组合Agent242/tools30均exit0；真实静态按钮/到达OCR18/18完成，无设备操作。总控下一步05H隔离账号数据根和GUI/Agent测试接线，待用户提供测试账号标签/槽号/目标车；首次choose=false。",
+  "next": "05H隔离根/GUI接线已实现cf8815b，用户输入已存私有配置草稿；用户全新Qwen3.8-Flash执行05HR。复核后准备准确源码测试包并填入其绝对根，尚未构建/实机。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
