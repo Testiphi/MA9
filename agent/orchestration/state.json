@@ -441,8 +441,9 @@
           ],
           "effort": "high_requested_actual_platform_reported",
           "phase": "prompt_ready",
-          "scope": "arrival wait only max20samples monotonic15s, keep2consecutive/1click",
-          "model": "ds-v4.1flash"
+          "scope": "arrival only max120samples monotonic30s interval0.3, keep2consecutive/1click",
+          "model": "ds-v4.1flash",
+          "user_loading_note": "user observes pronounced lag after click and other page transitions; do not repeat input while waiting"
         }
       },
       "test_wiring_task": {
@@ -997,5 +998,13 @@
     "cost_statement": "user reports free/unlimited on current platform, not independently verified or general pricing",
     "dispatch": "bounded small task only, fresh complete prompt and independent local validation; not auto dispatched",
     "effort": "platform_actual_default_no_invented_enums"
+  },
+  "transition_wait_policy": {
+    "hard_limit_note": "blocking backend operations cannot be preempted by loop deadline",
+    "loading": "old/unknown page after accepted click may be loading; observe without repeating action",
+    "timeout": "stop preserve evidence no blind next action",
+    "principle": "advance on observed stable target page, bounded deadline not short poll-count assumption",
+    "rollout": "current entry first; other transitions audited when touched or evidence identifies a defect",
+    "early_success": "two verified target samples then proceed immediately"
   }
 }
