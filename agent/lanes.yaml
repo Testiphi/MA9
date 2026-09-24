@@ -62,6 +62,7 @@ orchestration_files:
     - agent/orchestration/prompts/05-duel-scan.md
     - agent/orchestration/prompts/05R-review.md
     - agent/orchestration/prompts/05ER-lineup-review.md
+    - agent/orchestration/prompts/05FR-slot-review.md
     - agent/orchestration/prompts/06-duel-defense.md
     - agent/orchestration/prompts/07-duel-attack.md
     - agent/orchestration/prompts/07R-attack-review.md
