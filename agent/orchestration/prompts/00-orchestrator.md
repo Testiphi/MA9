@@ -113,3 +113,6 @@ user-test-slot-da22bf1/MA9-preview，版本v0.0.0-slot-locate-da22bf1，exe75388
 
 ## 最新用户裁决：05J名称优先，不需详情截图
 当前优先跑通名称匹配及单槽选车，性能差异不作本测试阻塞。05J-name-first.md派ds-v4.1flash high请求，源da22bf1，只4Python文件；scan新增verify_list_detail_rating默认True保持旧防守，SlotSelectionRequest默认False按用户新要求；显式expected_performance/stars、身份/占用/按钮/同槽仍检查。不重写性能OCR、不猜4837、不做车库扫描存储（仅后续想法），GUI暂仍choosefalse，选择模式由总控后续接线。
+
+## 最新05J验收、02I进度包、用户授权推送
+612531f0107e8125e0106fe680059a03f849d8c0总控Agent285/tools29+1skip exit0。05JR-name-first-review.md待Flash全新只读复核，未合main。用户要求打包推送，总控直接构建新包user-test-slot-612531f/MA9-preview，8模块/哈希/根配置/无socket冒烟/schema通过，仍choosefalse且待复核不实机。推送main和lane/duel-scan，确切结果见20260925-progress-push/results.json，不上传私有包。

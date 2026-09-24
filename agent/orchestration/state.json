@@ -126,6 +126,17 @@
           "modules": 8
         },
         "device_test": "Nevera_identity_and_card_click_passed_detail_rating_mismatch_returned_selection_lost"
+      },
+      "name_first_package_task": {
+        "device_allowed": false,
+        "project": "MA9-02I-612531f",
+        "modules": 8,
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-02I-612531f/results.json",
+        "source": "612531f0107e8125e0106fe680059a03f849d8c0",
+        "package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-slot-612531f/MA9-preview",
+        "phase": "built_offline_verified_pending_independent_review",
+        "choose": false,
+        "exe_sha256": "f97269c4df67a6bf7f7d0d3630df50dc152999f32b1784d44d3c0862ef3b86dd"
       }
     },
     "vehicle": {
@@ -631,7 +642,7 @@
       },
       "name_first_task": {
         "owns_generated": [],
-        "phase": "prompt_ready",
+        "phase": "local_accepted_independent_review_pending",
         "project": "MA9-05J-name-first",
         "base": "da22bf1bc844d762d75fb70977284dced7b09e11",
         "device_allowed": false,
@@ -645,7 +656,11 @@
         "policy": "scan verify_list_detail_rating defaultTrue; single-slot request defaultFalse; explicit expectations and identity/occupancy/button/same-slot guards retained",
         "model": "ds-v4.1flash",
         "prompt": "agent/orchestration/prompts/05J-name-first.md",
-        "effort": "high_requested_actual_platform_reported"
+        "effort": "high_requested_actual_platform_reported",
+        "delivery": "612531f0107e8125e0106fe680059a03f849d8c0",
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260925-05J-orchestrator/results.json",
+        "review_prompt": "agent/orchestration/prompts/05JR-name-first-review.md",
+        "merged": false
       }
     },
     "duel-defense": {
@@ -933,7 +948,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户裁决当前以名称匹配先跑通指定选车，不需补详情截图。05J-name-first.md授权4文件：旧scan默认跨页分数比较保留，单槽薄适配默认关闭隐式分数比较，身份/显式期待/占用/同槽守卫不变；后续总控单次选择接线，当前旧包不重跑。",
+  "next": "05J已总控验收285/tools29+1skip exit0，独立05JR待用户全新Flash复核；依用户要求直接构建02I本地进度包并推送main与lane保存进度，05J未合main/包不放设备。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1115,7 +1130,18 @@
       }
     ],
     "observation_note": "Post-push local status observation only; no second status-only push to retrigger CI. Major orchestration changes already committed and pushed.",
-    "new_commits_pending": 4
+    "new_commits_pending": 4,
+    "current_request": {
+      "date": "2026-09-25",
+      "authorization": "user: 另外打包推送一下目前的进度吧",
+      "destination": "https://github.com/Testiphi/MA9.git",
+      "refs": [
+        "main",
+        "lane/duel-scan"
+      ],
+      "policy": "ordinary atomic push no force; main accepted work plus orchestration,05J on lane pendingreview",
+      "result_file": "E:/hzz/work/MA9/MA9-evidence/20260925-progress-push/results.json"
+    }
   },
   "git_commit_policy": {
     "approved_at": "2026-09-23",
