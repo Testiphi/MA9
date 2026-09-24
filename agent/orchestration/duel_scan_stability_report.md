@@ -343,3 +343,6 @@ main合并候选与17371c9的agent/tools/assets/data/deps一致（除编排元�
 推送候选冻结为4fccf017f74ea50401b0dbffaeb44bb05ec9c469，相对已知origin/main共25提交；自动审批在执行前拒绝，理由仍要求明确目标Testiphi/MA9.git与该payload授权。已向用户提出精确确认问题，不改shell/工具绕过；后续05F元数据不能偷偷加入这批待批准payload。
 独立推进05F：登记duel_slot_selection.py及对应测试归05，只做防守资格赛环境的单槽薄适配。用户事先打开所需槽的阵容页；观察器+真实OCR连续两次一致方可接受槽位上下文；入口回调注入、无防守导航节点/地图名；复用已有scan。choose=false默认停详情，choose=true才走选择，返回后必须两帧同槽且与expected_slot一致，不把scan.assigned单独当正确槽位成功。
 无完整阵容直接跳过、无地图策略生成、无账号恢复/多槽循环、无新增GUI/Agent注册。账号标签与confirmed_owned输入用于追踪/验证请求，不代替实际账号数据根隔离；后续用户测试包需专门绑定，不使用旧包主账号车库。当前不运行设备、不点击、不创建外部对话或子智能体。
+
+推送结果补充：用户随后精确批准4fccf01及25提交到Testiphi/MA9.git main，总控执行git push origin 4fccf01:refs/heads/main成功，ls-remote同SHA。05F后续元数据未混入批准payload，远端CI另行核对。
+05F完整提示词固定fd35979cdd4c9f708892f8b076f8a2b0d2bf33fc，指定ds-v4.1flash high，核心行为前置两帧同槽、外部入口回调、复用scan、默认choose=false、选择后两帧同槽；仅新增两文件，全部离线fake context，本轮没有真实入口/账号绑定或设备测试。

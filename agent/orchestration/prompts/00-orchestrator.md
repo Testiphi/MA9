@@ -60,3 +60,5 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 最新05E1：17371c9d96eb2caaaf3083c26ca87b16a40bf2ee已交付，总控Agent186/tools29+1skip、18几何等价与6旧伪正例拒绝通过；ImportError不算行为红。当前下一05E1R短复核，Qwen3.8-Flash，提示词05ER-lineup-review.md；未合入/未接线。后续可先限定防守验证，不必等待进攻所有槽图。
 
 最新观察器里程碑：05E1R无阻塞已接收，17371c9只读模块集成；main Agent186/tools30全过。总控另用真实MaaFW原生OCR离线18张全部通过，8正例标题真实框和置信度满足守卫，证据20260924-native-lineup-title；这是静态图而非设备操作。05E1/05E1R旧提示词已完成，不重复派发。下一是限定防守试验路径的实时稳定槽位上下文和入/回同槽接线；仍无Agent设备操作权限，入口/地图外置。
+
+当前唯一下一任务05F：ds-v4.1flash high，完整提示词05-duel-scan.md；05工作区基点fd35979cdd4c9f708892f8b076f8a2b0d2bf33fc，新增duel_slot_selection.py/测试，入口注入、稳定前后同槽、默认仅定位，全部离线。本轮精确4fccf01及25提交已获用户确认并成功推送，ls-remote核实；新05F编排提交仍本地，别把后续记录混作已推送。
