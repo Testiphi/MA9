@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-24",
+  "updated_at": "2026-09-25",
   "policy": "external-fresh-conversations-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -99,7 +99,7 @@
       },
       "exact_name_package_task": {
         "project": "MA9-02H-da22bf1",
-        "phase": "prompt_ready",
+        "phase": "orchestrator_verified_user_locate_test_ready",
         "owns_generated": [],
         "prompt": "agent/orchestration/prompts/02H-exact-name-package.md",
         "cwd": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
@@ -111,7 +111,21 @@
         "effort": "high_requested_actual_platform_reported",
         "branch": "lane/duel-scan",
         "device_allowed": false,
-        "source": "da22bf1bc844d762d75fb70977284dced7b09e11"
+        "source": "da22bf1bc844d762d75fb70977284dced7b09e11",
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260925-02H-orchestrator/results.json",
+        "owner_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-02H-da22bf1/results.json",
+        "exe_sha256": "753881c8d9dc3275fe346f637b763f35c5175c05242c0955875a06e2af9df464",
+        "checks": {
+          "matcher_negative_exit": 1,
+          "matcher_negative_differences": 23,
+          "packaged_name_probe_exit": 0,
+          "private_binding": "newroot_slot1_Nevera_chooseFalse",
+          "hashes": "all_match",
+          "process_exit": 0,
+          "smoke_exit": 1,
+          "modules": 8
+        },
+        "device_test": "not_run"
       }
     },
     "vehicle": {
@@ -516,7 +530,7 @@
           "preserve formal defense and all existing GUI tasks",
           "user serial device testing only after build verification"
         ],
-        "phase": "live_nevera_exact_match_failure_repaired_pending_review",
+        "phase": "02H_verified_waiting_user_locate_retry",
         "scope": "explicit isolated runtime root and dedicated request/profile; default locate only; one GUI/Agent test route",
         "device_allowed": false,
         "requested_user_inputs": [
@@ -888,7 +902,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05IR无阻塞接受，F1仅构造截断探针非实机。用户ds-v4.1flash全新对话执行02H-exact-name-package.md，从da22bf1构建新包，8模块必含共享vehicle_screen；旧包/日志不覆盖，验包后用户只定位。",
+  "next": "02H da22bf1包已总控独立8模块/旧matcher负对照/包内名字探针/哈希/配置/无socket冒烟通过。用户新包自检后单次第1槽Nevera仅定位，等待业务JSON与详情截图；尚未实机成功，不重跑旧包、不操作设备。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

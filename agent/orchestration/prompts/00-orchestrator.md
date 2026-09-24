@@ -104,3 +104,6 @@ f074163fb77a163f76b73239a10842c03f07a90c只两文件，120/30s/.3等待；总控
 
 ## 最新05IR通过，02H精确名修复包待构建
 05IR独立10+6测试/10探针exit0无阻塞；F1是构造后缀截断/league探针非真机帧，保留文字无法证明未裁切风险，04暂停。02H-exact-name-package.md派ds-v4.1flash请求high，源da22bf1bc844d762d75fb70977284dced7b09e11，新目录user-test-slot-da22bf1；必须8模块含共享vehicle_screen及旧f074163匹配器同basename负对照exit1。旧包/失败日志保留；未构建/未实机通过。
+
+## 2026-09-25 最新02H验包完成
+user-test-slot-da22bf1/MA9-preview，版本v0.0.0-slot-locate-da22bf1，exe753881c8d9dc3275fe346f637b763f35c5175c05242c0955875a06e2af9df464。总控20260925-02H-orchestrator独立8模块全同，matcher旧版23差异exit1，包内纯匹配探针exit0，全部hash/配置/冒烟通过。等待用户第1槽Nevera仅定位，choose=false；旧包证据不覆盖，不宣布实机成功。
