@@ -96,6 +96,22 @@
           "private_config": "new_absolute_root_slot1_Nevera_chooseFalse"
         },
         "device_test": "entry_passed_scan_target_not_found"
+      },
+      "exact_name_package_task": {
+        "project": "MA9-02H-da22bf1",
+        "phase": "prompt_ready",
+        "owns_generated": [],
+        "prompt": "agent/orchestration/prompts/02H-exact-name-package.md",
+        "cwd": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
+        "package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-slot-da22bf1/MA9-preview",
+        "owns_new": [],
+        "model": "ds-v4.1flash",
+        "must_verify": "8modules including sharedvehicle_screen and oldf074163 sharedmatcher negativeexit1",
+        "owns": [],
+        "effort": "high_requested_actual_platform_reported",
+        "branch": "lane/duel-scan",
+        "device_allowed": false,
+        "source": "da22bf1bc844d762d75fb70977284dced7b09e11"
       }
     },
     "vehicle": {
@@ -561,7 +577,7 @@
       "exact_name_repair": {
         "delivery": "da22bf1bc844d762d75fb70977284dced7b09e11",
         "project": "MA9-05I",
-        "phase": "implemented_verified_pending_05IR",
+        "phase": "05IR_accepted_precise_package_pending",
         "base": "354a5d56fdfcd0fedd5adbebbd55a8fe41d1fe0c",
         "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-2300-nevera-scan-live",
         "owner": "orchestrator",
@@ -576,7 +592,15 @@
         "review_prompt": "agent/orchestration/prompts/05IR-exact-name-review.md",
         "scope": "unique normalized exact match outranks near variant; fuzzy/tie/league rules retained",
         "device": "new_fix_not_run",
-        "cause": "Nevera exact1.0 vs NeveraR .95652 below.05 margin, four full OCR name frames rejected"
+        "cause": "Nevera exact1.0 vs NeveraR .95652 below.05 margin, four full OCR name frames rejected",
+        "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-05IR-exact-name-review/results.json",
+        "review_counts": {
+          "vehicle": 10,
+          "probes": 10,
+          "all_exit": 0,
+          "duel_screen": 6
+        },
+        "remaining_risk": "F1 constructed suffix-loss/league probe, not device reproduction. Text-only exact match does not prove unclipped identity; no universal no-wrong-click guarantee. Current four full-name frames valid; 04 remains paused."
       }
     },
     "duel-defense": {
@@ -864,7 +888,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "02G入页等待通过，但Nevera首屏完整OCR因共享匹配器近名差距被拒，扫13页至A边界无目标。总控已最小修复da22bf1并268/30测试和4帧回放通过，用户全新Flash执行05IR窄复核，再新包；不重跑旧包。",
+  "next": "05IR无阻塞接受，F1仅构造截断探针非实机。用户ds-v4.1flash全新对话执行02H-exact-name-package.md，从da22bf1构建新包，8模块必含共享vehicle_screen；旧包/日志不覆盖，验包后用户只定位。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

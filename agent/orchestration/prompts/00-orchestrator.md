@@ -101,3 +101,6 @@ f074163fb77a163f76b73239a10842c03f07a90c只两文件，120/30s/.3等待；总控
 
 ## 最新05I：Nevera全名被近名R挤掉已修，待05IR
 02G实机已进入扫描，13页target_not_found到A边界，selection_attempted=false/starts_race=false。四首屏OCR完整RIMAC/NEVERA，被1.0与.95652差距<.05拒绝。总控独占vehicle_screen最小修复da22bf1bc844d762d75fb70977284dced7b09e11，唯一精确匹配优先；Agent268/tools30 exit0，真实OCR4帧恢复、10140矩阵仅30唯一精确变化。lane已快进da22bf1；05IR-exact-name-review.md交Flash全新只读复核，旧包不重跑。
+
+## 最新05IR通过，02H精确名修复包待构建
+05IR独立10+6测试/10探针exit0无阻塞；F1是构造后缀截断/league探针非真机帧，保留文字无法证明未裁切风险，04暂停。02H-exact-name-package.md派ds-v4.1flash请求high，源da22bf1bc844d762d75fb70977284dced7b09e11，新目录user-test-slot-da22bf1；必须8模块含共享vehicle_screen及旧f074163匹配器同basename负对照exit1。旧包/失败日志保留；未构建/未实机通过。
