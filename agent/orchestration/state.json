@@ -66,6 +66,21 @@
           "owner negative harness exit0 asserted mismatch; orchestrator actual comparator exit1 after matching basename, 4 code differences; owner37 includes filename metadata",
           "TEST-BUILD label v0.0.0-slot-locate-cf8815b; GUI interface version remains1.0.0, identify by exact path and TEST-BUILD"
         ]
+      },
+      "wait_fix_package_task": {
+        "phase": "prompt_ready",
+        "cwd": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
+        "owns_generated": [],
+        "owns": [],
+        "project": "MA9-02G-f074163",
+        "branch": "lane/duel-scan",
+        "prompt": "agent/orchestration/prompts/02G-wait-fix-package.md",
+        "effort": "high_requested_actual_platform_reported",
+        "model": "ds-v4.1flash",
+        "device_allowed": false,
+        "package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-slot-f074163/MA9-preview",
+        "source": "f074163fb77a163f76b73239a10842c03f07a90c",
+        "owns_new": []
       }
     },
     "vehicle": {
@@ -440,7 +455,7 @@
             "agent/tests/test_duel_slot_entry.py"
           ],
           "effort": "high_requested_actual_platform_reported",
-          "phase": "local_accepted_pending_05G1R",
+          "phase": "reviewed_merged_new_package_pending",
           "scope": "arrival only max120samples monotonic30s interval0.3, keep2consecutive/1click",
           "model": "ds-v4.1flash",
           "user_loading_note": "user observes pronounced lag after click and other page transitions; do not repeat input while waiting",
@@ -453,7 +468,11 @@
             "tools_skipped": 1
           },
           "review_prompt": "agent/orchestration/prompts/05G1R-wait-review.md",
-          "reviewer": "Qwen3.8-Flash actual platform default"
+          "reviewer": "Qwen3.8-Flash actual platform default",
+          "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-05G1R-wait-review/results.json",
+          "review_result": "no_blocker_targeted39exit0_independent8probes",
+          "merge_commit": "2b19d0bf8446e391a5a28c5027c5d35426d2fd7d",
+          "integration": "E:/hzz/work/MA9/MA9-evidence/20260924-05G1-integration/results.json"
         }
       },
       "test_wiring_task": {
@@ -810,7 +829,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05G1 f074163总控离线验收通过Agent265/tools29+1skip exit0；用户全新Flash执行05G1R短复核，再准备准确新包。cf8815b旧包仍未定位通过，不重跑旧包。",
+  "next": "05G1R无阻塞，main合入2b19d0b且265/30门禁exit0。用户ds-v4.1flash全新对话执行02G-wait-fix-package.md，从lane f074163构建全新慢加载修复包，旧cf8815b包及实机日志不覆盖；验包后再用户实机。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

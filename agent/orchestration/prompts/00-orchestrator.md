@@ -92,3 +92,6 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 
 ## 最新05G1已验收待短复核
 f074163fb77a163f76b73239a10842c03f07a90c只两文件，120/30s/.3等待；总控Agent265/tools29+1skip exit0，红6读False→绿7读True（第7帧合成）。05G1R-wait-review.md给Qwen3.8-Flash默认档位。截止只限制新采样，底层不硬中断；未合入/未新包/未实机。
+
+## 最新05G1已合入，02G修复包待构建
+05G1R无阻塞，main合入2b19d0bf8446e391a5a28c5027c5d35426d2fd7d，组合Agent265/tools30均exit0。02G-wait-fix-package.md锁定lane f074163，ds-v4.1flash high请求，全新包user-test-slot-f074163，不覆盖旧包。追加旧cf8815b entry模块同basename负对照exit1、独立OCR缓存hash、新包interface版本显式区分。用户配置不变但绑定新根；未新包/未实机通过。
