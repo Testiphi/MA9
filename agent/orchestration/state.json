@@ -68,7 +68,7 @@
         ]
       },
       "wait_fix_package_task": {
-        "phase": "prompt_ready",
+        "phase": "orchestrator_verified_user_locate_test_ready",
         "cwd": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
         "owns_generated": [],
         "owns": [],
@@ -80,7 +80,22 @@
         "device_allowed": false,
         "package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-slot-f074163/MA9-preview",
         "source": "f074163fb77a163f76b73239a10842c03f07a90c",
-        "owns_new": []
+        "owns_new": [],
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260924-02G-orchestrator/results.json",
+        "owner_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-02G-f074163/results.json",
+        "exe_sha256": "c96cbdd31a3cd4c4e4bed0d0f7ed5ce22735abd8e584528e0035fbdca59bd555",
+        "checks": {
+          "entry_negative_differences": 490,
+          "ocr_cache": "independently_matches_host",
+          "modules": 7,
+          "smoke_exit": 1,
+          "process_exit": 0,
+          "runtime_negative_exit": 1,
+          "hashes": "all_match",
+          "entry_negative_exit": 1,
+          "private_config": "new_absolute_root_slot1_Nevera_chooseFalse"
+        },
+        "device_test": "not_run"
       }
     },
     "vehicle": {
@@ -485,7 +500,7 @@
           "preserve formal defense and all existing GUI tasks",
           "user serial device testing only after build verification"
         ],
-        "phase": "user_live_entry_wait_failed_fix_pending",
+        "phase": "02G_package_verified_waiting_user_retry",
         "scope": "explicit isolated runtime root and dedicated request/profile; default locate only; one GUI/Agent test route",
         "device_allowed": false,
         "requested_user_inputs": [
@@ -829,7 +844,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05G1R无阻塞，main合入2b19d0b且265/30门禁exit0。用户ds-v4.1flash全新对话执行02G-wait-fix-package.md，从lane f074163构建全新慢加载修复包，旧cf8815b包及实机日志不覆盖；验包后再用户实机。",
+  "next": "02G f074163修复包已独立验包通过，等待用户账号/第1槽/Nevera仅定位单次重试；用户先自检再运行定位，失败不连续重试，成功须新包业务JSON和详情截图。旧包/旧失败证据保留，助手无设备权限。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

@@ -95,3 +95,6 @@ f074163fb77a163f76b73239a10842c03f07a90c只两文件，120/30s/.3等待；总控
 
 ## 最新05G1已合入，02G修复包待构建
 05G1R无阻塞，main合入2b19d0bf8446e391a5a28c5027c5d35426d2fd7d，组合Agent265/tools30均exit0。02G-wait-fix-package.md锁定lane f074163，ds-v4.1flash high请求，全新包user-test-slot-f074163，不覆盖旧包。追加旧cf8815b entry模块同basename负对照exit1、独立OCR缓存hash、新包interface版本显式区分。用户配置不变但绑定新根；未新包/未实机通过。
+
+## 最新02G验包完成，等待用户重试
+新包user-test-slot-f074163/MA9-preview，界面版本v0.0.0-slot-locate-f074163，exe c96cbdd31a3cd4c4e4bed0d0f7ed5ce22735abd8e584528e0035fbdca59bd555。总控20260924-02G-orchestrator独立7模块/全部hash/4OCR来源/配置绑定通过，runtime旧版4差异和entry旧版490差异两个比较进程exit1，无socket冒烟exit1。仍未实机通过；用户单次自检+第1槽Nevera只定位，助手不设备操作。
