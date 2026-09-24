@@ -16,6 +16,7 @@ is not executed by importing it.
 from __future__ import annotations
 
 import ast
+import contextlib
 import copy
 import sys
 import unittest
@@ -33,8 +34,10 @@ from ma9_agent.duel_lineup_slot import (BUTTON_CENTER_BASE, EXPANDED_WIDTH,
                                         LINEUP_TITLE_ROI, PANEL_RIGHT_BASE,
                                         SELECTION_PAGE_TITLE, SLOT_PITCH,
                                         SUPPORTED_SIZE, observe_lineup_slot)
-from ma9_agent.duel_slot_entry import (ARRIVAL_CONSECUTIVE, ARRIVAL_INTERVAL,
-                                       ARRIVAL_SAMPLES, ENTRY_BUTTON_TEXTS,
+from ma9_agent.duel_slot_entry import (ARRIVAL_CONSECUTIVE,
+                                       ARRIVAL_DEADLINE_SECONDS,
+                                       ARRIVAL_INTERVAL, ARRIVAL_SAMPLES,
+                                       ENTRY_BUTTON_TEXTS,
                                        SELECTION_PAGE_TITLE_ROI,
                                        TEXT_CONFIDENCE_FLOOR,
                                        enter_defense_slot_selection)
@@ -91,6 +94,56 @@ def evidence_for(slot: int) -> dict:
 def arrival_row(text: str = SELECTION_PAGE_TITLE, confidence: float = 0.98,
                 box: tuple[int, int, int, int] = (50, 70, 180, 40)) -> dict:
     return {"text": text, "confidence": confidence, "box": list(box)}
+
+
+#: Verbatim OCR rows of the frozen 05H live entry, taken read-only from
+#: ``MA9-evidence/20260924-211053-slot-entry-live/repro.json``.  Five arrival
+#: captures still showed the qualifying lineup page (``OLD_PAGE_ROWS``); the
+#: sixth, at 21:11:03.768, was the first ``车辆选择`` read (``READY_ROWS``).
+#: The seventh frame used in the tests below is a **synthetic** repetition of
+#: that last real row set - it pins the waiting behaviour, it is not a seventh
+#: live capture.
+OLD_PAGE_ROWS = [
+    {"text": "资格赛", "confidence": 0.9997, "box": [66, 91, 93, 28]},
+    {"text": "倒计", "confidence": 0.999848, "box": [224, 85, 35, 21]},
+    {"text": "D", "confidence": 0.260341, "box": [233, 106, 17, 13]},
+]
+READY_ROWS = [
+    {"text": SELECTION_PAGE_TITLE, "confidence": 0.99993, "box": [52, 70, 113, 33]},
+    {"text": "为旷野翅车“世外萄园\"赛", "confidence": 0.794186,
+     "box": [52, 102, 204, 17]},
+]
+
+
+class _Clock:
+    """Deterministic stand-in for ``time.monotonic``/``time.sleep``.
+
+    ``now`` starts at ``start`` and every ``sleep`` advances it by ``advance``
+    seconds - ``None`` (the default) advances by the requested duration, i.e. a
+    real-paced clock, while ``0.0`` models captures whose pauses cost no wall
+    clock so the *count* cap is what binds.  Only the arrival wait calls
+    ``monotonic``, so ``read_times`` (one entry per call) shows exactly when the
+    deadline was computed and when each capture was checked; ``sleeps`` records
+    every pause.  ``advance=0.5`` gives an exact clock without binary rounding.
+    """
+
+    def __init__(self, start: float = 1000.0, *, advance: float | None = None) -> None:
+        self.start = float(start)
+        self.now = float(start)
+        self.advance = advance
+        self.read_times: list[float] = []
+        self.sleeps: list[float] = []
+
+    def elapsed(self) -> float:
+        return self.now - self.start
+
+    def monotonic(self) -> float:
+        self.read_times.append(self.now)
+        return self.now
+
+    def sleep(self, seconds: float) -> None:
+        self.sleeps.append(seconds)
+        self.now += seconds if self.advance is None else self.advance
 
 
 def off_grid_button_frame(slot: int = 1, shift: int = 60) -> np.ndarray:
@@ -187,10 +240,17 @@ class _Harness:
 
     def __init__(self, order: list, frames: list, *, slot: int = 1,
                  button_roi: tuple | None = None, button_rows: list | None = None,
-                 arrival_rows: list | None = None, title_rows: list | None = None) -> None:
+                 arrival_rows: list | None = None, title_rows: list | None = None,
+                 clock: _Clock | None = None,
+                 block_seconds: list | None = None) -> None:
         self.order = order
         self.frames = list(frames)
         self.frame_calls = 0
+        #: When set, an arrival OCR entry may *raise* (an ``Exception`` entry) or
+        #: - via ``block_seconds`` - model one underlying read that blocks past
+        #: the deadline before its rows are interpreted.
+        self.clock = clock
+        self.block_seconds = list(block_seconds) if block_seconds is not None else []
         self.ocr_rois: list[tuple] = []
         self.button_roi = tuple(BUTTON_BOX[slot] if button_roi is None else button_roi)
         self.title_rows = ([title_row(DEFENSE_PAGE_TITLE)] if title_rows is None
@@ -225,10 +285,47 @@ class _Harness:
     def _next_arrival_rows(self) -> list[dict]:
         index = self.arrival_calls
         self.arrival_calls += 1
+        if self.clock is not None and self.block_seconds:
+            extra = (self.block_seconds[index] if index < len(self.block_seconds)
+                     else self.block_seconds[-1])
+            self.clock.now += extra
         if self.arrival_rows is None:
             return [arrival_row()]
-        rows = self.arrival_rows[index] if index < len(self.arrival_rows) else self.arrival_rows[-1]
-        return [dict(row) for row in rows]
+        item = self.arrival_rows[index] if index < len(self.arrival_rows) else self.arrival_rows[-1]
+        if isinstance(item, Exception):  # a failing OCR read: an invalid sample
+            raise item
+        return [dict(row) for row in item]
+
+
+def arrival_probe(rows: list, *, clock: _Clock | None = None,
+                  samples: int | None = None, deadline: float | None = None,
+                  block_seconds: list | None = None,
+                  frame: np.ndarray | None = None) -> tuple[bool, _Harness]:
+    """Drive only ``_await_selection_page`` with frame/OCR/clock stubbed.
+
+    The wait under test is the real production function - its return value is
+    never mocked.  Only its dependencies are replaced: the frame source, the OCR
+    rows and the clock; the caps may be overridden to exercise boundaries.
+    """
+    order: list = []
+    harness = _Harness(order, [SLOT_FRAMES[1] if frame is None else frame],
+                       arrival_rows=rows, clock=clock, block_seconds=block_seconds)
+    patches = [mock.patch.object(duel_slot_entry, "frame_of", harness.frame_of),
+               mock.patch.object(duel_slot_entry, "ocr_roi", harness.ocr_roi)]
+    if clock is None:
+        patches.append(mock.patch.object(duel_slot_entry.time, "sleep"))
+    else:
+        patches.append(mock.patch.object(duel_slot_entry.time, "monotonic", clock.monotonic))
+        patches.append(mock.patch.object(duel_slot_entry.time, "sleep", clock.sleep))
+    if samples is not None:
+        patches.append(mock.patch.object(duel_slot_entry, "ARRIVAL_SAMPLES", samples))
+    if deadline is not None:
+        patches.append(mock.patch.object(duel_slot_entry, "ARRIVAL_DEADLINE_SECONDS", deadline))
+    with contextlib.ExitStack() as stack:
+        for patch_ in patches:
+            stack.enter_context(patch_)
+        result = duel_slot_entry._await_selection_page(object())
+    return result, harness
 
 
 # ----------------------------------------------------------------------- tests
@@ -236,23 +333,31 @@ class SlotEntryCallbackTest(unittest.TestCase):
     def _flow(self, *, slot: int = 1, evidence: object = UNSET, frames: list | None = None,
               controller: _Controller | None = None, button_roi: tuple | None = None,
               button_rows: list | None = None, arrival_rows: list | None = None,
-              title_rows: list | None = None):
+              title_rows: list | None = None, clock: _Clock | None = None):
         order: list = []
         if controller is None:
             controller = _Controller(order)
         harness = _Harness(order, frames if frames is not None else [SLOT_FRAMES[slot]] * 8,
                            slot=slot, button_roi=button_roi, button_rows=button_rows,
-                           arrival_rows=arrival_rows, title_rows=title_rows)
+                           arrival_rows=arrival_rows, title_rows=title_rows, clock=clock)
         evidence = evidence_for(slot) if evidence is UNSET else evidence
         sleeps: list = []
         # ``observe_stable_lineup_slot`` lives in 05F and resolves ``frame_of``/
         # ``ocr_roi`` from its own module namespace, so the one fake device has to
         # be installed on both modules - exactly as one real device serves both.
+        # Patched on the shared ``time`` module, so a fake clock also paces 05F;
+        # the arrival deadline is measured from the wait's own start regardless.
+        sleep_patch = (mock.patch.object(duel_slot_entry.time, "sleep", sleeps.append)
+                       if clock is None
+                       else mock.patch.object(duel_slot_entry.time, "sleep", clock.sleep))
+        monotonic_patch = (mock.patch.object(duel_slot_entry.time, "monotonic",
+                                             clock.monotonic)
+                           if clock is not None else contextlib.nullcontext())
         with mock.patch.object(duel_slot_entry, "frame_of", harness.frame_of), \
                 mock.patch.object(duel_slot_entry, "ocr_roi", harness.ocr_roi), \
                 mock.patch.object(duel_slot_selection, "frame_of", harness.frame_of), \
                 mock.patch.object(duel_slot_selection, "ocr_roi", harness.ocr_roi), \
-                mock.patch.object(duel_slot_entry.time, "sleep", sleeps.append):
+                sleep_patch, monotonic_patch:
             result = enter_defense_slot_selection(_Context(controller), evidence)
         return result, harness, controller, order, sleeps
 
@@ -303,8 +408,14 @@ class SlotEntryCallbackTest(unittest.TestCase):
         self.assertEqual({key: id(value) for key, value in evidence.items()}, nested)
 
     def test_the_declared_budgets_and_seams_are_the_contracted_ones(self) -> None:
-        self.assertEqual(ARRIVAL_SAMPLES, 6)
-        self.assertEqual(ARRIVAL_INTERVAL, 0.2)
+        # Dual cap: at most 120 captures *and* a fixed 30 s monotonic deadline,
+        # 0.3 s apart; the callback's own worst case is 4 + 1 + 120 = 125
+        # captures and 5 on the happy path (outer 05F observation and scan are
+        # counted separately).
+        self.assertEqual(ARRIVAL_SAMPLES, 120)
+        self.assertEqual(ARRIVAL_INTERVAL, 0.3)
+        self.assertEqual(ARRIVAL_DEADLINE_SECONDS, 30.0)
+        self.assertEqual(4 + 1 + ARRIVAL_SAMPLES, 125)
         self.assertEqual(ARRIVAL_CONSECUTIVE, 2)
         self.assertEqual(TEXT_CONFIDENCE_FLOOR, 0.90)
         self.assertEqual(SELECTION_PAGE_TITLE_ROI, (40, 60, 220, 60))
@@ -515,14 +626,14 @@ class SlotEntryCallbackTest(unittest.TestCase):
                 self.assertEqual(len(controller.posts), 1)
                 self.assertLessEqual(harness.arrival_calls, ARRIVAL_SAMPLES)
 
-    def test_the_arrival_budget_is_six_samples_and_exhausts_to_false(self) -> None:
+    def test_the_arrival_count_budget_is_one_hundred_and_twenty_and_exhausts_to_false(self) -> None:
         result, harness, controller, _order, sleeps = self._flow(arrival_rows=[[]])
         self.assertIs(result, False)
-        self.assertEqual(harness.arrival_calls, 6)
-        self.assertEqual(harness.frame_calls, 3 + 6)
+        self.assertEqual(harness.arrival_calls, ARRIVAL_SAMPLES)
+        self.assertEqual(harness.frame_calls, 3 + ARRIVAL_SAMPLES)
         self.assertEqual(controller.posts, [click_point(1)])
-        self.assertEqual(set(sleeps), {ARRIVAL_INTERVAL})
-        self.assertGreaterEqual(len(sleeps), ARRIVAL_SAMPLES - 1)
+        # one interval pause before each capture except the first
+        self.assertEqual(sleeps.count(ARRIVAL_INTERVAL), ARRIVAL_SAMPLES - 1)
 
     def test_arrival_requires_a_whole_string_confident_title_in_its_region(self) -> None:
         cases = {
@@ -552,6 +663,167 @@ class SlotEntryCallbackTest(unittest.TestCase):
         self.assertEqual(harness.ocr_rois[-1], BUTTON_BOX[1])
         self.assertEqual(len(harness.ocr_rois), 4)
         self.assertEqual(controller.posts, [click_point(1)])
+
+    # ------------------------------------------------ dual-cap arrival wait 05G1
+    def test_the_frozen_live_log_needs_the_synthetic_seventh_frame(self) -> None:
+        """05H live log: five old pages, one first arrival, then a synthetic pair.
+
+        The OCR rows are the verbatim frozen entries; the seventh frame is a
+        synthetic repetition of the last real row set, not a live capture.
+        """
+        sequence = [OLD_PAGE_ROWS] * 5 + [READY_ROWS, READY_ROWS]
+        # Old six-capture budget: the first ready frame is the last capture, so
+        # a second consecutive one can never arrive.
+        old_result, old_harness = arrival_probe(sequence, samples=6)
+        self.assertIs(old_result, False)
+        self.assertEqual(old_harness.arrival_calls, 6)
+        # New dual cap: the synthetic seventh frame completes the pair.
+        new_result, new_harness = arrival_probe(sequence)
+        self.assertIs(new_result, True)
+        self.assertEqual(new_harness.arrival_calls, 7)
+
+    def test_the_frozen_live_log_through_the_full_entry_clicks_exactly_once(self) -> None:
+        sequence = [OLD_PAGE_ROWS] * 5 + [READY_ROWS, READY_ROWS]
+        with mock.patch.object(duel_slot_entry, "ARRIVAL_SAMPLES", 6):
+            old_result, old_harness, old_controller, _o, _s = self._flow(
+                arrival_rows=sequence)
+        self.assertIs(old_result, False)
+        self.assertEqual(old_controller.posts, [click_point(1)])
+        self.assertEqual(old_harness.arrival_calls, 6)
+        new_result, new_harness, new_controller, _o, _s = self._flow(arrival_rows=sequence)
+        self.assertIs(new_result, True)
+        self.assertEqual(new_controller.posts, [click_point(1)])
+        self.assertEqual(new_harness.arrival_calls, 7)
+
+    def test_a_first_ready_frame_alone_can_never_confirm(self) -> None:
+        # The first frame may not be reused as the second: once the count budget
+        # is over there is nothing left to pair it with.
+        for samples in (1, 2):
+            with self.subTest(samples=samples):
+                result, harness = arrival_probe([READY_ROWS, OLD_PAGE_ROWS],
+                                                samples=samples)
+                self.assertIs(result, False)
+                self.assertEqual(harness.arrival_calls, samples)
+
+    def test_a_first_ready_frame_then_the_expired_deadline_is_false(self) -> None:
+        # The single underlying arrival read blocks past the 30 s deadline: the
+        # wait stops at its next check rather than looking for a pair.
+        clock = _Clock(advance=0.0)
+        result, harness = arrival_probe([READY_ROWS], clock=clock, block_seconds=[45.0])
+        self.assertIs(result, False)
+        self.assertEqual(harness.arrival_calls, 1)
+
+    def test_a_bad_frame_or_a_raising_read_resets_the_pair(self) -> None:
+        cases = {
+            "bad_frame": [READY_ROWS, OLD_PAGE_ROWS, READY_ROWS, READY_ROWS],
+            "exception": [READY_ROWS, RuntimeError("ocr transport died"),
+                          READY_ROWS, READY_ROWS],
+        }
+        for label, rows in cases.items():
+            with self.subTest(case=label):
+                result, harness = arrival_probe(rows, clock=_Clock(advance=0.0))
+                self.assertIs(result, True)
+                self.assertEqual(harness.arrival_calls, 4)
+
+    def test_a_fast_clock_exhausts_the_capture_count_cap(self) -> None:
+        # Captures so fast that the pauses cost no wall clock: the 120-capture
+        # cap is what binds and nothing is sampled beyond it.
+        clock = _Clock(advance=0.0)
+        result, harness = arrival_probe([OLD_PAGE_ROWS], clock=clock)
+        self.assertIs(result, False)
+        self.assertEqual(harness.arrival_calls, ARRIVAL_SAMPLES)
+        self.assertEqual(harness.frame_calls, ARRIVAL_SAMPLES)
+        self.assertEqual(len(clock.sleeps), ARRIVAL_SAMPLES - 1)
+        self.assertEqual(clock.elapsed(), 0.0)       # the deadline never fired
+
+    def test_a_page_that_never_loads_stops_at_the_deadline(self) -> None:
+        # A pause that costs exactly 0.5 s of fake wall clock: 60 captures fit in
+        # 30 s and the check at 30.0 s refuses to start a 61st.
+        clock = _Clock(advance=0.5)
+        result, harness = arrival_probe([OLD_PAGE_ROWS], clock=clock)
+        self.assertIs(result, False)
+        self.assertLess(harness.arrival_calls, ARRIVAL_SAMPLES)  # the time cap bound
+        self.assertEqual(harness.arrival_calls, 60)
+        self.assertEqual(clock.elapsed(), ARRIVAL_DEADLINE_SECONDS)
+        self.assertEqual(len(clock.sleeps), 60)
+        self.assertTrue(all(value == ARRIVAL_INTERVAL for value in clock.sleeps))
+        # reads = one deadline computation + one check per capture attempt; the
+        # last accepted check is inside the deadline, the refusing one is not.
+        self.assertEqual(len(clock.read_times), harness.arrival_calls + 2)
+        self.assertLess(clock.read_times[-2] - clock.start, ARRIVAL_DEADLINE_SECONDS)
+        self.assertGreaterEqual(clock.read_times[-1] - clock.start,
+                                ARRIVAL_DEADLINE_SECONDS)
+
+    def test_the_deadline_boundaries_zero_and_thirty_are_deterministic(self) -> None:
+        clock = _Clock(advance=0.5)
+        result, harness = arrival_probe([OLD_PAGE_ROWS], clock=clock, deadline=0.0)
+        self.assertIs(result, False)
+        self.assertEqual(harness.arrival_calls, 0)   # expired before the first capture
+        self.assertEqual(clock.sleeps, [])
+        self.assertEqual(clock.elapsed(), 0.0)
+        clock = _Clock(advance=0.5)
+        result, harness = arrival_probe([OLD_PAGE_ROWS], clock=clock,
+                                        deadline=ARRIVAL_DEADLINE_SECONDS)
+        self.assertIs(result, False)
+        self.assertEqual(harness.arrival_calls, 60)
+
+    def test_one_call_blocking_past_the_deadline_is_not_a_hard_interrupt(self) -> None:
+        # A single screencap/OCR may itself overrun 30 s: it is not killed, its
+        # rows are still interpreted, and only the *next* capture is refused.
+        clock = _Clock(advance=0.0)
+        result, harness = arrival_probe([OLD_PAGE_ROWS], clock=clock,
+                                        block_seconds=[45.0])
+        self.assertIs(result, False)
+        self.assertEqual(harness.arrival_calls, 1)
+        self.assertEqual(harness.frame_calls, 1)
+        self.assertEqual(clock.elapsed(), 45.0)
+
+    def test_ten_seconds_of_old_page_then_a_pair_still_succeeds(self) -> None:
+        # Fast captures can pile up many old-page samples; more than 10 s of
+        # them must not trip the capture cap before the pair arrives.
+        clock = _Clock(advance=None)
+        rows = [OLD_PAGE_ROWS] * 34 + [READY_ROWS, READY_ROWS]
+        result, harness = arrival_probe(rows, clock=clock)
+        self.assertIs(result, True)
+        self.assertEqual(harness.arrival_calls, 36)
+        self.assertLess(harness.arrival_calls, ARRIVAL_SAMPLES)
+        self.assertLessEqual(clock.elapsed(), ARRIVAL_DEADLINE_SECONDS)
+
+    def test_a_page_that_loads_after_fifteen_to_twenty_seconds_still_succeeds(self) -> None:
+        for old_samples in (49, 66, 82):             # about 15 s, 20 s and 25 s
+            with self.subTest(old_samples=old_samples):
+                clock = _Clock(advance=None)
+                rows = [OLD_PAGE_ROWS] * old_samples + [READY_ROWS, READY_ROWS]
+                result, harness = arrival_probe(rows, clock=clock)
+                self.assertIs(result, True)
+                self.assertEqual(harness.arrival_calls, old_samples + 2)
+                self.assertLessEqual(clock.elapsed(), ARRIVAL_DEADLINE_SECONDS)
+
+    def test_a_single_ready_frame_in_the_last_second_is_still_refused(self) -> None:
+        # Only one ready frame arrives - in the last second - and it is never
+        # reused as its own successor; the old page follows instead.
+        clock = _Clock(advance=0.5)
+        rows = [OLD_PAGE_ROWS] * 59 + [READY_ROWS, OLD_PAGE_ROWS]
+        result, harness = arrival_probe(rows, clock=clock)
+        self.assertIs(result, False)
+        self.assertEqual(harness.arrival_calls, 60)
+        self.assertGreaterEqual(clock.read_times[-2] - clock.start, 29.0)
+
+    def test_a_failed_or_raising_click_never_starts_the_arrival_wait(self) -> None:
+        controllers = {
+            "failed": _Controller([], succeeded=False),
+            "raising": _Controller([], error=RuntimeError("controller gone")),
+        }
+        for label, controller in controllers.items():
+            with self.subTest(case=label):
+                clock = _Clock(advance=None)
+                result, harness, _c, _order, _sleeps = self._flow(
+                    controller=controller, clock=clock)
+                self.assertIs(result, False)
+                self.assertEqual(controller.posts, [click_point(1)])
+                self.assertEqual(harness.arrival_calls, 0)
+                # no arrival pause was ever taken, so the wait never ran
+                self.assertNotIn(ARRIVAL_INTERVAL, clock.sleeps)
 
     # ------------------------------------------------ integration with real 05F
     def _with_05f(self, frames: list, scan_result: dict, expected_slot: int = 1):
