@@ -471,6 +471,8 @@ lanes:
       - docs/zh_cn/develop/duel_offline_recognition.md
       # 20260923：实机与集成通过，两个defense_setup文件已归还06。
     owns_new:
+      - agent/ma9_agent/duel_slot_selection.py
+      - agent/tests/test_duel_slot_selection.py
       - assets/resource/image/navigation/duel/detail_select_text.png
     reviewer:
       model: qwen_flash

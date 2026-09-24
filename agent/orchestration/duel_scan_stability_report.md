@@ -337,3 +337,9 @@ s05明确第1局输、第2/3局赢、第4局输、第5局未打，即2胜2负。
 静态原生OCR成功不代表实时来源/稳定性/入出同槽或点击成功。进攻仍只验证slot1，防守1–5为旧静态帧；后续可先限定防守测试路径，不等待全部进攻图。
 main合并候选与17371c9的agent/tools/assets/data/deps一致（除编排元数据）。总控集成Agent186、tools30全过无skip、最终exit0，schema输入未变复用27；证据MA9-evidence/20260924-lineup-observer-integration。只读观察器两文件转入05 owns，未修改原防守行为、未接执行器。
 未来私有证据脚本一律尽量加-B/PYTHONDONTWRITEBYTECODE，避免只读导入在旧证据写缓存；本轮已如此执行。当前自动本地集成提交，不推送未确认的新payload。
+
+## 2026-09-24 用户要求推送并继续05F
+
+推送候选冻结为4fccf017f74ea50401b0dbffaeb44bb05ec9c469，相对已知origin/main共25提交；自动审批在执行前拒绝，理由仍要求明确目标Testiphi/MA9.git与该payload授权。已向用户提出精确确认问题，不改shell/工具绕过；后续05F元数据不能偷偷加入这批待批准payload。
+独立推进05F：登记duel_slot_selection.py及对应测试归05，只做防守资格赛环境的单槽薄适配。用户事先打开所需槽的阵容页；观察器+真实OCR连续两次一致方可接受槽位上下文；入口回调注入、无防守导航节点/地图名；复用已有scan。choose=false默认停详情，choose=true才走选择，返回后必须两帧同槽且与expected_slot一致，不把scan.assigned单独当正确槽位成功。
+无完整阵容直接跳过、无地图策略生成、无账号恢复/多槽循环、无新增GUI/Agent注册。账号标签与confirmed_owned输入用于追踪/验证请求，不代替实际账号数据根隔离；后续用户测试包需专门绑定，不使用旧包主账号车库。当前不运行设备、不点击、不创建外部对话或子智能体。
