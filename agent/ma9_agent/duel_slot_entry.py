@@ -28,12 +28,17 @@ Order of operations - every step has to pass before the next one runs:
    ``context.tasker.controller.post_click(...).wait().succeeded``.  A failed or
    raising click is never retried, and no other input - no swipe, no back, no
    garage detail button, no start - is ever issued;
-5. arrival is not implied by a successful click: at most ``ARRIVAL_SAMPLES``
-   independent frames are sampled and the garage title ``车辆选择`` must be read
-   as a whole string, confidently, with its box centre inside
-   ``SELECTION_PAGE_TITLE_ROI``, on two *consecutive* frames.  A failed,
-   raising or wrongly sized sample resets the consecutive count; when the budget
-   is exhausted the callback returns ``False``.
+5. arrival is not implied by a successful click: the garage title ``车辆选择``
+   is *polled* - at most ``ARRIVAL_SAMPLES`` independent frames, ``ARRIVAL_INTERVAL``
+   apart, under a fixed ``ARRIVAL_DEADLINE_SECONDS`` ``time.monotonic`` deadline
+   measured from the start of this wait - and must be read as a whole string,
+   confidently, with its box centre inside ``SELECTION_PAGE_TITLE_ROI``, on two
+   *consecutive* frames.  A failed, raising or wrongly sized sample resets the
+   consecutive count, the deadline is never reset by a first reading or an
+   error, and whatever cap is reached first stops new captures; while arrival is
+   still unconfirmed the callback returns ``False``.  A slow page transition is
+   an allowed transitional state, so it is merely observed longer - never an
+   excuse for a second click.
 
 Honest limits, deliberately not papered over:
 
@@ -41,9 +46,15 @@ Honest limits, deliberately not papered over:
   returned after the click means "arrival was not confirmed", **not** "nothing
   happened" - the page may already have changed.  ``05F`` keeps recording
   ``entry_attempted`` for exactly that reason;
-* every bound here is a *call-count* budget, not a wall-clock promise.  Passing
-  the offline fake-context tests does not claim a real click or a device pass;
-  the region and thresholds still need a live frame supplied by the user;
+* the arrival wait has two independent caps - a *count* cap of
+  ``ARRIVAL_SAMPLES`` captures and a fixed ``ARRIVAL_DEADLINE_SECONDS``
+  ``time.monotonic`` deadline.  Neither is a promise of a fixed wall-clock
+  return.  The deadline is checked before every *new* capture, but one
+  underlying screencap/OCR call may itself block past it: the timeout is not a
+  hard interruption of the device call (no extra thread, no forced kill), it
+  only refuses to start another capture.  Passing the offline fake-context
+  tests does not claim a real click or a device pass; the region and thresholds
+  still need a live frame supplied by the user;
 * no vehicle type is located here.  The existing ``scan`` keeps owning the full
   garage-state check.  Nothing is written to disk, no request is issued and no
   global cache is kept, so the result is a function of the context and the
@@ -70,6 +81,7 @@ __all__ = [
     "TEXT_CONFIDENCE_FLOOR",
     "ARRIVAL_SAMPLES",
     "ARRIVAL_INTERVAL",
+    "ARRIVAL_DEADLINE_SECONDS",
     "ARRIVAL_CONSECUTIVE",
 ]
 
@@ -86,11 +98,22 @@ ENTRY_BUTTON_TEXTS = ("选择车辆", "更换车辆")
 #: ``confidence`` outside ``0.0..1.0`` is invalid rather than clamped.
 TEXT_CONFIDENCE_FLOOR = 0.90
 
-#: Arrival budget: at most this many independent captures after the one click.
-ARRIVAL_SAMPLES = 6
-#: Pause between arrival captures.  A *call-count* budget, not a wall-clock
-#: promise.
-ARRIVAL_INTERVAL = 0.2
+#: Arrival *count* cap: at most this many independent captures after the one
+#: click.  The callback therefore takes at most ``4 + 1 + 120 = 125`` captures -
+#: the fresh stable-slot observation, the single last frame and this wait - and
+#: ``5`` on the happy path (2 stable, 1 last frame, 2 arrival).  The outer 05F
+#: observation and the ``scan`` sampling are counted separately.  This is a
+#: *call-count* cap, not a promise that all 125 captures are always taken.
+ARRIVAL_SAMPLES = 120
+#: Pause between arrival captures.
+ARRIVAL_INTERVAL = 0.3
+#: Arrival *time* cap: a fixed ``time.monotonic`` deadline in seconds, measured
+#: from the start of the arrival wait.  It is deliberately **not** reset by a
+#: first reading or by an error, and it is checked before every new capture.
+#: It is not a claim of a hard 30-second return: a single underlying
+#: screencap/OCR may itself block past it.  Whichever of the two caps is reached
+#: first simply stops further captures.
+ARRIVAL_DEADLINE_SECONDS = 30.0
 #: Two consecutive confirmed garage titles are required before ``True``.
 ARRIVAL_CONSECUTIVE = 2
 
@@ -307,16 +330,27 @@ def _supported_frame(frame: Any) -> bool:
 
 
 def _await_selection_page(context: Any) -> bool:
-    """Require two consecutive confirmed garage titles after the single click.
+    """Poll for the garage title under two caps: captures and wall clock.
 
-    No further input is issued anywhere in this loop.  A failed, raising or
-    wrongly sized sample resets the consecutive count; the budget is
-    ``ARRIVAL_SAMPLES`` independent captures.
+    No further input is issued anywhere in this loop: a slow transition is only
+    observed longer.  A failed, raising or wrongly sized sample resets the
+    consecutive count.  At most ``ARRIVAL_SAMPLES`` independent captures are
+    taken, ``ARRIVAL_INTERVAL`` apart, and from the start of this wait a fixed
+    ``ARRIVAL_DEADLINE_SECONDS`` ``time.monotonic`` deadline is enforced: it is
+    computed once, before the first capture, and checked before every *new*
+    capture, so an already-expired wait simply stops.  A single call that blocks
+    past the deadline is not interrupted - the wait ends at its next check
+    instead.  Whichever cap is reached first prevents further captures.  ``True``
+    needs ``ARRIVAL_CONSECUTIVE`` consecutive confirmed titles, otherwise
+    ``False``.
     """
+    deadline = time.monotonic() + ARRIVAL_DEADLINE_SECONDS
     streak = 0
     for index in range(ARRIVAL_SAMPLES):
         if index:
             time.sleep(ARRIVAL_INTERVAL)
+        if time.monotonic() >= deadline:
+            return False
         confirmed = False
         try:
             frame = frame_of(context)
