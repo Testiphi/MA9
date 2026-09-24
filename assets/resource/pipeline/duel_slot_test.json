@@ -1,0 +1,9 @@
+{
+    "对决_隔离单槽定位测试": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "ma9_duel_slot_test",
+        "timeout": 600000,
+        "next": []
+    }
+}

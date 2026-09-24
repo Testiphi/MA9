@@ -69,13 +69,14 @@ class FrozenPublicContractTest(unittest.TestCase):
             ('选中单人模式', '主页_单人模式_定位入口'),
             ('选中每日赛事（含奖励）', '每日赛事_定位入口'),
             ('进入每日赛事（仅无奖励，样例页验证）', '每日赛事_进入入口'),
+            ('对决防守：独立账号单槽定位测试（停详情，不选车）', '对决_隔离单槽定位测试'),
             ('普通任务', 'MyTask1'),
             ('选项任务', 'MyTask2'),
             ('参数任务', 'MyTask3'),
             ('带Custom的任务', 'MyTask4'),
         ]
         self.assertEqual([(task["name"], task["entry"]) for task in tasks], expected)
-        self.assertEqual(len(tasks), 49)
+        self.assertEqual(len(tasks), 50)
 
     def test_leagues_round_trip_and_order(self) -> None:
         labels = ("青铜", "白银", "黄金", "白金", "翡翠", "钻石", "精英", "宗师", "传奇")

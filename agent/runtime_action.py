@@ -311,3 +311,23 @@ class DuelDefenseSetupAction(CustomAction):
                           "assigned": len(report["assigned"]),
                           "starts_race": False}, ensure_ascii=False), flush=True)
         return report["status"] in {"planned", "five_assigned", "already_configured"}
+
+
+@AgentServer.custom_action("ma9_duel_slot_test")
+class DuelSlotTestAction(CustomAction):
+    """Locate a user-confirmed test car from the current defensive slot only."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv  # No GUI override may enable choosing or redirect input files.
+        from ma9_agent.duel_slot_test import run_slot_test
+        try:
+            report, destination = run_slot_test(context, find_project_root())
+        except Exception as error:
+            print(json.dumps({"event": "ma9_duel_slot_test_error",
+                              "error": str(error), "starts_race": False},
+                             ensure_ascii=False), flush=True)
+            return False
+        print(json.dumps({"event": "ma9_duel_slot_test", "status": report["status"],
+                          "report_file": str(destination), "starts_race": False},
+                         ensure_ascii=False), flush=True)
+        return report["status"] == "located"
