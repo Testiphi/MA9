@@ -307,7 +307,7 @@
       },
       "slot_selection_task": {
         "project": "MA9-05F-防守单槽选车薄适配",
-        "phase": "05FR_accepted_offline_real_entry_development_next",
+        "phase": "integrated_offline_verified",
         "model": "ds-v4.1flash",
         "effort": "high_requested_actual_platform_reported",
         "owns": [],
@@ -330,7 +330,7 @@
         },
         "review_prompt": "agent/orchestration/prompts/05FR-slot-review.md",
         "reviewer": "Qwen3.8-Flash actual platform default",
-        "merged": false,
+        "merged": true,
         "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-05FR-slot-review/results.json",
         "review_result": "no_blocker_30_plus14_exit0_eight_probe_outputs_checked",
         "review_limits": "probe exit0 means script executed; printed outputs checked against expectations, not assumed assertions; no device validation",
@@ -338,7 +338,8 @@
           "entry callback must not mutate nested evidence",
           "entry_attempted and selection_attempted report correction retained",
           "account data-root binding and real frame freshness still pending"
-        ]
+        ],
+        "merge_commit": "2263b027e7425c4facc9ef7fc18119b7e120715c"
       },
       "slot_entry_task": {
         "device_allowed": false,
@@ -347,7 +348,7 @@
         "base_commit": "f9182dac671e19e9e9a0d8a3af3c334df46c9a5d",
         "project": "MA9-05G-防守当前槽选车入口回调",
         "effort": "high_requested_actual_platform_reported",
-        "phase": "05G_locally_verified_pending_05GR",
+        "phase": "05GR_accepted_integrated_native_static_OCR_passed",
         "owns_new": [
           "agent/ma9_agent/duel_slot_entry.py",
           "agent/tests/test_duel_slot_entry.py"
@@ -359,7 +360,58 @@
         "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260924-05G-orchestrator/results.json",
         "review_prompt": "agent/orchestration/prompts/05GR-entry-review.md",
         "reviewer": "Qwen3.8-Flash platform actual default",
-        "budget_correction": "callback max11 captures not9; happy5; excludes outer05F/scan"
+        "budget_correction": "callback max11 captures not9; happy5; excludes outer05F/scan",
+        "merged": true,
+        "merge_commit": "2263b027e7425c4facc9ef7fc18119b7e120715c",
+        "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-05GR-entry-review/results.json",
+        "review_result": "no_blocker_26_plus30_exit0_and8_asserted_probes_checked",
+        "integration": {
+          "tools_skipped": 0,
+          "schema": "27exit0_reused_only4Python_additions",
+          "evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-slot-entry-integration/results.json",
+          "exit_codes": [
+            0,
+            0
+          ],
+          "agent": 242,
+          "tools": 30
+        },
+        "native_ocr": {
+          "arrival_negative": 16,
+          "passed": 18,
+          "process": "E:/hzz/work/MA9/MA9-evidence/20260924-native-slot-entry/process-result.json",
+          "device": "none_memory_controller_all_input_denied",
+          "scope": "saved_frames_not_dynamic_device",
+          "button_positive": 8,
+          "evidence": "E:/hzz/work/MA9/MA9-evidence/20260924-native-slot-entry/results.json",
+          "arrival_positive": 2,
+          "exit_code": 0,
+          "samples": 18
+        },
+        "review_notes": [
+          "T1 max11 happy5 excludes outer05F andscan",
+          "C1-C4 nonblocking retained no speculative expansion",
+          "no static OCR failure requires code change"
+        ]
+      },
+      "test_wiring_task": {
+        "owner": "orchestrator",
+        "project": "MA9-05H-隔离账号单槽测试入口",
+        "requirements": [
+          "no ancestor main garage fallback for this test",
+          "missing account confirmation or target owned evidence stops before capture",
+          "account_key is user confirmation label not visual identity proof",
+          "preserve formal defense and all existing GUI tasks",
+          "user serial device testing only after build verification"
+        ],
+        "phase": "design_inputs_pending",
+        "scope": "explicit isolated runtime root and dedicated request/profile; default locate only; one GUI/Agent test route",
+        "device_allowed": false,
+        "requested_user_inputs": [
+          "test account trace label",
+          "slot1to5",
+          "target vehicle name"
+        ]
       }
     },
     "duel-defense": {
@@ -647,7 +699,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05G本地验收Agent242/tools29+1skip exit0，用户以全新Qwen3.8-Flash对话执行05GR独立复核；未合入业务/打包/实机。",
+  "next": "05F/05G已合入2263b02，组合Agent242/tools30均exit0；真实静态按钮/到达OCR18/18完成，无设备操作。总控下一步05H隔离账号数据根和GUI/Agent测试接线，待用户提供测试账号标签/槽号/目标车；首次choose=false。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

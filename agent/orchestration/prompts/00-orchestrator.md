@@ -71,3 +71,6 @@ Git只用命令级safe.directory，不改全局配置。契约A=bd9a535336750d8f
 
 ## 2026-09-24 最新：05G验收，待05GR
 05G交付7eedd3f0934ba89d8c1234e6534345e66c85a9df，仅两新文件。总控独立Agent242/tools29+1skip exit0，证据20260924-05G-orchestrator；回调最大采样更正11非9，顺利5，外层05F/scan另计。05GR-entry-review.md交用户全新Qwen3.8-Flash只读复核。业务未合入，账号根/GUI/真实OCR和设备验收仍待。
+
+## 2026-09-24 最新：05F/05G已合入，准备05H
+05GR证据已核对无阻塞；合入2263b027e7425c4facc9ef7fc18119b7e120715c，4文件与lane审查版本相同；main Agent242/tools30（本次无skip）均exit0，schema27按输入未变复用。真实MaaFW静态按钮/到达OCR18/18在20260924-native-slot-entry，8按钮正例、2到达正例、16到达反例；内存controller输入全拒，非设备。05H由总控实现隔离根/明确请求与账号确认/GUI-Agent单槽入口，默认只定位；已向用户询问账号标签、槽号、目标车。尚未打包/推送/实机。
