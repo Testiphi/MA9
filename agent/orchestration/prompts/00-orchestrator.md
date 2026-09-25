@@ -149,3 +149,6 @@ c268cddf63d843d4454985bcc38e999af7c12596仅runtime和测试，按panel右缘身�
 
 ## 最新剩余3槽配置齐备，当前只启用slot3
 用户目标：slot3 A Formula E Gen 3 EVO Championship Edition/car_00bbb8ac1279e6f9，slot4 B FV Frangivento GT65/car_71bc72d2c3ab44e1，slot5 D Ginetta G60/car_5531a43a5f8c457d。新包user-test-slots345-ff426c6/MA9-preview，复用已验ff426c6同hash Agent不重编译；20260925-slots345-package记录全hash/Usage/schema/配置通过，三份private-plans保留，只有slot3已激活。等用户slot3结果先核JSON，再总控切4，再5，不并行/不让用户手改配置，保留Nevera/296GTB。
+
+## 最新slot3 FE3漏识别：冻结证据，待完整卡/详情截图
+20260925-115731-slot3-fe3-scan：target_not_found扫A13页到B；仅入口和A标签2次点击，未点击目标。OCR45帧含FE3右缘FORMU/J CHAMPIONSHIP EDIT、FORMULAE/P EDITION/GEN3 EV片段，left1069/984+420>1295不完整卡被跳过，随后左缘IPION尾片段。疑点同时是覆盖重叠和滚动长名，不能只增加等待或降全局阈值。需用户手动把FE3整卡移入屏幕停列表，间隔1-2秒2-3截图，加详情图（不选择）；4/5预案未激活，前两槽保留，无生产修改。

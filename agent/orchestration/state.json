@@ -826,7 +826,7 @@
           "slot1 Nevera",
           "slot2 Ferrari296GTB"
         ],
-        "phase": "package_verified_slot3_active",
+        "phase": "slot3_FE3_not_found_diagnosis_needs_full_card_samples",
         "slots": [
           3,
           4,
@@ -865,7 +865,23 @@
         "activation": "serial_after_previous_business_acceptance_no_automatic_loop",
         "source": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
         "agent_recompiled": false,
-        "device_test": "not_run"
+        "device_test": "not_run",
+        "failure_evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-115731-slot3-fe3-scan",
+        "failure": "A scan13pages toB target_not_found; rolling partial FE3 name plus clipped-edge coverage gap",
+        "slots4and5": "prepared_but_not_activated"
+      },
+      "rolling_name_issue": {
+        "phase": "evidence_frozen_need_full_list_and_detail_frames",
+        "scope": "investigate clipped-card coverage and rolling name identification; do not lower global fuzzy thresholds or hardcode target",
+        "target": "Formula E Gen 3 EVO Championship Edition",
+        "needed_images": [
+          "FE3 fully visible list while no swiping 2-3 screenshots spaced1-2seconds",
+          "FE3 detail screenshot without selecting"
+        ],
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-115731-slot3-fe3-scan/diagnosis.json",
+        "code_changed": false,
+        "agent_device_authorized": false,
+        "device_operator": "user"
       }
     },
     "duel-defense": {
@@ -1153,7 +1169,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户已给3槽A FormulaE Gen3EVO ChampionshipEdition、4槽B FVFrangiventoGT65、5槽D GinettaG60；目录ID等级全核对，独立slots345包全hash/根配置/Usage/schema通过。当前仅3槽配置启用，3成功JSON核验后总控再切4，再5；前两槽保留，不声称自动五槽应用。",
+  "next": "slot3 FE3未找到：13页扫至B；实际OCR出现FORMULAE/P EDITION/GEN3EV，右缘卡片left984/1069超过完整卡边界，下一页只剩左侧尾片段。已冻结45组OCR/两点击证据。先请用户补FE3完整列表静止2-3帧+详情1帧（不选择）供覆盖与滚名修复，不重跑、不激活4/5。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
