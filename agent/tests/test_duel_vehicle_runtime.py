@@ -14,9 +14,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ma9_agent.duel_lineup_slot import (BUTTON_CENTER_BASE, EXPANDED_WIDTH,
                                         PANEL_RIGHT_BASE, SLOT_PITCH,
                                         observe_lineup_slot)
-from ma9_agent.duel_vehicle_runtime import (_detail, _finish_target,
-                                            _lineup_identity, _try_target,
-                                            assign_visible, scan)
+from ma9_agent.duel_vehicle_runtime import (EDGE_REPOSITION_LIMIT,
+                                            EDGE_REPOSITION_SWIPE, _detail,
+                                            _finish_target, _lineup_identity,
+                                            _try_target, assign_visible, scan)
 from ma9_agent.vehicle_screen import match_vehicle
 
 _UNSET = object()
@@ -197,11 +198,11 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
     def test_edge_requires_two_unchanged_swipes(self) -> None:
         context = _Context()
         pages = [
-            (self.frame, [_card("a"), _card("b")], True),
-            (self.frame, [_card("a"), _card("b")], True),
-            (self.frame, [_card("c"), _card("d")], True),
-            (self.frame, [_card("c"), _card("d")], True),
-            (self.frame, [_card("c"), _card("d")], True),
+            (self.frame, [_card("a"), _card("b")], True, []),
+            (self.frame, [_card("a"), _card("b")], True, []),
+            (self.frame, [_card("c"), _card("d")], True, []),
+            (self.frame, [_card("c"), _card("d")], True, []),
+            (self.frame, [_card("c"), _card("d")], True, []),
         ]
         catalog = [{"id": value, "title": value, "class": "D"}
                    for value in "abcd"]
@@ -222,8 +223,8 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
     def test_mixed_transition_page_keeps_requested_class_tail(self) -> None:
         context = _Context()
         pages = [
-            (self.frame, [_card("r1", "R"), _card("s1", "S")], True),
-            (self.frame, [_card("s1", "S"), _card("s2", "S")], True),
+            (self.frame, [_card("r1", "R"), _card("s1", "S")], True, []),
+            (self.frame, [_card("s1", "S"), _card("s2", "S")], True, []),
         ]
         catalog = [
             {"id": "r1", "title": "r1", "class": "R"},
@@ -250,7 +251,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                    side_effect=[{"status": "wrong_detail"}, assigned]), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True) as click, \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      return_value=(self.frame, [card], True)), \
+                      return_value=(self.frame, [card], True, [])), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             report = _try_target(context, card, 1, [card], "target",
                                  [{"id": "target", "title": "target", "class": "D"}],
@@ -270,7 +271,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                    return_value=self.frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      return_value=(self.frame, [card], True)), \
+                      return_value=(self.frame, [card], True, [])), \
                 patch("ma9_agent.duel_vehicle_runtime._try_target",
                       return_value=assigned), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
@@ -285,7 +286,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
 
     def test_continuously_unstable_page_stops_without_scanning_or_swiping(self) -> None:
         context = _Context()
-        unstable = (self.frame, [_card("untrusted")], False)
+        unstable = (self.frame, [_card("untrusted")], False, [])
         catalog = [{"id": "untrusted", "title": "untrusted", "class": "D"}]
         with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
                    return_value=self.frame), \
@@ -302,8 +303,8 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
 
     def test_stable_resample_discards_prior_unstable_cards(self) -> None:
         context = _Context()
-        unstable = (self.frame, [_card("untrusted")], False)
-        settled = (self.frame, [_card("trusted")], True)
+        unstable = (self.frame, [_card("untrusted")], False, [])
+        settled = (self.frame, [_card("trusted")], True, [])
         catalog = [{"id": value, "title": value, "class": "D"}
                    for value in ("untrusted", "trusted")]
         with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
@@ -320,14 +321,14 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
     def test_unstable_target_is_never_opened_before_a_stable_read(self) -> None:
         context = _Context()
         target = _card("target")
-        stable_other = (self.frame, [_card("other")], True)
+        stable_other = (self.frame, [_card("other")], True, [])
         catalog = [{"id": "target", "title": "target", "class": "D"},
                    {"id": "other", "title": "other", "class": "D"}]
         with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
                    return_value=self.frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      side_effect=[(self.frame, [target], False), stable_other,
+                      side_effect=[(self.frame, [target], False, []), stable_other,
                                    stable_other, stable_other]), \
                 patch("ma9_agent.duel_vehicle_runtime._try_target") as try_target, \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
@@ -344,7 +345,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
         with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
                    return_value=self.frame), \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      side_effect=[(self.frame, [target], False)] * 2), \
+                      side_effect=[(self.frame, [target], False, [])] * 2), \
                 patch("ma9_agent.duel_vehicle_runtime._try_target") as try_target, \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             report = assign_visible(context, "target", catalog)
@@ -360,7 +361,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                    return_value={"status": "wrong_detail"}) as finish, \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      side_effect=[(self.frame, [target], False)] * 2), \
+                      side_effect=[(self.frame, [target], False, [])] * 2), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             report = _try_target(context, target, 1, [target], "target", catalog,
                                  choose=True, expected_performance=2000,
@@ -373,14 +374,14 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
         context = _Context()
         trusted = _card("trusted", "R")
         lower = _card("lower", "S")
-        unstable_lower = (self.frame, [lower], False)
+        unstable_lower = (self.frame, [lower], False, [])
         catalog = [{"id": "trusted", "title": "trusted", "class": "R"},
                    {"id": "lower", "title": "lower", "class": "S"}]
         with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
                    return_value=self.frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      side_effect=[(self.frame, [trusted], True),
+                      side_effect=[(self.frame, [trusted], True, []),
                                    unstable_lower, unstable_lower]), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             report = scan(context, "R", catalog, max_pages=3)
@@ -400,7 +401,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                 patch("ma9_agent.duel_vehicle_runtime._frame", return_value=self.frame), \
                 patch("ma9_agent.duel_vehicle_runtime._selection_title", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._visible",
-                      side_effect=[[card] for card in cards]), \
+                      side_effect=[([card], []) for card in cards]), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             report = scan(context, "D", catalog, max_pages=3)
         self.assertEqual(report["status"], "page_ocr_unverified")
@@ -603,7 +604,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                    return_value=self.frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      return_value=(self.frame, [card], True)), \
+                      return_value=(self.frame, [card], True, [])), \
                 patch("ma9_agent.duel_vehicle_runtime._try_target",
                       return_value={"status": "detail_verified"}) as try_target, \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
@@ -633,7 +634,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                    return_value=frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True) as click, \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      return_value=(frame, [card], True)), \
+                      return_value=(frame, [card], True, [])), \
                 patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
                 patch("ma9_agent.duel_vehicle_runtime._ocr",
                       self._detail_ocr(detail_rating="37/4,897")), \
@@ -654,7 +655,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                    return_value=frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True) as click, \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      return_value=(frame, [card], True)), \
+                      return_value=(frame, [card], True, [])), \
                 patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
                 patch("ma9_agent.duel_vehicle_runtime._ocr",
                       self._detail_ocr(detail_rating="37/4,897")), \
@@ -809,7 +810,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                    return_value=frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      return_value=(frame, [card], True)), \
+                      return_value=(frame, [card], True, [])), \
                 patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
                 patch("ma9_agent.duel_vehicle_runtime._ocr", ocr), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
@@ -818,6 +819,371 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
         self.assertEqual(report["status"], "assigned")
         self.assertTrue(report["assignment_complete"])
         self.assertEqual(report["lineup_identity"]["vehicle"]["id"], "lancer")
+
+
+#: Catalog of the right-edge/detail scenes below.  Formula E Gen 2 keeps the
+#: family honest: it shares the ``FORMULA E`` brand line with the Gen 3 car and
+#: must never be resolved by the Gen 3 fragments.
+_ROLLING_CATALOG = [
+    {"id": "fe3", "title": "Formula E Gen 3 EVO Championship Edition", "class": "A"},
+    {"id": "fe2", "title": "Formula E Gen 2 Asphalt Edition", "class": "B"},
+    {"id": "mclaren650", "title": "McLaren 650S GT3", "class": "A"},
+]
+#: The clipped right-edge card of the recorded 11:55:52.818 page: the car is at
+#: left 1069 (x 1069+420 > 1295), so only its name fragments are readable.  The
+#: scene is a splice of recorded OCR rows, not a continuous live capture.
+_CLIPPED_EDGE_ROWS = [
+    {"text": "FORMU", "confidence": .993, "box": [1077, 332, 72, 22]},
+    {"text": "J CHAMPIONSHIP EDIT", "confidence": .947, "box": [1073, 350, 201, 22]},
+]
+_PAGE_TITLE_ROWS = [
+    {"text": "车辆选择", "confidence": .999, "box": [40, 72, 120, 30]},
+]
+_VISIBLE_PAGE_ROWS = [
+    {"text": "MCLAREN", "confidence": .936, "box": [256, 329, 101, 26]},
+    {"text": "650S GT3", "confidence": .966, "box": [256, 350, 94, 22]},
+]
+#: The two recorded detail frames of the same car, alternating as the scrolling
+#: detail title does (see the 20260925-fe3-full-intake native OCR).
+_DETAIL_FRAME_A = [
+    {"text": "FORMULA E", "confidence": .935, "box": [173, 110, 124, 19]},
+    {"text": "N", "confidence": .994, "box": [172, 133, 25, 26]},
+    {"text": "GEN 3 EV0 CI", "confidence": .940, "box": [246, 135, 160, 24]},
+    {"text": "a", "confidence": .254, "box": [176, 166, 31, 17]},
+    {"text": "最高", "confidence": 1.0, "box": [261, 166, 41, 19]},
+]
+_DETAIL_FRAME_B = [
+    {"text": "FORMULA E", "confidence": .926, "box": [172, 110, 125, 19]},
+    {"text": "3 EVO CHAMPIONSH", "confidence": .936, "box": [170, 132, 236, 28]},
+    {"text": "", "confidence": 0.0, "box": [177, 167, 25, 14]},
+    {"text": "最高", "confidence": .999, "box": [260, 163, 42, 22]},
+]
+#: A *synthesised* detail pair, not a recorded capture: it applies the same
+#: evidenced marquee shapes (a truncated brand line plus one model fragment) to
+#: the detail layout, so that neither frame resolves through the exact matcher
+#: and only the accumulated reading can decide.
+_DETAIL_TRUNCATED_A = [
+    {"text": "FORMU", "confidence": .935, "box": [173, 110, 124, 19]},
+    {"text": "GEN 3 EV0 CI", "confidence": .940, "box": [246, 135, 160, 24]},
+    {"text": "最高", "confidence": 1.0, "box": [261, 166, 41, 19]},
+]
+_DETAIL_TRUNCATED_B = [
+    {"text": "FORMU", "confidence": .926, "box": [172, 110, 125, 19]},
+    {"text": "3 EVO CHAMPIONSH", "confidence": .936, "box": [170, 132, 236, 28]},
+    {"text": "最高", "confidence": .999, "box": [260, 163, 42, 22]},
+]
+
+
+class _RollingScene:
+    """Device model whose list page carries one clipped right-edge card.
+
+    ``sticky`` simulates a list that does not move at all; otherwise the small
+    re-position request itself moves the recorded rows, exactly as the real
+    swipe would.  A card detail is entered by clicking it, and each read of a
+    detail page advances to the next marquee phase.  The frame pixels are a
+    placeholder: only the text of this scene is measured.
+    """
+
+    def __init__(self, *, sticky: bool = False, detail_frames=None) -> None:
+        self.sticky = sticky
+        self.detail_frames = detail_frames or [_DETAIL_FRAME_A, _DETAIL_FRAME_B]
+        self.pixels = DuelVehicleRuntimeTest._active_button_frame()
+        self.active = self.detail_frames[0]
+        self.shift = 0
+        self.page = "list"
+        self.detail_index = 0
+        self.swipes: list[tuple[int, ...]] = []
+        self.clicks: list[tuple[int, int]] = []
+        self.controller = self
+
+    def post_swipe(self, x1, y1, x2, y2, duration):
+        self.swipes.append((x1, y1, x2, y2, duration))
+        if not self.sticky:
+            self.shift += x1 - x2
+        return _Job()
+
+    def frame(self):
+        """The next screen: a new marquee phase while a detail is open."""
+        if self.page == "detail":
+            self.active = self.detail_frames[self.detail_index % len(self.detail_frames)]
+            self.detail_index += 1
+        return self.pixels
+
+    def rows(self) -> list[dict]:
+        if self.page == "detail":
+            return self.active
+        # The title bar is fixed chrome; only the card list moves.
+        return [*_PAGE_TITLE_ROWS,
+                *[{**row, "box": [row["box"][0] - self.shift, *row["box"][1:]]}
+                  for row in [*_VISIBLE_PAGE_ROWS, *_CLIPPED_EDGE_ROWS]]]
+
+    def open_detail(self) -> None:
+        self.page = "detail"
+        self.detail_index = 0
+
+
+class DuelEdgeCoverageTest(unittest.TestCase):
+    """The bounded right-edge observation and the bounded detail read."""
+
+    @staticmethod
+    def _context(scene: _RollingScene):
+        context = _DetailContext([True] * 40)
+        context.tasker = SimpleNamespace(controller=scene)
+        return context
+
+    @staticmethod
+    def _ocr(scene: _RollingScene):
+        def ocr(_context, _frame_value, roi):
+            return [{**row, "box": clipped} for row in scene.rows()
+                    if (clipped := _clip(row["box"], roi)) is not None]
+        return ocr
+
+    def _scan(self, scene: _RollingScene, *, choose=False, **kwargs):
+        context = self._context(scene)
+
+        def click(_context, x, y):
+            scene.clicks.append((x, y))
+            if (x, y) != (940, 103):  # the A-class tab is not a detail entry
+                scene.open_detail()
+            return True
+
+        with patch("ma9_agent.duel_vehicle_runtime._ocr", self._ocr(scene)), \
+                patch("ma9_agent.duel_vehicle_runtime._frame",
+                      lambda _context: scene.frame()), \
+                patch("ma9_agent.duel_vehicle_runtime._click", click), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            return scan(context, "A", _ROLLING_CATALOG, target_id="fe3",
+                        choose=choose, max_pages=3, **kwargs)
+
+    def test_clipped_edge_card_is_observed_whole_before_the_scan_moves_on(self) -> None:
+        """The recorded right-edge page must not be swiped past.
+
+        The old scan skipped the clipped card and its next fling lost the car.
+        The new scan spends one bounded, small re-position (the recorded 300 px
+        page shift), reads the card whole at left 769, and only then clicks it.
+        """
+        scene = _RollingScene()
+        report = self._scan(scene)
+        self.assertEqual(scene.swipes, [(1010, 470, 710, 470, 650)])
+        self.assertEqual(report["edge_repositions"], 1)
+        self.assertEqual(report["status"], "detail_verified")
+        # The recorded detail pair needs its second frame before the car is
+        # named, exactly as the dedicated detail test records.
+        self.assertEqual(report["detail_name_frames"], 2)
+        self.assertEqual(report["detail_identity_basis"], "title")
+        self.assertIn("fe3", [row["vehicle"]["id"] for row in report["vehicles"]])
+        clicked = [call for call in scene.clicks if call != (940, 103)]
+        self.assertEqual(clicked, [(769 + 185, 168 + 105)])
+        # The clicked geometry is fully inside the complete-card bound.
+        self.assertLessEqual(769 + 420, 1295)
+        self.assertFalse(report["assignment_complete"])
+
+    def test_clipped_edge_budget_reports_incomplete_instead_of_a_missing_target(self) -> None:
+        """A list that never moves may not be reported as a complete traversal."""
+        scene = _RollingScene(sticky=True)
+        report = self._scan(scene)
+        self.assertEqual(report["status"], "edge_candidate_unresolved")
+        self.assertFalse(report["scan_complete"])
+        self.assertEqual(report["edge_repositions"], EDGE_REPOSITION_LIMIT)
+        self.assertEqual(report["edge_candidate"]["vehicle"]["id"], "fe3")
+        self.assertEqual(scene.swipes, [EDGE_REPOSITION_SWIPE] * EDGE_REPOSITION_LIMIT)
+        self.assertEqual(scene.clicks, [(940, 103)])
+
+    def test_clipped_only_target_is_never_clicked_by_assign_visible(self) -> None:
+        """The locate-only path keeps refusing a target it cannot see whole."""
+        scene = _RollingScene()
+        context = self._context(scene)
+        with patch("ma9_agent.duel_vehicle_runtime._ocr", self._ocr(scene)), \
+                patch("ma9_agent.duel_vehicle_runtime._frame",
+                      lambda _context: scene.frame()), \
+                patch("ma9_agent.duel_vehicle_runtime._click",
+                      lambda _context, x, y: scene.clicks.append((x, y)) or True), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = assign_visible(context, "fe3", _ROLLING_CATALOG)
+        self.assertEqual(report["status"], "target_not_visible")
+        self.assertEqual(report["clipped_target"]["vehicle"]["id"], "fe3")
+        self.assertEqual(scene.clicks, [])
+        self.assertEqual(scene.swipes, [])
+
+    def _detail_run(self, frames, expected="fe3", titles=()):
+        scene = _RollingScene(detail_frames=frames)
+        scene.open_detail()
+        context = self._context(scene)
+        titles = list(titles)
+        index = [0]
+
+        def ocr(_context, _frame_value, roi):
+            if roi == (40, 60, 220, 60):
+                return ([{"text": titles[index[0]], "confidence": .99,
+                          "box": [40, 72, 120, 30]}] if index[0] < len(titles) else [])
+            return [{**row, "box": clipped} for row in scene.rows()
+                    if (clipped := _clip(row["box"], roi)) is not None]
+
+        with patch("ma9_agent.duel_vehicle_runtime._ocr", ocr), \
+                patch("ma9_agent.duel_vehicle_runtime._frame",
+                      lambda _context: scene.frame()), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            return _detail(context, expected, _ROLLING_CATALOG)
+
+    def test_detail_identity_accumulates_two_bounded_frames_of_one_page(self) -> None:
+        """One detail frame may stay undecidable; two of them must decide.
+
+        The recorded pair is used as read: frame A alone names nothing, and the
+        second frame's exact reading (confidence .786) is what verifies the car,
+        which is why the frame count is reported next to the basis.
+        """
+        single = self._detail_run([_DETAIL_FRAME_A])
+        self.assertEqual(single["status"], "detail_not_verified")
+        sequence = self._detail_run([_DETAIL_FRAME_A, _DETAIL_FRAME_B])
+        self.assertEqual(sequence["status"], "detail_verified")
+        self.assertEqual(sequence["detail_name_frames"], 2)
+        self.assertEqual(sequence["detail_identity_basis"], "title")
+        self.assertEqual(sequence["detail_vehicle"]["confidence"], .786)
+        self.assertEqual(sequence["detail_vehicle"]["id"], "fe3")
+
+    def test_detail_rolling_name_decides_only_with_two_frames(self) -> None:
+        """Synthesised marquee pair: only the accumulated reading may decide.
+
+        Neither frame resolves through the exact matcher, one frame is never
+        enough, and the unique catalog resolution still has to name the expected
+        car before anything is treated as verified.
+        """
+        single = self._detail_run([_DETAIL_TRUNCATED_A])
+        self.assertEqual(single["status"], "detail_not_verified")
+        sequence = self._detail_run([_DETAIL_TRUNCATED_A, _DETAIL_TRUNCATED_B])
+        self.assertEqual(sequence["status"], "detail_verified")
+        self.assertEqual(sequence["detail_name_frames"], 2)
+        self.assertEqual(sequence["detail_identity_basis"], "rolling_fragment")
+        self.assertEqual(sequence["detail_vehicle"]["id"], "fe3")
+
+    def test_detail_rolling_name_of_another_vehicle_keeps_the_retry(self) -> None:
+        """A uniquely read other car is a wrong page, not an unclear one."""
+        report = self._detail_run([_DETAIL_TRUNCATED_A, _DETAIL_TRUNCATED_B],
+                                  expected="mclaren650")
+        self.assertEqual(report["status"], "wrong_detail")
+        self.assertEqual(report["detail_vehicle"]["id"], "fe3")
+
+    def test_detail_identity_is_cleared_when_the_page_changes(self) -> None:
+        """Fragments of another page may never complete this identity."""
+        report = self._detail_run([_DETAIL_TRUNCATED_A, _DETAIL_TRUNCATED_B],
+                                  titles=["车辆选择"] * 8)
+        self.assertEqual(report["status"], "detail_not_verified")
+
+
+class DuelScanCounterexampleFixTest(unittest.TestCase):
+    """The three scan-ordering counterexamples of the 05N1 repair round.
+
+    Real call premise: each case drives the production ``scan`` end to end and
+    only stubs the IO/sampling/detail dependencies (``_stable_sample_visible``,
+    ``_click``, ``_detail`` and ``time.sleep``), exactly as the recorded 05N
+    repro did.  The sampled pages are synthetic boundary scenes -- not device
+    evidence -- and the swipe/edit budgets are the production ones.
+    """
+
+    FRAME = np.zeros((720, 1280, 3), dtype=np.uint8)
+
+    @staticmethod
+    def _catalog() -> list[dict]:
+        return [{"id": "wanted", "title": "wanted", "class": "A"},
+                {"id": "other", "title": "other", "class": "A"},
+                {"id": "lower", "title": "lower", "class": "B"}]
+
+    @staticmethod
+    def _row(vehicle_id: str, vehicle_class: str = "A", *, left: int = 100) -> dict:
+        row = _card(vehicle_id, vehicle_class)
+        row["card"] = [left, 168, 420, 212]
+        row["target"] = [left + 185, 273]
+        row["performance"] = [1000, 1000]
+        return row
+
+    def _run(self, target_id, pages):
+        """Drive ``scan`` on the A tab with one page limit over ``pages``."""
+        clicks: list[tuple[int, int]] = []
+        swipes: list[tuple[int, ...]] = []
+
+        class _Ctrl:
+            def post_swipe(self, *args):
+                swipes.append(args)
+                return _Job()
+
+        context = _Context()
+        context.tasker = SimpleNamespace(controller=_Ctrl())
+        detail = {"status": "detail_verified",
+                  "detail_vehicle": {"id": "wanted", "title": "wanted",
+                                     "confidence": 1.0},
+                  "performance": 1000, "stars_lit": 6, "star_slots": 6,
+                  "occupied_elsewhere": False, "select_available": True}
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=self.FRAME), \
+                patch("ma9_agent.duel_vehicle_runtime._stable_sample_visible",
+                      side_effect=pages), \
+                patch("ma9_agent.duel_vehicle_runtime._click",
+                      side_effect=lambda _context, x, y: clicks.append((x, y)) or True), \
+                patch("ma9_agent.duel_vehicle_runtime._detail",
+                      return_value=detail), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "A", self._catalog(), target_id=target_id,
+                          choose=False, max_pages=1)
+        return report, clicks, swipes
+
+    def test_visible_target_is_served_before_an_unrelated_edge_card(self) -> None:
+        """F1: a fully visible target may not be slid away for the edge card.
+
+        The first sampled page shows ``wanted`` whole while the right edge clips
+        a different car (``other``).  The page/class guards and the current
+        complete-target path must run first, so the target's own detail is opened
+        with no re-position at all; an unrelated edge card never displaces it.
+        """
+        wanted = self._row("wanted")
+        other = self._row("other")
+        clipped = self._row("other", left=1069)
+        clipped["clipped"] = True
+        report, clicks, swipes = self._run(
+            "wanted", [(self.FRAME, [wanted], True, [clipped]),
+                       (self.FRAME, [other], True, [])])
+        self.assertEqual(report["status"], "detail_verified")
+        self.assertEqual(report["edge_repositions"], 0)
+        self.assertEqual(swipes, [])
+        self.assertIn(tuple(wanted["target"]), clicks)
+
+    def test_complete_cards_are_booked_before_the_edge_reposition(self) -> None:
+        """F2: the first page's cars survive the bounded re-position.
+
+        With no target, the first sampled page shows ``wanted`` whole and clips
+        ``other``; the one re-position then reveals ``other`` whole.  A complete
+        observation is booked when it is seen, so both cars stay in the
+        inventory instead of the first one being lost to the re-position.
+        """
+        wanted = self._row("wanted")
+        other = self._row("other")
+        clipped = self._row("other", left=1069)
+        clipped["clipped"] = True
+        report, _clicks, _swipes = self._run(
+            None, [(self.FRAME, [wanted], True, [clipped]),
+                   (self.FRAME, [other], True, [])])
+        self.assertEqual({row["vehicle"]["id"] for row in report["vehicles"]},
+                         {"wanted", "other"})
+
+    def test_unresolved_edge_candidate_never_fakes_a_complete_scan(self) -> None:
+        """F3: an owed candidate is a debt a later frame may not erase.
+
+        ``wanted`` is the clipped target on page one; the single bounded
+        re-position lands on a lower-class page without it and without a new
+        clipped candidate.  Dropping the debt there would report
+        ``target_not_found`` with ``scan_complete`` true; the owed car must keep
+        the traversal explicitly incomplete instead.
+        """
+        other = self._row("other")
+        pending = self._row("wanted", left=1069)
+        pending["clipped"] = True
+        report, _clicks, swipes = self._run(
+            "wanted", [(self.FRAME, [other], True, [pending]),
+                       (self.FRAME, [self._row("lower", "B")], True, [])])
+        self.assertIs(report["scan_complete"], False)
+        self.assertNotEqual(report["status"], "target_not_found")
+        self.assertEqual(report["status"], "edge_candidate_unresolved")
+        self.assertEqual(report["edge_candidate"]["vehicle"]["id"], "wanted")
+        self.assertEqual(len(swipes), 1)
 
 
 if __name__ == "__main__":
