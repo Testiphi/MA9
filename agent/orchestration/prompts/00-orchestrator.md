@@ -146,3 +146,6 @@ c268cddf63d843d4454985bcc38e999af7c12596仅runtime和测试，按panel右缘身�
 
 ## 最新第2槽296GTB完整实机通过
 20260925-114452-slot2-296gtb-assigned已冻结JSON/log/终态图，assigned/same_slot_confirmed、beforeafter2、detail与lineup idcar_663ddea67d1bbda0一致、assignment_completetrue/starts_racefalse；第1槽Nevera终态图保留（本轮未另OCR第1槽）。已请求用户一次给3/4/5槽不同已拥有未占用车型，优先A/B/D补覆盖；尚不宣称五车全自动或开赛通过，不重复已验流程。
+
+## 最新剩余3槽配置齐备，当前只启用slot3
+用户目标：slot3 A Formula E Gen 3 EVO Championship Edition/car_00bbb8ac1279e6f9，slot4 B FV Frangivento GT65/car_71bc72d2c3ab44e1，slot5 D Ginetta G60/car_5531a43a5f8c457d。新包user-test-slots345-ff426c6/MA9-preview，复用已验ff426c6同hash Agent不重编译；20260925-slots345-package记录全hash/Usage/schema/配置通过，三份private-plans保留，只有slot3已激活。等用户slot3结果先核JSON，再总控切4，再5，不并行/不让用户手改配置，保留Nevera/296GTB。

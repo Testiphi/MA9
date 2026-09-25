@@ -826,7 +826,7 @@
           "slot1 Nevera",
           "slot2 Ferrari296GTB"
         ],
-        "phase": "awaiting_user_three_distinct_owned_targets",
+        "phase": "package_verified_slot3_active",
         "slots": [
           3,
           4,
@@ -837,7 +837,35 @@
           "B",
           "D"
         ],
-        "next_scope": "remaining slot and class coverage then five unique verification; no races"
+        "next_scope": "remaining slot and class coverage then five unique verification; no races",
+        "targets": [
+          {
+            "slot": 3,
+            "target_id": "car_00bbb8ac1279e6f9",
+            "vehicle_class": "A",
+            "title": "Formula E Gen 3 EVO Championship Edition"
+          },
+          {
+            "slot": 4,
+            "target_id": "car_71bc72d2c3ab44e1",
+            "vehicle_class": "B",
+            "title": "FV Frangivento GT65"
+          },
+          {
+            "slot": 5,
+            "target_id": "car_5531a43a5f8c457d",
+            "vehicle_class": "D",
+            "title": "Ginetta G60"
+          }
+        ],
+        "active_slot": 3,
+        "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-slots345-ff426c6\\MA9-preview",
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-slots345-package/results.json",
+        "private_presets": "E:/hzz/work/MA9/MA9-evidence/20260925-slots345-package/private-plans",
+        "activation": "serial_after_previous_business_acceptance_no_automatic_loop",
+        "source": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
+        "agent_recompiled": false,
+        "device_test": "not_run"
       }
     },
     "duel-defense": {
@@ -1125,7 +1153,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "第2槽Ferrari296GTB完整实机闭环通过：assigned/same_slot_confirmed、beforeafter2、detail与lineup车型一致、assignment_completetrue/starts_racefalse；第1槽Nevera截图仍在。归档114452证据；已请用户一次给3/4/5槽不同已拥有车型，随后扩剩余槽位/等级与五车互斥，不重做已通过阶段。",
+  "next": "用户已给3槽A FormulaE Gen3EVO ChampionshipEdition、4槽B FVFrangiventoGT65、5槽D GinettaG60；目录ID等级全核对，独立slots345包全hash/根配置/Usage/schema通过。当前仅3槽配置启用，3成功JSON核验后总控再切4，再5；前两槽保留，不声称自动五槽应用。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
