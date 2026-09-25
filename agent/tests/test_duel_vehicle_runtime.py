@@ -1070,5 +1070,121 @@ class DuelEdgeCoverageTest(unittest.TestCase):
         self.assertEqual(report["status"], "detail_not_verified")
 
 
+class DuelScanCounterexampleFixTest(unittest.TestCase):
+    """The three scan-ordering counterexamples of the 05N1 repair round.
+
+    Real call premise: each case drives the production ``scan`` end to end and
+    only stubs the IO/sampling/detail dependencies (``_stable_sample_visible``,
+    ``_click``, ``_detail`` and ``time.sleep``), exactly as the recorded 05N
+    repro did.  The sampled pages are synthetic boundary scenes -- not device
+    evidence -- and the swipe/edit budgets are the production ones.
+    """
+
+    FRAME = np.zeros((720, 1280, 3), dtype=np.uint8)
+
+    @staticmethod
+    def _catalog() -> list[dict]:
+        return [{"id": "wanted", "title": "wanted", "class": "A"},
+                {"id": "other", "title": "other", "class": "A"},
+                {"id": "lower", "title": "lower", "class": "B"}]
+
+    @staticmethod
+    def _row(vehicle_id: str, vehicle_class: str = "A", *, left: int = 100) -> dict:
+        row = _card(vehicle_id, vehicle_class)
+        row["card"] = [left, 168, 420, 212]
+        row["target"] = [left + 185, 273]
+        row["performance"] = [1000, 1000]
+        return row
+
+    def _run(self, target_id, pages):
+        """Drive ``scan`` on the A tab with one page limit over ``pages``."""
+        clicks: list[tuple[int, int]] = []
+        swipes: list[tuple[int, ...]] = []
+
+        class _Ctrl:
+            def post_swipe(self, *args):
+                swipes.append(args)
+                return _Job()
+
+        context = _Context()
+        context.tasker = SimpleNamespace(controller=_Ctrl())
+        detail = {"status": "detail_verified",
+                  "detail_vehicle": {"id": "wanted", "title": "wanted",
+                                     "confidence": 1.0},
+                  "performance": 1000, "stars_lit": 6, "star_slots": 6,
+                  "occupied_elsewhere": False, "select_available": True}
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=self.FRAME), \
+                patch("ma9_agent.duel_vehicle_runtime._stable_sample_visible",
+                      side_effect=pages), \
+                patch("ma9_agent.duel_vehicle_runtime._click",
+                      side_effect=lambda _context, x, y: clicks.append((x, y)) or True), \
+                patch("ma9_agent.duel_vehicle_runtime._detail",
+                      return_value=detail), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "A", self._catalog(), target_id=target_id,
+                          choose=False, max_pages=1)
+        return report, clicks, swipes
+
+    def test_visible_target_is_served_before_an_unrelated_edge_card(self) -> None:
+        """F1: a fully visible target may not be slid away for the edge card.
+
+        The first sampled page shows ``wanted`` whole while the right edge clips
+        a different car (``other``).  The page/class guards and the current
+        complete-target path must run first, so the target's own detail is opened
+        with no re-position at all; an unrelated edge card never displaces it.
+        """
+        wanted = self._row("wanted")
+        other = self._row("other")
+        clipped = self._row("other", left=1069)
+        clipped["clipped"] = True
+        report, clicks, swipes = self._run(
+            "wanted", [(self.FRAME, [wanted], True, [clipped]),
+                       (self.FRAME, [other], True, [])])
+        self.assertEqual(report["status"], "detail_verified")
+        self.assertEqual(report["edge_repositions"], 0)
+        self.assertEqual(swipes, [])
+        self.assertIn(tuple(wanted["target"]), clicks)
+
+    def test_complete_cards_are_booked_before_the_edge_reposition(self) -> None:
+        """F2: the first page's cars survive the bounded re-position.
+
+        With no target, the first sampled page shows ``wanted`` whole and clips
+        ``other``; the one re-position then reveals ``other`` whole.  A complete
+        observation is booked when it is seen, so both cars stay in the
+        inventory instead of the first one being lost to the re-position.
+        """
+        wanted = self._row("wanted")
+        other = self._row("other")
+        clipped = self._row("other", left=1069)
+        clipped["clipped"] = True
+        report, _clicks, _swipes = self._run(
+            None, [(self.FRAME, [wanted], True, [clipped]),
+                   (self.FRAME, [other], True, [])])
+        self.assertEqual({row["vehicle"]["id"] for row in report["vehicles"]},
+                         {"wanted", "other"})
+
+    def test_unresolved_edge_candidate_never_fakes_a_complete_scan(self) -> None:
+        """F3: an owed candidate is a debt a later frame may not erase.
+
+        ``wanted`` is the clipped target on page one; the single bounded
+        re-position lands on a lower-class page without it and without a new
+        clipped candidate.  Dropping the debt there would report
+        ``target_not_found`` with ``scan_complete`` true; the owed car must keep
+        the traversal explicitly incomplete instead.
+        """
+        other = self._row("other")
+        pending = self._row("wanted", left=1069)
+        pending["clipped"] = True
+        report, _clicks, swipes = self._run(
+            "wanted", [(self.FRAME, [other], True, [pending]),
+                       (self.FRAME, [self._row("lower", "B")], True, [])])
+        self.assertIs(report["scan_complete"], False)
+        self.assertNotEqual(report["status"], "target_not_found")
+        self.assertEqual(report["status"], "edge_candidate_unresolved")
+        self.assertEqual(report["edge_candidate"]["vehicle"]["id"], "wanted")
+        self.assertEqual(len(swipes), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

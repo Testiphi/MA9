@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import unittest
 import sys
 from pathlib import Path
@@ -11,6 +12,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ma9_agent.duel_selection import plan_live_weak_defense
 from ma9_agent.duel_vehicle_screen import (read_clipped_candidate, read_visible_cards,
                                            rolling_identity)
+from ma9_agent.vehicle_screen import _key, match_vehicle
+
+#: The shipped full catalog, used as read-only input by the tail-rejection test.
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 # Verbatim OCR output of the frozen live frame recorded at
@@ -344,6 +349,28 @@ class DuelRollingNameTest(unittest.TestCase):
         self.assertEqual(read_visible_cards(image, _ROLLING_EDGE_DECIDES,
                                             _ROLLING_CATALOG), [])
 
+    def test_clipped_candidate_offers_no_click_target(self) -> None:
+        """The clipped record is explicitly non-clickable; full cards are not.
+
+        Real call premise: ``read_clipped_candidate`` resolves a right-edge card
+        only so the scan can trade one bounded re-position for a full read, so
+        its row must not carry the ``target`` key that a caller could click.
+        The complete-card rows keep their existing format -- this test reads the
+        same frozen frames through both helpers and compares the two shapes.
+        """
+        decided = read_clipped_candidate(_ROLLING_EDGE_DECIDES, _ROLLING_CATALOG)
+        self.assertTrue(decided["clipped"])
+        self.assertEqual(decided["vehicle"]["id"], "fe3")
+        self.assertIn("card", decided)
+        self.assertIn("vehicle", decided)
+        self.assertNotIn("target", decided)
+
+        image = np.zeros((720, 1280, 3), dtype=np.uint8)
+        rows = {row["vehicle"]["id"]: row for row in read_visible_cards(
+            image, _ROLLING_FRAME_A, _ROLLING_CATALOG)}
+        self.assertIn("target", rows["fe3"])
+        self.assertEqual(rows["fe3"]["target"], [694 + 185, 168 + 105])
+
     def test_scrolling_name_negatives_never_decide(self) -> None:
         """Every documented undecidable fragment shape must stay unresolved."""
         cases = {
@@ -418,6 +445,65 @@ class DuelRollingNameTest(unittest.TestCase):
                 {"text": "GEN 3 EVO CHAMPION", "confidence": .93, "box": [100, 345, 196, 22]},
                 {"text": "TACHYON SPEED", "confidence": .97, "box": [100, 468, 152, 22]}]
         self.assertIsNone(rolling_identity(rows, _ROLLING_CATALOG))
+
+
+class DuelRollingTailTest(unittest.TestCase):
+    """A long fragment is matched whole, never as an unexplained prefix."""
+
+    @staticmethod
+    def _real_catalog() -> list[dict]:
+        return json.loads((_PROJECT_ROOT / "data" / "generated" /
+                           "vehicle_catalog.json").read_text(encoding="utf8"))["vehicles"]
+
+    def test_contradictory_long_tail_is_rejected_over_the_real_catalog(self) -> None:
+        """Synthetic contradictory name over the real catalog and matchers.
+
+        Real call premise: the two words are the shape the live OCR produces for
+        a scrolling Duel name -- a truncated brand line and then a model line --
+        and both readings are high confidence.  Both go through the real
+        :func:`vehicle_screen.match_vehicle` and the real :func:`rolling_identity`
+        over the shipped ``data/generated/vehicle_catalog.json`` with no
+        hand-picked catalog and no stubbed matcher.  ``CHAMPIONSHIP EDITION``
+        aligns inside the Gen 3 car's name, but ``UNRELATEDZZZZZZZZ`` is a tail
+        that name cannot explain: a long fragment whose tail is unexplained is a
+        contradiction, not a short match, so both matchers must return ``None``.
+        This is a synthetic name, not a device reading.
+        """
+        catalog = self._real_catalog()
+        words = [
+            {"text": "FORMU", "confidence": .99, "box": [100, 330, 80, 20]},
+            {"text": "CHAMPIONSHIP EDITION UNRELATEDZZZZZZZZ", "confidence": .99,
+             "box": [100, 350, 210, 20]},
+        ]
+        self.assertIsNone(match_vehicle(words, catalog))
+        self.assertIsNone(rolling_identity(words, catalog))
+        # The Gen 3 car is in the catalog and its key does contain the fragment
+        # prefix, so the rejection is the tail rule and not a missing entry.
+        gen3 = next(row for row in catalog
+                    if row["title"] == "Formula E Gen 3 EVO Championship Edition")
+        self.assertIn("championshipedition", _key(gen3["title"]))
+
+    def test_recorded_rolling_fragments_still_resolve_after_the_tail_rule(self) -> None:
+        """The full-consumption rule keeps the evidenced recorded shapes.
+
+        Real call premise: the same two recorded high-confidence fragments the
+        module already resolves -- ``FORMU`` + ``GEN 3 EVO CHAMPION`` and the
+        wrapped ``FORMULAE`` + ``J CHAMPIONSHIP EDIT`` -- are matched whole after
+        the one allowed leading character, so requiring the whole fragment does
+        not cost the positives.  Text-only reading of the frozen OCR rows.
+        """
+        cases = {
+            "head_fragment": [("FORMU", .99, [100, 325, 66, 20]),
+                              ("GEN 3 EVO CHAMPION", .93, [100, 345, 196, 22])],
+            "wrapped_tail": [("FORMULAE", .99, [100, 325, 90, 20]),
+                             ("J CHAMPIONSHIP EDIT", .95, [100, 345, 201, 22])],
+        }
+        for name, rows in cases.items():
+            with self.subTest(case=name):
+                resolved = rolling_identity(
+                    [{"text": text, "confidence": confidence, "box": box}
+                     for text, confidence, box in rows], _ROLLING_CATALOG)
+                self.assertEqual(resolved["id"], "fe3")
 
 
 if __name__ == "__main__":

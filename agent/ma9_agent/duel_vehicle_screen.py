@@ -195,14 +195,24 @@ def _window_run(fragment: str, candidate: str, start: int) -> tuple[int, int]:
 
 
 def _fragment_window(fragment: str, candidate: str, position: int) -> tuple[int, int] | None:
-    """First qualifying window of ``candidate`` at or after ``position``."""
+    """First window of ``candidate`` that explains the whole ``fragment``.
+
+    A window counts only when it consumes the *entire* fragment (after the one
+    explicitly allowed leading character is dropped).  A run that stops early --
+    because the candidate ends first, or because a second character differs --
+    leaves the fragment's tail unexplained, and a visible tail that does not fit
+    is a contradiction of that candidate, not a short match.  Requiring the full
+    run is what keeps a long contradictory fragment from being read as a prefix.
+    """
     for drop in range(ROLLING_MAX_HEAD_DROP + 1):
         trimmed = fragment[drop:]
         if len(trimmed) < ROLLING_MIN_FRAGMENT:
             continue
         for start in range(position, len(candidate)):
+            # ``_window_run`` stops as soon as the edit budget is spent, so a
+            # run that reached the fragment's end stayed within the budget.
             length, edits = _window_run(trimmed, candidate, start)
-            if length >= ROLLING_MIN_FRAGMENT and edits <= ROLLING_MAX_EDITS:
+            if length == len(trimmed) and edits <= ROLLING_MAX_EDITS:
                 return start, start + length
     return None
 
@@ -251,11 +261,13 @@ def rolling_identity(items: list[dict[str, Any]], catalog: list[dict[str, Any]]
         contribute.
     ``fragment``
         Every word of at least :data:`ROLLING_MIN_FRAGMENT` characters on the
-        remaining line must be a contiguous window of that candidate key,
-        starting after the brand prefix and progressing left to right, with at
-        most :data:`ROLLING_MAX_EDITS` differing character and at most
-        :data:`ROLLING_MAX_HEAD_DROP` dropped leading character (the marquee
-        head the OCR loses).
+        remaining line must be a contiguous window of that candidate key that
+        consumes the *whole* word, starting after the brand prefix and
+        progressing left to right, with at most :data:`ROLLING_MAX_EDITS`
+        differing character and at most :data:`ROLLING_MAX_HEAD_DROP` dropped
+        leading character (the marquee head the OCR loses).  A word whose tail
+        the candidate cannot explain is a contradiction, so a fragment that only
+        matches a short prefix is never treated as a match.
     ``length``
         At least one fragment has to clear :data:`ROLLING_MIN_FRAGMENT`;
         ``FORMULA``, ``EDITION``, a bare brand or a lone ``R`` can never decide.
@@ -404,7 +416,7 @@ def read_clipped_candidate(ocr: list[dict[str, Any]], catalog: list[dict[str, An
     :func:`read_visible_cards` only returns cards it can see whole, so the card
     cut by the right edge is never read on the page where it first appears and
     a following fling can carry the list past it.  Its geometry is *not* safe to
-    click, so this helper does not hand out a click target: it reports the
+    click, so this helper deliberately returns no ``target``: it reports the
     clipped card only when its visible name resolves uniquely over the whole
     catalog, and the caller trades one bounded, small re-position for a full
     observation of that card instead of swiping past it.  At most one candidate
@@ -418,6 +430,9 @@ def read_clipped_candidate(ocr: list[dict[str, Any]], catalog: list[dict[str, An
             if vehicle is None:
                 continue
             row = _card_row(vehicle, catalog, left, top)
+            # Drop the click target: this row is a re-position request, not a
+            # card that may be opened.  The complete-card row keeps its target.
+            row.pop("target")
             row["clipped"] = True
             row["visible_name"] = [item["text"] for item in group]
             return row

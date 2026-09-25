@@ -513,81 +513,110 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
         if not stable:
             return _result("page_ocr_unverified", page, list(found.values()),
                            unstable_samples=2)
-        # Bounded right-edge completion.  A card the screen edge clips is not
-        # readable here, and the next fling can carry the list past it, so a
-        # card whose visible name resolves uniquely over the whole catalog gets
-        # a small, controlled re-position until it has had a full observation.
-        # Nothing is clicked before that: the clipped row carries no usable
-        # geometry, and the swipe distance is never assumed either.
-        pending = next((row for row in clipped
-                        if row["class"] == vehicle_class
-                        and (row["vehicle"]["id"] == target_id
-                             or row["vehicle"]["id"] not in found)), None)
-        attempts = 0
-        while pending is not None and attempts < EDGE_REPOSITION_LIMIT:
-            attempts += 1
+        # The sampled page is handled as it is read -- page/class guards, the
+        # inventory record and the current complete target -- and only then is
+        # the bounded right-edge completion attempted.  A card the screen edge
+        # clips is not readable here and the next fling can carry the list past
+        # it, so a card whose visible name resolves uniquely over the whole
+        # catalog gets a small, controlled re-position until it has had a full
+        # observation.  Because the full target of this page is served first, a
+        # car that is already visible whole is never slid away for an unrelated
+        # edge card, and every complete observation is booked before the list
+        # can move.  Nothing is clicked before a full observation: the clipped
+        # row carries no usable geometry, and the swipe distance is never
+        # assumed either.
+        #
+        # Every candidate that still owes a full observation is kept as a debt
+        # until *that exact car* is seen whole.  It is never dropped because the
+        # next frame's OCR lost it, because the fling overshot it, or because a
+        # different candidate appeared: those all leave the page incompletely
+        # covered, which is reported as such instead of as a complete traversal.
+        owed: dict[str, dict[str, Any]] = {}
+        edge_attempts = 0
+        while True:
+            if not cards:
+                return _result("page_ocr_unverified", page, list(found.values()),
+                               edge_repositions=edge_repositions)
+            target_cards = [row for row in cards if row["class"] == vehicle_class]
+            foreign_classes = {row["class"] for row in cards
+                               if row["class"] != vehicle_class}
+            unexpected = foreign_classes - lower_classes
+            if unexpected:
+                return _result("class_or_ocr_unverified", page, list(found.values()),
+                               visible=cards, unexpected_classes=sorted(unexpected),
+                               edge_repositions=edge_repositions)
+            # A transition page can contain the tail of the requested class and
+            # the head of the next one.  Keep its requested-class cards and stop
+            # only on a stable page containing lower classes alone.
+            next_class_card = next((row for row in cards
+                                    if row["class"] in lower_classes), None)
+            at_boundary = not target_cards and bool(foreign_classes) and stable
+            fingerprint = _fingerprint(target_cards)
+            for row in target_cards:
+                found.setdefault(row["vehicle"]["id"], {**row, "page": page})
+            if not at_boundary and target_id in fingerprint:
+                card = next(row for row in target_cards
+                            if row["vehicle"]["id"] == target_id)
+                result = _try_target(
+                    context, card, page, list(found.values()), target_id, catalog,
+                    choose=choose, expected_performance=expected_performance,
+                    expected_stars=expected_stars,
+                    verify_list_detail_rating=verify_list_detail_rating)
+                result["fast_forward_swipes"] = fast_forward
+                result["edge_repositions"] = edge_repositions
+                if result["status"] != "target_temporarily_unreadable":
+                    return result
+            for row in clipped:
+                vehicle_id = row["vehicle"]["id"]
+                if (row["class"] == vehicle_class and vehicle_id not in found
+                        and vehicle_id not in owed):
+                    owed[vehicle_id] = row
+            for vehicle_id in [key for key in owed if key in fingerprint]:
+                del owed[vehicle_id]
+            if at_boundary:
+                # A lower-class page is only a real boundary when nothing on the
+                # previous page still owes a full observation.  Otherwise the
+                # owed car was carried out of view and the traversal is
+                # incomplete, not a finished one.
+                if owed:
+                    return _result("edge_candidate_unresolved", page,
+                                   list(found.values()),
+                                   edge_candidate=next(iter(owed.values())),
+                                   edge_repositions=edge_repositions,
+                                   boundary_reason="edge_candidate_overshot")
+                status = "target_not_found" if target_id else "class_boundary"
+                return _result(status, page - 1, list(found.values()),
+                               boundary_reason="next_class",
+                               edge_repositions=edge_repositions,
+                               next_class=(next_class_card["class"]
+                                           if next_class_card is not None else None))
+            if not owed:
+                break
+            if edge_attempts >= EDGE_REPOSITION_LIMIT:
+                return _result("edge_candidate_unresolved", page,
+                               list(found.values()),
+                               edge_candidate=next(iter(owed.values())),
+                               edge_repositions=edge_repositions,
+                               boundary_reason="edge_reposition_budget")
+            edge_attempts += 1
             edge_repositions += 1
             if not context.tasker.controller.post_swipe(
                     *EDGE_REPOSITION_SWIPE).wait().succeeded:
                 return _result("swipe_failed", page - 1, list(found.values()),
-                               edge_candidate=pending, edge_repositions=edge_repositions)
+                               edge_candidate=next(iter(owed.values())),
+                               edge_repositions=edge_repositions)
             time.sleep(EDGE_REPOSITION_INTERVAL)
             frame, cards, stable, clipped = _stable_sample_visible(
                 context, catalog, target_id=target_id)
             if frame is None:
                 return _result("selection_lost", page - 1, list(found.values()),
-                               edge_candidate=pending, edge_repositions=edge_repositions)
+                               edge_candidate=next(iter(owed.values())),
+                               edge_repositions=edge_repositions)
             if not stable:
                 return _result("page_ocr_unverified", page, list(found.values()),
-                               unstable_samples=2, edge_candidate=pending,
+                               unstable_samples=2,
+                               edge_candidate=next(iter(owed.values())),
                                edge_repositions=edge_repositions)
-            if pending["vehicle"]["id"] in _fingerprint(cards):
-                pending = None
-                break
-            pending = next((row for row in clipped
-                            if row["class"] == vehicle_class
-                            and row["vehicle"]["id"] not in found), None)
-        if pending is not None:
-            # The budget is spent and that card still has no full observation,
-            # so this traversal may not claim to be complete and a target scan
-            # may not report the target as missing.
-            return _result("edge_candidate_unresolved", page, list(found.values()),
-                           edge_candidate=pending, edge_repositions=edge_repositions,
-                           boundary_reason="edge_reposition_budget")
-        if not cards:
-            return _result("page_ocr_unverified", page, list(found.values()),
-                           edge_repositions=edge_repositions)
-        target_cards = [row for row in cards if row["class"] == vehicle_class]
-        foreign_classes = {row["class"] for row in cards if row["class"] != vehicle_class}
-        unexpected = foreign_classes - lower_classes
-        if unexpected:
-            return _result("class_or_ocr_unverified", page, list(found.values()),
-                           visible=cards, unexpected_classes=sorted(unexpected),
-                           edge_repositions=edge_repositions)
-        # A transition page can contain the tail of the requested class and
-        # the head of the next one.  Keep its requested-class cards and stop
-        # only on a stable page containing lower classes alone.
-        if not target_cards and foreign_classes and stable:
-            status = "target_not_found" if target_id else "class_boundary"
-            return _result(status, page - 1, list(found.values()),
-                           boundary_reason="next_class",
-                           edge_repositions=edge_repositions,
-                           next_class=next((row["class"] for row in cards
-                                           if row["class"] in lower_classes), None))
-        fingerprint = _fingerprint(target_cards)
-        for row in target_cards:
-            found.setdefault(row["vehicle"]["id"], {**row, "page": page})
-        if target_id in fingerprint:
-            card = next(row for row in target_cards if row["vehicle"]["id"] == target_id)
-            result = _try_target(
-                context, card, page, list(found.values()), target_id, catalog,
-                choose=choose, expected_performance=expected_performance,
-                expected_stars=expected_stars,
-                verify_list_detail_rating=verify_list_detail_rating)
-            result["fast_forward_swipes"] = fast_forward
-            result["edge_repositions"] = edge_repositions
-            if result["status"] != "target_temporarily_unreadable":
-                return result
         if previous is not None and fingerprint == previous:
             if float(np.mean(cv2.absdiff(_gray_list(previous_image), _gray_list(frame)))) < 3:
                 unchanged_swipes += 1
