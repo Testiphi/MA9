@@ -11,10 +11,22 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from ma9_agent.duel_vehicle_runtime import (_detail, _finish_target, _try_target,
+from ma9_agent.duel_lineup_slot import (BUTTON_CENTER_BASE, EXPANDED_WIDTH,
+                                        PANEL_RIGHT_BASE, SLOT_PITCH,
+                                        observe_lineup_slot)
+from ma9_agent.duel_vehicle_runtime import (_detail, _finish_target,
+                                            _lineup_identity, _try_target,
                                             assign_visible, scan)
+from ma9_agent.vehicle_screen import match_vehicle
 
 _UNSET = object()
+
+#: Colours of a synthetic 1280x720 Duel lineup page that the real read-only
+#: observer accepts: a dark background, the bright expanded panel and its
+#: bright-green selection button.
+_LINEUP_BACKGROUND = (60, 25, 45)
+_LINEUP_PANEL = (200, 90, 140)
+_LINEUP_BUTTON = (20, 240, 180)
 
 
 class _Job:
@@ -61,6 +73,73 @@ def _card(vehicle_id: str, vehicle_class: str = "D") -> dict:
     }
 
 
+def _lineup_frame(slot: int = 1, *, select_button: bool = False) -> np.ndarray:
+    """A lineup page whose expanded ``slot`` passes the real observer.
+
+    Geometry comes from the committed observer constants, so the frame only
+    moves horizontally with the slot exactly as the five real cells do.
+    """
+    frame = np.zeros((720, 1280, 3), dtype=np.uint8)
+    frame[:, :] = _LINEUP_BACKGROUND
+    right = PANEL_RIGHT_BASE + SLOT_PITCH * (slot - 1)
+    frame[210:545, right - EXPANDED_WIDTH:right + 1] = _LINEUP_PANEL
+    left = int(round(BUTTON_CENTER_BASE + SLOT_PITCH * (slot - 1) - 96))
+    frame[495:545, left:left + 192] = _LINEUP_BUTTON
+    if select_button:
+        frame[625:690, 1045:1235] = _LINEUP_BUTTON
+    return frame
+
+
+def _panel_right(slot: int = 1) -> int:
+    return PANEL_RIGHT_BASE + SLOT_PITCH * (slot - 1)
+
+
+def _page_rows(slot: int = 1, *, brand: str = "RIMAC", model: str = "NEVERA",
+               track: int = 0) -> list[tuple[str, list[int], float]]:
+    """Text of a recorded lineup frame, moved onto ``slot``.
+
+    Coordinates mirror the production OCR boxes of the 05L evidence frames:
+    the two-line identity block right-anchored inside the panel, the expanded
+    track name left of it, the performance score + class letter row below it
+    and the neighbouring collapsed cell right of the panel.  ``track`` replaces
+    the identity block with the "no car selected" placeholder.
+    """
+    shift = SLOT_PITCH * (slot - 1)
+    right = _panel_right(slot) - 78
+    if track:
+        return [("旷野飙车", [198 + shift, 216, 116, 34], .998),
+                ("4,837S", [572 + shift, 259, 142, 47], .825),
+                ("花都疾驰", [_panel_right(slot) + 26, 219, 63, 24], .999),
+                ("回", [2, 346, 28, 24], .791)]
+    return [
+        ("旷野飙车", [198 + shift, 216, 116, 34], .998),
+        (brand, [right - 11 * len(brand), 214, 11 * len(brand), 26], .99),
+        (model, [right - 11 * len(model), 238, 11 * len(model), 22], .99),
+        ("4,837S", [572 + shift, 259, 142, 47], .825),
+        ("更换车辆", [566, 491, 58, 15], .999),
+        ("花都疾驰", [_panel_right(slot) + 26, 219, 63, 24], .999),
+        ("回", [2, 346, 28, 24], .791),
+    ]
+
+
+def _clip(box: list[int], roi: tuple[int, int, int, int]) -> list[int] | None:
+    left, top = max(box[0], roi[0]), max(box[1], roi[1])
+    right = min(box[0] + box[2], roi[0] + roi[2])
+    bottom = min(box[1] + box[3], roi[1] + roi[3])
+    if right <= left or bottom <= top:
+        return None
+    return [left, top, right - left, bottom - top]
+
+
+def _frame_ocr(rows: list[tuple[str, list[int], float]]):
+    """Model the production OCR engine: it only reports text inside the ROI."""
+    def ocr(_context, _frame_value, roi):
+        return [{"text": text, "confidence": confidence, "box": clipped}
+                for text, box, confidence in rows
+                if (clipped := _clip(box, roi)) is not None]
+    return ocr
+
+
 class DuelVehicleRuntimeTest(unittest.TestCase):
     def setUp(self) -> None:
         self.frame = np.zeros((720, 1280, 3), dtype=np.uint8)
@@ -94,6 +173,17 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
         return [
             {"id": "lancer", "title": "Mitsubishi Lancer Evolution", "class": "D"},
             {"id": "other", "title": "Other Car", "class": "D"},
+        ]
+
+    @staticmethod
+    def _lineup_catalog():
+        """Decoys that reproduce the real Nevera / Nevera R margin the live run hit."""
+        return [
+            {"id": "nevera", "title": "Rimac Nevera", "class": "S"},
+            {"id": "nevera_r", "title": "Rimac Nevera R", "class": "R"},
+            {"id": "jesko", "title": "Koenigsegg Jesko Absolut", "class": "R"},
+            {"id": "glickenhaus", "title": "Glickenhaus 004C", "class": "D"},
+            {"id": "praga", "title": "Praga R1", "class": "D"},
         ]
 
     @staticmethod
@@ -472,20 +562,17 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
     def test_name_first_choose_still_runs_select_and_assignment_guards(self) -> None:
         card = _card("lancer")
         card["performance"] = [4837, 4897]
-        frame = self._active_button_frame()
+        frame = _lineup_frame(1, select_button=True)
+        page = _frame_ocr(_page_rows(1, brand="MITSUBISHI",
+                                     model="LANCER EVOLUTION"))
 
-        def ocr(_context, _frame_value, roi):
+        def ocr(context, frame_value, roi):
             if roi == (160, 76, 300, 110):
                 return [{"text": "MITSUBISHI", "confidence": .99, "box": [160, 76, 170, 25]},
                         {"text": "LANCER EVOLUTION", "confidence": .99, "box": [160, 104, 220, 25]}]
             if roi == (900, 90, 210, 90):
                 return [{"text": "37/4,897", "confidence": .99, "box": [900, 126, 130, 30]}]
-            if roi == (470, 470, 720, 90):
-                return [{"text": "更换车辆", "confidence": .99, "box": [470, 470, 120, 25]}]
-            if roi == (0, 170, 1280, 190):
-                return [{"text": "MITSUBISHI", "confidence": .99, "box": [0, 170, 170, 25]},
-                        {"text": "LANCER EVOLUTION", "confidence": .99, "box": [0, 200, 220, 25]}]
-            return []
+            return page(context, frame_value, roi)
 
         context = _DetailContext([True] * 40)
         with patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
@@ -498,6 +585,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                                     verify_list_detail_rating=False)
         self.assertEqual(report["status"], "assigned")
         self.assertTrue(report["assignment_complete"])
+        self.assertEqual(report["lineup_identity"]["vehicle"]["id"], "lancer")
         self.assertEqual([call.args[1:] for call in click.call_args_list],
                          [tuple(card["target"]), (1139, 658)])
 
@@ -575,6 +663,161 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                           choose=False)
         self.assertEqual(report["status"], "list_detail_rating_mismatch")
         self.assertIn((32, 25), [call.args[1:] for call in click.call_args_list])
+
+    # ------------------------------ post-selection lineup identity (MA9-05L)
+    @staticmethod
+    def _read_identity(frame, rows, catalog):
+        """Run the production identity read behind its own OCR mock."""
+        with patch("ma9_agent.duel_vehicle_runtime._ocr", _frame_ocr(rows)):
+            return _lineup_identity(_Context(), frame, catalog)
+
+    def test_identity_region_reads_every_slot_and_rejects_the_page_wide_band(self) -> None:
+        """The recorded page still fails the old band and passes the new region."""
+        catalog = self._lineup_catalog()
+        for slot in range(1, 6):
+            with self.subTest(slot=slot):
+                frame = _lineup_frame(slot)
+                panel = observe_lineup_slot(frame)["evidence"]["panel"]
+                page = _frame_ocr(_page_rows(slot))
+                wide = page(context := _Context(), frame, (0, 170, 1280, 190))
+                self.assertIn("4,837S", [row["text"] for row in wide])
+                self.assertIsNone(match_vehicle(wide, catalog))
+                with patch("ma9_agent.duel_vehicle_runtime._ocr", page):
+                    result = _lineup_identity(context, frame, catalog)
+                self.assertEqual(result["panel"], panel)
+                self.assertEqual(result["region"],
+                                 [panel["right"] - 340, 200, 340, 58])
+                self.assertEqual(result["vehicle"]["id"], "nevera")
+                self.assertEqual([row["text"] for row in
+                                  page(context, frame, tuple(result["region"]))],
+                                 ["RIMAC", "NEVERA"])
+
+    def test_identity_region_never_covers_score_track_or_neighbour_text(self) -> None:
+        for slot in range(1, 6):
+            with self.subTest(slot=slot):
+                frame = _lineup_frame(slot)
+                region = tuple(self._read_identity(
+                    frame, _page_rows(slot), self._lineup_catalog())["region"])
+                shift = SLOT_PITCH * (slot - 1)
+                outside = {
+                    "score_and_class": [572 + shift, 259, 142, 47],
+                    "track_name": [198 + shift, 216, 116, 34],
+                    "neighbour_cell": [_panel_right(slot) + 26, 219, 63, 24],
+                    "left_rail": [2, 346, 28, 24],
+                }
+                for name, box in outside.items():
+                    with self.subTest(text=name):
+                        self.assertIsNone(_clip(box, region))
+
+    def test_identity_region_keeps_digit_and_single_letter_suffix_names(self) -> None:
+        """No text filter: a digit name and a lone ``R`` suffix stay intact."""
+        catalog = self._lineup_catalog()
+        for brand, model, expected in (("RIMAC", "NEVERA", "nevera"),
+                                       ("RIMAC", "NEVERA R", "nevera_r"),
+                                       ("GLICKENHAUS", "004C", "glickenhaus"),
+                                       ("PRAGA", "R1", "praga")):
+            with self.subTest(model=model):
+                result = self._read_identity(
+                    _lineup_frame(1), _page_rows(1, brand=brand, model=model), catalog)
+                self.assertEqual(result["vehicle"]["id"], expected)
+
+    def test_identity_region_leaves_an_unreadable_cell_unassigned(self) -> None:
+        """The "no car selected" panel names no vehicle even though the read works."""
+        frame = _lineup_frame(4)
+        result = self._read_identity(frame, _page_rows(4, track=1),
+                                     self._lineup_catalog())
+        self.assertEqual(result["panel"]["right"], _panel_right(4))
+        self.assertIsNone(result["vehicle"])
+
+    def test_identity_read_never_passes_an_expected_slot(self) -> None:
+        frame = _lineup_frame(3)
+        with patch("ma9_agent.duel_vehicle_runtime.observe_lineup_slot",
+                   return_value=observe_lineup_slot(frame)) as observe, \
+                patch("ma9_agent.duel_vehicle_runtime._ocr",
+                      _frame_ocr(_page_rows(3))):
+            result = _lineup_identity(_Context(), frame, self._lineup_catalog())
+        self.assertEqual(result["vehicle"]["id"], "nevera")
+        self.assertEqual(observe.call_count, 1)
+        self.assertEqual(len(observe.call_args.args), 1)
+        self.assertIs(observe.call_args.args[0], frame)
+        self.assertEqual(observe.call_args.kwargs, {})
+
+    def _return_page_run(self, *, model="LANCER EVOLUTION", brand="MITSUBISHI",
+                         catalog=None, extra_frame=None):
+        """Drive ``_finish_target`` onto a lineup return page and report the run."""
+        card = _card("lancer")
+        card["performance"] = [4837, 4897]
+        frame = extra_frame if extra_frame is not None else _lineup_frame(1, select_button=True)
+        page = _frame_ocr(_page_rows(1, brand=brand, model=model))
+
+        def ocr(context, frame_value, roi):
+            if roi == (160, 76, 300, 110):
+                return [{"text": "MITSUBISHI", "confidence": .99, "box": [160, 76, 170, 25]},
+                        {"text": "LANCER EVOLUTION", "confidence": .99, "box": [160, 104, 220, 25]}]
+            if roi == (900, 90, 210, 90):
+                return [{"text": "37/4,897", "confidence": .99, "box": [900, 126, 130, 30]}]
+            return page(context, frame_value, roi)
+
+        context = _DetailContext([True] * 40)
+        with patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._ocr", ocr), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True) as click, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = _finish_target(
+                context, card, 1, [card], "lancer",
+                catalog or self._detail_catalog() + self._lineup_catalog(),
+                choose=True, expected_performance=None, expected_stars=None,
+                verify_list_detail_rating=False)
+        return report, [call.args[1:] for call in click.call_args_list]
+
+    def test_return_page_naming_another_vehicle_stays_unverified(self) -> None:
+        report, clicks = self._return_page_run(brand="RIMAC", model="NEVERA R")
+        self.assertEqual(report["status"], "assignment_unverified")
+        self.assertFalse(report["assignment_complete"])
+        self.assertFalse(report["scan_complete"])
+        self.assertEqual(report["lineup_identity"]["vehicle"]["id"], "nevera_r")
+        self.assertEqual(clicks, [tuple(_card("lancer")["target"]), (1139, 658)])
+
+    def test_ambiguous_return_page_stays_unverified(self) -> None:
+        frame = _lineup_frame(1, select_button=True)
+        second = int(round(BUTTON_CENTER_BASE - 96)) + 300
+        frame[495:545, second:second + 192] = _LINEUP_BUTTON
+        report, clicks = self._return_page_run(extra_frame=frame)
+        self.assertEqual(report["status"], "assignment_unverified")
+        self.assertFalse(report["assignment_complete"])
+        self.assertEqual(report["lineup_identity"],
+                         {"panel": None, "region": None, "vehicle": None})
+        self.assertEqual(clicks, [tuple(_card("lancer")["target"]), (1139, 658)])
+
+    def test_scan_assigns_only_after_the_identity_read_confirms_the_target(self) -> None:
+        card = _card("lancer")
+        card["performance"] = [4837, 4897]
+        catalog = self._detail_catalog() + self._lineup_catalog()
+        frame = _lineup_frame(1, select_button=True)
+        page = _frame_ocr(_page_rows(1, brand="MITSUBISHI", model="LANCER EVOLUTION"))
+
+        def ocr(context, frame_value, roi):
+            if roi == (160, 76, 300, 110):
+                return [{"text": "MITSUBISHI", "confidence": .99, "box": [160, 76, 170, 25]},
+                        {"text": "LANCER EVOLUTION", "confidence": .99, "box": [160, 104, 220, 25]}]
+            if roi == (900, 90, 210, 90):
+                return [{"text": "37/4,897", "confidence": .99, "box": [900, 126, 130, 30]}]
+            return page(context, frame_value, roi)
+
+        context = _DetailContext([True] * 40)
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._sample_visible",
+                      return_value=(frame, [card], True)), \
+                patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._ocr", ocr), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "D", catalog, target_id="lancer", choose=True,
+                          verify_list_detail_rating=False)
+        self.assertEqual(report["status"], "assigned")
+        self.assertTrue(report["assignment_complete"])
+        self.assertEqual(report["lineup_identity"]["vehicle"]["id"], "lancer")
 
 
 if __name__ == "__main__":

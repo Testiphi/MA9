@@ -9,6 +9,7 @@ import cv2
 import numpy as np
 from maa.pipeline import JRecognitionType, JTemplateMatch
 
+from .duel_lineup_slot import observe_lineup_slot
 from .duel_vehicle_screen import _current_rating, read_visible_cards
 from .selection_runtime import _click, _frame, _ocr
 from .vehicle_screen import match_vehicle
@@ -22,6 +23,20 @@ DETAIL_ATTEMPTS = 8
 DETAIL_INTERVAL = .5
 SELECT_BUTTON_ROI = (1020, 610, 240, 100)
 SELECT_BUTTON_TEMPLATE = "navigation/duel/detail_select_text.png"
+
+#: Vertical band ``(top, bottom)`` of the expanded lineup cell's vehicle name
+#: block, in 1280x720 pixels.  Calibrated on the fixed frames listed in the 05L
+#: evidence report: the two name lines sit at y 214-263 on every measured slot,
+#: while the performance score + class letter row (``4,837S``) starts at y 259
+#: and the track names live left of the block.  The band is slot-independent
+#: because the five cells only move horizontally.
+LINEUP_IDENTITY_BAND = (200, 258)
+#: Width of the identity read, measured back from the expanded panel's right
+#: edge.  The name block is right-anchored ~76 px inside the panel, so it moves
+#: with the panel on slots 2..5; the nearest non-identity text (the expanded
+#: track name) ends at least 461 px left of the panel edge on every measured
+#: slot, and the neighbouring collapsed cells start 19-30 px right of it.
+LINEUP_IDENTITY_SPAN = 340
 
 
 def _selection_title(context: Any, frame: np.ndarray) -> bool:
@@ -189,6 +204,35 @@ def _detail(context: Any, expected_id: str, catalog: list[dict[str, Any]]) -> di
     return {"status": "detail_not_verified"}
 
 
+def _lineup_identity(context: Any, frame: np.ndarray,
+                     catalog: list[dict[str, Any]]) -> dict[str, Any]:
+    """Read only the expanded lineup cell's vehicle-name block of one frame.
+
+    The page-wide ``(0, 170, 1280, 190)`` band used before this helper mixed
+    the performance score and class letter (``4,837S``), the track names and
+    the neighbouring collapsed cells into a single ``match_vehicle`` call, so
+    the target's own name was never matched on its own.
+
+    The block is right-anchored inside the expanded panel, so its position is
+    taken from the read-only lineup observer's panel geometry instead of from a
+    fixed page-wide band; that also moves it correctly on slots 2..5.  Nothing
+    is filtered by text here, so a digit name (``004C``, ``370Z``) or a
+    single-letter suffix (``Nevera R``) survives intact.  Returns the panel,
+    the region that was read and the vehicle read there (``None`` when the
+    block names no vehicle, or when no single expanded panel was found).
+    """
+    observed = observe_lineup_slot(frame)
+    panel = observed["evidence"].get("panel") if observed else None
+    if observed["expanded_slot"] is None or panel is None:
+        return {"panel": None, "region": None, "vehicle": None}
+    top, bottom = LINEUP_IDENTITY_BAND
+    left = panel["right"] - LINEUP_IDENTITY_SPAN
+    region = (left, top, panel["right"] - left, bottom - top)
+    words = _ocr(context, frame, region)
+    return {"panel": panel, "region": list(region),
+            "vehicle": match_vehicle(words, catalog)}
+
+
 def _finish_target(context: Any, card: dict[str, Any], page: int,
                    vehicles: list[dict[str, Any]], target_id: str,
                    catalog: list[dict[str, Any]], *, choose: bool,
@@ -238,16 +282,23 @@ def _finish_target(context: Any, card: dict[str, Any], page: int,
         result["status"] = "select_click_failed"
         return result
     result["status"] = "assignment_unverified"
+    identity: dict[str, Any] = {"panel": None, "region": None, "vehicle": None}
     for _ in range(10):
         time.sleep(.5)
         frame = _frame(context)
         changed = any("更换车辆" in row["text"]
                       for row in _ocr(context, frame, (470, 470, 720, 90)))
-        displayed = match_vehicle(_ocr(context, frame, (0, 170, 1280, 190)), catalog)
+        identity = _lineup_identity(context, frame, catalog)
+        displayed = identity["vehicle"]
         if changed and displayed and displayed["id"] == target_id:
             result["status"] = "assigned"
             result["assignment_complete"] = True
             break
+    # Post-selection evidence: the same frame carries both the "back on the
+    # lineup" cue above and this identity read, so a later failure can be told
+    # apart from an unreadable or wrong-lineup cell.  Existing keys keep their
+    # meaning.
+    result["lineup_identity"] = identity
     return result
 
 
