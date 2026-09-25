@@ -125,3 +125,6 @@ user-test-slot-da22bf1/MA9-preview，版本v0.0.0-slot-locate-da22bf1，exe75388
 
 ## 最新05KR通过、02J单槽选择包可用户验证
 05KR16/10/8探针exit0无阻塞。总控已构建source ddcb200c066ae7017d48914e46af0ce242415c37新包user-test-assign-ddcb200/MA9-preview，8模块/全部hash/独立赋值配置/Usage exit1/schema通过，旧locate加载器40差异负对照exit1。exe c56270ddbcb61b569979633df39f9c6dc2e7283f747943cc2fafdbc31d0757bd。GUI只自检+单槽选择，配置choose/assignment_confirmed都true，用户核对账号后从第1槽阵容开始，实际选Nevera并回同槽，starts_racefalse；尚未赋值实机通过。
+
+## 最新：实际单槽赋值成功，自动回页确认仍缺口
+02J截图Nevera已在第1槽，JSON却assignment_unverified/after null/selection_attemptedtrue/starts_racefalse。20260925-095331-assignment-postcheck已冻结；scan对宽ROI含4837S等做全段match，3组实际OCR都None，单独真实姓名行均正确。05L-lineup-identity.md派ds-v4.1flash请求high，源ddcb200，仅runtime及测试，修回页车型空间读取，不改共享匹配/等待/补点，不让用户清空重选。

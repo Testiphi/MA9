@@ -142,7 +142,7 @@
         "device_test": "located_detail_verified_user_success_businessJSON_checked"
       },
       "single_assignment_package": {
-        "device": "not_run",
+        "device": "user_assigned_Nevera_slot1_but_JSON_unverified",
         "package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-assign-ddcb200/MA9-preview",
         "exe_sha256": "c56270ddbcb61b569979633df39f9c6dc2e7283f747943cc2fafdbc31d0757bd",
         "source": "ddcb200c066ae7017d48914e46af0ce242415c37",
@@ -693,7 +693,7 @@
         "base": "50c3cb58940df144bdf463da0984b37787176bff",
         "device": "not_run",
         "project": "MA9-05K",
-        "phase": "05KR_passed_package_verified_user_test_ready",
+        "phase": "user_visual_assignment_success_automated_postcheck_unverified",
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-05K-single-assignment/results.json",
         "delivery": "ddcb200c066ae7017d48914e46af0ce242415c37",
         "scope": "distinct assignment GUI/action/config; same isolated account slot1 Nevera; no races or five-slot loop",
@@ -720,7 +720,24 @@
           "target id Nevera",
           "starts_race false",
           "stop lineup"
-        ]
+        ],
+        "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-095331-assignment-postcheck"
+      },
+      "lineup_identity_task": {
+        "scope": "post-assignment identity area only; exclude stats/map text with spatial evidence; no newclick or timeout changes",
+        "prompt": "agent/orchestration/prompts/05L-lineup-identity.md",
+        "owns": [
+          "agent/ma9_agent/duel_vehicle_runtime.py",
+          "agent/tests/test_duel_vehicle_runtime.py"
+        ],
+        "effort": "high_requested_actual_platform_reported",
+        "project": "MA9-05L",
+        "phase": "prompt_ready",
+        "owns_generated": [],
+        "model": "ds-v4.1flash",
+        "owns_new": [],
+        "device_allowed": false,
+        "base": "ddcb200c066ae7017d48914e46af0ce242415c37"
       }
     },
     "duel-defense": {
@@ -1008,7 +1025,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05KR无阻塞且02J-ddcb200单槽选择包已构建/验包通过。交用户同账号第1槽Nevera真实选择一次，最终返回同槽阵容且assigned/assignment_complete/starts_racefalse。不是五槽或开赛，助手不操作设备。",
+  "next": "用户截图与观察证实Nevera已在第1槽，但JSON assignment_unverified/after null：scan回页大ROI含4837S污染车型名，3组OCR离线旧None名称行匹配正确。05L窄修复返回页身份范围；不要让用户重复选择或清空已成功阵容，不把视觉成功冒充自动验收。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
