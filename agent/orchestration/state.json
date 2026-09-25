@@ -895,7 +895,7 @@
         "base": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
         "project": "MA9-05N",
         "owns_new": [],
-        "phase": "05N_blocked_counterexamples_05N1_prompt_ready",
+        "phase": "05N1_locally_accepted_pending_05NR_full_review",
         "device_allowed": false,
         "owns": [
           "agent/ma9_agent/duel_vehicle_screen.py",
@@ -922,7 +922,26 @@
         ],
         "repair_prompt": "agent/orchestration/prompts/05N1-counterexample-fix.md",
         "merged": false,
-        "tradeoff": "bounded unresolved early-stop accepted; candidate loss and false completeness not accepted"
+        "tradeoff": "bounded unresolved early-stop accepted; candidate loss and false completeness not accepted",
+        "repaired_delivery": "f3f0762352236021924b1ba8a49831a105dfd823",
+        "repair_acceptance": "E:/hzz/work/MA9/MA9-evidence/20260925-05N1-orchestrator/results.json",
+        "repair_counts": {
+          "tools_passed": 29,
+          "full_FE3_lists_pass": 2,
+          "tools_skip": 1,
+          "agent": 327,
+          "tools_ran": 30,
+          "old_recognized_removed": 0,
+          "repro_pass": 4,
+          "two_detail_sequence": "detail_verified_title_match",
+          "recorded_list_frames": 45,
+          "all_exit": 0,
+          "new_added": 2
+        },
+        "review_prompt": "agent/orchestration/prompts/05NR-rolling-coverage-review.md",
+        "review_base": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
+        "review_scope": "whole05N+05N1 two commits fourfiles",
+        "blockers_resolved": "F1-F4 independently pass; previous blocked evidence remains immutable"
       }
     },
     "duel-defense": {
@@ -1210,7 +1229,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05N自带321/tools29+1skip通过但总控四独立反例失败：可见目标被移走/库存丢记录/候选债务丢失假完整/匹配片段尾部被忽略。不得合入打包；用户ds-v4.1flash新对话执行05N1-counterexample-fix.md，基点2b39e73仍4文件。预算耗尽明确未完成取舍接受，不需要实机重跑。",
+  "next": "05N1 f3f0762总控原四反例均PASS，Agent327/tools29+1skip exit0，四图和45帧重新验证无旧识别/坐标/读数回归。用户全新Flash做05NR，覆盖ff426c6..f3f0762全部05N+返修，不只最后diff；暂不合入/打包，4/5仍暂停。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

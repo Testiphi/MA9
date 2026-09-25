@@ -158,3 +158,6 @@ c268cddf63d843d4454985bcc38e999af7c12596仅runtime和测试，按panel右缘身�
 
 ## 最新05N被总控四反例阻塞，返修05N1
 2b39e73ed49126f23dd89ad4c43946f3442dce0b自带Agent321/tools29+1skip exit0，但20260925-05N-orchestrator/repro.py四FAIL exit1：先补边滑走当前目标、丢当前完整车记录、pending消失后假complete-notfound、长片段尾部未解释仍认FE3。采样额外探索脚本第二帧无候选假设错误，不列第五阻塞。05N1-counterexample-fix.md新对话ds high请求，严格4文件；bounded未解早停本身接受。未合/未包/不实机，4/5仍暂停。
+
+## 最新05N1验收通过待完整05NR
+f3f0762352236021924b1ba8a49831a105dfd823四反例总控独立全PASS（仅OUT/SHA/None打印改，原探针该打印bug确认），327/tools29+1skip exit0。45组OCR无旧车/几何/分数变化，仅2新增；两完整FE3图可认、详情2帧序列title@.786确认。05NR-rolling-coverage-review.md给Flash新对话，审ff426c6..f3f0762完整两提交4文件，不只修复diff。未合/未包/未实机，4/5暂停。
