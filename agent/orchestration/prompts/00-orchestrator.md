@@ -152,3 +152,6 @@ c268cddf63d843d4454985bcc38e999af7c12596仅runtime和测试，按panel右缘身�
 
 ## 最新slot3 FE3漏识别：冻结证据，待完整卡/详情截图
 20260925-115731-slot3-fe3-scan：target_not_found扫A13页到B；仅入口和A标签2次点击，未点击目标。OCR45帧含FE3右缘FORMU/J CHAMPIONSHIP EDIT、FORMULAE/P EDITION/GEN3 EV片段，left1069/984+420>1295不完整卡被跳过，随后左缘IPION尾片段。疑点同时是覆盖重叠和滚动长名，不能只增加等待或降全局阈值。需用户手动把FE3整卡移入屏幕停列表，间隔1-2秒2-3截图，加详情图（不选择）；4/5预案未激活，前两槽保留，无生产修改。
+
+## 最新FE3补图足够，05N修复待派
+用户4张1280x720图已冻结20260925-fe3-full-intake，MaaFW内存离线原生OCRexit0：完整列表两张0/2匹配（FORMU+滚动model），详情首帧None/第二帧FE3@.786。原右裁切覆盖缺口之外还需滚名处理，05N-rolling-coverage.md授权screen/runtime及两测试4文件、源ff426c6；禁止改共享matcher/全局阈值/车名硬编码，需四图和45帧真实日志回放及候选歧义负例。ds-v4.1flash请求high，4/5继续暂停，无需继续补图。
