@@ -709,7 +709,7 @@
         "base": "50c3cb58940df144bdf463da0984b37787176bff",
         "device": "not_run",
         "project": "MA9-05K",
-        "phase": "user_visual_assignment_success_automated_postcheck_unverified",
+        "phase": "slot2_full_chain_live_passed_slot1_current_state_verified",
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-05K-single-assignment/results.json",
         "delivery": "ddcb200c066ae7017d48914e46af0ce242415c37",
         "scope": "distinct assignment GUI/action/config; same isolated account slot1 Nevera; no races or five-slot loop",
@@ -807,7 +807,7 @@
         "avoid_already_assigned_elsewhere": true,
         "slot": 2,
         "device_operator": "user",
-        "phase": "exact_package_verified_user_test_ready",
+        "phase": "slot2_end_to_end_live_passed",
         "target_title": "Ferrari 296 GTB",
         "target_id": "car_663ddea67d1bbda0",
         "vehicle_class": "C",
@@ -816,8 +816,28 @@
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-slot2-296gtb-package/results.json",
         "source": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
         "agent": "reused verified02K exe samehash not recompiled",
-        "device_test": "not_run",
-        "success": "assigned/assignment_complete true; before after slot2; Ferrari target evidence; starts_racefalse; screenshot first-slotNevera retained"
+        "device_test": "assigned_same_slot2_target_verified_no_race",
+        "success": "assigned/assignment_complete true; before after slot2; Ferrari target evidence; starts_racefalse; screenshot first-slotNevera retained",
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260925-114452-slot2-296gtb-assigned/acceptance.json"
+      },
+      "remaining_slot_validation": {
+        "not_yet_implemented": "automatic five-slot navigation and plan application not claimed",
+        "preserve": [
+          "slot1 Nevera",
+          "slot2 Ferrari296GTB"
+        ],
+        "phase": "awaiting_user_three_distinct_owned_targets",
+        "slots": [
+          3,
+          4,
+          5
+        ],
+        "preferred_classes": [
+          "A",
+          "B",
+          "D"
+        ],
+        "next_scope": "remaining slot and class coverage then five unique verification; no races"
       }
     },
     "duel-defense": {
@@ -1105,7 +1125,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户选定C级Ferrari296GTB，已核catalog car_663ddea67d1bbda0。新包user-test-slot2-296gtb-ff426c6基于已审相同exe另组包，配置/全hash/Usage/schema通过，无业务改动。用户第2地图先展开但不手动入选车页，自检后运行选择，期待assigned回slot2且Nevera slot1保留，助手不操作设备。",
+  "next": "第2槽Ferrari296GTB完整实机闭环通过：assigned/same_slot_confirmed、beforeafter2、detail与lineup车型一致、assignment_completetrue/starts_racefalse；第1槽Nevera截图仍在。归档114452证据；已请用户一次给3/4/5槽不同已拥有车型，随后扩剩余槽位/等级与五车互斥，不重做已通过阶段。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

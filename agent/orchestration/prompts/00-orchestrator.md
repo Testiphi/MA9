@@ -143,3 +143,6 @@ c268cddf63d843d4454985bcc38e999af7c12596仅runtime和测试，按panel右缘身�
 
 ## 最新第2槽Ferrari296GTB测试包就绪
 用户确认C级Ferrari296GTB，idcar_663ddea67d1bbda0。复用ff426c6已验exe1ab5ee796f13041c9cea5d9743f9f46bc3f619c1a5f1c129f1767f6059491f65，不重复编译；新包user-test-slot2-296gtb-ff426c6/MA9-preview，版本v0.0.0-slot2-296gtb-ff426c6，expected_slot2/chooseTrue/namefirst。20260925-slot2-296gtb-package记录全hash/配置/Usage/schema均通过。用户展开第2地图后运行，验证assigned+同槽2+不开赛，第1槽Nevera保持；未设备通过。
+
+## 最新第2槽296GTB完整实机通过
+20260925-114452-slot2-296gtb-assigned已冻结JSON/log/终态图，assigned/same_slot_confirmed、beforeafter2、detail与lineup idcar_663ddea67d1bbda0一致、assignment_completetrue/starts_racefalse；第1槽Nevera终态图保留（本轮未另OCR第1槽）。已请求用户一次给3/4/5槽不同已拥有未占用车型，优先A/B/D补覆盖；尚不宣称五车全自动或开赛通过，不重复已验流程。
