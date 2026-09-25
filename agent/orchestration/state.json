@@ -134,9 +134,11 @@
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-02I-612531f/results.json",
         "source": "612531f0107e8125e0106fe680059a03f849d8c0",
         "package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-slot-612531f/MA9-preview",
-        "phase": "built_offline_verified_pending_independent_review",
+        "phase": "review_passed_existing_package_released_locate_only",
         "choose": false,
-        "exe_sha256": "f97269c4df67a6bf7f7d0d3630df50dc152999f32b1784d44d3c0862ef3b86dd"
+        "exe_sha256": "f97269c4df67a6bf7f7d0d3630df50dc152999f32b1784d44d3c0862ef3b86dd",
+        "release": "user_serial_locate_only",
+        "rebuilt": false
       }
     },
     "vehicle": {
@@ -642,7 +644,7 @@
       },
       "name_first_task": {
         "owns_generated": [],
-        "phase": "local_accepted_independent_review_pending",
+        "phase": "05JR_passed_merged_waiting_user_locate_test",
         "project": "MA9-05J-name-first",
         "base": "da22bf1bc844d762d75fb70977284dced7b09e11",
         "device_allowed": false,
@@ -660,7 +662,17 @@
         "delivery": "612531f0107e8125e0106fe680059a03f849d8c0",
         "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260925-05J-orchestrator/results.json",
         "review_prompt": "agent/orchestration/prompts/05JR-name-first-review.md",
-        "merged": false
+        "merged": true,
+        "merge_commit": "e3a9c021e96873822aa5072013dd2f50f8018b95",
+        "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-05JR-name-first-review/results.json",
+        "review_counts": {
+          "slot": 36,
+          "probes": 17,
+          "runtime": 25,
+          "all_exit": 0
+        },
+        "integration": "E:/hzz/work/MA9/MA9-evidence/20260925-05J-integration/results.json",
+        "risk": "external positional dataclass callers could shift newfield; repo calls keyword, invalid score-as-bool rejected"
       }
     },
     "duel-defense": {
@@ -948,7 +960,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05J已总控验收285/tools29+1skip exit0，独立05JR待用户全新Flash复核；依用户要求直接构建02I本地进度包并推送main与lane保存进度，05J未合main/包不放设备。",
+  "next": "05JR无阻塞且main已合入e3a9c02，285/30组合exit0。已核对现有612531f包不变，更新本地TEST-BUILD/说明解除待复核，用户第1槽Nevera仅定位；尚未chooseTrue接线，不让用户点击选择或开赛。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1140,7 +1152,7 @@
         "lane/duel-scan"
       ],
       "policy": "ordinary atomic push no force; main accepted work plus orchestration,05J on lane pendingreview",
-      "result_file": "E:/hzz/work/MA9/MA9-evidence/20260925-progress-push/results.json"
+      "result_file": "E:/hzz/work/MA9/MA9-evidence/20260925-name-first-merge-push/results.json"
     }
   },
   "git_commit_policy": {

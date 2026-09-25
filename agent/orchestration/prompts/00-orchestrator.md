@@ -116,3 +116,6 @@ user-test-slot-da22bf1/MA9-preview，版本v0.0.0-slot-locate-da22bf1，exe75388
 
 ## 最新05J验收、02I进度包、用户授权推送
 612531f0107e8125e0106fe680059a03f849d8c0总控Agent285/tools29+1skip exit0。05JR-name-first-review.md待Flash全新只读复核，未合main。用户要求打包推送，总控直接构建新包user-test-slot-612531f/MA9-preview，8模块/哈希/根配置/无socket冒烟/schema通过，仍choosefalse且待复核不实机。推送main和lane/duel-scan，确切结果见20260925-progress-push/results.json，不上传私有包。
+
+## 最新05JR收口：05J合入并复用现有包
+05JR25+36/17探针exit0无阻塞；合入e3a9c021e96873822aa5072013dd2f50f8018b95，main285/30 exit0。612531f包exe哈希f97269c4df67a6bf7f7d0d3630df50dc152999f32b1784d44d3c0862ef3b86dd未变，未重建；本地TEST-BUILD/说明已解除待复核，原文件快照保存在05J-integration。用户只定位Nevera到详情，不点击选择，隐式分数差不再退回；实机未通过。
