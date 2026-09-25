@@ -119,3 +119,6 @@ user-test-slot-da22bf1/MA9-preview，版本v0.0.0-slot-locate-da22bf1，exe75388
 
 ## 最新05JR收口：05J合入并复用现有包
 05JR25+36/17探针exit0无阻塞；合入e3a9c021e96873822aa5072013dd2f50f8018b95，main285/30 exit0。612531f包exe哈希f97269c4df67a6bf7f7d0d3630df50dc152999f32b1784d44d3c0862ef3b86dd未变，未重建；本地TEST-BUILD/说明已解除待复核，原文件快照保存在05J-integration。用户只定位Nevera到详情，不点击选择，隐式分数差不再退回；实机未通过。
+
+## 最新定位实机收口，05K单槽赋值待审
+20260925-092207-nevera-located已冻结业务JSON，612531f实际located/detail_verified/slot1/选择未尝试/starts_racefalse，用户确认停详情。总控新增独立选择action/配置，choose模式不可由GUI参数覆写，assignment_confirmed严格true，旧定位保留；ddcb200c066ae7017d48914e46af0ce242415c37，291/30与两变更schema通过。lane已快进供05KR-single-assignment-review.md Flash独立复核；通过后新包做一槽Nevera赋值/返回同槽，不五槽不开赛。

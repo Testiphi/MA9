@@ -138,7 +138,8 @@
         "choose": false,
         "exe_sha256": "f97269c4df67a6bf7f7d0d3630df50dc152999f32b1784d44d3c0862ef3b86dd",
         "release": "user_serial_locate_only",
-        "rebuilt": false
+        "rebuilt": false,
+        "device_test": "located_detail_verified_user_success_businessJSON_checked"
       }
     },
     "vehicle": {
@@ -543,7 +544,7 @@
           "preserve formal defense and all existing GUI tasks",
           "user serial device testing only after build verification"
         ],
-        "phase": "detail_rating_clipping_diagnosed_waiting_detail_image",
+        "phase": "single_target_locate_live_passed",
         "scope": "explicit isolated runtime root and dedicated request/profile; default locate only; one GUI/Agent test route",
         "device_allowed": false,
         "requested_user_inputs": [
@@ -599,7 +600,8 @@
           "arrival_samples": 6,
           "ready": 1,
           "locator_success": false
-        }
+        },
+        "locate_acceptance": "E:/hzz/work/MA9/MA9-evidence/20260925-092207-nevera-located/acceptance.json"
       },
       "exact_name_repair": {
         "delivery": "da22bf1bc844d762d75fb70977284dced7b09e11",
@@ -673,6 +675,24 @@
         },
         "integration": "E:/hzz/work/MA9/MA9-evidence/20260925-05J-integration/results.json",
         "risk": "external positional dataclass callers could shift newfield; repo calls keyword, invalid score-as-bool rejected"
+      },
+      "single_assignment_task": {
+        "base": "50c3cb58940df144bdf463da0984b37787176bff",
+        "device": "not_run",
+        "project": "MA9-05K",
+        "phase": "implemented_offline_verified_review_pending",
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-05K-single-assignment/results.json",
+        "delivery": "ddcb200c066ae7017d48914e46af0ce242415c37",
+        "scope": "distinct assignment GUI/action/config; same isolated account slot1 Nevera; no races or five-slot loop",
+        "review_prompt": "agent/orchestration/prompts/05KR-single-assignment-review.md",
+        "owner": "orchestrator",
+        "tests": {
+          "targeted": 16,
+          "all_exit": 0,
+          "tools": 30,
+          "schema_changed_inputs": 2,
+          "agent": 291
+        }
       }
     },
     "duel-defense": {
@@ -960,7 +980,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05JR无阻塞且main已合入e3a9c02，285/30组合exit0。已核对现有612531f包不变，更新本地TEST-BUILD/说明解除待复核，用户第1槽Nevera仅定位；尚未chooseTrue接线，不让用户点击选择或开赛。",
+  "next": "612531f包单槽Nevera定位已真实成功，JSON located/detail_verified/slot1/不赋值不开赛。总控05K已新增独立单槽赋值入口ddcb200并291/30/schema通过，用户全新Flash做05KR复核后再新包；旧包不能改choose开启选择。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
