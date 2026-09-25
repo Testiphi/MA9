@@ -10,7 +10,8 @@ import numpy as np
 from maa.pipeline import JRecognitionType, JTemplateMatch
 
 from .duel_lineup_slot import observe_lineup_slot
-from .duel_vehicle_screen import _current_rating, read_visible_cards
+from .duel_vehicle_screen import (_current_rating, read_clipped_candidate,
+                                  read_visible_cards, rolling_identity)
 from .selection_runtime import _click, _frame, _ocr
 from .vehicle_screen import match_vehicle
 
@@ -23,6 +24,19 @@ DETAIL_ATTEMPTS = 8
 DETAIL_INTERVAL = .5
 SELECT_BUTTON_ROI = (1020, 610, 240, 100)
 SELECT_BUTTON_TEMPLATE = "navigation/duel/detail_select_text.png"
+
+#: Bounded right-edge completion (MA9-05N).  The card the 16:9 right edge clips
+#: is not readable on the page where it appears, and the next fling can carry
+#: the list past it: the recorded slot-3 A scan had the target's card clipped at
+#: x 1069 and one swipe later only its left tail was left on screen.  When such
+#: a card's visible name resolves uniquely it is worth a small, controlled
+#: re-position -- at most :data:`EDGE_REPOSITION_LIMIT` swipes of
+#: :data:`EDGE_REPOSITION_SWIPE` per page, each about 45% of the page swipe --
+#: because only a *full* observation is ever clicked, and because the swipe
+#: distance is never assumed: every attempt is followed by a fresh settled read.
+EDGE_REPOSITION_LIMIT = 3
+EDGE_REPOSITION_SWIPE = (1010, 470, 710, 470, 650)
+EDGE_REPOSITION_INTERVAL = .4
 
 #: Vertical band ``(top, bottom)`` of the expanded lineup cell's vehicle name
 #: block, in 1280x720 pixels.  Calibrated on the fixed frames listed in the 05L
@@ -55,10 +69,19 @@ def _wait_selection_frame(context: Any, timeout: float = 5.0) -> np.ndarray | No
         time.sleep(.35)
 
 
-def _visible(context: Any, frame: np.ndarray, catalog: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _visible(context: Any, frame: np.ndarray, catalog: list[dict[str, Any]]
+             ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Read one frame: the fully visible cards and the clipped right-edge card.
+
+    Both come from the same OCR pass.  The clipped card is returned separately
+    because its geometry is not safe to click: it only tells the scan that a
+    full observation of that card is still owed.
+    """
     words = _ocr(context, frame, (0, 120, 1280, 500))
-    return read_visible_cards(frame, words, catalog,
-                              retry_ocr=lambda roi: _ocr(context, frame, roi))
+    cards = read_visible_cards(frame, words, catalog,
+                               retry_ocr=lambda roi: _ocr(context, frame, roi))
+    clipped = read_clipped_candidate(words, catalog)
+    return cards, ([clipped] if clipped is not None else [])
 
 
 def _fingerprint(cards: list[dict[str, Any]]) -> tuple[str, ...]:
@@ -68,23 +91,29 @@ def _fingerprint(cards: list[dict[str, Any]]) -> tuple[str, ...]:
 def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
                     attempts: int = 4, interval: float = .18,
                     target_id: str | None = None,
-                    ) -> tuple[np.ndarray | None, list[dict[str, Any]], bool]:
+                    ) -> tuple[np.ndarray | None, list[dict[str, Any]], bool,
+                               list[dict[str, Any]]]:
     """Read a settled list page without trusting one animated OCR frame.
 
     Long vehicle names scroll inside their cards.  A name can therefore be
     absent or split in one OCR pass even though the garage itself did not
     move.  Prefer the most complete repeated fingerprint and only call the
     page stable when the same card set was observed at least twice.
+
+    The last element is the clipped right-edge card of the chosen sample, kept
+    apart from the fully visible cards so it can neither steady nor unsteady
+    the page fingerprint.
     """
-    samples: list[tuple[np.ndarray, list[dict[str, Any]], tuple[str, ...]]] = []
+    samples: list[tuple[np.ndarray, list[dict[str, Any]], tuple[str, ...],
+                        list[dict[str, Any]]]] = []
     previous: tuple[str, ...] | None = None
     for attempt in range(attempts):
         frame = _frame(context)
         if not _selection_title(context, frame):
-            return None, [], False
-        cards = _visible(context, frame, catalog)
+            return None, [], False, []
+        cards, clipped = _visible(context, frame, catalog)
         fingerprint = _fingerprint(cards)
-        samples.append((frame, cards, fingerprint))
+        samples.append((frame, cards, fingerprint, clipped))
         # Most settled pages expose four complete cards. Two equal reads are
         # sufficient there; animated/partial pages retain the full retry
         # budget. For a target scan, two consecutive sightings of that exact
@@ -92,31 +121,32 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
         target_stable = (target_id is not None and target_id in fingerprint
                          and fingerprint == previous)
         if fingerprint == previous and (len(cards) >= 4 or target_stable):
-            return frame, cards, True
+            return frame, cards, True, clipped
         previous = fingerprint
         if attempt + 1 < attempts:
             time.sleep(interval)
     counts: dict[tuple[str, ...], int] = {}
-    for _frame_value, _cards, fingerprint in samples:
+    for _frame_value, _cards, fingerprint, _clipped in samples:
         if fingerprint:
             counts[fingerprint] = counts.get(fingerprint, 0) + 1
     repeated = {key for key, count in counts.items() if count >= 2}
     candidates = [sample for sample in samples if sample[2] in repeated] or samples
     # Prefer a complete OCR pass; for ties use the newest coordinates.
-    frame, cards, fingerprint = max(
+    frame, cards, fingerprint, clipped = max(
         enumerate(candidates), key=lambda item: (len(item[1][1]), item[0]))[1]
-    return frame, cards, bool(fingerprint and fingerprint in repeated)
+    return frame, cards, bool(fingerprint and fingerprint in repeated), clipped
 
 
 def _stable_sample_visible(context: Any, catalog: list[dict[str, Any]], *,
                            attempts: int = 4, interval: float = .18,
                            target_id: str | None = None,
-                           ) -> tuple[np.ndarray | None, list[dict[str, Any]], bool]:
+                           ) -> tuple[np.ndarray | None, list[dict[str, Any]], bool,
+                                      list[dict[str, Any]]]:
     """Give an animated page one extra complete sampling window before use."""
-    frame, cards, stable = _sample_visible(
+    frame, cards, stable, clipped = _sample_visible(
         context, catalog, attempts=attempts, interval=interval, target_id=target_id)
     if frame is None or stable:
-        return frame, cards, stable
+        return frame, cards, stable, clipped
     time.sleep(interval)
     return _sample_visible(
         context, catalog, attempts=attempts, interval=interval, target_id=target_id)
@@ -173,13 +203,51 @@ def _select_button_ready(context: Any, frame: np.ndarray) -> bool:
     return bool(detail and detail.hit and _active_select_button(frame))
 
 
+def _identity_evidence(evidence: list[dict[str, Any]], words: list[dict[str, Any]]) -> bool:
+    """Add one frame's identity words to the bounded page evidence.
+
+    Returns whether the frame contributed anything new, which is how the
+    caller counts the distinct readable frames of one page.
+    """
+    fresh = False
+    known = {(item["text"], tuple(item["box"])) for item in evidence}
+    for item in words:
+        signature = (item["text"], tuple(item["box"]))
+        if signature in known:
+            continue
+        known.add(signature)
+        evidence.append(item)
+        fresh = True
+    return fresh
+
+
 def _detail(context: Any, expected_id: str, catalog: list[dict[str, Any]]) -> dict[str, Any]:
+    """Verify one detail page, with a bounded multi-frame name read.
+
+    The detail title scrolls horizontally as well: the recorded frames read
+    ``FORMULA E`` + ``GEN 3 EV0 CI`` and then ``3 EVO CHAMPIONSH`` for one car.
+    The identity block is therefore accumulated over the bounded attempts of
+    this one visit, and the rolling fallback only runs once at least two frames
+    of the same page contributed words.  A frame that shows the garage list
+    title instead clears the accumulation: fragments of two different pages must
+    never be combined into one identity.
+    """
     last_verified: dict[str, Any] | None = None
+    evidence: list[dict[str, Any]] = []
+    name_frames = 0
     for _ in range(DETAIL_ATTEMPTS):
         time.sleep(DETAIL_INTERVAL)
         frame = _frame(context)
         words = _ocr(context, frame, (160, 76, 300, 110))
+        if _selection_title(context, frame):
+            evidence.clear()
+            name_frames = 0
+            continue
+        if _identity_evidence(evidence, words):
+            name_frames += 1
         observed = match_vehicle(words, catalog)
+        if observed is None and name_frames >= 2:
+            observed = rolling_identity(evidence, catalog)
         if observed and observed["id"] == expected_id:
             lower = _ocr(context, frame, (200, 560, 800, 150))
             occupied = any("已被放置" in row["text"] or "所在的赛道" in row["text"]
@@ -189,6 +257,8 @@ def _detail(context: Any, expected_id: str, catalog: list[dict[str, Any]]) -> di
             stars_lit, star_slots = _detail_stars(frame)
             verified = {"status": "detail_verified", "occupied_elsewhere": occupied,
                         "select_available": False, "detail_vehicle": observed,
+                        "detail_name_frames": name_frames,
+                        "detail_identity_basis": observed.get("identity_basis", "title"),
                         "performance": rating, "stars_lit": stars_lit,
                         "star_slots": star_slots}
             if occupied:
@@ -197,7 +267,10 @@ def _detail(context: Any, expected_id: str, catalog: list[dict[str, Any]]) -> di
                 verified["select_available"] = True
                 return verified
             last_verified = verified
-        elif observed and observed["confidence"] >= .95:
+        elif observed and (observed["confidence"] >= .95
+                           or observed.get("identity_basis") == "rolling_fragment"):
+            # A unique rolling reading of another car is evidence of the wrong
+            # page, not an unclear one: it keeps the bounded retry.
             return {"status": "wrong_detail", "detail_vehicle": observed}
     if last_verified is not None:
         return {**last_verified, "select_wait_timed_out": True}
@@ -324,7 +397,7 @@ def _try_target(context: Any, card: dict[str, Any], page: int,
         if not _click(context, 32, 25):
             return last
         time.sleep(.65)
-        frame, cards, stable = _stable_sample_visible(
+        frame, cards, stable, _clipped = _stable_sample_visible(
             context, catalog, attempts=3, target_id=target_id)
         if frame is None:
             return _result("selection_lost", page, vehicles,
@@ -353,7 +426,7 @@ def assign_visible(context: Any, target_id: str, catalog: list[dict[str, Any]], 
     frame = _wait_selection_frame(context)
     if frame is None:
         return _result("not_duel_selection", 0, [])
-    sampled_frame, cards, stable = _stable_sample_visible(
+    sampled_frame, cards, stable, clipped = _stable_sample_visible(
         context, catalog, attempts=3, target_id=target_id)
     if sampled_frame is None:
         return _result("not_duel_selection", 0, [])
@@ -361,7 +434,10 @@ def assign_visible(context: Any, target_id: str, catalog: list[dict[str, Any]], 
         return _result("page_ocr_unverified", 0, [])
     card = next((row for row in cards if row["vehicle"]["id"] == target_id), None)
     if card is None:
-        return _result("target_not_visible", 0, cards)
+        # A target that is only there as the clipped right-edge card is not
+        # visible: this path never re-positions, so its geometry stays unused.
+        extra = {"clipped_target": clipped[0]} if clipped else {}
+        return _result("target_not_visible", 0, cards, **extra)
     return _try_target(context, card, 0, cards, target_id, catalog, choose=True,
                        expected_performance=expected_performance,
                        expected_stars=expected_stars)
@@ -383,6 +459,14 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
     ``list_detail_rating_mismatch`` retry); an explicit ``expected_performance``
     or ``expected_stars`` is still enforced and the raw detail reading is
     reported unchanged with ``list_detail_rating_compare == "disabled"``.
+
+    Coverage is bounded and observable: a clipped right-edge card whose visible
+    name resolves uniquely is followed up with at most
+    :data:`EDGE_REPOSITION_LIMIT` small re-positions per page (counted in
+    ``edge_repositions``), and if that budget runs out before the card can be
+    observed whole the scan returns ``edge_candidate_unresolved`` with
+    ``scan_complete`` False instead of reporting a complete traversal or a
+    missing target.  The page limit and the swipe budget stay in force.
     """
     if type(choose) is not bool or type(max_pages) is not int:
         raise ValueError("choose must be boolean and max_pages must be an integer")
@@ -420,22 +504,66 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
     unchanged_swipes = 0
     class_index = CLASS_ORDER.index(vehicle_class)
     lower_classes = set(CLASS_ORDER[class_index + 1:])
+    edge_repositions = 0
     for page in range(fast_forward + 1, max_pages + 1):
-        frame, cards, stable = _stable_sample_visible(
+        frame, cards, stable, clipped = _stable_sample_visible(
             context, catalog, target_id=target_id)
         if frame is None:
             return _result("selection_lost", page - 1, list(found.values()))
         if not stable:
             return _result("page_ocr_unverified", page, list(found.values()),
                            unstable_samples=2)
+        # Bounded right-edge completion.  A card the screen edge clips is not
+        # readable here, and the next fling can carry the list past it, so a
+        # card whose visible name resolves uniquely over the whole catalog gets
+        # a small, controlled re-position until it has had a full observation.
+        # Nothing is clicked before that: the clipped row carries no usable
+        # geometry, and the swipe distance is never assumed either.
+        pending = next((row for row in clipped
+                        if row["class"] == vehicle_class
+                        and (row["vehicle"]["id"] == target_id
+                             or row["vehicle"]["id"] not in found)), None)
+        attempts = 0
+        while pending is not None and attempts < EDGE_REPOSITION_LIMIT:
+            attempts += 1
+            edge_repositions += 1
+            if not context.tasker.controller.post_swipe(
+                    *EDGE_REPOSITION_SWIPE).wait().succeeded:
+                return _result("swipe_failed", page - 1, list(found.values()),
+                               edge_candidate=pending, edge_repositions=edge_repositions)
+            time.sleep(EDGE_REPOSITION_INTERVAL)
+            frame, cards, stable, clipped = _stable_sample_visible(
+                context, catalog, target_id=target_id)
+            if frame is None:
+                return _result("selection_lost", page - 1, list(found.values()),
+                               edge_candidate=pending, edge_repositions=edge_repositions)
+            if not stable:
+                return _result("page_ocr_unverified", page, list(found.values()),
+                               unstable_samples=2, edge_candidate=pending,
+                               edge_repositions=edge_repositions)
+            if pending["vehicle"]["id"] in _fingerprint(cards):
+                pending = None
+                break
+            pending = next((row for row in clipped
+                            if row["class"] == vehicle_class
+                            and row["vehicle"]["id"] not in found), None)
+        if pending is not None:
+            # The budget is spent and that card still has no full observation,
+            # so this traversal may not claim to be complete and a target scan
+            # may not report the target as missing.
+            return _result("edge_candidate_unresolved", page, list(found.values()),
+                           edge_candidate=pending, edge_repositions=edge_repositions,
+                           boundary_reason="edge_reposition_budget")
         if not cards:
-            return _result("page_ocr_unverified", page, list(found.values()))
+            return _result("page_ocr_unverified", page, list(found.values()),
+                           edge_repositions=edge_repositions)
         target_cards = [row for row in cards if row["class"] == vehicle_class]
         foreign_classes = {row["class"] for row in cards if row["class"] != vehicle_class}
         unexpected = foreign_classes - lower_classes
         if unexpected:
             return _result("class_or_ocr_unverified", page, list(found.values()),
-                           visible=cards, unexpected_classes=sorted(unexpected))
+                           visible=cards, unexpected_classes=sorted(unexpected),
+                           edge_repositions=edge_repositions)
         # A transition page can contain the tail of the requested class and
         # the head of the next one.  Keep its requested-class cards and stop
         # only on a stable page containing lower classes alone.
@@ -443,6 +571,7 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
             status = "target_not_found" if target_id else "class_boundary"
             return _result(status, page - 1, list(found.values()),
                            boundary_reason="next_class",
+                           edge_repositions=edge_repositions,
                            next_class=next((row["class"] for row in cards
                                            if row["class"] in lower_classes), None))
         fingerprint = _fingerprint(target_cards)
@@ -456,6 +585,7 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
                 expected_stars=expected_stars,
                 verify_list_detail_rating=verify_list_detail_rating)
             result["fast_forward_swipes"] = fast_forward
+            result["edge_repositions"] = edge_repositions
             if result["status"] != "target_temporarily_unreadable":
                 return result
         if previous is not None and fingerprint == previous:
@@ -468,11 +598,13 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
         if unchanged_swipes >= 2:
             status = "target_not_found" if target_id else "edge_reached"
             return _result(status, page, list(found.values()),
-                           boundary_reason="list_edge")
+                           boundary_reason="list_edge", edge_repositions=edge_repositions)
         if page == max_pages:
             break
         previous, previous_image = fingerprint, frame
         if not context.tasker.controller.post_swipe(1090, 480, 400, 480, 300).wait().succeeded:
-            return _result("swipe_failed", page, list(found.values()))
+            return _result("swipe_failed", page, list(found.values()),
+                           edge_repositions=edge_repositions)
         time.sleep(.4)
-    return _result("page_limit", max_pages, list(found.values()))
+    return _result("page_limit", max_pages, list(found.values()),
+                   edge_repositions=edge_repositions)

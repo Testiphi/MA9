@@ -9,7 +9,8 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ma9_agent.duel_selection import plan_live_weak_defense
-from ma9_agent.duel_vehicle_screen import read_visible_cards
+from ma9_agent.duel_vehicle_screen import (read_clipped_candidate, read_visible_cards,
+                                           rolling_identity)
 
 
 # Verbatim OCR output of the frozen live frame recorded at
@@ -231,6 +232,192 @@ class DuelVehicleScreenTest(unittest.TestCase):
         self.assertEqual([slot["performance"] for slot in plan["slots"]],
                          [1381, 1476, 1516, 1546, 1683])
         self.assertEqual(len({slot["vehicle_id"] for slot in plan["slots"]}), 5)
+
+
+# Name-band OCR of the two frozen "FE3 fully visible" frames in
+# E:/hzz/work/MA9/MA9-evidence/20260925-fe3-full-intake/native-results.json
+# (real MaaFW native OCR).  Only the two name bands are kept: they are the only
+# boxes read_visible_cards consults for identity, and the black placeholder
+# frame keeps this a text-only reading, never a star or pixel claim.  The card
+# of Formula E Gen 3 EVO Championship Edition is *fully visible* at x 690/694 in
+# both frames; only its scrolling name never reads whole.
+_ROLLING_FRAME_A = [
+    {"text": "GLICKENHAUS", "confidence": .996, "box": [258, 330, 142, 23]},
+    {"text": "007S", "confidence": .971, "box": [256, 350, 56, 23]},
+    {"text": "FORMU", "confidence": .989, "box": [698, 333, 66, 20]},
+    {"text": "GEN 3 EVO CHAMPION", "confidence": .931, "box": [698, 350, 196, 22]},
+    {"text": "FERRARI", "confidence": .979, "box": [1133, 329, 89, 24]},
+    {"text": "ENZO FERRARI", "confidence": .965, "box": [1132, 350, 132, 22]},
+    {"text": "MCLAREN", "confidence": .936, "box": [256, 556, 101, 26]},
+    {"text": "650S GT3", "confidence": .966, "box": [256, 578, 94, 22]},
+    {"text": "LEXUS", "confidence": .995, "box": [694, 558, 74, 22]},
+    {"text": "ELECTRIFIED SPORT t", "confidence": .931, "box": [704, 578, 192, 22]},
+    {"text": "RAESR", "confidence": .984, "box": [1133, 558, 75, 22]},
+    {"text": "TACHYON SPEED", "confidence": .960, "box": [1132, 578, 147, 22]},
+]
+_ROLLING_FRAME_B = [
+    {"text": "GLICKENHAUS", "confidence": .995, "box": [258, 330, 142, 23]},
+    {"text": "007S", "confidence": .971, "box": [256, 350, 56, 23]},
+    {"text": "FORMU", "confidence": .989, "box": [697, 332, 72, 22]},
+    {"text": "V 3 EV0 CHAMPIONSH", "confidence": .930, "box": [694, 350, 199, 22]},
+    {"text": "FERRARI", "confidence": .979, "box": [1133, 329, 89, 24]},
+    {"text": "ENZO FERRARI", "confidence": .961, "box": [1132, 350, 132, 22]},
+    {"text": "MCLAREN", "confidence": .936, "box": [256, 556, 101, 26]},
+    {"text": "650S GT3", "confidence": .966, "box": [256, 578, 94, 22]},
+    {"text": "LEXUS", "confidence": .993, "box": [694, 557, 72, 22]},
+    {"text": "ELECTRIFIED SPOI", "confidence": .985, "box": [733, 578, 161, 22]},
+    {"text": "RAESR", "confidence": .984, "box": [1132, 558, 76, 22]},
+    {"text": "TACHYON SPEED", "confidence": .957, "box": [1132, 578, 147, 22]},
+]
+# The clipped right-edge card of the real 11:55:52.818 page of the slot-3 scan
+# (the page after which the fling lost the car), and of 11:55:55.256, whose
+# fragments of the same car never reach the minimum evidence.
+_ROLLING_EDGE_DECIDES = [
+    {"text": "FORMU", "confidence": .993, "box": [1077, 332, 72, 22]},
+    {"text": "J CHAMPIONSHIP EDIT", "confidence": .947, "box": [1073, 350, 201, 22]},
+]
+_ROLLING_EDGE_TOO_SHORT = [
+    {"text": "FORMULAE", "confidence": .989, "box": [990, 332, 116, 22]},
+    {"text": "P EDITION", "confidence": .956, "box": [988, 350, 88, 22]},
+    {"text": "GEN 3 EV", "confidence": .931, "box": [1109, 350, 80, 22]},
+]
+
+_ROLLING_CATALOG = [
+    {"id": "fe3", "title": "Formula E Gen 3 EVO Championship Edition", "class": "A"},
+    {"id": "fe2", "title": "Formula E Gen 2 Asphalt Edition", "class": "B"},
+    {"id": "glickenhaus007", "title": "Glickenhaus 007S", "class": "A"},
+    {"id": "mclaren650", "title": "McLaren 650S GT3", "class": "A"},
+    {"id": "lexus", "title": "Lexus Electrified Sport Concept", "class": "A"},
+    {"id": "raesr", "title": "Raesr Tachyon Speed", "class": "A"},
+    {"id": "ferrari_enzo", "title": "Ferrari Enzo Ferrari", "class": "A"},
+    {"id": "nevera", "title": "Rimac Nevera", "class": "S"},
+    {"id": "nevera_r", "title": "Rimac Nevera R", "class": "R"},
+    {"id": "glickenhaus004", "title": "Glickenhaus 004C", "class": "D"},
+    {"id": "praga", "title": "Praga R1", "class": "D"},
+    {"id": "nissan370", "title": "Nissan 370Z Nismo", "class": "C"},
+    {"id": "ginetta", "title": "Ginetta G60", "class": "D"},
+]
+
+
+class DuelRollingNameTest(unittest.TestCase):
+    """The scrolling-name fallback and the clipped right-edge candidate."""
+
+    def test_recorded_scrolling_frames_resolve_fe3_and_keep_their_neighbours(self) -> None:
+        """Both frozen frames must read FE3, and nothing else may move.
+
+        ``match_vehicle`` scores the visible ``FORMU`` + ``GEN 3 EVO CHAMPION``
+        at .777, just under its .78 gate, which is why the live run never saw
+        the car.  The fallback resolves it from the fragment itself; the three
+        cards that were already exact keep their exact reading.
+        """
+        image = np.zeros((720, 1280, 3), dtype=np.uint8)
+        for name, rows, left in (("frame_a", _ROLLING_FRAME_A, 694),
+                                 ("frame_b", _ROLLING_FRAME_B, 690)):
+            with self.subTest(frame=name):
+                cards = {row["vehicle"]["id"]: row for row in read_visible_cards(
+                    image, rows, _ROLLING_CATALOG)}
+                self.assertEqual(set(cards), {"fe3", "glickenhaus007", "mclaren650",
+                                              "lexus"})
+                self.assertEqual(cards["fe3"]["card"][:2], [left, 168])
+                self.assertEqual(cards["fe3"]["vehicle"]["identity_basis"],
+                                 "rolling_fragment")
+                self.assertEqual(cards["fe3"]["vehicle"]["title"],
+                                 "Formula E Gen 3 EVO Championship Edition")
+                for neighbour in ("glickenhaus007", "mclaren650", "lexus"):
+                    self.assertEqual(cards[neighbour]["identity_basis"], "title")
+
+    def test_clipped_right_edge_card_is_reported_only_when_its_name_decides(self) -> None:
+        """The clipped card is offered for a re-position, never for a click.
+
+        Its geometry stays outside the complete-card bound, so the caller can
+        only use it to ask for one more observation.
+        """
+        decided = read_clipped_candidate(_ROLLING_EDGE_DECIDES, _ROLLING_CATALOG)
+        self.assertEqual(decided["vehicle"]["id"], "fe3")
+        self.assertTrue(decided["clipped"])
+        self.assertEqual(decided["visible_name"], ["J CHAMPIONSHIP EDIT", "FORMU"])
+        self.assertGreaterEqual(decided["card"][0], 1069)
+        self.assertGreater(decided["card"][0] + decided["card"][2], 1295)
+        self.assertEqual(read_clipped_candidate(_ROLLING_EDGE_TOO_SHORT,
+                                               _ROLLING_CATALOG), None)
+        image = np.zeros((720, 1280, 3), dtype=np.uint8)
+        self.assertEqual(read_visible_cards(image, _ROLLING_EDGE_DECIDES,
+                                            _ROLLING_CATALOG), [])
+
+    def test_scrolling_name_negatives_never_decide(self) -> None:
+        """Every documented undecidable fragment shape must stay unresolved."""
+        cases = {
+            # A near name of the same family stays itself, and never becomes FE3.
+            "fe2_stays_gen2": ([("FORMULA E", .99, [100, 325, 110, 20]),
+                                ("GEN 2 ASPHALT EDITION", .97, [100, 345, 200, 20])],
+                               "fe2"),
+            "model_tail_too_short": ([("FORMULA E", .99, [100, 325, 110, 20]),
+                                      ("GEN 3 EV", .98, [100, 345, 80, 20])], None),
+            "generic_word_only": ([("FORMULA E", .99, [100, 325, 110, 20]),
+                                   ("EDITION", .97, [100, 345, 80, 20])], None),
+            "brand_line_only": ([("FORMULA E", .99, [100, 325, 110, 20]),
+                                 ("GEN 3", .97, [100, 345, 60, 20])], None),
+            # Text of another card can never join this card's identity block.
+            "cross_card_mix": ([("FORMU", .99, [100, 325, 66, 20]),
+                                ("TACHYON SPEED", .97, [520, 345, 152, 22])], None),
+            "brand_contradicts_model": ([("FORMU", .99, [100, 325, 66, 20]),
+                                         ("650S GT3", .97, [100, 345, 95, 22])], None),
+            "low_confidence_fragment": ([("FORMU", .99, [100, 325, 66, 20]),
+                                         ("GEN 3 EVO CHAMPION", .80,
+                                          [100, 345, 196, 22])], None),
+            # Short names keep going through the exact matcher, never this rule.
+            "nevera_without_suffix": ([("RIMAC", .99, [100, 325, 60, 20]),
+                                       ("NEVERA", .97, [100, 345, 70, 20])], None),
+            "digit_name_370z": ([("NISSAN", .99, [100, 325, 66, 20]),
+                                 ("370Z NISMO", .97, [100, 345, 110, 20])], None),
+            "four_digit_name_004c": ([("GLICKENHAUS", .99, [100, 325, 120, 20]),
+                                      ("004C", .97, [100, 345, 50, 20])], None),
+            "one_letter_suffix_r1": ([("PRAGA", .99, [100, 325, 60, 20]),
+                                      ("R1", .97, [100, 345, 30, 20])], None),
+        }
+        for name, (rows, expected) in cases.items():
+            with self.subTest(case=name):
+                resolved = rolling_identity(
+                    [{"text": text, "confidence": confidence, "box": box}
+                     for text, confidence, box in rows], _ROLLING_CATALOG)
+                self.assertEqual(resolved["id"] if resolved else None, expected)
+
+    def test_scrolling_name_positives_follow_the_recorded_fragments(self) -> None:
+        """Each evidenced fragment shape resolves, and only to its own car."""
+        head = [("FORMU", .99, [100, 325, 66, 20])]
+        cases = {
+            "head_fragment": ([*head, ("GEN 3 EVO CHAMPION", .93, [100, 345, 196, 22])],
+                              "fe3"),
+            "wrapped_tail": ([("FORMULAE", .99, [100, 325, 90, 20]),
+                              ("J CHAMPIONSHIP EDIT", .95, [100, 345, 201, 22])], "fe3"),
+            "ocr_reads_zero": ([*head, ("V 3 EV0 CHAMPIONSH", .93,
+                                        [100, 345, 199, 22])], "fe3"),
+            "gen2_keeps_its_own_reading": ([("FORMULA E", .99, [100, 325, 110, 20]),
+                                            ("GEN 2 ASPHALT EDITION", .97,
+                                             [100, 345, 200, 20])], "fe2"),
+        }
+        for name, (rows, expected) in cases.items():
+            with self.subTest(case=name):
+                resolved = rolling_identity(
+                    [{"text": text, "confidence": confidence, "box": box}
+                     for text, confidence, box in rows], _ROLLING_CATALOG)
+                self.assertEqual(resolved["id"], expected)
+
+    def test_one_extra_candidate_rejects_the_rolling_reading(self) -> None:
+        """Uniqueness is over the whole catalog, and a twin removes the match."""
+        rows = [{"text": "FORMU", "confidence": .99, "box": [100, 325, 66, 20]},
+                {"text": "GEN 3 EVO CHAMPION", "confidence": .93, "box": [100, 345, 196, 22]}]
+        twin = [{"id": "twin", "title": "Formula E Gen 3 EVO Championship Edition RS",
+                 "class": "B"}]
+        self.assertEqual(rolling_identity(rows, _ROLLING_CATALOG)["id"], "fe3")
+        self.assertIsNone(rolling_identity(rows, _ROLLING_CATALOG + twin))
+
+    def test_third_identity_line_rejects_the_rolling_reading(self) -> None:
+        """Fragments of two pages must never be combined into one identity."""
+        rows = [{"text": "FORMU", "confidence": .99, "box": [100, 325, 66, 20]},
+                {"text": "GEN 3 EVO CHAMPION", "confidence": .93, "box": [100, 345, 196, 22]},
+                {"text": "TACHYON SPEED", "confidence": .97, "box": [100, 468, 152, 22]}]
+        self.assertIsNone(rolling_identity(rows, _ROLLING_CATALOG))
 
 
 if __name__ == "__main__":
