@@ -1,4 +1,4 @@
-"""Isolated, locate-only user test wiring; account identity is user-confirmed."""
+"""Isolated single-slot user test wiring; account identity is user-confirmed."""
 from __future__ import annotations
 
 import json
@@ -16,17 +16,20 @@ def _inside(root: Path, relative: str) -> Path:
     return path
 
 
-def load_slot_test(root: Path) -> tuple[SlotSelectionRequest, list[dict], set[str]]:
+def load_slot_test(root: Path, *, choose: bool = False) -> tuple[SlotSelectionRequest, list[dict], set[str]]:
     """Validate all local inputs before any capture; never read garage.json.
 
     A portable marker alone is not account authentication. The request explicitly
     binds its absolute runtime_root and a user-confirmed account label. The user
     must check the actual logged-in game account before running this test.
     """
+    if type(choose) is not bool:
+        raise ValueError("choose must be boolean")
     root = root.resolve()
     if not _inside(root, ".ma9-portable-root").is_file():
         raise ValueError("single-slot test requires an isolated portable root")
-    config = json.loads(_inside(root, "config/duel_slot_test.json").read_text(encoding="utf-8-sig"))
+    filename = "config/duel_slot_assign_test.json" if choose else "config/duel_slot_test.json"
+    config = json.loads(_inside(root, filename).read_text(encoding="utf-8-sig"))
     if not isinstance(config, dict):
         raise ValueError("slot test request must be an object")
     binding = config.get("runtime_root")
@@ -34,8 +37,10 @@ def load_slot_test(root: Path) -> tuple[SlotSelectionRequest, list[dict], set[st
         raise ValueError("slot test request belongs to another runtime root")
     if config.get("account_confirmed") is not True or config.get("environment") != "defense_test":
         raise ValueError("confirm the test account and defense environment first")
-    if config.get("choose", False) is not False:
-        raise ValueError("this GUI test supports locate-only; choose must be false")
+    if type(config.get("choose", False)) is not bool or config.get("choose", False) is not choose:
+        raise ValueError("request choose does not match the selected GUI test")
+    if choose and config.get("assignment_confirmed") is not True:
+        raise ValueError("single-slot assignment must be explicitly confirmed")
     key = config.get("account_key")
     slot = config.get("expected_slot")
     target = config.get("target_id")
@@ -57,14 +62,16 @@ def load_slot_test(root: Path) -> tuple[SlotSelectionRequest, list[dict], set[st
         raise ValueError("target must occur exactly once in the isolated catalog")
     request = SlotSelectionRequest(expected_slot=slot, target_id=target,
                                    vehicle_class=matches[0].get("class"),
-                                   account_key=key, choose=False)
+                                   account_key=key, choose=choose)
     return request, vehicles, set(owned)
 
 
-def run_slot_test(context, root: Path) -> tuple[dict, Path]:
+def run_slot_test(context, root: Path, *, choose: bool = False) -> tuple[dict, Path]:
     """Persist a distinct business report in the same root; never start a race."""
+    if type(choose) is not bool:
+        raise ValueError("choose must be boolean")
     root = root.resolve()
-    request, catalog, owned = load_slot_test(root)
+    request, catalog, owned = load_slot_test(root, choose=choose)
     # Validate the output path before device-facing code too, including symlinks.
     destination = _inside(root, f"debug/duel-slot-test-{uuid4().hex}.json")
     destination.parent.mkdir(parents=True, exist_ok=True)

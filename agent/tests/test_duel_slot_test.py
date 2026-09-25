@@ -8,7 +8,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ma9_agent import duel_slot_test as module
-from runtime_action import DuelSlotTestAction
+from runtime_action import DuelSlotTestAction, DuelSlotAssignTestAction
 
 
 class SlotTestWiringTest(unittest.TestCase):
@@ -29,6 +29,66 @@ class SlotTestWiringTest(unittest.TestCase):
         (self.root / "config/duel_slot_test.json").write_text(json.dumps(self.config), encoding="utf8")
         (self.root / "data/generated/vehicle_catalog.json").write_text(json.dumps(self.catalog), encoding="utf8")
 
+    def assignment_config(self, **changes):
+        value = {**self.config, "choose": True, "assignment_confirmed": True, **changes}
+        (self.root / "config/duel_slot_assign_test.json").write_text(json.dumps(value), encoding="utf8")
+
+    def test_assignment_never_falls_back_to_locate_request(self):
+        with patch.object(module, "select_vehicle_for_slot") as selection:
+            with self.assertRaises(FileNotFoundError):
+                module.run_slot_test(object(), self.root, choose=True)
+            selection.assert_not_called()
+
+    def test_assignment_confirmation_and_mode_are_strict_before_device(self):
+        for change in ({"assignment_confirmed": False}, {"assignment_confirmed": 1},
+                       {"choose": False}, {"choose": 1}, {"choose": "true"}):
+            self.assignment_config(**change)
+            with self.subTest(change=change), patch.object(module, "select_vehicle_for_slot") as selection:
+                with self.assertRaises(ValueError):
+                    module.run_slot_test(object(), self.root, choose=True)
+                selection.assert_not_called()
+
+    def test_modes_use_separate_files_and_keep_name_first(self):
+        self.assignment_config()
+        locate, _, _ = module.load_slot_test(self.root)
+        assign, _, _ = module.load_slot_test(self.root, choose=True)
+        self.assertIs(locate.choose, False)
+        self.assertIs(assign.choose, True)
+        self.assertIs(assign.verify_list_detail_rating, False)
+        for invalid in (1, "true", None):
+            with self.assertRaises(ValueError):
+                module.load_slot_test(self.root, choose=invalid)
+
+    def test_assignment_report_and_callback_mode(self):
+        self.assignment_config()
+        expected = {"status": "assigned", "assignment_complete": True,
+                    "starts_race": False, "selection_attempted": True,
+                    "before": {"expanded_slot": 1}, "after": {"expanded_slot": 1}}
+        def fake(context, request, entry, **kwargs):
+            self.assertIs(request.choose, True)
+            self.assertIs(request.verify_list_detail_rating, False)
+            self.assertIs(entry, module.enter_defense_slot_selection)
+            return expected.copy()
+        with patch.object(module, "select_vehicle_for_slot", side_effect=fake):
+            report, path = module.run_slot_test(object(), self.root, choose=True)
+        self.assertEqual(report["after"]["expanded_slot"], 1)
+        self.assertTrue(json.loads(path.read_text(encoding="utf8"))["assignment_complete"])
+
+    def test_assignment_action_success_requires_business_completion(self):
+        self.assignment_config()
+        for report, expected in [({"status": "assigned", "assignment_complete": True, "starts_race": False}, True),
+                                 ({"status": "located", "assignment_complete": False, "starts_race": False}, False),
+                                 ({"status": "assigned", "assignment_complete": False, "starts_race": False}, False),
+                                 ({"status": "assigned", "assignment_complete": True, "starts_race": True}, False),
+                                 ({"status": "assignment_unverified", "assignment_complete": False, "starts_race": False}, False)]:
+            with self.subTest(report=report), patch("runtime_action.find_project_root", return_value=self.root), patch.object(module, "select_vehicle_for_slot", return_value=report.copy()), patch("builtins.print"):
+                self.assertIs(DuelSlotAssignTestAction().run(object(), SimpleNamespace(custom_action_param='{"choose":false}')), expected)
+
+    def test_assignment_node_has_no_followup(self):
+        root = Path(__file__).resolve().parents[2]
+        node = json.loads((root / "assets/resource/pipeline/duel_slot_test.json").read_text(encoding="utf-8-sig"))["对决_隔离单槽选择测试"]
+        self.assertEqual(node["custom_action"], "ma9_duel_slot_assign_test")
+        self.assertEqual(node["next"], [])
     def test_valid_request_derives_class_and_defaults_to_locate(self):
         request, _, owned = module.load_slot_test(self.root)
         self.assertEqual((request.vehicle_class, request.expected_slot, request.target_id), ("S", 1, "nevera"))

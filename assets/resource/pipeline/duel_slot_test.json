@@ -1,9 +1,16 @@
 {
-    "对决_隔离单槽定位测试": {
-        "recognition": "DirectHit",
-        "action": "Custom",
-        "custom_action": "ma9_duel_slot_test",
-        "timeout": 600000,
-        "next": []
-    }
+  "对决_隔离单槽定位测试": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "ma9_duel_slot_test",
+    "timeout": 600000,
+    "next": []
+  },
+  "对决_隔离单槽选择测试": {
+    "next": [],
+    "custom_action": "ma9_duel_slot_assign_test",
+    "action": "Custom",
+    "timeout": 600000,
+    "recognition": "DirectHit"
+  }
 }

@@ -331,3 +331,25 @@ class DuelSlotTestAction(CustomAction):
                           "report_file": str(destination), "starts_race": False},
                          ensure_ascii=False), flush=True)
         return report["status"] == "located"
+
+
+@AgentServer.custom_action("ma9_duel_slot_assign_test")
+class DuelSlotAssignTestAction(CustomAction):
+    """Assign one explicitly confirmed car and stop on the verified same slot."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv  # Mode and request filename are fixed by this distinct entry.
+        from ma9_agent.duel_slot_test import run_slot_test
+        try:
+            report, destination = run_slot_test(context, find_project_root(), choose=True)
+        except Exception as error:
+            print(json.dumps({"event": "ma9_duel_slot_assign_test_error",
+                              "error": str(error), "starts_race": False},
+                             ensure_ascii=False), flush=True)
+            return False
+        print(json.dumps({"event": "ma9_duel_slot_assign_test", "status": report["status"],
+                          "report_file": str(destination), "starts_race": False},
+                         ensure_ascii=False), flush=True)
+        return (report["status"] == "assigned"
+                and report.get("assignment_complete") is True
+                and report.get("starts_race") is False)
