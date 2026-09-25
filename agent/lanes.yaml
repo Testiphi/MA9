@@ -273,6 +273,8 @@ lanes:
     owns_new:
       # 本席新建（名字是建议名，调整后回来改本文件）
       - agent/ma9_agent/duel_slot_test.py
+      - agent/ma9_agent/duel_slot_verify.py
+      - agent/tests/test_duel_slot_verify.py
       - agent/tests/test_duel_slot_test.py
       - assets/resource/pipeline/duel_slot_test.json
       - docs/zh_cn/develop/duel_slot_test.md

@@ -12,5 +12,12 @@
     "action": "Custom",
     "timeout": 600000,
     "recognition": "DirectHit"
+  },
+  "对决_隔离单槽只读核验": {
+    "next": [],
+    "custom_action": "ma9_duel_slot_verify",
+    "timeout": 600000,
+    "recognition": "DirectHit",
+    "action": "Custom"
   }
 }

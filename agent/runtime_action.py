@@ -353,3 +353,26 @@ class DuelSlotAssignTestAction(CustomAction):
         return (report["status"] == "assigned"
                 and report.get("assignment_complete") is True
                 and report.get("starts_race") is False)
+
+
+@AgentServer.custom_action("ma9_duel_slot_verify")
+class DuelSlotVerifyAction(CustomAction):
+    """Inspect the configured current slot; never execute assignment."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv
+        from ma9_agent.duel_slot_verify import verify_current_slot
+        try:
+            report, destination = verify_current_slot(context, find_project_root())
+        except Exception as error:
+            print(json.dumps({"event": "ma9_duel_slot_verify_error", "error": str(error),
+                              "read_only": True, "starts_race": False}, ensure_ascii=False), flush=True)
+            return False
+        print(json.dumps({"event": "ma9_duel_slot_verify", "status": report["status"],
+                          "report_file": str(destination), "read_only": True,
+                          "starts_race": False}, ensure_ascii=False), flush=True)
+        return (report["status"] == "lineup_verified"
+                and report.get("configuration_verified") is True
+                and report.get("read_only") is True
+                and report.get("selection_attempted") is False
+                and report.get("starts_race") is False)

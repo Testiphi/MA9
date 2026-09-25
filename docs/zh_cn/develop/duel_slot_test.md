@@ -21,3 +21,8 @@ GUI另有“对决防守：独立账号单槽选择测试（停阵容，不开�
 仍从用户已展开的资格赛目标槽开始，默认名称优先，已确认的目标经占用/按钮检查才选择。只有原选车核心返回assigned/assignment_complete=true，且05F再次确认回到同一资格赛槽，GUI才报告成功。成功业务JSON应保留before/after同槽、目标身份、selection_attempted=true、assignment_complete=true、starts_race=false；未核验成功要保留可能已点击的事实，不补点或进入下一槽。
 
 该入口只赋值一辆，不循环五槽，不开始比赛；定位任务仍固定choose=false。两个GUI入口都忽略custom_action_param中的模式/路径重定向，以各自固定模式和独立配置为准。单槽选择上线须经独立复核及准确新包验收，旧定位包不可通过修改choose字段变成选择包。
+## 只读核验已有阵容
+
+GUI另有“对决防守：核验当前槽位车辆（只读，不点击）”。复用隔离根内duel_slot_assign_test.json的账号标签/目标槽/目标车作为期望，只调用截图和OCR，不执行其中的choose，不进入车库、点击、滑动或开赛。用户保持已配置的目标槽展开即可。连续两帧资格赛标题/几何/槽号/车型一致才lineup_verified，最多120次与30秒截止限制新采样，后台单次调用不硬中断。
+
+结果写入新的debug/duel-slot-verification-*.json：configuration_verified只表示当前观察匹配；selection_attempted和assignment_complete始终false，不追认旧运行已自动确认，也不改写旧assignment_unverified报告。此任务不证明是谁/哪次操作配置了车辆。
