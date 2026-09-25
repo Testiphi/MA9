@@ -169,6 +169,19 @@
         "private_config": "existing assign request expected state only, no choose execution",
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-02K-ff426c6/results.json",
         "package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-verify-ff426c6/MA9-preview"
+      },
+      "fe3_rolling_package": {
+        "modules": 9,
+        "negative_screen_exit": 1,
+        "negative_runtime_exit": 1,
+        "project": "MA9-02L-f3f0762",
+        "phase": "built_verified_user_slot3_ready",
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-02L-f3f0762/results.json",
+        "source": "f3f0762352236021924b1ba8a49831a105dfd823",
+        "package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-fe3-f3f0762/MA9-preview",
+        "device": "not_run",
+        "exe_sha256": "2b141fc8a2acc73441df95a1c0ca7ba4c4ff6ac9da0f6c33395d7ae2e61e34ae",
+        "schema_delta_exit": 0
       }
     },
     "vehicle": {
@@ -826,7 +839,7 @@
           "slot1 Nevera",
           "slot2 Ferrari296GTB"
         ],
-        "phase": "slot3_FE3_not_found_diagnosis_needs_full_card_samples",
+        "phase": "slot3_rolling_fix_package_verified",
         "slots": [
           3,
           4,
@@ -859,16 +872,17 @@
           }
         ],
         "active_slot": 3,
-        "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-slots345-ff426c6\\MA9-preview",
+        "package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-fe3-f3f0762/MA9-preview",
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-slots345-package/results.json",
         "private_presets": "E:/hzz/work/MA9/MA9-evidence/20260925-slots345-package/private-plans",
         "activation": "serial_after_previous_business_acceptance_no_automatic_loop",
-        "source": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
+        "source": "f3f0762352236021924b1ba8a49831a105dfd823",
         "agent_recompiled": false,
         "device_test": "not_run",
         "failure_evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-115731-slot3-fe3-scan",
         "failure": "A scan13pages toB target_not_found; rolling partial FE3 name plus clipped-edge coverage gap",
-        "slots4and5": "prepared_but_not_activated"
+        "slots4and5": "prepared_but_not_activated",
+        "private_presets_note": "4/5 presets retained at old evidence; must rebind absolute root before activation, not copy blindly"
       },
       "rolling_name_issue": {
         "phase": "full_images_native_ocr_done_05N_prompt_ready",
@@ -895,7 +909,7 @@
         "base": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
         "project": "MA9-05N",
         "owns_new": [],
-        "phase": "05N1_locally_accepted_pending_05NR_full_review",
+        "phase": "05NR_accepted_merged_exact_package_ready",
         "device_allowed": false,
         "owns": [
           "agent/ma9_agent/duel_vehicle_screen.py",
@@ -921,7 +935,7 @@
           "rolling fragment trailing contradiction ignored"
         ],
         "repair_prompt": "agent/orchestration/prompts/05N1-counterexample-fix.md",
-        "merged": false,
+        "merged": true,
         "tradeoff": "bounded unresolved early-stop accepted; candidate loss and false completeness not accepted",
         "repaired_delivery": "f3f0762352236021924b1ba8a49831a105dfd823",
         "repair_acceptance": "E:/hzz/work/MA9/MA9-evidence/20260925-05N1-orchestrator/results.json",
@@ -941,7 +955,22 @@
         "review_prompt": "agent/orchestration/prompts/05NR-rolling-coverage-review.md",
         "review_base": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
         "review_scope": "whole05N+05N1 two commits fourfiles",
-        "blockers_resolved": "F1-F4 independently pass; previous blocked evidence remains immutable"
+        "blockers_resolved": "F1-F4 independently pass; previous blocked evidence remains immutable",
+        "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-05NR-rolling-coverage-review/results.json",
+        "review_counts": {
+          "screen": 15,
+          "counterexamples": 4,
+          "probes": 6,
+          "runtime": 43,
+          "all_expected_exit": true
+        },
+        "merge_commit": "fc53b6e194461fd500322e7dc899eb1aa28eb0de",
+        "integration": "E:/hzz/work/MA9/MA9-evidence/20260925-05N-integration/results.json",
+        "remaining_risks": [
+          "catalog-absent nearby models can be misidentified; not proven unreachable; expected_id alone does not remove correlated mismatch risk",
+          "one clipped candidate observed per frame, no universal whole-garage coverage claim",
+          "real swipe inertia and FE3 return-lineup rolling identity unverified"
+        ]
       }
     },
     "duel-defense": {
@@ -1229,7 +1258,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05N1 f3f0762总控原四反例均PASS，Agent327/tools29+1skip exit0，四图和45帧重新验证无旧识别/坐标/读数回归。用户全新Flash做05NR，覆盖ff426c6..f3f0762全部05N+返修，不只最后diff；暂不合入/打包，4/5仍暂停。",
+  "next": "05NR通过，05N+N1合入fc53b6e，main327/30exit0；总控02L-f3f0762新包9模块/两旧版负对照/包内FE3图及矛盾尾词/哈希/Usage/schema通过。用户只第3槽FE3重试，前两槽不动4/5暂停；若已选入但未确认保留现场，不重选。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1421,7 +1450,7 @@
         "lane/duel-scan"
       ],
       "policy": "ordinary atomic push no force; main accepted work plus orchestration,05J on lane pendingreview",
-      "result_file": "E:/hzz/work/MA9/MA9-evidence/20260925-readonly-lineup-push/results.json"
+      "result_file": "E:/hzz/work/MA9/MA9-evidence/20260925-rolling-coverage-push/results.json"
     }
   },
   "git_commit_policy": {

@@ -161,3 +161,6 @@ c268cddf63d843d4454985bcc38e999af7c12596仅runtime和测试，按panel右缘身�
 
 ## 最新05N1验收通过待完整05NR
 f3f0762352236021924b1ba8a49831a105dfd823四反例总控独立全PASS（仅OUT/SHA/None打印改，原探针该打印bug确认），327/tools29+1skip exit0。45组OCR无旧车/几何/分数变化，仅2新增；两完整FE3图可认、详情2帧序列title@.786确认。05NR-rolling-coverage-review.md给Flash新对话，审ff426c6..f3f0762完整两提交4文件，不只修复diff。未合/未包/未实机，4/5暂停。
+
+## 最新05NR通过且FE3新包就绪
+05N+N1已合入fc53b6e194461fd500322e7dc899eb1aa28eb0de，main327/30exit0。包user-test-fe3-f3f0762/MA9-preview，sourcef3f0762、版本v0.0.0-slot3-fe3-f3f0762，exe2b141fc8a2acc73441df95a1c0ca7ba4c4ff6ac9da0f6c33395d7ae2e61e34ae；9模块全同、旧2b39 screen43/runtime37差异子进程exit1、包内两完整FE3图命中且矛盾长尾拒绝、hash/Usage/schema通过。用户slot3重试，4/5暂停，若选入但未确认不清空。目录缺失近邻误认风险不采信“域内不可达”断言，限当前已知FE3目标；回阵容滚名仍未实机证明。
