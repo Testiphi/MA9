@@ -122,3 +122,6 @@ user-test-slot-da22bf1/MA9-preview，版本v0.0.0-slot-locate-da22bf1，exe75388
 
 ## 最新定位实机收口，05K单槽赋值待审
 20260925-092207-nevera-located已冻结业务JSON，612531f实际located/detail_verified/slot1/选择未尝试/starts_racefalse，用户确认停详情。总控新增独立选择action/配置，choose模式不可由GUI参数覆写，assignment_confirmed严格true，旧定位保留；ddcb200c066ae7017d48914e46af0ce242415c37，291/30与两变更schema通过。lane已快进供05KR-single-assignment-review.md Flash独立复核；通过后新包做一槽Nevera赋值/返回同槽，不五槽不开赛。
+
+## 最新05KR通过、02J单槽选择包可用户验证
+05KR16/10/8探针exit0无阻塞。总控已构建source ddcb200c066ae7017d48914e46af0ce242415c37新包user-test-assign-ddcb200/MA9-preview，8模块/全部hash/独立赋值配置/Usage exit1/schema通过，旧locate加载器40差异负对照exit1。exe c56270ddbcb61b569979633df39f9c6dc2e7283f747943cc2fafdbc31d0757bd。GUI只自检+单槽选择，配置choose/assignment_confirmed都true，用户核对账号后从第1槽阵容开始，实际选Nevera并回同槽，starts_racefalse；尚未赋值实机通过。
