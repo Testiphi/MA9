@@ -78,6 +78,7 @@ orchestration_files:
     - agent/orchestration/prompts/05LR-lineup-identity-review.md
     - agent/orchestration/prompts/05MR-readonly-lineup-review.md
     - agent/orchestration/prompts/05N-rolling-coverage.md
+    - agent/orchestration/prompts/05N1-counterexample-fix.md
     - agent/orchestration/prompts/05HR-wiring-review.md
     - agent/orchestration/prompts/06-duel-defense.md
     - agent/orchestration/prompts/07-duel-attack.md

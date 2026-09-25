@@ -895,14 +895,34 @@
         "base": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
         "project": "MA9-05N",
         "owns_new": [],
-        "phase": "prompt_ready",
+        "phase": "05N_blocked_counterexamples_05N1_prompt_ready",
         "device_allowed": false,
         "owns": [
           "agent/ma9_agent/duel_vehicle_screen.py",
           "agent/tests/test_duel_vehicle_screen.py",
           "agent/ma9_agent/duel_vehicle_runtime.py",
           "agent/tests/test_duel_vehicle_runtime.py"
-        ]
+        ],
+        "delivery": "2b39e73ed49126f23dd89ad4c43946f3442dce0b",
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260925-05N-orchestrator/results.json",
+        "counts": {
+          "independent_counterexamples": 4,
+          "repro_exit": 1,
+          "agent": 321,
+          "suites_exit": 0,
+          "tools_ran": 30,
+          "tools_passed": 29,
+          "tools_skip": 1
+        },
+        "blockers": [
+          "visible target swiped away before processing",
+          "fully read vehicles discarded before inventory recording",
+          "unresolved edge candidate dropped causing false complete target_not_found",
+          "rolling fragment trailing contradiction ignored"
+        ],
+        "repair_prompt": "agent/orchestration/prompts/05N1-counterexample-fix.md",
+        "merged": false,
+        "tradeoff": "bounded unresolved early-stop accepted; candidate loss and false completeness not accepted"
       }
     },
     "duel-defense": {
@@ -1190,7 +1210,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户四FE3图已冻结并原生离线OCR实跑：两完整列表仍漏，详情1/2能认；足够派05N四文件有界修复覆盖与滚动名。给ds-v4.1flash新对话完整提示词05N-rolling-coverage.md；无须继续补图，4/5未激活，前两槽保留。",
+  "next": "05N自带321/tools29+1skip通过但总控四独立反例失败：可见目标被移走/库存丢记录/候选债务丢失假完整/匹配片段尾部被忽略。不得合入打包；用户ds-v4.1flash新对话执行05N1-counterexample-fix.md，基点2b39e73仍4文件。预算耗尽明确未完成取舍接受，不需要实机重跑。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

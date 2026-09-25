@@ -155,3 +155,6 @@ c268cddf63d843d4454985bcc38e999af7c12596仅runtime和测试，按panel右缘身�
 
 ## 最新FE3补图足够，05N修复待派
 用户4张1280x720图已冻结20260925-fe3-full-intake，MaaFW内存离线原生OCRexit0：完整列表两张0/2匹配（FORMU+滚动model），详情首帧None/第二帧FE3@.786。原右裁切覆盖缺口之外还需滚名处理，05N-rolling-coverage.md授权screen/runtime及两测试4文件、源ff426c6；禁止改共享matcher/全局阈值/车名硬编码，需四图和45帧真实日志回放及候选歧义负例。ds-v4.1flash请求high，4/5继续暂停，无需继续补图。
+
+## 最新05N被总控四反例阻塞，返修05N1
+2b39e73ed49126f23dd89ad4c43946f3442dce0b自带Agent321/tools29+1skip exit0，但20260925-05N-orchestrator/repro.py四FAIL exit1：先补边滑走当前目标、丢当前完整车记录、pending消失后假complete-notfound、长片段尾部未解释仍认FE3。采样额外探索脚本第二帧无候选假设错误，不列第五阻塞。05N1-counterexample-fix.md新对话ds high请求，严格4文件；bounded未解早停本身接受。未合/未包/不实机，4/5仍暂停。
