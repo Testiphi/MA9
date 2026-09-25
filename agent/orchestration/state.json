@@ -153,6 +153,22 @@
         "choose": true,
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-02J-ddcb200/results.json",
         "modules": 8
+      },
+      "readonly_lineup_package": {
+        "device": "not_run",
+        "exe_sha256": "1ab5ee796f13041c9cea5d9743f9f46bc3f619c1a5f1c129f1767f6059491f65",
+        "source": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
+        "read_only": true,
+        "modules": 9,
+        "task_entries": [
+          "多人运行时_数据自检",
+          "对决_隔离单槽只读核验"
+        ],
+        "project": "MA9-02K-ff426c6",
+        "phase": "built_verified_user_readonly_ready",
+        "private_config": "existing assign request expected state only, no choose execution",
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-02K-ff426c6/results.json",
+        "package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-verify-ff426c6/MA9-preview"
       }
     },
     "vehicle": {
@@ -758,7 +774,7 @@
         "device": "not_run",
         "review_prompt": "agent/orchestration/prompts/05MR-readonly-lineup-review.md",
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-05M-readonly-lineup/results.json",
-        "phase": "implemented_offline_verified_pending05MR",
+        "phase": "05MR_passed_package_verified_user_readonly_ready",
         "delivery": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
         "owner": "orchestrator",
         "counts": {
@@ -770,7 +786,16 @@
         },
         "scope": "observe current same-slot vehicle twice, no game input, report current configuration not assignment",
         "base": "d9314f0714f3a64e55dcc8aa3aac5bbe299660b8",
-        "project": "MA9-05M"
+        "project": "MA9-05M",
+        "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-05MR-readonly-lineup-review/results.json",
+        "review_counts": {
+          "root": 10,
+          "probe_groups": 13,
+          "all_exit": 0,
+          "assertions": 40,
+          "targeted": 9
+        },
+        "review_notes": "action does not explicitly test assignment_complete but producer sets it false unconditionally; current-state verification is not retrospective assignment completion"
       }
     },
     "duel-defense": {
@@ -1058,7 +1083,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05LR通过已合入d9314f0，main299/30通过。为不重选现有Nevera，总控实现05M只读核验入口ff426c6，308/30/schema通过；用户全新Flash做05MR独立复核，之后只读包验当前阵容，不覆盖旧失败报告。",
+  "next": "05MR无阻塞，02K-ff426c6只读包已9模块/哈希/配置/旧入口负对照/Usage/schema验证。用户保持已有第1槽Nevera，先自检再只读核验；期待lineup_verified/configuration_verifiedtrue且selection_attempted/assignment_complete/starts_race均false，不重选或改旧报告。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1250,7 +1275,7 @@
         "lane/duel-scan"
       ],
       "policy": "ordinary atomic push no force; main accepted work plus orchestration,05J on lane pendingreview",
-      "result_file": "E:/hzz/work/MA9/MA9-evidence/20260925-single-assignment-push/results.json"
+      "result_file": "E:/hzz/work/MA9/MA9-evidence/20260925-readonly-lineup-push/results.json"
     }
   },
   "git_commit_policy": {

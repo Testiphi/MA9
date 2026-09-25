@@ -134,3 +134,6 @@ c268cddf63d843d4454985bcc38e999af7c12596仅runtime和测试，按panel右缘身�
 
 ## 最新05LR合入、05M只读入口待审
 05LR33/63probe exit0无阻塞，d9314f0合入并main299/30通过。总控新增只读verify_current_slot/GUI ff426c671cc23aef207b5f187db2de1105ac9ea7，9定向/Agent308/tools30/两schema通过；复用assign配置仅作期望，无输入，2稳定帧确认当前车槽，configuration_verified与assignment_complete分开、后者false。05MR-readonly-lineup-review.md给Flash独立复核，下一只读包不能让用户清阵容重选。
+
+## 最新05MR通过、02K只读包就绪
+05MR9/10测试和13组40断言exit0无阻塞。总控构建ff426c6准确只读包user-test-verify-ff426c6/MA9-preview，9模块/全部hash/新绝对根配置/旧runtime_action4差异exit1/无socketUsageexit1/schema通过；exe1ab5ee796f13041c9cea5d9743f9f46bc3f619c1a5f1c129f1767f6059491f65。GUI只有自检+只读核验，配置assign文件仅作期望、不执行choose。用户保持第1槽Nevera，核验JSON=lineup_verified/configuration_verifiedtrue，attempt/assignment_complete/starts_racefalse。未设备通过、不重选、不改旧历史报告。
