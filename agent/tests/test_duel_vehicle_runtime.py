@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import sys
 import unittest
 from pathlib import Path
@@ -12,6 +13,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ma9_agent.duel_vehicle_runtime import (_detail, _finish_target, _try_target,
                                             assign_visible, scan)
+
+_UNSET = object()
 
 
 class _Job:
@@ -63,7 +66,8 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
         self.frame = np.zeros((720, 1280, 3), dtype=np.uint8)
 
     @staticmethod
-    def _detail_ocr(*, selection_text="择", occupied=False, wrong_vehicle=False):
+    def _detail_ocr(*, selection_text="择", occupied=False, wrong_vehicle=False,
+                    detail_rating="1,381"):
         def ocr(_context, _frame_value, roi):
             if roi == (160, 76, 300, 110):
                 if wrong_vehicle:
@@ -79,7 +83,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                 return ([{"text": "这辆车已被放置在赛道", "confidence": .99,
                           "box": [300, 610, 320, 25]}] if occupied else [])
             if roi == (900, 90, 210, 90):
-                return [{"text": "1,381", "confidence": .99, "box": [950, 125, 80, 25]}]
+                return [{"text": detail_rating, "confidence": .99, "box": [900, 126, 130, 30]}]
             if roi == (1000, 600, 270, 105):
                 return [{"text": selection_text, "confidence": .99, "box": [1138, 643, 52, 25]}]
             return []
@@ -93,9 +97,11 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
         ]
 
     @staticmethod
-    def _active_button_frame():
+    def _active_button_frame(stars: int = 0):
         frame = np.zeros((720, 1280, 3), dtype=np.uint8)
         frame[625:690, 1045:1235] = (20, 240, 180)
+        for index in range(stars):
+            frame[95, 180 + 24 * index] = (20, 200, 200)
         return frame
 
     def test_edge_requires_two_unchanged_swipes(self) -> None:
@@ -375,6 +381,200 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                 self.assertEqual(report["status"], status)
                 self.assertEqual([call.args[1:] for call in click.call_args_list],
                                  [tuple(card["target"])])
+
+    # ------------------------------------- name-first list/detail rating policy
+    def _finish(self, card, *, choose=False, expected_performance=None,
+                expected_stars=None, verify=_UNSET, stars=0, **ocr_kwargs):
+        extras = {} if verify is _UNSET else {"verify_list_detail_rating": verify}
+        context = _DetailContext([True] * 40)
+        with patch("ma9_agent.duel_vehicle_runtime._frame",
+                   return_value=self._active_button_frame(stars=stars)), \
+                patch("ma9_agent.duel_vehicle_runtime._ocr",
+                      self._detail_ocr(**ocr_kwargs)), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True) as click, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = _finish_target(
+                context, card, 1, [card], "lancer", self._detail_catalog(),
+                choose=choose, expected_performance=expected_performance,
+                expected_stars=expected_stars, **extras)
+        return report, [call.args[1:] for call in click.call_args_list]
+
+    def test_default_still_rejects_the_live_list_detail_rating_mismatch(self) -> None:
+        """Old default (verify omitted -> True) keeps the live 4837/4897 refusal."""
+        card = _card("lancer")
+        card["performance"] = [4837, 4897]
+        report, clicks = self._finish(card, detail_rating="37/4,897")
+        self.assertEqual(report["status"], "list_detail_rating_mismatch")
+        self.assertEqual(report["performance"], 4897)
+        self.assertNotIn("list_detail_rating_compare", report)
+        self.assertEqual(clicks, [tuple(card["target"])])
+
+    def test_name_first_disables_only_the_implicit_rating_compare(self) -> None:
+        card = _card("lancer")
+        card["performance"] = [4837, 4897]
+        report, clicks = self._finish(card, verify=False, detail_rating="37/4,897")
+        self.assertEqual(report["status"], "detail_verified")
+        self.assertEqual(report["performance"], 4897)  # raw reading, never rewritten
+        self.assertEqual(report["list_detail_rating_compare"], "disabled")
+        self.assertTrue(report["select_available"])
+        self.assertEqual(clicks, [tuple(card["target"])])
+
+    def test_name_first_still_enforces_an_explicit_expected_performance(self) -> None:
+        card = _card("lancer")
+        card["performance"] = [4837, 4897]
+        report, _clicks = self._finish(card, verify=False, expected_performance=4837,
+                                       detail_rating="37/4,897")
+        self.assertEqual(report["status"], "performance_mismatch")
+        self.assertEqual(report["performance"], 4897)
+        matching, _clicks = self._finish(card, verify=False, expected_performance=4897,
+                                         detail_rating="37/4,897")
+        self.assertEqual(matching["status"], "detail_verified")
+
+    def test_name_first_still_enforces_expected_stars(self) -> None:
+        card = _card("lancer")
+        card["performance"] = [4837, 4897]
+        report, _clicks = self._finish(card, verify=False, expected_stars=5, stars=6,
+                                       detail_rating="37/4,897")
+        self.assertEqual(report["status"], "stars_mismatch")
+        self.assertEqual(report["stars_lit"], 6)
+        matching, _clicks = self._finish(card, verify=False, expected_stars=6, stars=6,
+                                        detail_rating="37/4,897")
+        self.assertEqual(matching["status"], "detail_verified")
+
+    def test_name_first_keeps_wrong_detail_and_occupied_guards(self) -> None:
+        card = _card("lancer")
+        card["performance"] = [4837, 4897]
+        for label, keyword, status in (("wrong_detail", dict(wrong_vehicle=True), "wrong_detail"),
+                                       ("occupied", dict(occupied=True), "occupied_elsewhere")):
+            with self.subTest(case=label):
+                report, clicks = self._finish(card, verify=False, choose=True,
+                                              detail_rating="37/4,897", **keyword)
+                self.assertEqual(report["status"], status)
+                self.assertFalse(report["assignment_complete"])
+                self.assertEqual(clicks, [tuple(card["target"])])
+
+    def test_name_first_never_locates_a_missing_detail(self) -> None:
+        card = _card("lancer")
+        card["performance"] = [4837, 4897]
+        context = _DetailContext([True] * 40)
+        with patch("ma9_agent.duel_vehicle_runtime._frame",
+                   return_value=self._active_button_frame()), \
+                patch("ma9_agent.duel_vehicle_runtime._ocr", lambda *args: []), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = _finish_target(
+                context, card, 1, [card], "lancer", self._detail_catalog(),
+                choose=False, expected_performance=None, expected_stars=None,
+                verify_list_detail_rating=False)
+        self.assertEqual(report["status"], "detail_not_verified")
+        self.assertFalse(report["assignment_complete"])
+
+    def test_name_first_choose_still_runs_select_and_assignment_guards(self) -> None:
+        card = _card("lancer")
+        card["performance"] = [4837, 4897]
+        frame = self._active_button_frame()
+
+        def ocr(_context, _frame_value, roi):
+            if roi == (160, 76, 300, 110):
+                return [{"text": "MITSUBISHI", "confidence": .99, "box": [160, 76, 170, 25]},
+                        {"text": "LANCER EVOLUTION", "confidence": .99, "box": [160, 104, 220, 25]}]
+            if roi == (900, 90, 210, 90):
+                return [{"text": "37/4,897", "confidence": .99, "box": [900, 126, 130, 30]}]
+            if roi == (470, 470, 720, 90):
+                return [{"text": "更换车辆", "confidence": .99, "box": [470, 470, 120, 25]}]
+            if roi == (0, 170, 1280, 190):
+                return [{"text": "MITSUBISHI", "confidence": .99, "box": [0, 170, 170, 25]},
+                        {"text": "LANCER EVOLUTION", "confidence": .99, "box": [0, 200, 220, 25]}]
+            return []
+
+        context = _DetailContext([True] * 40)
+        with patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._ocr", ocr), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True) as click, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = _finish_target(context, card, 1, [card], "lancer",
+                                    self._detail_catalog(), choose=True,
+                                    expected_performance=None, expected_stars=None,
+                                    verify_list_detail_rating=False)
+        self.assertEqual(report["status"], "assigned")
+        self.assertTrue(report["assignment_complete"])
+        self.assertEqual([call.args[1:] for call in click.call_args_list],
+                         [tuple(card["target"]), (1139, 658)])
+
+    def test_strict_defaults_are_preserved_and_the_flag_is_forwarded(self) -> None:
+        for func in (scan, _try_target, _finish_target):
+            self.assertIs(inspect.signature(func).parameters["verify_list_detail_rating"].default,
+                          True, func.__name__)
+        self.assertNotIn("verify_list_detail_rating",
+                         inspect.signature(assign_visible).parameters)
+
+        context = _Context()
+        card = _card("target")
+        catalog = [{"id": "target", "title": "target", "class": "D"}]
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=self.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._sample_visible",
+                      return_value=(self.frame, [card], True)), \
+                patch("ma9_agent.duel_vehicle_runtime._try_target",
+                      return_value={"status": "detail_verified"}) as try_target, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            scan(context, "D", catalog, target_id="target", verify_list_detail_rating=False)
+            self.assertIs(try_target.call_args.kwargs["verify_list_detail_rating"], False)
+            scan(context, "D", catalog, target_id="target")
+            self.assertIs(try_target.call_args.kwargs["verify_list_detail_rating"], True)
+
+    def test_non_bool_verify_flag_is_rejected_before_any_context_call(self) -> None:
+        context = _Context()
+        catalog = [{"id": "a", "title": "a", "class": "D"}]
+        for bad in ("yes", 1, 0, None, []):
+            with self.subTest(bad=repr(bad)):
+                with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame") as wait:
+                    with self.assertRaises(ValueError):
+                        scan(context, "D", catalog, target_id="a",
+                             verify_list_detail_rating=bad)
+                    wait.assert_not_called()
+                self.assertEqual(context.tasker.controller.swipes, 0)
+
+    def test_scan_name_first_stops_on_the_target_detail_without_a_return_click(self) -> None:
+        context = _DetailContext([True] * 40)
+        card = _card("lancer")
+        card["performance"] = [4837, 4897]
+        frame = self._active_button_frame()
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True) as click, \
+                patch("ma9_agent.duel_vehicle_runtime._sample_visible",
+                      return_value=(frame, [card], True)), \
+                patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._ocr",
+                      self._detail_ocr(detail_rating="37/4,897")), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "D", self._detail_catalog(), target_id="lancer",
+                          choose=False, verify_list_detail_rating=False)
+        self.assertEqual(report["status"], "detail_verified")
+        self.assertEqual(report["performance"], 4897)
+        self.assertEqual(report["list_detail_rating_compare"], "disabled")
+        self.assertNotIn((32, 25), [call.args[1:] for call in click.call_args_list])
+
+    def test_scan_strict_default_repeats_the_existing_mismatch_retry(self) -> None:
+        context = _DetailContext([True] * 80)
+        card = _card("lancer")
+        card["performance"] = [4837, 4897]
+        frame = self._active_button_frame()
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True) as click, \
+                patch("ma9_agent.duel_vehicle_runtime._sample_visible",
+                      return_value=(frame, [card], True)), \
+                patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._ocr",
+                      self._detail_ocr(detail_rating="37/4,897")), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "D", self._detail_catalog(), target_id="lancer",
+                          choose=False)
+        self.assertEqual(report["status"], "list_detail_rating_mismatch")
+        self.assertIn((32, 25), [call.args[1:] for call in click.call_args_list])
 
 
 if __name__ == "__main__":

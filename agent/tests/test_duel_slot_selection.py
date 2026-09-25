@@ -34,6 +34,7 @@ from ma9_agent.duel_slot_selection import (DEFENSE_PAGE_TITLE, MAX_SAMPLES,
                                            select_vehicle_for_slot)
 
 MODULE_PATH = Path(__file__).resolve().parents[1] / "ma9_agent/duel_slot_selection.py"
+SLOT_TEST_ENTRY_PATH = Path(__file__).resolve().parents[1] / "ma9_agent/duel_slot_test.py"
 
 BACKGROUND = (60, 25, 45)
 PANEL_COLOR = (200, 90, 140)
@@ -251,6 +252,94 @@ class SlotSelectionAdapterTest(unittest.TestCase):
         self.assertEqual(call["expected_stars"], 4)
         self.assertEqual(call["page_hint"], 3)
         self.assertEqual(report["request"]["page_hint"], 3)
+
+    # --------------------------------------- name-first rating policy plumbing
+    def test_default_request_disables_and_reports_the_rating_compare(self) -> None:
+        report, _order, scan_calls, entry, _harness = self._flow(
+            request(), frames=[SLOT_FRAMES[1]] * 2, scan_result=detail_report())
+        self.assertEqual(report["status"], STATUS_LOCATED)
+        self.assertIs(report["request"]["verify_list_detail_rating"], False)
+        self.assertIs(scan_calls[0]["verify_list_detail_rating"], False)
+        self.assertIsNone(report["after"])
+        self.assertFalse(report["starts_race"])
+        self.assertFalse(report["selection_attempted"])
+        self.assertEqual(len(entry.calls), 1)
+
+    def test_live_nevera_shape_locates_by_name_without_explicit_expectation(self) -> None:
+        # Real device shape: the list read 4837 while the detail named the target
+        # and parsed 4897; no expected_performance was supplied.
+        live = detail_report(target="car-d")
+        live["performance"] = 4897
+        live["selected_card"] = {
+            "vehicle": {"id": "car-d", "title": "car-d", "confidence": 1.0},
+            "performance": [4837, 4897],
+        }
+        report, _order, scan_calls, _entry, _harness = self._flow(
+            request(choose=False), frames=[SLOT_FRAMES[1]] * 2, scan_result=live)
+        self.assertEqual(report["status"], STATUS_LOCATED)
+        self.assertIs(scan_calls[0]["choose"], False)
+        self.assertIs(scan_calls[0]["verify_list_detail_rating"], False)
+        self.assertIsNone(scan_calls[0]["expected_performance"])
+        self.assertEqual(report["scan_report"]["performance"], 4897)
+
+    def test_explicit_verify_true_is_forwarded_and_keeps_the_strict_path(self) -> None:
+        strict = request(verify_list_detail_rating=True)
+        report, _order, scan_calls, _entry, _harness = self._flow(
+            strict, frames=[SLOT_FRAMES[1]] * 2, scan_result=detail_report())
+        self.assertIs(report["request"]["verify_list_detail_rating"], True)
+        self.assertIs(scan_calls[0]["verify_list_detail_rating"], True)
+
+        mismatch = {"status": "list_detail_rating_mismatch", "assignment_complete": False,
+                    "detail_vehicle": {"id": "car-d"},
+                    "selected_card": {"vehicle": {"id": "car-d"}}}
+        report, _order, scan_calls, _entry, _harness = self._flow(
+            strict, frames=[SLOT_FRAMES[1]] * 2, scan_result=mismatch)
+        self.assertEqual(report["status"], STATUS_SCAN_INCOMPLETE)
+        self.assertEqual(report["reason"], "list_detail_rating_mismatch")
+
+    def test_a_non_located_scan_status_is_never_reported_as_located(self) -> None:
+        for status in ("list_detail_rating_mismatch", "performance_mismatch",
+                       "stars_mismatch", "wrong_detail", "detail_not_verified",
+                       "occupied_elsewhere"):
+            with self.subTest(status=status):
+                report, _order, _scan, _entry, _harness = self._flow(
+                    request(choose=False), frames=[SLOT_FRAMES[1]] * 2,
+                    scan_result={"status": status, "assignment_complete": False,
+                                 "detail_vehicle": {"id": "car-d"}})
+                self.assertEqual(report["status"], STATUS_SCAN_INCOMPLETE)
+
+    def test_non_bool_verify_flag_is_rejected_before_any_capture(self) -> None:
+        for bad in ("no", 1, 0, None):
+            with self.subTest(bad=repr(bad)):
+                order: list[str] = []
+                harness = _Harness([SLOT_FRAMES[1]] * 2, [title_row(DEFENSE_PAGE_TITLE)], order)
+                with mock.patch.object(duel_slot_selection, "frame_of", harness.frame_of), \
+                        mock.patch.object(duel_slot_selection, "ocr_roi", harness.ocr_roi), \
+                        mock.patch.object(duel_slot_selection, "scan") as scan_stub, \
+                        mock.patch.object(duel_slot_selection.time, "sleep"):
+                    with self.assertRaises(ValueError):
+                        select_vehicle_for_slot(object(),
+                                                request(verify_list_detail_rating=bad),
+                                                _Entry(), catalog=CATALOG,
+                                                confirmed_owned_ids=OWNED)
+                self.assertEqual(order, [])
+                self.assertEqual(harness.frame_calls, 0)
+                scan_stub.assert_not_called()
+
+    def test_single_slot_default_is_false_and_the_05h_request_needs_no_change(self) -> None:
+        field_default = SlotSelectionRequest.__dataclass_fields__[
+            "verify_list_detail_rating"].default
+        self.assertIs(field_default, False)
+        self.assertIs(request().verify_list_detail_rating, False)
+
+        tree = ast.parse(SLOT_TEST_ENTRY_PATH.read_text(encoding="utf-8"))
+        built = [node for node in ast.walk(tree)
+                 if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+                 and node.func.id == "SlotSelectionRequest"]
+        self.assertTrue(built)
+        for node in built:
+            self.assertNotIn("verify_list_detail_rating",
+                             {keyword.arg for keyword in node.keywords})
 
     # --------------------------------------------------- pre-slot refusals
     def test_single_valid_frame_is_not_enough(self) -> None:

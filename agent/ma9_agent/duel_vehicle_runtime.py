@@ -193,7 +193,8 @@ def _finish_target(context: Any, card: dict[str, Any], page: int,
                    vehicles: list[dict[str, Any]], target_id: str,
                    catalog: list[dict[str, Any]], *, choose: bool,
                    expected_performance: int | None,
-                   expected_stars: int | None) -> dict[str, Any]:
+                   expected_stars: int | None,
+                   verify_list_detail_rating: bool = True) -> dict[str, Any]:
     if not _click(context, *card["target"]):
         return _result("card_click_failed", page, vehicles)
     detail = _detail(context, target_id, catalog)
@@ -201,17 +202,24 @@ def _finish_target(context: Any, card: dict[str, Any], page: int,
                      **{key: value for key, value in detail.items() if key != "status"},
                      selected_card=card)
     if detail["status"] == "detail_verified":
-        card_rating = card["performance"][0] if card["performance"] else None
-        detail_rating = detail["performance"]
-        clipped_thousands = (card_rating is not None and detail_rating is not None
-                             and card_rating < 1000 <= detail_rating
-                             and detail_rating % 1000 == card_rating)
-        if (card_rating is not None and detail_rating is not None
-                and card_rating != detail_rating and not clipped_thousands):
-            result["status"] = "list_detail_rating_mismatch"
-            return result
-        if clipped_thousands:
-            result["list_rating_clipped"] = True
+        if verify_list_detail_rating:
+            card_rating = card["performance"][0] if card["performance"] else None
+            detail_rating = detail["performance"]
+            clipped_thousands = (card_rating is not None and detail_rating is not None
+                                 and card_rating < 1000 <= detail_rating
+                                 and detail_rating % 1000 == card_rating)
+            if (card_rating is not None and detail_rating is not None
+                    and card_rating != detail_rating and not clipped_thousands):
+                result["status"] = "list_detail_rating_mismatch"
+                return result
+            if clipped_thousands:
+                result["list_rating_clipped"] = True
+        else:
+            # Name-first single-slot route: the detail already names the exact
+            # target, so only the *implicit* "list score == detail score"
+            # equality is suspended.  The raw OCR reading is reported unchanged
+            # and the disabled comparison is stated explicitly.
+            result["list_detail_rating_compare"] = "disabled"
         if expected_performance is not None and detail["performance"] != expected_performance:
             result["status"] = "performance_mismatch"
             return result
@@ -247,7 +255,9 @@ def _try_target(context: Any, card: dict[str, Any], page: int,
                 vehicles: list[dict[str, Any]], target_id: str,
                 catalog: list[dict[str, Any]], *, choose: bool,
                 expected_performance: int | None,
-                expected_stars: int | None, attempts: int = 2) -> dict[str, Any]:
+                expected_stars: int | None,
+                verify_list_detail_rating: bool = True,
+                attempts: int = 2) -> dict[str, Any]:
     """Reacquire a card after a moving list opens a neighbouring detail."""
     current = card
     last: dict[str, Any] | None = None
@@ -255,7 +265,8 @@ def _try_target(context: Any, card: dict[str, Any], page: int,
         last = _finish_target(
             context, current, page, vehicles, target_id, catalog, choose=choose,
             expected_performance=expected_performance,
-            expected_stars=expected_stars)
+            expected_stars=expected_stars,
+            verify_list_detail_rating=verify_list_detail_rating)
         last["target_attempts"] = attempt + 1
         if last["status"] not in RETRYABLE_TARGET_STATUSES:
             return last
@@ -283,7 +294,11 @@ def _try_target(context: Any, card: dict[str, Any], page: int,
 def assign_visible(context: Any, target_id: str, catalog: list[dict[str, Any]], *,
                    expected_performance: int | None = None,
                    expected_stars: int | None = None) -> dict[str, Any]:
-    """Assign a target already visible on the current Duel garage page."""
+    """Assign a target already visible on the current Duel garage page.
+
+    This formal defence path keeps the strict default: the implicit list/detail
+    rating equality stays verified (``_try_target``'s default ``True``).
+    """
     frame = _wait_selection_frame(context)
     if frame is None:
         return _result("not_duel_selection", 0, [])
@@ -305,13 +320,23 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
          target_id: str | None = None, choose: bool = False,
          max_pages: int = 25, expected_performance: int | None = None,
          expected_stars: int | None = None,
-         page_hint: int | None = None) -> dict[str, Any]:
+         page_hint: int | None = None,
+         verify_list_detail_rating: bool = True) -> dict[str, Any]:
     """Scan from a class tab, dedupe overlapping pages, and stop at an edge.
 
     ``choose`` only assigns a verified, unoccupied car; it never starts a race.
+
+    ``verify_list_detail_rating`` keeps the strict default.  Only when it is
+    explicitly ``False`` does the scan skip the *implicit* "list current score
+    must equal detail current score" comparison (and the resulting
+    ``list_detail_rating_mismatch`` retry); an explicit ``expected_performance``
+    or ``expected_stars`` is still enforced and the raw detail reading is
+    reported unchanged with ``list_detail_rating_compare == "disabled"``.
     """
     if type(choose) is not bool or type(max_pages) is not int:
         raise ValueError("choose must be boolean and max_pages must be an integer")
+    if type(verify_list_detail_rating) is not bool:
+        raise ValueError("verify_list_detail_rating must be boolean")
     if vehicle_class not in CLASS_X or not 1 <= max_pages <= 50:
         raise ValueError("unsupported Duel class or page limit")
     by_id = {row["id"]: row for row in catalog}
@@ -377,7 +402,8 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
             result = _try_target(
                 context, card, page, list(found.values()), target_id, catalog,
                 choose=choose, expected_performance=expected_performance,
-                expected_stars=expected_stars)
+                expected_stars=expected_stars,
+                verify_list_detail_rating=verify_list_detail_rating)
             result["fast_forward_swipes"] = fast_forward
             if result["status"] != "target_temporarily_unreadable":
                 return result
