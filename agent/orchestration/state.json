@@ -155,7 +155,7 @@
         "modules": 8
       },
       "readonly_lineup_package": {
-        "device": "not_run",
+        "device": "read_only_live_passed_slot1_Nevera_two_frames",
         "exe_sha256": "1ab5ee796f13041c9cea5d9743f9f46bc3f619c1a5f1c129f1767f6059491f65",
         "source": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
         "read_only": true,
@@ -737,7 +737,8 @@
           "starts_race false",
           "stop lineup"
         ],
-        "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-095331-assignment-postcheck"
+        "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-095331-assignment-postcheck",
+        "current_state_confirmation": "E:/hzz/work/MA9/MA9-evidence/20260925-113353-lineup-verified/acceptance.json"
       },
       "lineup_identity_task": {
         "scope": "post-assignment identity area only; exclude stats/map text with spatial evidence; no newclick or timeout changes",
@@ -774,7 +775,7 @@
         "device": "not_run",
         "review_prompt": "agent/orchestration/prompts/05MR-readonly-lineup-review.md",
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-05M-readonly-lineup/results.json",
-        "phase": "05MR_passed_package_verified_user_readonly_ready",
+        "phase": "user_live_current_slot1_Nevera_verified",
         "delivery": "ff426c671cc23aef207b5f187db2de1105ac9ea7",
         "owner": "orchestrator",
         "counts": {
@@ -795,7 +796,18 @@
           "assertions": 40,
           "targeted": 9
         },
-        "review_notes": "action does not explicitly test assignment_complete but producer sets it false unconditionally; current-state verification is not retrospective assignment completion"
+        "review_notes": "action does not explicitly test assignment_complete but producer sets it false unconditionally; current-state verification is not retrospective assignment completion",
+        "live_acceptance": "E:/hzz/work/MA9/MA9-evidence/20260925-113353-lineup-verified/acceptance.json"
+      },
+      "next_slot_trial": {
+        "new_code_required": "none_expected; exact package/config preparation after target known",
+        "target_must_differ_from_slot1": true,
+        "purpose": "end-to-end assign plus automatic same-slot verification on another slot/class using reviewed repaired code",
+        "preferred_class": "C_or_D",
+        "avoid_already_assigned_elsewhere": true,
+        "slot": 2,
+        "device_operator": "user",
+        "phase": "awaiting_user_owned_target_name"
       }
     },
     "duel-defense": {
@@ -1083,7 +1095,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05MR无阻塞，02K-ff426c6只读包已9模块/哈希/配置/旧入口负对照/Usage/schema验证。用户保持已有第1槽Nevera，先自检再只读核验；期待lineup_verified/configuration_verifiedtrue且selection_attempted/assignment_complete/starts_race均false，不重选或改旧报告。",
+  "next": "只读包实机lineup_verified/configuration_verifiedtrue，2帧slot1 Nevera置信1.0，未输入。原赋值unverified历史保持。下一轮第2槽不同已拥有车（建议C/D）完整赋值+自动回槽确认，已询问用户车型；不清空第1槽，不扩五槽/开赛。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
