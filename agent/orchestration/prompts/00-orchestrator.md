@@ -131,3 +131,6 @@ user-test-slot-da22bf1/MA9-preview，版本v0.0.0-slot-locate-da22bf1，exe75388
 
 ## 最新05L验收通过待05LR
 c268cddf63d843d4454985bcc38e999af7c12596仅runtime和测试，按panel右缘身份ROI隔离分数地图。总控299/tools29+1skip exit0，真实7图+原始native OCR（非center筛选）直接production helper7/7；有车真帧仅Nevera/Jesko slot1，5空槽只证版式。05LR-lineup-identity-review.md给Flash独立窄复核，未合入/未新包；下一步优先只读确认现有已选Nevera，不清空重选。
+
+## 最新05LR合入、05M只读入口待审
+05LR33/63probe exit0无阻塞，d9314f0合入并main299/30通过。总控新增只读verify_current_slot/GUI ff426c671cc23aef207b5f187db2de1105ac9ea7，9定向/Agent308/tools30/两schema通过；复用assign配置仅作期望，无输入，2稳定帧确认当前车槽，configuration_verified与assignment_complete分开、后者false。05MR-readonly-lineup-review.md给Flash独立复核，下一只读包不能让用户清阵容重选。
