@@ -75,6 +75,7 @@ orchestration_files:
     - agent/orchestration/prompts/05JR-name-first-review.md
     - agent/orchestration/prompts/05KR-single-assignment-review.md
     - agent/orchestration/prompts/05L-lineup-identity.md
+    - agent/orchestration/prompts/05LR-lineup-identity-review.md
     - agent/orchestration/prompts/05HR-wiring-review.md
     - agent/orchestration/prompts/06-duel-defense.md
     - agent/orchestration/prompts/07-duel-attack.md

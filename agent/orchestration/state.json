@@ -732,12 +732,24 @@
         ],
         "effort": "high_requested_actual_platform_reported",
         "project": "MA9-05L",
-        "phase": "prompt_ready",
+        "phase": "local_accepted_pending_05LR",
         "owns_generated": [],
         "model": "ds-v4.1flash",
         "owns_new": [],
         "device_allowed": false,
-        "base": "ddcb200c066ae7017d48914e46af0ce242415c37"
+        "base": "ddcb200c066ae7017d48914e46af0ce242415c37",
+        "delivery": "c268cddf63d843d4454985bcc38e999af7c12596",
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260925-05L-orchestrator/results.json",
+        "counts": {
+          "tools_ran": 30,
+          "all_exit": 0,
+          "tools_passed": 29,
+          "agent": 299,
+          "production_raw_replay": 7,
+          "tools_skip": 1
+        },
+        "review_prompt": "agent/orchestration/prompts/05LR-lineup-identity-review.md",
+        "review_scope_note": "geometry_only helper; native probe centered rows vs production raw replay7/7 checked; real named frames only2 slot1"
       }
     },
     "duel-defense": {
@@ -1025,7 +1037,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "用户截图与观察证实Nevera已在第1槽，但JSON assignment_unverified/after null：scan回页大ROI含4837S污染车型名，3组OCR离线旧None名称行匹配正确。05L窄修复返回页身份范围；不要让用户重复选择或清空已成功阵容，不把视觉成功冒充自动验收。",
+  "next": "05L c268cdd总控299/tools29+1skip exit0，真实7图+原始OCR生产helper回放7/7。用户全新Flash做05LR窄复核，随后总控优先只读核验既有Nevera阵容，不要求清空或重复赋值；视觉成功与自动未确认历史分开。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

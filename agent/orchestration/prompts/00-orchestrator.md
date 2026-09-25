@@ -128,3 +128,6 @@ user-test-slot-da22bf1/MA9-preview，版本v0.0.0-slot-locate-da22bf1，exe75388
 
 ## 最新：实际单槽赋值成功，自动回页确认仍缺口
 02J截图Nevera已在第1槽，JSON却assignment_unverified/after null/selection_attemptedtrue/starts_racefalse。20260925-095331-assignment-postcheck已冻结；scan对宽ROI含4837S等做全段match，3组实际OCR都None，单独真实姓名行均正确。05L-lineup-identity.md派ds-v4.1flash请求high，源ddcb200，仅runtime及测试，修回页车型空间读取，不改共享匹配/等待/补点，不让用户清空重选。
+
+## 最新05L验收通过待05LR
+c268cddf63d843d4454985bcc38e999af7c12596仅runtime和测试，按panel右缘身份ROI隔离分数地图。总控299/tools29+1skip exit0，真实7图+原始native OCR（非center筛选）直接production helper7/7；有车真帧仅Nevera/Jesko slot1，5空槽只证版式。05LR-lineup-identity-review.md给Flash独立窄复核，未合入/未新包；下一步优先只读确认现有已选Nevera，不清空重选。
