@@ -140,3 +140,6 @@ c268cddf63d843d4454985bcc38e999af7c12596仅runtime和测试，按panel右缘身�
 
 ## 最新：第1槽只读实机确认通过，待第2槽车型
 20260925-113353-lineup-verified已冻结business/log并检查：lineup_verified、configuration_verified/read_only true，两帧均资格赛slot1 Nevera@1.0；selection_attempted/assignment_complete/starts_race false。原09:53赋值unverified不倒改。下一第2槽换另一已拥有且未占用车，建议C/D，已询问用户；用修复后完整赋值+自动同槽链路验证，预期无需新业务代码，不清空第一槽。
+
+## 最新第2槽Ferrari296GTB测试包就绪
+用户确认C级Ferrari296GTB，idcar_663ddea67d1bbda0。复用ff426c6已验exe1ab5ee796f13041c9cea5d9743f9f46bc3f619c1a5f1c129f1767f6059491f65，不重复编译；新包user-test-slot2-296gtb-ff426c6/MA9-preview，版本v0.0.0-slot2-296gtb-ff426c6，expected_slot2/chooseTrue/namefirst。20260925-slot2-296gtb-package记录全hash/配置/Usage/schema均通过。用户展开第2地图后运行，验证assigned+同槽2+不开赛，第1槽Nevera保持；未设备通过。
