@@ -88,9 +88,55 @@ def _fingerprint(cards: list[dict[str, Any]]) -> tuple[str, ...]:
     return tuple(row["vehicle"]["id"] for row in cards)
 
 
+#: Largest movement, per coordinate and in 1280x720 pixels, tolerated between
+#: two consecutive independent readings of the *same* target card (MA9-05N2).
+#: The FE3 pair the scan must confirm moved its card by 2 px only while its name
+#: was readable in both frames (card left 708 -> 706, click target 893 -> 891),
+#: so 12 px is six times the observed OCR jitter.  This is a chosen tolerance,
+#: not a claim about real movement: the 690 px of a page swipe is the *command*
+#: coordinate difference of that large gesture, not a floor every real
+#: displacement clears -- the live list can also shift by a few pixels.  It is
+#: enough that the bound still cannot accept the clear cases: the neighbouring
+#: column sits at least 320 px away and the second card row is 227 px below the
+#: first, while the class and the row are checked independently of the margin.
+TARGET_GEOMETRY_TOLERANCE = 12
+
+
+def _target_read(cards: list[dict[str, Any]], target_id: str | None
+                 ) -> tuple[dict[str, Any] | None, bool]:
+    """One complete target card of ``cards``, and whether the id was claimed.
+
+    ``cards`` only ever holds fully visible cards, so a target the right edge
+    clips never reaches this helper.  A page that shows the id on two cards
+    cannot say which one is the target: the card is then ``None`` while the id
+    still counts as claimed, which keeps that ambiguous page from confirming
+    anything.
+    """
+    if target_id is None:
+        return None, False
+    matches = [row for row in cards if row["vehicle"]["id"] == target_id]
+    return (matches[0] if len(matches) == 1 else None), bool(matches)
+
+
+def _same_target_card(first: dict[str, Any], second: dict[str, Any],
+                      tolerance: int = TARGET_GEOMETRY_TOLERANCE) -> bool:
+    """Whether two readings describe the same, unmoved target card.
+
+    The class and both the card box and the click target have to agree within
+    :data:`TARGET_GEOMETRY_TOLERANCE`; a name that merely repeats may not stand
+    in for the target's geometry.
+    """
+    if first["class"] != second["class"]:
+        return False
+    return all(abs(before - after) <= tolerance
+               for before, after in zip([*first["card"], *first["target"]],
+                                        [*second["card"], *second["target"]]))
+
+
 def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
                     attempts: int = 4, interval: float = .18,
                     target_id: str | None = None,
+                    target_state: list[dict[str, Any] | None] | None = None,
                     ) -> tuple[np.ndarray | None, list[dict[str, Any]], bool,
                                list[dict[str, Any]]]:
     """Read a settled list page without trusting one animated OCR frame.
@@ -100,6 +146,27 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
     move.  Prefer the most complete repeated fingerprint and only call the
     page stable when the same card set was observed at least twice.
 
+    A target scan additionally accepts the target itself: two consecutive
+    independent reads that name that one complete card and put its card box and
+    click target within :data:`TARGET_GEOMETRY_TOLERANCE` are enough even when
+    an unrelated neighbour's own rolling name changed between them, because the
+    target is what this scan is about.  The returned frame is always the newest
+    one, so the coordinates can never be stale.  A missing or ambiguous read and
+    any larger movement break the run, and a window that read the target without
+    confirming it is never reported as stable: a rolling name the OCR lost must
+    not be mistaken for a car that is not on the page.  That is enforced on the
+    early exit too -- once *this window* has claimed the id, a later whole-page
+    repeat is no longer accepted as the settled page, because the seen target is
+    exactly what such a page would otherwise silently erase.
+
+    ``target_state`` is the small local continuity cell shared by the two
+    windows of one :func:`_stable_sample_visible` call.  On entry it holds the
+    target reading of the capture immediately before this window (``None`` at
+    the first window), and on every return this window writes back the reading
+    of its own *last actual capture*.  That is what keeps a real target run
+    continuous across the artificial window boundary without ever promoting an
+    older sighting to immediate predecessor.
+
     The last element is the clipped right-edge card of the chosen sample, kept
     apart from the fully visible cards so it can neither steady nor unsteady
     the page fingerprint.
@@ -107,22 +174,42 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
     samples: list[tuple[np.ndarray, list[dict[str, Any]], tuple[str, ...],
                         list[dict[str, Any]]]] = []
     previous: tuple[str, ...] | None = None
+    # The reading just before this window: a fresh call starts from nothing,
+    # while the second window of one bounded call starts from the first
+    # window's own last actual capture.
+    previous_target = target_state[0] if target_state is not None else None
+    claimed = False
+    seen: tuple[np.ndarray, list[dict[str, Any]], list[dict[str, Any]]] | None = None
     for attempt in range(attempts):
         frame = _frame(context)
         if not _selection_title(context, frame):
+            if target_state is not None:
+                target_state[0] = None
             return None, [], False, []
         cards, clipped = _visible(context, frame, catalog)
         fingerprint = _fingerprint(cards)
+        target_card, target_claimed = _target_read(cards, target_id)
+        if target_claimed:
+            claimed = True
+            seen = (frame, cards, clipped)
         samples.append((frame, cards, fingerprint, clipped))
         # Most settled pages expose four complete cards. Two equal reads are
-        # sufficient there; animated/partial pages retain the full retry
-        # budget. For a target scan, two consecutive sightings of that exact
-        # vehicle are also enough even on a short class tail.
-        target_stable = (target_id is not None and target_id in fingerprint
-                         and fingerprint == previous)
-        if fingerprint == previous and (len(cards) >= 4 or target_stable):
+        # sufficient there; animated/partial pages retain the full retry budget.
+        # A page whose id is ambiguous is not settled evidence, so it may not
+        # steady the page either.  Neither may a whole-page repeat once this
+        # window has already claimed the target: the id was seen and not yet
+        # confirmed, so a page without it is not the settled page -- reading it
+        # that way is how a seen target gets forgotten and the caller gets
+        # authorised to swipe past it.
+        target_stable = (target_card is not None and previous_target is not None
+                         and _same_target_card(previous_target, target_card))
+        if target_stable or (fingerprint == previous and len(cards) >= 4
+                             and not target_claimed and not claimed):
+            if target_state is not None:
+                target_state[0] = target_card
             return frame, cards, True, clipped
         previous = fingerprint
+        previous_target = target_card
         if attempt + 1 < attempts:
             time.sleep(interval)
     counts: dict[tuple[str, ...], int] = {}
@@ -134,6 +221,22 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
     # Prefer a complete OCR pass; for ties use the newest coordinates.
     frame, cards, fingerprint, clipped = max(
         enumerate(candidates), key=lambda item: (len(item[1][1]), item[0]))[1]
+    # Every route out of the loop hands the next window the target reading of
+    # this window's last actual capture -- never the earlier capture that the
+    # ``seen`` branch below returns, which would let the next window bridge a
+    # gap the target was absent from.
+    if target_state is not None:
+        target_state[0] = previous_target
+    if claimed:
+        # The target was read in this window but never confirmed by two
+        # consecutive consistent target reads, so the window may not report a
+        # settled page that simply lacks it.  Return the pair of the newest
+        # capture that named the target -- one capture, so frame and cards stay
+        # consistent -- with ``stable`` false: nothing is ever opened or swiped
+        # from an unverified window, and the caller keeps the sighting when it
+        # weighs its second window.
+        assert seen is not None
+        return seen[0], seen[1], False, seen[2]
     return frame, cards, bool(fingerprint and fingerprint in repeated), clipped
 
 
@@ -142,14 +245,41 @@ def _stable_sample_visible(context: Any, catalog: list[dict[str, Any]], *,
                            target_id: str | None = None,
                            ) -> tuple[np.ndarray | None, list[dict[str, Any]], bool,
                                       list[dict[str, Any]]]:
-    """Give an animated page one extra complete sampling window before use."""
+    """Give an animated page one extra complete sampling window before use.
+
+    The two windows are one bounded budget of ``2 * attempts`` captures, not two
+    independent votes.  A window that read the target without confirming it
+    returns the capture that named it, and that sighting is carried into the
+    second window: when the second window settles on the page without the
+    target, the page is reported as unverified instead of as a settled page the
+    target is simply not on.  A target the first window never named keeps the
+    original whole-page rule unchanged, for inventory and target scans alike.
+
+    The artificial window split does not break a real target run.  The first
+    window hands the second one the target reading of its own *last actual
+    capture*, so two consecutive readings that happen to straddle the boundary
+    (the recorded capture 4 and capture 5) are still one run and confirm on the
+    newest one.  A first window whose last capture did *not* name the target
+    hands on ``None``, so a sighting from earlier in that window never stands in
+    as the immediate predecessor: one reading after a gap stays one reading.
+    Nothing survives the call -- the continuity cell is local, so every fresh
+    call starts from ``None``.
+    """
+    state: list[dict[str, Any] | None] = [None]
     frame, cards, stable, clipped = _sample_visible(
-        context, catalog, attempts=attempts, interval=interval, target_id=target_id)
+        context, catalog, attempts=attempts, interval=interval,
+        target_id=target_id, target_state=state)
     if frame is None or stable:
         return frame, cards, stable, clipped
+    seen = any(row["vehicle"]["id"] == target_id for row in cards)
     time.sleep(interval)
-    return _sample_visible(
-        context, catalog, attempts=attempts, interval=interval, target_id=target_id)
+    frame, cards, stable, clipped = _sample_visible(
+        context, catalog, attempts=attempts, interval=interval,
+        target_id=target_id, target_state=state)
+    if seen and stable and not any(row["vehicle"]["id"] == target_id
+                                   for row in cards):
+        return frame, cards, False, clipped
+    return frame, cards, stable, clipped
 
 
 def _gray_list(frame: np.ndarray) -> np.ndarray:
@@ -511,8 +641,13 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
         if frame is None:
             return _result("selection_lost", page - 1, list(found.values()))
         if not stable:
+            # A target scan that read its car but never confirmed it lands here
+            # too: nothing is opened and no page swipe is authorised on an
+            # unconfirmed target.  The target id is reported so the two cases
+            # stay diagnosable apart.
+            extra = {"target_id": target_id} if target_id is not None else {}
             return _result("page_ocr_unverified", page, list(found.values()),
-                           unstable_samples=2)
+                           unstable_samples=2, **extra)
         # The sampled page is handled as it is read -- page/class guards, the
         # inventory record and the current complete target -- and only then is
         # the bounded right-edge completion attempted.  A card the screen edge
