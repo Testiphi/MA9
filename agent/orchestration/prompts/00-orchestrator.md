@@ -185,3 +185,6 @@ f3f0762352236021924b1ba8a49831a105dfd823四反例总控独立全PASS（仅OUT/SH
 
 ## 2026-09-27 第4槽GT65成功，第5槽G60配置就绪
 业务dc0aabced03c4660893267a2988603fa assigned/same_slot_confirmed，before/after4，详情/阵容ID均GT65@1.0，不开赛。截图前三槽保留。证据20260927-slot4-success-slot5-config冻结报告/截图/旧配置。相同0b8f1de包现私有请求slot5/car_5531a43a5f8c457d/D，choose=true，loader通过，尚待用户实机；前四槽保留，五车齐全也禁止开始。源码未改，不重新构建。
+
+## 2026-09-27 第5槽成功，地图接线前评估
+G60业务04f4ec4202584dc4b6ced038827a4812 assigned/same_slot_confirmed，before/after5，详情与阵容1.0，未开赛；图中前四槽保留。五槽/五等级仅分别单槽实机通过，非自动连续五槽或进攻通过。证据20260927-slot5-success-left-edge。用户另报D标签落点左缘裁切+侧栏遮挡EVO37；原因未实测，现代码标签点击后无起点归位验证。记录为覆盖缺口，不能宣称库存完整/未找到即未拥有。建议先复用duel_map_screen.read_five_tracks做只读地图序号取证，再策略候选预览；左边缘可独立有界反向补位，暂不改阈值/盲点侧栏。未新派工、未更改业务。

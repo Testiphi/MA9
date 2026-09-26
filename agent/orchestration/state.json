@@ -1123,7 +1123,24 @@
         "device_test": "not_run",
         "loader_passed": true,
         "config_sha256": "9b9d9478e7a3af23ad03428fda50a3c5547e1381d2a4cdd3b349a763e168eb20",
-        "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-slot4-success-slot5-config"
+        "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-slot4-success-slot5-config",
+        "live_acceptance": {
+          "slot": 5,
+          "target_id": "car_5531a43a5f8c457d",
+          "status": "assigned",
+          "reason": "same_slot_confirmed",
+          "assignment_complete": true,
+          "starts_race": false,
+          "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-slot5-success-left-edge",
+          "scope": "Five different slots/classes have individual user-operated tests; not an autonomous five-slot loop or attack acceptance.",
+          "left_edge": {
+            "observed": "user screenshot: leftmost name obscured by side overlay and screen edge",
+            "cause": "unverified; class-tab landing does not prove aligned class start",
+            "proposed_fix": "bounded reverse reposition and fresh stable recognition, explicit unresolved coverage; no blind retries or lower name threshold",
+            "blocks": "claim of complete class inventory or reliable absence",
+            "does_not_block": "readonly map recognition and offline candidate planning"
+          }
+        }
       }
     },
     "duel-defense": {
@@ -1411,7 +1428,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "第4槽GT65已assigned/same_slot_confirmed，详情与阵容均1.0；配置已切到第5槽D级Ginetta G60，纯文件loader通过。用户保留前四槽并手动展开第5地图后串行测试；五槽齐备也不开赛。第5槽尚未实机验证。",
+  "next": "五槽分别实机选车验证完成（非自动五槽循环）。建议下一阶段只读五地图+槽号识别，再参考表/确认拥有集合生成候选预览，复用单槽执行。左侧遮挡与等级起点未核验登记待办，地图识别不因此阻塞，但全库存完整/可靠未找到及依赖边缘车的自动应用不得据此放行。当前配置仍slot5，不重复运行，不开赛。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
