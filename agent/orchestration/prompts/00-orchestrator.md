@@ -176,3 +176,6 @@ f3f0762352236021924b1ba8a49831a105dfd823四反例总控独立全PASS（仅OUT/SH
 
 ## 05N2R通过，02M新包可交用户串行测试
 0b8f1de已合入f769695，main345/tools30(1skip)进程exit0。reviewer345汇总OK后exit21在327/336基点均复现，单列保留不改写。新包build/user-test-fe3-0b8f1de/MA9-preview，source0b8f1de，exe a2ad2c9acb468af39e2e6d5113fdc55d58451df229fe22d1797a42893ba0cea3；9模块一致、包内三探针通过、旧f3负对照441差异exit1、两schema通过。证据20260926-02M-0b8f1de；第3槽待用户实机，4/5暂停，前两槽保留。未推送。
+
+## 2026-09-27 第3槽FE3实机成功
+准确0b8f1de包exe hash核对一致。business 9fba4815672549adb7f570565bf03a7c: assigned/same_slot_confirmed，before/after均slot3各连续2帧、assignment_complete true、starts_race false；两页一次补边、一次目标尝试；详情.786，回阵容.885。截图前两槽保留。证据20260927-slot3-fe3-assigned。仅本次现场闭环通过，不外推所有滚名；下一步第4槽B级FV Frangivento GT65，当前私有配置仍slot3未改，5等待。
