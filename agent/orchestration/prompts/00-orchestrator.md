@@ -179,3 +179,6 @@ f3f0762352236021924b1ba8a49831a105dfd823四反例总控独立全PASS（仅OUT/SH
 
 ## 2026-09-27 第3槽FE3实机成功
 准确0b8f1de包exe hash核对一致。business 9fba4815672549adb7f570565bf03a7c: assigned/same_slot_confirmed，before/after均slot3各连续2帧、assignment_complete true、starts_race false；两页一次补边、一次目标尝试；详情.786，回阵容.885。截图前两槽保留。证据20260927-slot3-fe3-assigned。仅本次现场闭环通过，不外推所有滚名；下一步第4槽B级FV Frangivento GT65，当前私有配置仍slot3未改，5等待。
+
+## 2026-09-27 第4槽GT65配置就绪
+复用user-test-fe3-0b8f1de包，不重建；exe a2ad2c9a…核对一致。私有请求现slot4/car_71bc72d2c3ab44e1/B，choose=true，loader通过。旧slot3配置/TEST-BUILD/说明已快照于20260927-slot4-gt65-config；前三槽保留，第5槽暂停。用户手动展开第4地图后运行单槽选择，尚无第4槽实机结果。

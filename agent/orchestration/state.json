@@ -1084,6 +1084,23 @@
           "edge_repositions": 1,
           "limits": "One live run only; no universal rolling-name guarantee; slots4/5 not yet tested."
         }
+      },
+      "slot4_live_test": {
+        "slot": 4,
+        "target_id": "car_71bc72d2c3ab44e1",
+        "vehicle_class": "B",
+        "title": "FV Frangivento GT65",
+        "choose": true,
+        "device_test": "not_run",
+        "config_sha256": "80e86c74f631cdae8dacbbdb618dda66d337c310211a03da1bc3f0bb44ff3905",
+        "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-slot4-gt65-config",
+        "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-fe3-0b8f1de\\MA9-preview",
+        "exe_sha256": "a2ad2c9acb468af39e2e6d5113fdc55d58451df229fe22d1797a42893ba0cea3",
+        "loader_passed": true,
+        "code_changed": false,
+        "rebuilt": false,
+        "previous_slot_evidence": "20260927-slot3-fe3-assigned",
+        "device_actions": 0
       }
     },
     "duel-defense": {
@@ -1371,7 +1388,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "FE3第3槽已用户截图+业务报告assigned/same_slot_confirmed验证，前两槽图中保留。不再重跑第3槽；下一步准备第4槽B级FV Frangivento GT65的独立配置，再由用户串行测试；第5槽继续等待，不开赛。当前包配置仍指向第3槽，尚未切换。",
+  "next": "第4槽B级FV Frangivento GT65配置已切换并纯文件loader通过；复用user-test-fe3-0b8f1de目录/原exe，用户先自检后单槽选择。前三槽保留，第5槽暂停，不开赛；第4槽尚未实机验证。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
