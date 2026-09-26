@@ -15,9 +15,12 @@ from ma9_agent.duel_lineup_slot import (BUTTON_CENTER_BASE, EXPANDED_WIDTH,
                                         PANEL_RIGHT_BASE, SLOT_PITCH,
                                         observe_lineup_slot)
 from ma9_agent.duel_vehicle_runtime import (EDGE_REPOSITION_LIMIT,
-                                            EDGE_REPOSITION_SWIPE, _detail,
+                                            EDGE_REPOSITION_SWIPE,
+                                            TARGET_GEOMETRY_TOLERANCE, _detail,
                                             _finish_target, _lineup_identity,
-                                            _try_target, assign_visible, scan)
+                                            _same_target_card, _sample_visible,
+                                            _stable_sample_visible, _try_target,
+                                            assign_visible, scan)
 from ma9_agent.vehicle_screen import match_vehicle
 
 _UNSET = object()
@@ -319,6 +322,15 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
         self.assertEqual(context.tasker.controller.swipes, 2)
 
     def test_unstable_target_is_never_opened_before_a_stable_read(self) -> None:
+        """A single target sighting may not be overwritten by a settled page.
+
+        MA9-05N2: the first sampling window names ``target`` but cannot confirm
+        it, and the second window settles on the same page without it.  Reading
+        that as a settled page the target is simply not on would authorise the
+        next page swipe and lose the car whose rolling name the OCR happened to
+        drop, so the page is reported unverified instead: nothing is opened and
+        no page swipe is made.
+        """
         context = _Context()
         target = _card("target")
         stable_other = (self.frame, [_card("other")], True, [])
@@ -333,9 +345,12 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                 patch("ma9_agent.duel_vehicle_runtime._try_target") as try_target, \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             report = scan(context, "D", catalog, target_id="target", choose=True, max_pages=4)
-        self.assertEqual(report["status"], "target_not_found")
-        self.assertTrue(report["scan_complete"])
-        self.assertEqual([row["vehicle"]["id"] for row in report["vehicles"]], ["other"])
+        self.assertEqual(report["status"], "page_ocr_unverified")
+        self.assertFalse(report["scan_complete"])
+        self.assertEqual(report["vehicles"], [])
+        self.assertEqual(report["target_id"], "target")
+        self.assertEqual(report["unstable_samples"], 2)
+        self.assertEqual(context.tasker.controller.swipes, 0)
         try_target.assert_not_called()
 
     def test_assign_visible_refuses_a_continuously_unstable_target(self) -> None:
@@ -1184,6 +1199,189 @@ class DuelScanCounterexampleFixTest(unittest.TestCase):
         self.assertEqual(report["status"], "edge_candidate_unresolved")
         self.assertEqual(report["edge_candidate"]["vehicle"]["id"], "wanted")
         self.assertEqual(len(swipes), 1)
+
+
+class DuelTargetStabilityTest(unittest.TestCase):
+    """MA9-05N2: the target's own two independent reads confirm it.
+
+    Every case drives the real ``_sample_visible``/``_stable_sample_visible`` (or
+    the real ``scan`` chain) and stubs only the IO boundary -- ``_frame``,
+    ``_selection_title``, ``_visible``, ``_click``, ``_try_target`` and
+    ``time.sleep``.  The card lists are synthetic scenes (not device evidence);
+    the geometry bound and the two-window capture budget are the production ones.
+    """
+
+    FRAME = np.zeros((720, 1280, 3), dtype=np.uint8)
+
+    @staticmethod
+    def _catalog() -> list[dict]:
+        return [{"id": value, "title": value, "class": "D"}
+                for value in ("wanted", "other", "spare", "lower")]
+
+    @staticmethod
+    def _moved(vehicle_id: str, *, left: int = 100, top: int = 168,
+               vehicle_class: str = "D") -> dict:
+        row = _card(vehicle_id, vehicle_class)
+        row["card"] = [left, top, 420, 212]
+        row["target"] = [left + 185, top + 105]
+        return row
+
+    def _sampling(self, pages, target_id, *, attempts: int = 4):
+        """Run the real two-window sampler over synthetic ``(cards, clipped)``."""
+        with patch("ma9_agent.duel_vehicle_runtime._frame",
+                   return_value=self.FRAME), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=list(pages)) as visible, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            result = _stable_sample_visible(_Context(), self._catalog(),
+                                            attempts=attempts, target_id=target_id)
+        return result, visible
+
+    def _scan(self, pages, target_id, *, max_pages: int = 4):
+        """Drive the real ``scan`` over synthetic pages, stubbing only IO/entry."""
+        context = _Context()
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=self.FRAME), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._frame",
+                      return_value=self.FRAME), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=list(pages)) as visible, \
+                patch("ma9_agent.duel_vehicle_runtime._try_target",
+                      return_value={"status": "detail_verified"}) as try_target, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "D", self._catalog(), target_id=target_id,
+                          choose=False, max_pages=max_pages)
+        return report, context, visible, try_target
+
+    def test_two_consecutive_target_reads_confirm_on_the_newest_frame(self) -> None:
+        """The recorded case: a neighbour's rolling name changed, the target did not.
+
+        The fingerprints of the two reads differ (``spare`` dropped out), which
+        is exactly why the old whole-page rule could not confirm the car the OCR
+        had identified twice.  The target's own pair is enough, and the returned
+        geometry is the second frame's.
+        """
+        pages = [([self._moved("wanted", left=100), self._moved("other"),
+                   self._moved("spare")], []),
+                 ([self._moved("wanted", left=102), self._moved("other")], [])]
+        (_frame, cards, stable, _clipped), visible = self._sampling(pages, "wanted")
+        self.assertTrue(stable)
+        self.assertEqual([row["vehicle"]["id"] for row in cards], ["wanted", "other"])
+        newest = next(row for row in cards if row["vehicle"]["id"] == "wanted")
+        self.assertEqual(newest["target"], [287, 273])
+        self.assertEqual(visible.call_count, 2)
+
+    def test_target_seen_in_alternate_frames_never_accumulates(self) -> None:
+        """Non-consecutive sightings are not a run: four alternations decide nothing."""
+        pages = [([self._moved("wanted")], []), ([self._moved("other")], [])] * 4
+        (_frame, _cards, stable, _clipped), visible = self._sampling(pages, "wanted")
+        self.assertFalse(stable)
+        self.assertEqual(visible.call_count, 8)
+
+    def test_target_geometry_jump_between_rows_or_columns_is_not_confirmed(self) -> None:
+        """A repeated id is not enough: the card box and target must stay put."""
+        for name, second in (("next_row", self._moved("wanted", top=395)),
+                             ("column_shift", self._moved("wanted", left=500))):
+            with self.subTest(name=name):
+                # A one-card page never settles early, so both windows read the
+                # full ``attempts`` budget: four alternating pages twice.
+                pages = [([self._moved("wanted")], []), ([second], []),
+                         ([self._moved("wanted")], []), ([second], [])] * 2
+                (_frame, _cards, stable, _clipped), visible = self._sampling(
+                    pages, "wanted")
+                self.assertFalse(stable)
+                self.assertEqual(visible.call_count, 8)
+
+    def test_two_cards_of_the_same_target_id_never_confirm_the_target(self) -> None:
+        """An ambiguous page may not steady itself into a click either."""
+        twin = self._moved("wanted", left=600)
+        pages = [([self._moved("wanted"), twin, self._moved("other"),
+                   self._moved("spare")], [])] * 8
+        report, context, visible, try_target = self._scan(pages, "wanted")
+        self.assertEqual(report["status"], "page_ocr_unverified")
+        self.assertFalse(report["scan_complete"])
+        self.assertEqual(context.tasker.controller.swipes, 0)
+        try_target.assert_not_called()
+        self.assertEqual(visible.call_count, 8)
+
+    def test_single_target_read_lost_afterwards_stops_without_swiping(self) -> None:
+        """One sighting then a settled page without it: unconfirmed, no big swipe."""
+        pages = [([self._moved("wanted")], [])] + [([self._moved("other")], [])] * 7
+        report, context, visible, try_target = self._scan(pages, "wanted")
+        self.assertEqual(report["status"], "page_ocr_unverified")
+        self.assertFalse(report["scan_complete"])
+        self.assertEqual(report["vehicles"], [])
+        self.assertEqual(report["target_id"], "wanted")
+        self.assertEqual(report["unstable_samples"], 2)
+        self.assertEqual(context.tasker.controller.swipes, 0)
+        try_target.assert_not_called()
+        # The two windows share one bounded budget: attempts * 2 captures.
+        self.assertEqual(visible.call_count, 8)
+
+    def test_target_only_as_a_clipped_row_is_not_target_evidence(self) -> None:
+        """The right edge's card has no click target and cannot confirm the car."""
+        clipped = self._moved("wanted", left=1069)
+        clipped["clipped"] = True
+        pages = [([self._moved("other")], [clipped])] * 8
+        (_frame, cards, stable, _clipped_rows), _visible = self._sampling(
+            pages, "wanted")
+        self.assertTrue(stable)
+        self.assertEqual([row["vehicle"]["id"] for row in cards], ["other"])
+
+    def test_no_target_geometry_state_is_borrowed_across_calls(self) -> None:
+        """A fresh call starts its run from nothing, not from the previous page."""
+        pages = ([([self._moved("other")], []), ([self._moved("wanted")], [])] * 2)
+        with patch("ma9_agent.duel_vehicle_runtime._frame",
+                   return_value=self.FRAME), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=pages), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            first = _sample_visible(_Context(), self._catalog(),
+                                    attempts=2, target_id="wanted")
+            second = _sample_visible(_Context(), self._catalog(),
+                                     attempts=2, target_id="wanted")
+        self.assertFalse(first[2])
+        self.assertFalse(second[2])
+
+    def test_real_scan_confirms_before_opening_and_uses_the_newest_target(self) -> None:
+        """The scan chain opens the car only after its own second read agrees."""
+        pages = [([self._moved("wanted", left=100), self._moved("other"),
+                   self._moved("spare")], []),
+                 ([self._moved("wanted", left=102), self._moved("other")], [])]
+        report, _context, visible, try_target = self._scan(pages, "wanted")
+        self.assertEqual(visible.call_count, 2)
+        try_target.assert_called_once()
+        opened = try_target.call_args.args[1]
+        self.assertEqual(opened["vehicle"]["id"], "wanted")
+        self.assertEqual(opened["target"], [287, 273])
+        self.assertEqual(report["status"], "detail_verified")
+
+    def test_target_geometry_tolerance_admits_the_recorded_jitter_only(self) -> None:
+        """The bound is the recorded 2 px jitter plus margin, not a real move.
+
+        A 2 px shift is the measured FE3 jitter, 227 px is the next card row and
+        >= 320 px is the neighbouring column, so the bound has to sit between
+        them; the class and the row are checked independently of the margin.
+        """
+        first = self._moved("wanted")
+        for delta, expected in ((0, True), (2, True),
+                                (TARGET_GEOMETRY_TOLERANCE, True),
+                                (TARGET_GEOMETRY_TOLERANCE + 1, False),
+                                (227, False), (400, False)):
+            with self.subTest(delta=delta):
+                self.assertIs(
+                    _same_target_card(first, self._moved("wanted", left=100 + delta)),
+                    expected)
+        self.assertIs(_same_target_card(first, self._moved("wanted", top=395)), False)
+        self.assertIs(_same_target_card(first, self._moved("wanted",
+                                                           vehicle_class="C")), False)
 
 
 if __name__ == "__main__":
