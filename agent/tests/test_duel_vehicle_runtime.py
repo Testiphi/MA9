@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ma9_agent.duel_lineup_slot import (BUTTON_CENTER_BASE, EXPANDED_WIDTH,
                                         PANEL_RIGHT_BASE, SLOT_PITCH,
                                         observe_lineup_slot)
-from ma9_agent.duel_vehicle_runtime import (EDGE_REPOSITION_LIMIT,
+from ma9_agent.duel_vehicle_runtime import (CLASS_X, EDGE_REPOSITION_LIMIT,
                                             EDGE_REPOSITION_SWIPE,
                                             TARGET_GEOMETRY_TOLERANCE, _detail,
                                             _finish_target, _lineup_identity,
@@ -1382,6 +1382,196 @@ class DuelTargetStabilityTest(unittest.TestCase):
         self.assertIs(_same_target_card(first, self._moved("wanted", top=395)), False)
         self.assertIs(_same_target_card(first, self._moved("wanted",
                                                            vehicle_class="C")), False)
+
+    # --------------------- MA9-05N2A: seen-target history and window boundary
+    @staticmethod
+    def _three_neighbours() -> list[dict]:
+        return [DuelTargetStabilityTest._moved("other", left=0, top=395),
+                DuelTargetStabilityTest._moved("spare", left=430, top=168),
+                DuelTargetStabilityTest._moved("lower", left=430, top=395)]
+
+    def test_seen_target_history_blocks_the_early_whole_page_return(self) -> None:
+        """A whole-page repeat may not erase a target the first window saw.
+
+        The orchestrator counterexample: capture 1 names ``wanted`` beside three
+        neighbours, captures 2..N show the *same* set of 4/5/6 other cards.  The
+        old early exit only looked at the current frame's ``target_claimed`` and
+        returned a stable page without the target, so the scan swiped past a car
+        it had read.  The seeing history now keeps the window unverified.
+        """
+        for count in (4, 5, 6):
+            with self.subTest(neighbours=count):
+                rest = [self._moved(f"n{index}") for index in range(count)]
+                first = [self._moved("wanted"), *rest[:3]]
+                pages = [(first, [])] + [(rest, [])] * 7
+                (_frame, _cards, stable, _clipped), visible = self._sampling(
+                    pages, "wanted")
+                self.assertFalse(stable)
+                self.assertEqual(visible.call_count, 6)
+
+    def test_ambiguous_target_history_blocks_the_early_whole_page_return(self) -> None:
+        """Two cards of the target id are a sighting too: no page may erase it."""
+        rest = [self._moved(f"n{index}") for index in range(4)]
+        first = [self._moved("wanted"), self._moved("wanted", left=600),
+                 self._moved("other")]
+        pages = [(first, [])] + [(rest, [])] * 7
+        (_frame, _cards, stable, _clipped), visible = self._sampling(pages, "wanted")
+        self.assertFalse(stable)
+        self.assertEqual(visible.call_count, 6)
+
+    def test_second_window_history_also_blocks_the_early_whole_page_return(self) -> None:
+        """The same 4/5/6-card rule holds inside the second window.
+
+        The first window never names the target, so the outer ``seen`` flag stays
+        false; only the second window's own seeing history can block its early
+        exit.  Without that gate the window would settle on a target-free page.
+        """
+        for count in (4, 5, 6):
+            with self.subTest(neighbours=count):
+                rest = [self._moved(f"n{index}") for index in range(count)]
+                distinct = [self._moved(f"d{index}") for index in range(4)]
+                pages = ([([row], []) for row in distinct]
+                         + [([self._moved("wanted"), *rest], [])]
+                         + [(rest, [])] * 3)
+                (_frame, _cards, stable, _clipped), visible = self._sampling(
+                    pages, "wanted")
+                self.assertFalse(stable)
+                self.assertEqual(visible.call_count, 8)
+
+    def test_target_pair_split_by_the_window_boundary_confirms_on_the_newest(self) -> None:
+        """A real run is not cut by the artificial window split.
+
+        The recorded orchestrator scene: the first window's last capture (global
+        4) names the target at left 0, the second window's first capture (global
+        5) names it at left 2.  The two are one continuous run 2 px apart, so the
+        second capture confirms immediately and its newest coordinates are used.
+        """
+        other = self._three_neighbours()
+        first = self._moved("wanted", left=0, top=168)
+        second = self._moved("wanted", left=2, top=168)
+        pages = ([(other, [])] * 3
+                 + [([first, *other], []), ([second, *other], [])]
+                 + [(other, [])] * 3)
+        (_frame, cards, stable, _clipped), visible = self._sampling(pages, "wanted")
+        self.assertTrue(stable)
+        self.assertEqual(visible.call_count, 5)
+        newest = next(row for row in cards if row["vehicle"]["id"] == "wanted")
+        self.assertEqual(newest["target"], [187, 273])
+
+    def test_a_sighting_after_a_gap_is_not_a_consecutive_pair(self) -> None:
+        """Capture 1 and capture 5 are not a pair: the window in between lost it.
+
+        The first window's last capture does not name the target, so it hands the
+        second window nothing to pair against; the lone capture 5 sighting stays
+        a single reading and never confirms.
+        """
+        pages = [([self._moved("wanted")], []),
+                 ([self._moved("other")], []),
+                 ([self._moved("spare")], []),
+                 ([self._moved("lower")], []),
+                 ([self._moved("wanted")], [])] + [([self._moved("other")], [])] * 3
+        (_frame, _cards, stable, _clipped), visible = self._sampling(pages, "wanted")
+        self.assertFalse(stable)
+        self.assertEqual(visible.call_count, 8)
+
+    def test_boundary_pair_must_still_match_geometry_class_and_uniqueness(self) -> None:
+        """Straddling the boundary relaxes nothing about the target's own read."""
+        other = self._three_neighbours()
+        first = self._moved("wanted", left=0, top=168)
+        cases = {
+            "obvious_move": [self._moved("wanted", left=100, top=168)],
+            "next_row": [self._moved("wanted", left=0, top=395)],
+            "other_class": [self._moved("wanted", left=2, top=168, vehicle_class="C")],
+            "ambiguous": [self._moved("wanted", left=2, top=168),
+                          self._moved("wanted", left=600, top=168)],
+        }
+        for name, tail in cases.items():
+            with self.subTest(name=name):
+                pages = ([(other, [])] * 3
+                         + [([first, *other], []), ([*tail, *other], [])]
+                         + [(other, [])] * 3)
+                (_frame, _cards, stable, _clipped), visible = self._sampling(
+                    pages, "wanted")
+                self.assertFalse(stable)
+                self.assertEqual(visible.call_count, 8)
+
+    def test_window_carry_never_survives_the_sampling_call(self) -> None:
+        """The continuity cell is local: a new call cannot borrow the old one.
+
+        The first call confirms a pair and leaves the target as its last reading.
+        The second call starts with the *same* target geometry but a moved-away
+        second capture.  Borrowed state would confirm on the second call's first
+        frame; a fresh call must not.
+        """
+        other = self._three_neighbours()
+        same = self._moved("wanted", left=2, top=168)
+        moved = self._moved("wanted", left=100, top=168)
+        first_call = ([(other, [])] * 3
+                      + [([self._moved("wanted", left=0, top=168), *other], [])]
+                      + [([same, *other], [])])
+        second_call = ([([same, *other], []), ([moved, *other], []),
+                        ([same, *other], []), ([moved, *other], [])]
+                       + [([self._moved(value)], [])
+                          for value in ("other", "spare", "lower", "n4")])
+        with patch("ma9_agent.duel_vehicle_runtime._frame",
+                   return_value=self.FRAME), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=first_call + second_call), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            first = _stable_sample_visible(_Context(), self._catalog(), target_id="wanted")
+            second = _stable_sample_visible(_Context(), self._catalog(), target_id="wanted")
+        self.assertTrue(first[2])
+        self.assertFalse(second[2])
+
+    def test_unverified_scan_never_clicks_a_card_or_swipes(self) -> None:
+        """Entry clicks and target clicks stay separate facts on an unverified page.
+
+        The class tab click is the only entry action; a page that read the target
+        without confirming it must not open a card (no ``_click`` at a card
+        target) and must not authorise the large page swipe.
+        """
+        neighbours = [self._moved(f"n{index}") for index in range(4)]
+        pages = ([([self._moved("wanted"), *neighbours[:3]], [])]
+                 + [(neighbours, [])] * 7)
+        context = _Context()
+        clicks: list[tuple[int, int]] = []
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=self.FRAME), \
+                patch("ma9_agent.duel_vehicle_runtime._click",
+                      side_effect=lambda _context, x, y: clicks.append((x, y)) or True), \
+                patch("ma9_agent.duel_vehicle_runtime._frame",
+                      return_value=self.FRAME), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=list(pages)), \
+                patch("ma9_agent.duel_vehicle_runtime._try_target") as try_target, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(context, "D", self._catalog(), target_id="wanted",
+                          choose=True, max_pages=4)
+        self.assertEqual(report["status"], "page_ocr_unverified")
+        self.assertFalse(report["scan_complete"])
+        self.assertEqual(clicks, [(CLASS_X["D"], 103)])
+        self.assertEqual(context.tasker.controller.swipes, 0)
+        try_target.assert_not_called()
+
+    def test_scan_opens_the_newest_card_of_a_boundary_pair(self) -> None:
+        """The confirmed boundary pair is handed to the real ``_try_target``."""
+        other = self._three_neighbours()
+        pages = ([(other, [])] * 3
+                 + [([self._moved("wanted", left=0, top=168), *other], []),
+                    ([self._moved("wanted", left=2, top=168), *other], [])]
+                 + [(other, [])] * 3)
+        report, context, visible, try_target = self._scan(pages, "wanted")
+        self.assertEqual(visible.call_count, 5)
+        self.assertEqual(context.tasker.controller.swipes, 0)
+        try_target.assert_called_once()
+        opened = try_target.call_args.args[1]
+        self.assertEqual(opened["vehicle"]["id"], "wanted")
+        self.assertEqual(opened["target"], [187, 273])
+        self.assertEqual(report["status"], "detail_verified")
 
 
 if __name__ == "__main__":
