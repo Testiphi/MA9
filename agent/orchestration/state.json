@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-25",
+  "updated_at": "2026-09-26",
   "policy": "external-fresh-conversations-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -179,7 +179,7 @@
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260925-02L-f3f0762/results.json",
         "source": "f3f0762352236021924b1ba8a49831a105dfd823",
         "package": "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-fe3-f3f0762/MA9-preview",
-        "device": "not_run",
+        "device": "target_not_found_after_target_seen_twice_sampling_discarded",
         "exe_sha256": "2b141fc8a2acc73441df95a1c0ca7ba4c4ff6ac9da0f6c33395d7ae2e61e34ae",
         "schema_delta_exit": 0
       }
@@ -839,7 +839,7 @@
           "slot1 Nevera",
           "slot2 Ferrari296GTB"
         ],
-        "phase": "slot3_rolling_fix_package_verified",
+        "phase": "slot3_target_sampling_fix_pending",
         "slots": [
           3,
           4,
@@ -971,6 +971,23 @@
           "one clipped candidate observed per frame, no universal whole-garage coverage claim",
           "real swipe inertia and FE3 return-lineup rolling identity unverified"
         ]
+      },
+      "target_stability_task": {
+        "effort": "high_requested_actual_platform_reported",
+        "model": "ds-v4.1flash",
+        "phase": "prompt_ready",
+        "base": "f3f0762352236021924b1ba8a49831a105dfd823",
+        "owns_new": [],
+        "prompt": "agent/orchestration/prompts/05N2-target-stability.md",
+        "owns_generated": [],
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260926-221410-fe3-retry",
+        "owns": [
+          "agent/ma9_agent/duel_vehicle_runtime.py",
+          "agent/tests/test_duel_vehicle_runtime.py"
+        ],
+        "cause": "FE3 read in two consecutive full frames; neighbour Lexus changed fingerprint; later no-target repeat selected and target evidence discarded",
+        "device_allowed": false,
+        "project": "MA9-05N2"
       }
     },
     "duel-defense": {
@@ -1258,7 +1275,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05NR通过，05N+N1合入fc53b6e，main327/30exit0；总控02L-f3f0762新包9模块/两旧版负对照/包内FE3图及矛盾尾词/哈希/Usage/schema通过。用户只第3槽FE3重试，前两槽不动4/5暂停；若已选入但未确认保留现场，不重选。",
+  "next": "02L实机再次target_not_found但新逻辑有4次补边且两连续完整帧已认FE3；整页fingerprint因邻车Lexus变化否决目标稳定，后两无FE帧反被选中并大滑。已冻结新日志/JSON/截图并真实四OCR序列repro红exit1，05N2-target-stability.md派ds-v4.1flash新对话，只runtime+测试；无需补图，4/5暂停，推送794d3f1仍待此前精确授权，不自动重试。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

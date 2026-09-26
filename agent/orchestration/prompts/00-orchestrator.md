@@ -164,3 +164,6 @@ f3f0762352236021924b1ba8a49831a105dfd823四反例总控独立全PASS（仅OUT/SH
 
 ## 最新05NR通过且FE3新包就绪
 05N+N1已合入fc53b6e194461fd500322e7dc899eb1aa28eb0de，main327/30exit0。包user-test-fe3-f3f0762/MA9-preview，sourcef3f0762、版本v0.0.0-slot3-fe3-f3f0762，exe2b141fc8a2acc73441df95a1c0ca7ba4c4ff6ac9da0f6c33395d7ae2e61e34ae；9模块全同、旧2b39 screen43/runtime37差异子进程exit1、包内两完整FE3图命中且矛盾长尾拒绝、hash/Usage/schema通过。用户slot3重试，4/5暂停，若选入但未确认不清空。目录缺失近邻误认风险不采信“域内不可达”断言，限当前已知FE3目标；回阵容滚名仍未实机证明。
+
+## 2026-09-26 最新FE3再次漏车：目标稳定采样问题
+20260926-221410-fe3-retry已冻结新包业务和日志、核exe正确。scan12页至B、edge_repositions4，22:11:46.746与49.232都完整认出FE3（位置仅2px抖动），邻车Lexus掉读导致全页指纹不同；51.761/53.768无FE但指纹相同被选为stable，继续大滑。独立真实四OCR序列repro红exit1，非再次缺图/仅滚名失败。05N2-target-stability.md派ds high请求，基点f3f0762，仅runtime+测试；目标独立连续两帧+几何稳定、返回最新坐标，不允许单帧点或忘记已见目标。4/5暂停。此前794d3f1→remote main的自动审批拒绝仍待用户精确授权，未再次推送。
