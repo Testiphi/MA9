@@ -182,3 +182,6 @@ f3f0762352236021924b1ba8a49831a105dfd823四反例总控独立全PASS（仅OUT/SH
 
 ## 2026-09-27 第4槽GT65配置就绪
 复用user-test-fe3-0b8f1de包，不重建；exe a2ad2c9a…核对一致。私有请求现slot4/car_71bc72d2c3ab44e1/B，choose=true，loader通过。旧slot3配置/TEST-BUILD/说明已快照于20260927-slot4-gt65-config；前三槽保留，第5槽暂停。用户手动展开第4地图后运行单槽选择，尚无第4槽实机结果。
+
+## 2026-09-27 第4槽GT65成功，第5槽G60配置就绪
+业务dc0aabced03c4660893267a2988603fa assigned/same_slot_confirmed，before/after4，详情/阵容ID均GT65@1.0，不开赛。截图前三槽保留。证据20260927-slot4-success-slot5-config冻结报告/截图/旧配置。相同0b8f1de包现私有请求slot5/car_5531a43a5f8c457d/D，choose=true，loader通过，尚待用户实机；前四槽保留，五车齐全也禁止开始。源码未改，不重新构建。

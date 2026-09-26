@@ -1100,7 +1100,30 @@
         "code_changed": false,
         "rebuilt": false,
         "previous_slot_evidence": "20260927-slot3-fe3-assigned",
-        "device_actions": 0
+        "device_actions": 0,
+        "live_acceptance": {
+          "status": "assigned",
+          "reason": "same_slot_confirmed",
+          "slot": 4,
+          "target_id": "car_71bc72d2c3ab44e1",
+          "assignment_complete": true,
+          "starts_race": false,
+          "detail_confidence": 1.0,
+          "lineup_confidence": 1.0,
+          "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-slot4-success-slot5-config",
+          "source_report": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-fe3-0b8f1de\\MA9-preview\\debug\\duel-slot-test-dc0aabced03c4660893267a2988603fa.json"
+        }
+      },
+      "slot5_live_test": {
+        "slot": 5,
+        "title": "Ginetta G60",
+        "target_id": "car_5531a43a5f8c457d",
+        "vehicle_class": "D",
+        "choose": true,
+        "device_test": "not_run",
+        "loader_passed": true,
+        "config_sha256": "9b9d9478e7a3af23ad03428fda50a3c5547e1381d2a4cdd3b349a763e168eb20",
+        "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-slot4-success-slot5-config"
       }
     },
     "duel-defense": {
@@ -1388,7 +1411,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "第4槽B级FV Frangivento GT65配置已切换并纯文件loader通过；复用user-test-fe3-0b8f1de目录/原exe，用户先自检后单槽选择。前三槽保留，第5槽暂停，不开赛；第4槽尚未实机验证。",
+  "next": "第4槽GT65已assigned/same_slot_confirmed，详情与阵容均1.0；配置已切到第5槽D级Ginetta G60，纯文件loader通过。用户保留前四槽并手动展开第5地图后串行测试；五槽齐备也不开赛。第5槽尚未实机验证。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
