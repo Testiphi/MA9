@@ -975,7 +975,7 @@
       "target_stability_task": {
         "effort": "high_requested_actual_platform_reported",
         "model": "ds-v4.1flash",
-        "phase": "05N2A_orchestrator_passed_05N2R_pending",
+        "phase": "05N2R_passed_merged_exact_package_ready",
         "base": "f3f0762352236021924b1ba8a49831a105dfd823",
         "owns_new": [],
         "prompt": "agent/orchestration/prompts/05N2-target-stability.md",
@@ -1007,7 +1007,10 @@
         "repair_acceptance": {
           "head": "0b8f1de467c0d89645d2c25efa44c0dcad32850e",
           "evidence": "E:/hzz/work/MA9/MA9-evidence/20260926-05N2A-orchestrator/results.json",
-          "closed_blockers": ["F1", "F2"],
+          "closed_blockers": [
+            "F1",
+            "F2"
+          ],
           "three_repros_exit": 0,
           "agent": 345,
           "tools_ran": 30,
@@ -1016,7 +1019,58 @@
           "review_prompt": "agent/orchestration/prompts/05N2R-target-review.md",
           "device_test": "not_run"
         },
-        "merged": false
+        "merged": true,
+        "merge_commit": "f7696954131bdaa3110fe7ca4ba2f2a39b4c9506",
+        "review": {
+          "evidence": "E:/hzz/work/MA9/MA9-evidence/20260926-05N2R-target-review/results.json",
+          "blockers": [],
+          "agent_exit": 21,
+          "baseline_exit21_reproduced": true
+        },
+        "package_acceptance": {
+          "source_head": "0b8f1de467c0d89645d2c25efa44c0dcad32850e",
+          "version": "v0.0.0-slot3-fe3-0b8f1de",
+          "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-fe3-0b8f1de\\MA9-preview",
+          "exe_sha256": "a2ad2c9acb468af39e2e6d5113fdc55d58451df229fe22d1797a42893ba0cea3",
+          "modules": 9,
+          "modules_equal": true,
+          "old_runtime_differences": 368,
+          "hashes": "all_match",
+          "smoke_exit": 1,
+          "verify_list_detail_rating": false,
+          "choose": true,
+          "read_only": false,
+          "source_request_choose": true,
+          "assignment_complete": false,
+          "device_test": "not_run",
+          "independent_review": "05N2R_passed",
+          "release": "approved_user_serial_slot3_FE3_test",
+          "packaged_runtime_probes": 3,
+          "schema_delta_exit": 0,
+          "negative_old_f3_runtime": {
+            "exit": 1,
+            "differences": 441
+          },
+          "integration_head": "f7696954131bdaa3110fe7ca4ba2f2a39b4c9506",
+          "integration_agent": {
+            "ran": 345,
+            "exit": 0
+          },
+          "integration_tools": {
+            "ran": 30,
+            "skip": 1,
+            "exit": 0
+          },
+          "reviewer_agent_exit": 21,
+          "reviewer_exit21_reproduced_on_base": true,
+          "packaging_note": "Initial private schema invocation used absent lane tools/schema; logs retained, explicit host deps/tools correction passed; no business changes.",
+          "changed_interface_keys": [
+            "agent",
+            "controller",
+            "task",
+            "version"
+          ]
+        }
       }
     },
     "duel-defense": {
@@ -1304,7 +1358,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "附件末尾05N2交付006e924已读并验收：原现场2帧修复成立、336/tools29+1skipexit0，但总控F1已见目标后4邻车早退导致大滑、F2跨窗口4+5连续目标不能确认均红exit1。派05N2A-window-state.md新ds对话，仍仅runtime+测试；暂不合/包/实机，4/5暂停。推送794d3f1仍待精确授权，不能重试当前新HEAD。",
+  "next": "用户串行测试准确user-test-fe3-0b8f1de包，第3槽FE3；先自检后独立单槽选择，不开赛。前两槽保留、4/5暂停；选入但未确认保持阵容。05N2R与main集成已通过，尚无第3槽实机成功。推送审批状态不变。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
