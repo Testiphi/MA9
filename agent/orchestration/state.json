@@ -975,7 +975,7 @@
       "target_stability_task": {
         "effort": "high_requested_actual_platform_reported",
         "model": "ds-v4.1flash",
-        "phase": "prompt_ready",
+        "phase": "05N2_original_live_fixed_two_boundary_blockers_05N2A_ready",
         "base": "f3f0762352236021924b1ba8a49831a105dfd823",
         "owns_new": [],
         "prompt": "agent/orchestration/prompts/05N2-target-stability.md",
@@ -987,7 +987,24 @@
         ],
         "cause": "FE3 read in two consecutive full frames; neighbour Lexus changed fingerprint; later no-target repeat selected and target evidence discarded",
         "device_allowed": false,
-        "project": "MA9-05N2"
+        "project": "MA9-05N2",
+        "delivery": "006e92445df70b459613369d6cced824c85c3e67",
+        "acceptance": "E:/hzz/work/MA9/MA9-evidence/20260926-05N2-orchestrator/results.json",
+        "counts": {
+          "new_counterexamples": 2,
+          "tools": 30,
+          "original_live_repro_exit": 0,
+          "agent": 336,
+          "skip": 1,
+          "suites_exit": 0,
+          "new_repro_exit": 1
+        },
+        "blockers": [
+          "early whole-page return checks current target_claimed not historical claimed; seen target erased and scan swipes",
+          "actual consecutive target at capture4and5 broken by window boundary reset"
+        ],
+        "repair_prompt": "agent/orchestration/prompts/05N2A-window-state.md",
+        "merged": false
       }
     },
     "duel-defense": {
@@ -1275,7 +1292,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "02L实机再次target_not_found但新逻辑有4次补边且两连续完整帧已认FE3；整页fingerprint因邻车Lexus变化否决目标稳定，后两无FE帧反被选中并大滑。已冻结新日志/JSON/截图并真实四OCR序列repro红exit1，05N2-target-stability.md派ds-v4.1flash新对话，只runtime+测试；无需补图，4/5暂停，推送794d3f1仍待此前精确授权，不自动重试。",
+  "next": "附件末尾05N2交付006e924已读并验收：原现场2帧修复成立、336/tools29+1skipexit0，但总控F1已见目标后4邻车早退导致大滑、F2跨窗口4+5连续目标不能确认均红exit1。派05N2A-window-state.md新ds对话，仍仅runtime+测试；暂不合/包/实机，4/5暂停。推送794d3f1仍待精确授权，不能重试当前新HEAD。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
