@@ -1428,7 +1428,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "五槽分别实机选车验证完成（非自动五槽循环）。建议下一阶段只读五地图+槽号识别，再参考表/确认拥有集合生成候选预览，复用单槽执行。左侧遮挡与等级起点未核验登记待办，地图识别不因此阻塞，但全库存完整/可靠未找到及依赖边缘车的自动应用不得据此放行。当前配置仍slot5，不重复运行，不开赛。",
+  "next": "05O-readonly-lineup-maps.md给ds新对话，基点0b8f1de，两新增文件：只读五地图观察与连续双帧确认，不接GUI/策略/选车。保留当前五车，左边缘问题另列待办。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
