@@ -170,3 +170,6 @@ f3f0762352236021924b1ba8a49831a105dfd823四反例总控独立全PASS（仅OUT/SH
 
 ## 最新05N2附件回传：原现场已修，两个边界待05N2A
 006e92445df70b459613369d6cced824c85c3e67原4帧总控2次捕获成功，336/tools29+1skipexit0；但20260926-05N2-orchestrator两合法几何反例红：已见目标后4邻车稳定提前返回（只看current target_claimed）并大滑；跨窗口第4/5帧连续目标被重置，8帧仍False。05N2A-window-state.md派ds high请求，基点006，仅两文件；不改原期望，不合入或打包。另修文档690是手势坐标差非实际位移、原2px方向708→706。旧推送精确授权794仍未收到。
+
+## 2026-09-26 05N2A总控通过，待05N2R
+0b8f1de467c0d89645d2c25efa44c0dcad32850e：独立F1/F2及原现场四帧全部exit0；F1不大滑、F2第5帧确认、原现场第2帧确认。Agent345/tools30(29+1skip)真实exit0。证据20260926-05N2A-orchestrator。05N2R-target-review.md给Flash新对话，审f3f0762..0b8f1de两提交两文件全范围。历史blockers记录保留，repair_acceptance明确闭合；尚未独立复核/合入/打包/实机。4/5暂停、前两槽不动。

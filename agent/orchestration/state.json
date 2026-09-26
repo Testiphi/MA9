@@ -975,7 +975,7 @@
       "target_stability_task": {
         "effort": "high_requested_actual_platform_reported",
         "model": "ds-v4.1flash",
-        "phase": "05N2_original_live_fixed_two_boundary_blockers_05N2A_ready",
+        "phase": "05N2A_orchestrator_passed_05N2R_pending",
         "base": "f3f0762352236021924b1ba8a49831a105dfd823",
         "owns_new": [],
         "prompt": "agent/orchestration/prompts/05N2-target-stability.md",
@@ -1004,6 +1004,18 @@
           "actual consecutive target at capture4and5 broken by window boundary reset"
         ],
         "repair_prompt": "agent/orchestration/prompts/05N2A-window-state.md",
+        "repair_acceptance": {
+          "head": "0b8f1de467c0d89645d2c25efa44c0dcad32850e",
+          "evidence": "E:/hzz/work/MA9/MA9-evidence/20260926-05N2A-orchestrator/results.json",
+          "closed_blockers": ["F1", "F2"],
+          "three_repros_exit": 0,
+          "agent": 345,
+          "tools_ran": 30,
+          "tools_skipped": 1,
+          "suites_exit": 0,
+          "review_prompt": "agent/orchestration/prompts/05N2R-target-review.md",
+          "device_test": "not_run"
+        },
         "merged": false
       }
     },
