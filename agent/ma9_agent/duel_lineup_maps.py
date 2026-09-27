@@ -34,11 +34,12 @@ and adds the two things it cannot do:
    still matches confidently (``AMBIGUITY_MARGIN``), the pair is refused.  A tie
    - including a duplicated reference entry - yields a zero margin and is
    refused.  The decision never depends on the directory order of the table.
-3. **audit the whole cell, not only the pair the parser picked.**  The parser
-   reads just the first two rows of each x-group, so a second big *or* small
-   line in the same cell is invisible to it.  Every cell must present exactly
-   two map lines at different heights; a third candidate (or an equal-height
-   pair) is refused with the conflicting rows named in the evidence.  OCR
+3. **audit the whole geometric cell, not only the pair the parser picked.**
+   The parser reads just the first two rows of each x-group, so an extra big or
+   small line in another x-group of the same wide cell is invisible to it.
+   Every cell must present exactly two map lines at different heights; a third
+   candidate (or an equal-height pair) is refused with the conflicting rows
+   named in the evidence.  OCR
    repeats of one physical line - identical text *and* identical box - are
    collapsed first, so a genuine repeat is not mistaken for a conflict.
 
@@ -282,7 +283,7 @@ def _dedupe_lines(entries: Sequence[dict[str, Any]]
 
 
 def _groups(entries: Sequence[dict[str, Any]]) -> list[list[dict[str, Any]]]:
-    """Cluster the band rows into lineup cells, exactly as the base parser does.
+    """Cluster the band rows by x, exactly as the base parser does.
 
     Rows are visited in x order and joined to the first group whose first row is
     within ``ROW_GROUP_TOLERANCE``; each group is then ordered top-down so the
@@ -308,10 +309,8 @@ def _pair_lines(groups: Sequence[Sequence[dict[str, Any]]],
                 ) -> list[dict[str, Any]] | None:
     """The unique group the base parser turned into this pair at ``center``.
 
-    The *whole* group is returned, not just its first two rows: the caller must
-    be able to see every other map row the same cell produced, because the base
-    parser only ever looks at ``lines[:2]`` and would otherwise hide a second,
-    conflicting candidate behind the pair it happened to pick.
+    The x-group locates the pair's two physical rows.  The caller separately
+    audits every row in their observer geometry cell, including other x-groups.
     """
     hits = [group for group in groups
             if len(group) >= 2
@@ -425,10 +424,10 @@ def _locate_track(track: Mapping[str, Any], groups: Sequence[Sequence[dict[str, 
                   ) -> dict[str, Any]:
     """Locate one parser track in the real slot cells and re-check its match.
 
-    ``groups`` are the band rows clustered into cells (used to recover *both*
-    line boxes and to audit the cell's whole row set), ``cells`` the five
-    geometric slot spans, ``pairs`` the reference table and ``rows`` the raw OCR
-    rows the parser consumed (re-parsed for the runner-up).  All state is passed
+    ``groups`` are the parser's x-groups (used to recover both line boxes),
+    ``cells`` the five geometric slot spans, ``pairs`` the reference table and
+    ``rows`` the raw OCR rows the parser consumed (re-parsed for the runner-up).
+    All state is passed
     in: the function is a pure function of its arguments.
     """
     observed = list(track["observed"])
@@ -436,22 +435,6 @@ def _locate_track(track: Mapping[str, Any], groups: Sequence[Sequence[dict[str, 
     if group is None:
         return {"reject": TRACK_ROW_NOT_FOUND, "observed": observed,
                 "confidence": track["confidence"], "center_x": track["x"]}
-    if not _cell_has_unique_pair(group):
-        # The cell offered more than the one big/small pair (or two lines at one
-        # height).  The base parser still published a pair - it only reads
-        # ``lines[:2]`` - so this is exactly the discarded second candidate it
-        # could not see.  Refuse rather than let the first two rows, or the
-        # highest score, absorb the conflict.
-        hits = _cells_of(cells, group[0]["center"])
-        conflict: dict[str, Any] = {
-            "reject": TRACK_CELL_CONFLICT, "observed": observed,
-            "confidence": track["confidence"], "center_x": group[0]["center"],
-            "big_box": list(group[0]["box"]), "small_box": list(group[1]["box"]),
-            "cell_rows": [_row_evidence(row) for row in group]}
-        if len(hits) == 1:
-            conflict["slot"] = hits[0]["slot"]
-            conflict["cell"] = dict(hits[0])
-        return conflict
     big_line, small_line = group[0], group[1]
     big_hits = _cells_of(cells, big_line["center"])
     if not big_hits:
@@ -607,10 +590,35 @@ def observe_lineup_maps(frame: Any, *, ocr: Iterable[Any],
     located: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     groups = _groups(lines)
+    cells = observer["cells"]
+    cell_rows: dict[int, list[dict[str, Any]]] = {
+        cell["slot"]: [] for cell in cells}
+    for line in lines:
+        hits = _cells_of(cells, line["center"])
+        if len(hits) == 1:
+            cell_rows[hits[0]["slot"]].append(line)
+    conflicted: set[int] = set()
+    for cell in cells:
+        candidates = sorted(cell_rows[cell["slot"]],
+                            key=lambda line: (line["top"], line["center"], line["text"]))
+        if len(candidates) >= 2 and not _cell_has_unique_pair(candidates):
+            conflicted.add(cell["slot"])
+            rejected.append({
+                "reject": TRACK_CELL_CONFLICT, "slot": cell["slot"],
+                "cell": dict(cell), "observed": [line["text"] for line in candidates[:2]],
+                "center_x": candidates[0]["center"],
+                "big_box": list(candidates[0]["box"]),
+                "small_box": list(candidates[1]["box"]),
+                "cell_rows": [_row_evidence(line) for line in candidates],
+            })
     for track in base["tracks"]:
-        outcome = _locate_track(track, groups, observer["cells"], pairs, usable)
+        outcome = _locate_track(track, groups, cells, pairs, usable)
         if "reject" in outcome:
             rejected.append(outcome)
+        elif outcome["slot"] in conflicted:
+            # The base parser can still report a pair from a conflicted cell;
+            # keep its real slot in the cell diagnostic, never in partial tracks.
+            continue
         else:
             located.append(outcome)
 

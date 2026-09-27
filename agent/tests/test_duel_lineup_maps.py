@@ -231,10 +231,13 @@ class LineupMapsTest(unittest.TestCase):
         report = self.observe(lineup_frame(3), rows)
         self.assertFalse(report["maps_verified"])
         rejected = report["evidence"]["rejected_tracks"]
-        self.assertEqual([row["reject"] for row in rejected], ["pair_spans_cells"])
+        # The straddling small line is also a third candidate in cell 3, so
+        # its otherwise valid pair is conservatively withheld from partials.
+        self.assertEqual({row["reject"] for row in rejected},
+                         {"pair_spans_cells", "map_cell_candidates_conflict"})
         self.assertEqual(sorted(row["slot"] for row in report["tracks"]),
-                         [1, 3, 4, 5])
-        self.assertEqual(report["evidence"]["slots_missing"], [2])
+                         [1, 4, 5])
+        self.assertEqual(report["evidence"]["slots_missing"], [2, 3])
 
     def test_a_pair_whose_lines_drift_apart_in_one_cell_is_refused(self) -> None:
         rows = [dict(QUALIFIER_ROW)]
@@ -335,6 +338,60 @@ class LineupMapsTest(unittest.TestCase):
             self.assertEqual(report["reason"], "map_row_conflict")
             self.assertEqual([row["slot"] for row in report["tracks"]],
                              [2, 3, 4, 5])
+
+    def test_every_row_in_the_wide_geometry_cell_is_audited(self):
+        # Slot 3 spans x=288..1019.  A second row 70 px from the selected
+        # pair forms an isolated parser x-group, yet remains in that same cell.
+        cell = cell_spans(3)[2]
+        center = (cell["left"] + cell["right"]) / 2
+        for text, top in (("完全不同赛道", 270), ("完全不同地图", 202)):
+            with self.subTest(text=text):
+                rows = lineup_rows(3)
+                rows.append(map_row(text, center + 70, top))
+                report = self.observe(lineup_frame(3), rows)
+                self.assertFalse(report["maps_verified"])
+                self.assertEqual(report["reason"], "map_row_conflict")
+                self.assertEqual([row["slot"] for row in report["tracks"]],
+                                 [1, 2, 4, 5])
+                self.assertEqual(report["evidence"]["slots_missing"], [3])
+                conflicts = [row for row in report["evidence"]["rejected_tracks"]
+                             if row["reject"] == "map_cell_candidates_conflict"]
+                self.assertEqual(len(conflicts), 1)
+                self.assertEqual(conflicts[0]["slot"], 3)
+                self.assertIn(text, [row["text"] for row in conflicts[0]["cell_rows"]])
+
+    def test_parser_x_group_boundary_does_not_change_the_cell_verdict(self):
+        cell = cell_spans(3)[2]
+        center = (cell["left"] + cell["right"]) / 2
+        for delta in (54, 55, 70):
+            with self.subTest(delta=delta):
+                rows = lineup_rows(3)
+                extra = map_row("完全不同赛道", center + delta, 270)
+                original_center = rows[5]["box"][0] + rows[5]["box"][2] / 2
+                extra["box"][0] = int(original_center + delta - extra["box"][2] / 2)
+                rows.append(extra)
+                parser = read_five_tracks(rows, TABLE)
+                self.assertEqual(parser["observed_groups"],
+                                 5 if delta == 54 else 6)
+                report = self.observe(lineup_frame(3), rows)
+                self.assertFalse(report["maps_verified"])
+                self.assertEqual(report["reason"], "map_row_conflict")
+                self.assertEqual(report["evidence"]["slots_missing"], [3])
+
+    def test_rows_excluded_from_the_map_band_do_not_create_a_conflict(self):
+        cell = cell_spans(3)[2]
+        center = (cell["left"] + cell["right"]) / 2 + 70
+        rows = lineup_rows(3)
+        rows.extend([map_row("完全不同地图", center, 199),
+                     map_row("完全不同赛道", center, 276),
+                     map_row("选择车辆", center, 250),
+                     map_row("English", center, 250)])
+        faint = map_row("完全不同赛道", center, 250)
+        faint["confidence"] = 0.69
+        rows.append(faint)
+        report = self.observe(lineup_frame(3), rows)
+        self.assertTrue(report["maps_verified"])
+        self.assertEqual(report["evidence"]["slots_missing"], [])
 
     def test_an_equal_height_pair_leaves_the_cell_unresolved(self):
         # Two map lines at one height cannot be ordered into big/small; both
@@ -704,6 +761,21 @@ class StableLineupMapsTest(unittest.TestCase):
         self.assertTrue(report["read_only"])
         self.assertFalse(report["selection_attempted"])
         self.assertFalse(report["starts_race"])
+
+    def test_an_isolated_x_group_in_the_same_cell_never_confirms(self):
+        cell = cell_spans(3)[2]
+        center = (cell["left"] + cell["right"]) / 2
+        rows = lineup_rows(3)
+        rows.append(map_row("完全不同地图", center + 70, 202))
+        frames = [lineup_frame(3), lineup_frame(3)]
+        for frame in frames:
+            self.case["rows"][id(frame)] = rows
+        report = self.run_reader(attempts=2, frames=frames)
+        self.assertFalse(report["maps_verified"])
+        self.assertEqual(report["samples"], 2)
+        self.assertEqual(report["latest"]["reason"], "map_row_conflict")
+        self.assertEqual([row["slot"] for row in report["latest"]["tracks"]],
+                         [1, 2, 4, 5])
 
     def test_the_attempt_budget_caps_the_samples(self) -> None:
         for slot in (1, 2, 3, 4, 5):
