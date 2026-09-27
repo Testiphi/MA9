@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T14:50:47+00:00",
-  "policy": "native-subagents-root-contained",
+  "updated_at": "2026-09-27T15:09:44+00:00",
+  "policy": "external-user-relay-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
   "active_owner_limit": 1,
@@ -2121,33 +2121,29 @@
     }
   },
   "model_dispatch": {
-    "approved": "2026-09-27",
-    "owner": "gpt-6-luna",
-    "owner_effort": "high",
-    "reviewer": "gpt-6-sol",
-    "reviewer_effort": "medium",
-    "mechanical": "gpt-6-luna",
-    "mechanical_effort": "medium",
-    "user_relay_required": false,
+    "approved": "latest_user_2026_09_27_external_relay",
+    "transport": "external_user_relay",
+    "owner": "DeepSeek v4.1flash",
+    "owner_effort": "platform_default",
+    "routine_review": "Qwen3.8flash",
+    "critical_review": "GLM5.3",
+    "mechanical": "Qwen3.8flash",
+    "user_relay_required": true,
     "user_device_operator": true,
     "parallel_writers_per_lane": 1,
-    "owner_scope": "clear bounded readonly/pure leaf tasks",
-    "complex_owner": "gpt-6-sol",
-    "complex_owner_effort": "medium",
-    "critical_safety_review_effort": "high",
-    "budget_policy": "short context; scripts for mechanical work; one writer; one bounded repair then triage; one final full suite; no redundant rebuild",
+    "native_subagents_enabled": false,
+    "child_may_spawn_agents": false,
+    "cost_basis": "user reports DeepSeek low cost, Qwen free, GLM higher cost/rate limits; no independent capability ranking",
+    "budget_policy": "bounded prompts, scripts for mechanical work, one repair then orchestrator triage, GLM final critical review only",
     "current_orchestrator_model": "gpt-6-astra",
-    "pricing_source": "https://learn.chatgpt.com/docs/pricing",
-    "model_guidance_source": "https://learn.chatgpt.com/docs/models",
     "current_orchestrator_effort": "medium",
-    "speed_preference": "standard",
-    "orchestrator_preference_authority": "user explicit 2026-09-27 keep main unchanged"
+    "speed_preference": "standard"
   },
   "last_exact_push": {
     "repository": "https://github.com/Testiphi/MA9.git",
     "branch": "main",
-    "commit": "8da5dbc28b1225ae26698872a28b8103887d6436",
-    "verified": "prior turn git ls-remote; this turn before new commit",
+    "commit": "eb5fbd196da4cb4e9b39d3054b3ac149499158cf",
+    "verified": "git ls-remote after completed Normal/README push",
     "further_HEAD_push_authorized": false
   },
   "garage_star_offline_task": {
@@ -2287,5 +2283,14 @@
     "default_language": "English",
     "source_engine_changed": false,
     "runtime_execution_enabled": false
+  },
+  "native_subagents_enabled": false,
+  "context_handoff": {
+    "recommended": "new_orchestrator_conversation",
+    "reason": "many completed recognition/data/sync stages; compact current handoff avoids replaying stale tasks",
+    "path": "agent/orchestration/HANDOFF_CURRENT.md",
+    "native_agents": "all completed, no active writer",
+    "external_tasks_issued": false,
+    "new_task_created": false
   }
 }

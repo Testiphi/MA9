@@ -32,24 +32,30 @@ orchestration_policy:
   single_orchestrator: true
   child_may_spawn_agents: false
   cross_lane_communication: through_orchestrator
+  native_subagents_enabled: false
+  user_relay_required: true
   concurrency: >
-    2026-09-27用户授权总控直接调度原生子智能体，不再要求用户搬运提示词。
-    默认一个写入owner；独立只读reviewer可与总控核验并行，同文件禁止并发写入。
-    用户仅负责实机验证和问题反馈；设备仍串行，子席不得自行接设备或派下级。
+    用户最新要求改为外部模型人工中转；总控提供填好的提示词，用户粘贴到外部新对话并回传结果。
+    不再调用原生子智能体，除非用户再次明确恢复；外部子席也不得派下级。
+    一个写入owner，reviewer只读且独立上下文；总控核对实际Git和证据后验收。
   active_model_policy:
-    implementation: gpt-6-luna
-    implementation_effort: high
-    independent_review: gpt-6-sol
-    review_effort: medium
-    mechanical_tasks: gpt-6-luna
-    mechanical_effort: medium
-    authority: user_explicit_2026_09_27
-    scope: bounded_readonly_or_pure_leaf_tasks
-    complex_implementation: gpt-6-sol
-    complex_effort: medium
-    critical_recognition_or_input_safety_effort: high
-    escalation: one_bounded_failed_repair_then_orchestrator_triage
-    notes: 2026-09-27用户要求节省额度；低风险窄实现Luna high，复杂实现Sol medium，识别/输入安全关键审查Sol high。短上下文、默认串行，不重复全套验证。
+    allowed_external_models: [deepseek, qwen_flash, glm]
+    implementation: deepseek
+    implementation_effort: null
+    independent_review: qwen_flash
+    review_effort: null
+    critical_independent_review: glm
+    mechanical_tasks: qwen_flash
+    mechanical_effort: null
+    authority: latest_user_external_relay_2026_09_27
+    scope: bounded_external_tasks_with_user_relay
+    complex_implementation: deepseek
+    complex_effort: null
+    escalation: one_bounded_repair_then_orchestrator_triage
+    notes: >
+      按用户提供的成本条件分配：DeepSeek v4.1flash日常实现/窄修；Qwen3.8flash免费机械核对/文档/低风险初审；
+      GLM5.3仅关键识别/输入安全/同步边界终审，避免常驻和重复全审。不是未经验证的能力排名。
+      外部平台档位未指定，使用平台默认并如实记录，不编造high/max支持。历史模型字段不支配新派工。
   reviewer_semantics: >
     lane 出现 reviewer 时，owner 验收通过后必须进行只读复核。reviewer 不修代码，
     只提交问题清单；最终修复派回 owner，是否合入由 Astra 编排层裁决。
@@ -171,20 +177,18 @@ support_roles:
 
 execution_transports:
   codex_direct:
-    models: [astra, gpt-6-sol, gpt-6-luna]
-    mode: native_subagents_orchestrated
-    notes: 总控保留当前对话；2026-09-27起可直接派Sol/Luna，owner与reviewer分离。
+    models: [astra]
+    mode: orchestrator_only
+    notes: 总控维持用户指定GPT-6 Astra medium/Standard；不启动原生子模型或自动新建用户任务。
   external_user_relay:
-    models: [deepseek, hy4, hy3, glm, glm_flash, minimax, kimi, qwen, qwen_flash]
+    models: [deepseek, qwen_flash, glm]
     mode: fresh_conversation_user_relay
     procedure:
-      - 总控生成独立且完整的提示词；用户选择指定模型并新建对话
-      - 有本地工具时从指定 cwd 开工；无本地工具时仅分析用户提供的脱敏输入并返回补丁建议
-      - 不假定任何平台已具备本地读写能力，不绕过权限，不声称已执行未执行的命令
-      - 用户回传结果、完整 commit 或 diff；总控独立检查实际改动并重跑验收
-    notes: >
-      可在 WorkBuddy 或用户选定的模型平台中转。MiniMax 目前仅备用，不实际派活。
-      模型名称按用户提供的标签登记，不代表价格/性能实测；未知平台档位保留 null，不编造枚举。
+      - 总控生成完整且已填好路径/HEAD/边界/验收的提示词；用户选择指定外部模型并粘贴到新对话
+      - 外部席先确认指定文件访问能力；无本地工具只返回基于所给材料的分析/补丁，不能假称已执行
+      - 一个写入owner，独立reviewer只读；子席不得创建下级或擅自操作设备/推送/合入
+      - 用户回传结果与commit/diff/命令实际退出码；总控核对真实Git与证据后验收
+    notes: 成本/限流信息来自用户；只启用本次列出的三个外部模型，其他历史模型暂不派发。
 
 live_verification:
   default_operator: user
@@ -230,31 +234,31 @@ model_tiers:
   gpt-6-sol:
     product: GPT-6 Sol
     efforts: [medium, high]
-    note: 原生实现与独立复核默认high；依据任务复杂度选择。
+    note: 历史原生席位；当前禁用，不支配外部派工。
   gpt-6-luna:
     product: GPT-6 Luna
     efforts: [medium, high]
-    note: 原生机械资料核对和配置整理，默认medium。
+    note: 历史原生席位；当前禁用。
   astra:
     product: GPT-6 Astra
     efforts: [medium, high]
-    note: 仅总控；由其直接调度Sol/Luna子智能体，子席不得递归派发。
+    note: 仅总控，维持用户指定medium/Standard；外部任务通过用户中转。
   deepseek:
-    product: ds-v4.1flash
-    efforts: [low, high, max]
-    note: 已有 MA9 执行记录，默认业务 owner high；不默认 max。
+    product: DeepSeek v4.1flash
+    efforts: []
+    note: 外部默认实现/窄修，用户报告额度消耗较小；平台默认档位。
   glm:
-    product: GLM-5.3
-    efforts: [low, high, max]
-    note: 独立只读复核；07 在依赖满足后使用 high。
+    product: GLM5.3
+    efforts: []
+    note: 关键任务独立终审；用户报告大量使用会限流且额度消耗较大，集中按需使用。
   qwen:
     product: Qwen3.8-Max
     efforts: []
     note: 07R独立只读复核有界试点；平台默认思考设置，Max是模型名，不编造high/max档位或等性能承诺。
   qwen_flash:
-    product: Qwen3.8-Flash
+    product: Qwen3.8flash
     efforts: []
-    note: 用户当前平台可用的低成本备用，实际档位如实记录；未自动派发或替代关键门禁。
+    note: 用户报告免费；用于机械核对/文档/低风险初审，不代替关键门禁。
   glm_flash:
     product: GLM-5.3-Flash
     efforts: []
@@ -507,8 +511,8 @@ lanes:
     scheduling: first_priority
     title: 擂台① 车库遍历
     branch: lane/duel-scan
-    model: gpt-6-sol
-    effort: high
+    model: deepseek
+    effort: null
     needs_device: true
     depends_on: [contract]
     owns:
@@ -548,14 +552,14 @@ lanes:
       - agent/tests/test_duel_slot_entry.py
       - assets/resource/image/navigation/duel/detail_select_text.png
     reviewer:
-      model: gpt-6-sol
-      effort: high
+      model: glm
+      effort: null
       mode: read_only
       trigger: 合入前独立检查模板证据、滚动车名、等级边界和快速定位兜底
     notes: >
-      2026-09-27改为原生Sol high自动调度；它是②③的硬前置，保留独立只读复核。
+      按最新外部中转策略分配DeepSeek实现与GLM关键复核；它是②③的硬前置。
       先用固定截图/现有测试核对剩余缺口，不重写已成功的 D 级流程。
-      具体难题两轮修复失败后交总控诊断，保存证据交总控，不自动升级 GPT 或 max。
+      一次有界返修仍未解决即交总控诊断，保存证据，不自动升级模型档位。
       当前D级f5472bc已实机five_assigned、五车互斥且未开赛，耗时449.013秒；已通过组合集成。
       R/S/A/B/C 等级边界目前只有离线测试证据。
 
