@@ -34,6 +34,13 @@
     "timeout": 600000,
     "next": []
   },
+  "对决_隔离全车库采集": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "ma9_duel_garage_survey",
+    "timeout": 3600000,
+    "next": []
+  },
   "对决_隔离单槽只读核验": {
     "next": [],
     "custom_action": "ma9_duel_slot_verify",

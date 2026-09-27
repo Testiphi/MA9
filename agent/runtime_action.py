@@ -453,3 +453,32 @@ class DuelZoneCandidatesAction(CustomAction):
                 and report.get("maps_verified") is True and report.get("selected_zone") in {"五区", "四区"}
                 and report.get("read_only") is True and report.get("selection_attempted") is False
                 and report.get("starts_race") is False)
+
+
+@AgentServer.custom_action("ma9_duel_garage_survey")
+class DuelGarageSurveyAction(CustomAction):
+    """Collect an isolated garage using only allowed class tabs and swipes."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv
+        from ma9_agent.duel_garage_survey import run_garage_survey
+        try:
+            report, destination = run_garage_survey(context, find_project_root())
+        except Exception as error:
+            print(json.dumps({"event": "ma9_duel_garage_survey_error", "error": str(error),
+                              "navigation_attempted": None, "selection_attempted": False,
+                              "starts_race": False, "allocation_ready": False},
+                             ensure_ascii=False), flush=True)
+            return False
+        print(json.dumps({"event": "ma9_duel_garage_survey", "status": report["status"],
+                          "traversal_finished": report["traversal_finished"],
+                          "unique_vehicle_count": report["unique_vehicle_count"],
+                          "navigation_attempted": report["navigation_attempted"],
+                          "coverage_complete": False, "allocation_ready": False,
+                          "selection_attempted": False, "starts_race": False,
+                          "report_file": str(destination)}, ensure_ascii=False), flush=True)
+        return (report.get("status") == "review_required" and report.get("traversal_finished") is True
+                and report.get("browse_only") is True and report.get("coverage_complete") is False
+                and report.get("allocation_ready") is False and report.get("selection_attempted") is False
+                and report.get("starts_race") is False
+                and all(item.get("allowed") is True for item in report.get("input_attempts", [])))
