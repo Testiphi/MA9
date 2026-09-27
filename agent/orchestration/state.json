@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T10:28:16+00:00",
+  "updated_at": "2026-09-27T10:44:32+00:00",
   "policy": "native-subagents-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -1926,7 +1926,7 @@
       "visible-list ownership is provisional",
       "external allocator not invoked"
     ],
-    "phase": "05X_user_BCD_supplementary_traversal_passed",
+    "phase": "05Y_offline_identity_star_audit_complete",
     "owner": "gpt-6-sol medium",
     "reviewer": "gpt-6-sol high",
     "active_owner": null,
@@ -1935,7 +1935,7 @@
     "push_authorized": false,
     "gui_entry": "对决_隔离车库补采BCD",
     "private_request": "config/duel_garage_scan.json",
-    "next": "Review saved identity/coverage/star evidence offline first. No repeat full scan or R/S/A scan now. Twelve note IDs remain outside profile; 91 records lack raw star readings and one has conflicting raw pairs. Do not promote provisional inventory or raw stars to complete allocation input.",
+    "next": "Implement separate offline region-based star reader and review overlay using saved frames; 2 boundary identity candidates, 10 single-full-frame pending; retain all raw evidence. No full rescan or source/profile promotion in audit.",
     "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-page-78a0f19\\MA9-preview",
     "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
     "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
@@ -2091,6 +2091,20 @@
       "coverage_complete": false,
       "allocation_ready": false,
       "stars_confirmed": false
+    },
+    "offline_audit": {
+      "evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05Y-offline/results.json",
+      "report": "E:/hzz/work/MA9/MA9-evidence/20260927-05Y-offline/report.md",
+      "two_frame_identity_candidates": 2,
+      "single_full_frame_identity_pending": 10,
+      "no_raw_stars_gold_background": 91,
+      "direct_capture_traces": 90,
+      "legacy_indirect_OCR_trace": 1,
+      "raw_conflict": "FE Gen2 visually5/6; sixth pixel missed gray star",
+      "profile_unchanged": true,
+      "source_changed": false,
+      "device_operations": false,
+      "allocation_ready": false
     }
   },
   "model_dispatch": {
@@ -2115,5 +2129,13 @@
     "current_orchestrator_effort": "medium",
     "speed_preference": "standard",
     "orchestrator_preference_authority": "user explicit 2026-09-27 keep main unchanged"
+  },
+  "last_exact_push": {
+    "repository": "https://github.com/Testiphi/MA9.git",
+    "branch": "main",
+    "commit": "5a1589e397c07c827ce9c8a5d3c04b6ef8cecb16",
+    "authorization": "user explicit destination and 70-commit payload confirmation",
+    "verified": "git ls-remote exact SHA",
+    "further_HEAD_push_authorized": false
   }
 }

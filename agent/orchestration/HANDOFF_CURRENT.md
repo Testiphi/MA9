@@ -98,7 +98,7 @@ fa9d8be实机run b8ebb7e58f0a4793b0b7d48613682568，R3/S51/A55/B54，A已走完�
 四车身份：B Ford Mustang RTR Spec 5 10th Anniv.由帧4/7确认，source7；B Huracan STO、C Ferrari296GTB、C DaytonaSP3均帧3/4确认。observed_classes仅B/C，无S FD，sampling_notes为空。本次已提供现场身份修复证据，但没有切级/翻页，不能说已动态跨越B/C或完成全库。
 星级仍raw未确认（296GTB本次无读数，不视为0星）；未将probe记录合入profile。当前页无需再测。后续固定BCD补采已实现，见下文05X；此处只读专包仍无补采功能，不直接让用户改classes绕过固定guard。未进行新设备操作或推送。
 
-## 当前05X：固定B/C/D补采包待用户运行
+## 05X：固定B/C/D补采包与实机验收
 用户“继续”后完成固定补采：B从等级标签入口重新扫，再C、D，不从任意当前页断点续滑；R/S/A本次不扫。既有183条及手工/历史保留。旧config.classes仍必须原全6，GUI参数不能改scope或choose。
 run_garage_remainder固定BCD、旧run_garage_survey仍全6，共用安全收集；私有scope只接受这两种。锁内load同账号profile后、0capture前要求R/S/A各有terminal status和严格claimed_scan_complete=True，否则拒绝。Controller允许类限定BCD，改active_class为R也不能点击；只读probe仍硬拒所有输入。partial在失败类停止并存checkpoint；merge只碰本次类别，不覆盖R/S/A。
 报告scope_classes/scope_traversal_finished/previous_coverage明确本次范围；补采成功也保持traversal_finished=False，不能当作本次新鲜六级遍历。coverage_complete/allocation_ready一直False，星级未晋升。Action核对scope/三类summary/输入/flags，忽略argv，pipeline next=[]。
@@ -113,6 +113,12 @@ run_garage_remainder固定BCD、旧run_garage_survey仍全6，共用安全收集
 证据MA9-evidence/20260927-05X-live/results.json；run/保留完整原始文件，profile-after.json及maafw-task.log已归档，audit.py实际进程exit0。profile SHA256 b5cdd0de1fae09758ab7d3dc231766efdb88374b038d5e2b711569f08f3eae1d。
 下一步先离线复核已存身份/覆盖/星级，不让用户重复全扫或R/S/A。117条采样备注涉及105个ID，其中12个ID尚未入档，不能称117辆漏车或把单次线索直接晋升owned；包括Kimera EVO37。252条中91条无非空raw星级，Formula E Gen 2 Asphalt Edition存在(5,5)/(5,6)冲突，其余raw也未确认。清单MA9-evidence/20260927-05X-live/review-queue.json。复制到不同包的相同run/capture不能充作独立双帧证据。coverage_complete/allocation_ready/stars_confirmed仍False。
 
+## 当前05Y：离线身份与星级核验完成
+未改源码/账号profile，252条档案SHA保持b5cdd0de1fae09758ab7d3dc231766efdb88374b038d5e2b711569f08f3eae1d。证据MA9-evidence/20260927-05Y-offline/results.json与report.md。
+12个待档均有视觉支持；129帧保存OCR回放实际exit0，完整reader读到的未入档集合恰为该12个（不证明未识别车辆不存在）。EVO37102/103/104与Mach-E103/104有同几何双帧依据，C扫描下的D正面证据被请求class过滤；105后D点击，106左缘裁切。独立Sol high复核无阻断，identity-review.md。两车是补录候选，未写profile，其余10个仍仅一次完整reader识别。
+91条无星级读数均有金底卡片证据；90条可直接溯源capture，F12tdf旧记录无source_capture，仅通过OCR定位原run71帧作旁证，不冒称精确原记录源帧。金底提前None是现读取器防背景误判策略，不是91车没有星。FE Gen2源图均5亮1暗，新源图第6个单像素不符灰阈值产生5/5假读数；只登记审计结论，不覆盖raw历史或晋升confirmed。
+下一步独立离线星条区域识别和证据覆盖层，先用已存图检验金底/蓝底/暗星/裁切、同车完整星条双帧，再审查受控档案合入。不要直接放宽实时目标几何；不要求用户重扫全库、不把未知填0、不宣称完整分配数据。复制包内同run/capture/hash不能重复计算独立证据。
+
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。库存身份双读不等于星级双读；当前仅保留某一原帧的raw星级，未做完整星条一致性确认，不具备可信星级档案证明。
 EVO37左缘/侧栏与可选列表是否等价完整拥有集合仍是覆盖关卡。首轮保存证据用于离线补识别，必要时针对缺口补采，不强行凑完整。当前参考表无最低星级要求，不自创满星门槛；后续要核对原分配器真正所需星级输入/约束，不能只用车型排序替代。车库数据未确认前不做完整自动分配；本轮未配置车/升级/购买/开赛。
@@ -121,5 +127,5 @@ EVO37左缘/侧栏与可选列表是否等价完整拥有集合仍是覆盖关�
 本轮独立review复现27项断言OK后MaaDeps ZeroMQ退出断言（Socket operation on non-socket 10038），挂住后仅终止该review自己的离线测试进程，实际exec exit -1，不能记成exit0。原用户0x40000015截图尚未一一对应，但已有同类退出阶段线索。总控修后Agent434、包内18测试实际exit0；新exe无参数Usage预期exit1且无该assert。不能宣称原生依赖退出问题已根治；报告已独立保留。
 
 ## 推送与恢复
-历史推送794d3f1到remote main被自动审批拒绝，未获该批精确授权；不可借“继续”重试/推送更新HEAD。本轮未推送。远端最后核实591e119，需推送时重新核对并满足精确审批。
+历史拒绝后，用户本次明确确认目的地Testiphi/MA9 main与完整70提交载荷，已普通fast-forward推送591e119..5a1589e397c07c827ce9c8a5d3c04b6ef8cecb16；git ls-remote核对一致。此授权只覆盖该精确HEAD，不外推到后续新提交。05Y审计记录仅本地提交，未再次推送。
 恢复：读state.json与本文件→git status/HEAD/worktree→读当前证据→确认活跃agent/owner→继续同一边界。新会话无旧agent控制柄时先只读核对结束状态。
