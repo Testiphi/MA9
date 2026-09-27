@@ -482,3 +482,28 @@ class DuelGarageSurveyAction(CustomAction):
                 and report.get("allocation_ready") is False and report.get("selection_attempted") is False
                 and report.get("starts_race") is False
                 and all(item.get("allowed") is True for item in report.get("input_attempts", [])))
+
+
+@AgentServer.custom_action("ma9_duel_garage_page_probe")
+class DuelGaragePageProbeAction(CustomAction):
+    """Fixed readonly current-page diagnostic; GUI arguments cannot enable input."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv
+        from ma9_agent.duel_garage_survey import run_garage_page_probe
+        try:
+            report, destination = run_garage_page_probe(context, find_project_root())
+        except Exception as error:
+            print(json.dumps({"event": "ma9_duel_garage_page_error", "error": str(error)},
+                             ensure_ascii=False), flush=True)
+            return False
+        print(json.dumps({"event": "ma9_duel_garage_page_probe", "status": report["status"],
+                          "report_file": str(destination)}, ensure_ascii=False), flush=True)
+        return (report.get("status") == "observed" and report.get("stable") is True
+                and report.get("read_only") is True and report.get("profile_updated") is False
+                and report.get("navigation_attempted") is False
+                and report.get("selection_attempted") is False and report.get("starts_race") is False
+                and report.get("coverage_complete") is False and report.get("allocation_ready") is False
+                and report.get("input_attempts") == []
+                and isinstance(report.get("confirmed_records"), list) and bool(report["confirmed_records"])
+                and type(report.get("captures")) is int and 4 <= report["captures"] <= 10)

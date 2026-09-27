@@ -16,7 +16,7 @@ import cv2
 from maa.pipeline import JRecognitionType
 
 from .duel_garage_profile import CLASSES, atomic_json, load_profile, merge_class, timestamp
-from .duel_vehicle_runtime import CLASS_X, EDGE_REPOSITION_SWIPE, scan
+from .duel_vehicle_runtime import CLASS_X, EDGE_REPOSITION_SWIPE, scan, _stable_sample_visible
 
 
 PAGE_SWIPE = (1090, 480, 400, 480, 300)
@@ -219,6 +219,69 @@ def _entrance_guard(proxy: _SurveyContext) -> bool:
         if not title or not subtitle:
             return False
     return True
+
+
+class _ReadOnlyController(_Controller):
+    def post_click(self, *args: Any) -> Any:
+        self.proxy.input_attempt("click", args, False)
+        raise PermissionError("page probe forbids all input")
+
+    def post_swipe(self, *args: Any) -> Any:
+        self.proxy.input_attempt("swipe", args, False)
+        raise PermissionError("page probe forbids all input")
+
+
+def run_garage_page_probe(context: Any, root: Path) -> tuple[dict[str, Any], Path]:
+    """Capture one user-opened page; never navigate or update its garage cache."""
+    root = Path(root).absolute()
+    request, catalog, _profile_path = load_survey(root)
+    run_id = uuid4().hex
+    run_dir = _safe(root, f"debug/duel-garage-page-{run_id}")
+    lock = _safe(root, "config/.duel-garage-scan.lock")
+    token = uuid4().hex
+    with lock.open("x", encoding="utf-8") as stream:
+        stream.write(token)
+    try:
+        run_dir.mkdir(parents=True, exist_ok=False)
+        (run_dir / "frames").mkdir()
+        proxy = _SurveyContext(context, run_dir, 1)
+        proxy.capture_limit = 10
+        proxy.input_limit = 0
+        proxy.tasker = SimpleNamespace(controller=_ReadOnlyController(context.tasker.controller, proxy))
+        report: dict[str, Any] = {
+            "schema_version": 1, "run_id": run_id, "runtime_root": str(root),
+            "account_key": request["account_key"], "status": "rejected",
+            "read_only": True, "profile_updated": False, "navigation_attempted": False,
+            "selection_attempted": False, "starts_race": False,
+            "coverage_complete": False, "allocation_ready": False,
+            "started_at": timestamp(), "stable": False,
+            "current_cards": [], "confirmed_records": [], "sampling_notes": [],
+        }
+        try:
+            if not _entrance_guard(proxy):
+                report["reason"] = "two_frame_duel_selection_guard_failed"
+            else:
+                evidence: dict[str, Any] = {}
+                _frame_value, cards, stable, clipped = _stable_sample_visible(
+                    proxy, catalog, target_id=None, sampling_notes=report["sampling_notes"],
+                    inventory_evidence=evidence)
+                report.update(stable=stable, current_cards=cards, clipped=clipped,
+                              confirmed_records=evidence.get("confirmed_records", []),
+                              observed_classes=sorted(evidence.get("current_epoch_seen_classes", [])))
+                report["status"] = ("observed" if stable and report["confirmed_records"]
+                                    and not proxy.inputs else "unverified")
+        except Exception as error:
+            report["reason"] = f"{type(error).__name__}: {error}"
+        finally:
+            report.update(captures=proxy.current_frame, capture_attempts=proxy.capture_count,
+                          input_attempts=proxy.inputs, finished_at=timestamp())
+            report["navigation_attempted"] = bool(proxy.inputs)
+            destination = run_dir / "report.json"
+            atomic_json(destination, report)
+        return report, destination
+    finally:
+        if lock.exists() and lock.read_text(encoding="utf8") == token:
+            lock.unlink()
 
 
 def _review_text(report: dict[str, Any], profile: dict[str, Any]) -> str:

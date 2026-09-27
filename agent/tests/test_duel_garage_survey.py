@@ -13,7 +13,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ma9_agent.duel_garage_survey import (PAGE_SWIPE, _SurveyContext,
-                                          load_survey, run_garage_survey)
+                                          load_survey, run_garage_survey, run_garage_page_probe)
 from ma9_agent.duel_vehicle_runtime import CLASS_X, EDGE_REPOSITION_SWIPE, scan
 
 
@@ -83,6 +83,68 @@ class SurveyTests(unittest.TestCase):
     def save_request(self):
         (self.root / "config/duel_garage_scan.json").write_text(
             json.dumps(self.request), encoding="utf-8")
+
+    def test_page_probe_is_readonly_and_does_not_create_or_change_profile(self):
+        context = Context()
+        profile = self.root / "config/duel_garage.json"
+
+        def sampled(proxy, catalog, **kwargs):
+            proxy.tasker.controller.post_screencap().get()
+            proxy.tasker.controller.post_screencap().get()
+            kwargs["inventory_evidence"].update(confirmed_records=[{"vehicle": {"id": "one"}}],
+                                               current_epoch_seen_classes={"R"})
+            return context.controller.frame, [], True, []
+
+        with patch("ma9_agent.duel_garage_survey._stable_sample_visible", side_effect=sampled):
+            report, path = run_garage_page_probe(context, self.root)
+        self.assertEqual(report["status"], "observed")
+        self.assertEqual(report["captures"], 4)
+        self.assertEqual(report["input_attempts"], [])
+        self.assertFalse(profile.exists())
+        self.assertTrue(path.exists())
+        self.assertTrue(all(call[0] == "capture" for call in context.controller.calls))
+        self.assertFalse((self.root / "config/.duel-garage-scan.lock").exists())
+        from ma9_agent.duel_garage_profile import empty_profile
+        profile.write_text(json.dumps(empty_profile(self.root, "acct")), encoding="utf8")
+        before = profile.read_bytes()
+        with patch("ma9_agent.duel_garage_survey._stable_sample_visible", side_effect=sampled):
+            run_garage_page_probe(context, self.root)
+        self.assertEqual(profile.read_bytes(), before)
+
+    def test_page_probe_denies_even_otherwise_whitelisted_input(self):
+        for kind in ("click", "swipe"):
+            with self.subTest(kind=kind):
+                context = Context()
+                def malicious(proxy, catalog, **kwargs):
+                    proxy.active_class = "B"
+                    if kind == "click":
+                        proxy.tasker.controller.post_click(CLASS_X["B"], 103)
+                    else:
+                        proxy.tasker.controller.post_swipe(*PAGE_SWIPE)
+                with patch("ma9_agent.duel_garage_survey._stable_sample_visible", side_effect=malicious):
+                    report, _ = run_garage_page_probe(context, self.root)
+                self.assertEqual(report["status"], "rejected")
+                self.assertEqual(report["input_attempts"][0]["allowed"], False)
+                self.assertTrue(all(call[0] == "capture" for call in context.controller.calls))
+
+    def test_page_probe_preflight_and_capture_budget(self):
+        context = Context()
+        self.request["account_confirmed"] = False
+        self.save_request()
+        with self.assertRaises(ValueError):
+            run_garage_page_probe(context, self.root)
+        self.assertEqual(context.controller.calls, [])
+        self.request["account_confirmed"] = True
+        self.save_request()
+        def endless(proxy, catalog, **kwargs):
+            for _ in range(20):
+                proxy.tasker.controller.post_screencap().get()
+        with patch("ma9_agent.duel_garage_survey._stable_sample_visible", side_effect=endless):
+            report, _ = run_garage_page_probe(context, self.root)
+        self.assertEqual(report["status"], "rejected")
+        self.assertEqual(report["captures"], 10)
+        self.assertIn("budget exceeded", report["reason"])
+        self.assertEqual(len(context.controller.calls), 10)
 
     def test_bad_inputs_and_profile_reject_before_capture(self):
         context = Context()
