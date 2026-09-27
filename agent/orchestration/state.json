@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T12:08:26+00:00",
+  "updated_at": "2026-09-27T12:39:10+00:00",
   "policy": "native-subagents-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -1935,7 +1935,7 @@
     "push_authorized": false,
     "gui_entry": "对决_隔离车库补采BCD",
     "private_request": "config/duel_garage_scan.json",
-    "next": "Resolve14 unknown star evidence using saved images; keep extra4 historical IDs isolated. Before automated capture/execution, separately repair and review Lykan prefix/Huracan cyclic-name runtime association risks. Offline reassociation is not runtime fix.",
+    "next": "User supplies two independent detail/clear-star screenshots each for S Raesr Tartarus and A Aston Martin DBS GT Zagato; list upgrade-ready banners hide their bars. Other12 gaps have visual review evidence; no full rescan. Runtime association narrow fix still required before automated capture/execution; extra4 historical IDs remain isolated.",
     "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-page-78a0f19\\MA9-preview",
     "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
     "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
@@ -2181,8 +2181,8 @@
       "offline_consistent": 88,
       "unknown": 3
     },
-    "next": "Resolve14 unknown star evidence using saved images; keep extra4 historical IDs isolated. Before automated capture/execution, separately repair and review Lykan prefix/Huracan cyclic-name runtime association risks. Offline reassociation is not runtime fix.",
-    "latest_review_overlay": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05AB-association\\star-review-overlay.json"
+    "next": "User supplies two independent detail/clear-star screenshots each for S Raesr Tartarus and A Aston Martin DBS GT Zagato; list upgrade-ready banners hide their bars. Other12 gaps have visual review evidence; no full rescan. Runtime association narrow fix still required before automated capture/execution; extra4 historical IDs remain isolated.",
+    "latest_review_overlay": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05AC-star-gaps\\star-review-overlay.json"
   },
   "garage_association_audit": {
     "phase": "05AB_two_conflicts_resolved_offline",
@@ -2193,6 +2193,31 @@
       "offline_consistent": 250,
       "unknown": 14
     },
+    "profile_unchanged": true,
+    "runtime_fixed": false,
+    "active_owner": null,
+    "active_reviewer": null
+  },
+  "garage_star_gap_review": {
+    "phase": "05AC_twelve_visual_reviews_complete_two_require_user_capture",
+    "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05AC-star-gaps\\results.json",
+    "latest_overlay": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05AC-star-gaps\\star-review-overlay.json",
+    "algorithm_consistent": 250,
+    "visual_review_consistent": 12,
+    "unknown": 2,
+    "capture_needed": [
+      {
+        "id": "car_f821b6ff3c1e14ff",
+        "title": "Raesr Tartarus",
+        "class": "S"
+      },
+      {
+        "id": "car_f177611972a2d6ef",
+        "title": "Aston Martin DBS GT Zagato",
+        "class": "A"
+      }
+    ],
+    "capture_guide": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05AC-star-gaps\\capture-guide.md",
     "profile_unchanged": true,
     "runtime_fixed": false,
     "active_owner": null,

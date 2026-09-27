@@ -137,6 +137,12 @@ B4（EB110/750S/LEGO M4 GT3 EVO/Ford GT MKII）与CD6（TVR Sagaris/Bolwell MK X
 原星级与其余1785条观测不变，精确匹配run/capture/原ID/card/hash只改5条关联并留原ID审计。重聚合250双帧一致/0冲突/14不足。普通Lykan5/5、Neon5/6、STO2/5、SuperTrofeoEVO5/5，仍只是离线列表读数。正式profile SHA保持b5cdd0de1fae09758ab7d3dc231766efdb88374b038d5e2b711569f08f3eae1d，未晋升owned/confirmed。
 实时源码未修：完整短名等于长型号前缀的提前返回、滚动尾头片段无法rolling后落回fuzzy仍有误关联风险。本轮仅离线核查更正，不冒充运行时修复。下一步先补14条星级证据，优先已有图；后续自动化采集/执行前另行窄修复核上述关联风险。额外4历史ID仍隔离，不重扫全库，无设备操作/推送。
 
+## 当前05AC：14条星级缺口已收口12条，剩2条需用户新图
+12项已利用旧原图补齐完整星条双帧并由Sol high独立复核：Praga4/5、F504/4、EB1105/5、750S4/5、LEGO BMW3/5、Ford MKII4/4、TVR4/4、Bolwell4/4、Shelby4/4、Arash2/4、Camaro3/3、Boxster4/4。旧算法unknown不篡改，新增model_visual_review观测24条；按原run/capture/hash去重，ROI在画内，逐图hash/manifest核验与合并脚本actual0。
+最新覆盖层MA9-evidence/20260927-05AC-star-gaps/star-review-overlay.json：250算法一致+12视觉复核一致+2未知；不是正式confirmed。正式252条profile SHA仍b5cdd0de1fae09758ab7d3dc231766efdb88374b038d5e2b711569f08f3eae1d，未改源码/设备/owned。review-four.md和review-ten.md独立结论已保存。
+仅S级Raesr Tartarus、A级Aston Martin DBS GT Zagato仍未知：各8/5个既存列表帧均升星就绪横幅遮星，不能从横幅/性能/目录推数。用户需提供两车车型名+完整星条同画面的详情/无遮挡页，各两张间隔1–2秒独立截图；见capture-guide.md，不重扫全库、不用只读列表任务跑详情页。
+下一步先核这两车新图再补覆盖层；原05AB两处车型误关联运行时根因仍需后续窄修，额外4历史ID仍隔离，未放行完整自动分配。本轮仅本地提交，未推送。
+
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。库存身份双读不等于星级双读；当前仅保留某一原帧的raw星级，未做完整星条一致性确认，不具备可信星级档案证明。
 EVO37左缘/侧栏与可选列表是否等价完整拥有集合仍是覆盖关卡。首轮保存证据用于离线补识别，必要时针对缺口补采，不强行凑完整。当前参考表无最低星级要求，不自创满星门槛；后续要核对原分配器真正所需星级输入/约束，不能只用车型排序替代。车库数据未确认前不做完整自动分配；本轮未配置车/升级/购买/开赛。
