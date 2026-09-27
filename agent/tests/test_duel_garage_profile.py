@@ -66,6 +66,37 @@ class DuelGarageProfileTests(unittest.TestCase):
         self.assertTrue(item["owned"])
         self.assertEqual(item["ownership_status"], "provisional")
 
+    def test_sampling_notes_remain_unowned_across_class_merges(self):
+        note = {"id": "one", "title": "One", "class": "R",
+                "card": [100, 168, 420, 212], "target": [285, 273],
+                "capture": 130, "page": 13, "reason": "page_epoch_changed"}
+        merge_class(self.profile, "R", {"status": "class_boundary", "pages": 13,
+            "scan_complete": True, "vehicles": [], "sampling_notes": [note]},
+            self.catalog, "first", "now", "checkpoint-first")
+        self.assertNotIn("one", self.profile["vehicles"])
+        self.assertEqual(self.profile["coverage"]["R"]["sampling_note_count"], 1)
+        merge_class(self.profile, "R", {"status": "page_limit", "pages": 1,
+            "scan_complete": False, "vehicles": [], "sampling_notes": [note]},
+            self.catalog, "second", "later", "checkpoint-second")
+        self.assertEqual([item["source_run"] for item in self.profile["sampling_history"]],
+                         ["first", "second"])
+        self.assertNotIn("one", self.profile["vehicles"])
+        self.assertFalse(self.profile["coverage_complete"])
+        self.assertFalse(self.profile["allocation_ready"])
+
+    def test_malformed_sampling_history_is_rejected(self):
+        path = self.root / "duel_garage.json"
+        for history in ({"bad": "shape"}, [{"id": "one", "class": "R"}],
+                        [{"id": "one", "class": "S", "title": "One"}]):
+            self.profile["sampling_history"] = history
+            atomic_json(path, self.profile)
+            with self.assertRaises(ValueError):
+                load_profile(path, self.root, "account", self.catalog)
+        self.profile["sampling_history"] = []
+        with self.assertRaises(ValueError):
+            merge_class(self.profile, "R", {"vehicles": [], "sampling_notes": {}},
+                        self.catalog, "run", "now", "checkpoint")
+
     def test_atomic_json_does_not_delete_colliding_temporary_file(self):
         path = self.root / "duel_garage.json"
         collision = path.with_name(path.name + ".fixed.tmp")
