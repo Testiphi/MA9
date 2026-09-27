@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T08:34:56+00:00",
+  "updated_at": "2026-09-27T09:27:08+00:00",
   "policy": "native-subagents-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -1449,7 +1449,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05V逐车型双原帧库存证据与当前可点击卡分离已实现、复核、精确打包；三轮348帧118窗口审计，原68成功窗口无回退，三个完整阻塞段均通过。短历史窗口不足不伪称全覆盖。166条待核验记录/全部引用历史run保留，待用户新包全级实机；仍不做完整分配、不接设备、不推送。",
+  "next": "05W修复邻卡数字18/小数等混入Ford品牌导致假S；新只读专包仅数据自检+当前页自检，不提供全库扫描入口。用户保持B/C现场先只读验证，查新duel-garage-page报告后再决定后续。183条资料保留。末尾仅3保存帧不足证明现场稳定通过，不伪称解决了完整动态扫描。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1862,11 +1862,11 @@
     "existing_limit": "fixed single-pixel star sampling; no independent two-frame star confirmation; EVO37 edge/sidebar gap remains"
   },
   "garage_survey_task": {
-    "source_head": "fa9d8beb6d141f66883d41510d6a7b617d7a3c6e",
-    "merge_commit": "70878b04c2f0aa6aaa2a96d97015d179ff7740c6",
-    "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-fa9d8be\\MA9-preview",
-    "exe_sha256": "95f0a09f7a546d9be06143b20fe3c1c81391f902f85e2ec2d15fc196b23d3067",
-    "agent_tests": 474,
+    "source_head": "78a0f19944f3ef8e8ec8278c5cb4fac0cd7b6626",
+    "merge_commit": "fe17a55df74fb172439a5cffaeab022344fd579b",
+    "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-page-78a0f19\\MA9-preview",
+    "exe_sha256": "2bff8f71e20e3f2fb9aeaa6a69787d86cd1e5c40873590f7138875feb094f551",
+    "agent_tests": 480,
     "agent_skip": 1,
     "agent_exit": 0,
     "tools_tests": 30,
@@ -1874,9 +1874,9 @@
     "tools_exit": 0,
     "schema_files": 28,
     "schema_exit": 0,
-    "schema_reuse": "Source assets/tools/data/deps unchanged; packaged resources byte-identical to schema-tested 05T inputs, excluding only later GUI-generated mfa_layout.json from the old live tree; new interface validated separately.",
+    "schema_reuse": "Changed interface and duel_slot_test pipeline validated directly; other business resources unchanged by git/hash comparison; ignore only old post-validation GUI mfa_layout.json",
     "compiled_modules_equal": 29,
-    "packaged_tests": 116,
+    "packaged_tests": 122,
     "packaged_skip": 1,
     "package_verify_exit": 0,
     "package_schema_exit": 0,
@@ -1897,16 +1897,16 @@
         "captures": 1
       }
     ],
-    "review": "independent Sol high passed",
-    "review_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05V-per-vehicle-evidence\\review-fixed.md",
+    "review": "independent Sol high no remaining blockers",
+    "review_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05W-name-band\\review-fixed.md",
     "browse_only": true,
-    "allowed_device_inputs": "current class tab and two bounded horizontal swipe shapes only",
+    "allowed_device_inputs": "none in current page-probe task",
     "selection_attempted": false,
     "starts_race": false,
     "allocation_ready": false,
     "coverage_complete": false,
-    "device_test": "05U live failed A page2; 05V not run",
-    "release": "ready_for_user_per_vehicle_garage_capture",
+    "device_test": "05V full scan failed B/C; 05W readonly probe not run",
+    "release": "ready_for_user_current_page_probe_only",
     "remote_push": "not_attempted",
     "first_scan_scope": [
       "R",
@@ -1926,17 +1926,17 @@
       "visible-list ownership is provisional",
       "external allocator not invoked"
     ],
-    "phase": "05V_per_vehicle_evidence_verified_package_ready",
+    "phase": "05W_name_band_fixed_readonly_page_probe_ready",
     "owner": "gpt-6-sol high",
     "reviewer": "gpt-6-sol high",
     "active_owner": null,
     "active_reviewer": null,
     "device_authorized": false,
     "push_authorized": false,
-    "gui_entry": "对决_隔离全车库采集",
+    "gui_entry": "对决_隔离当前车库页只读",
     "private_request": "config/duel_garage_scan.json",
-    "next": "User keeps current vehicle-selection page and runs new full six-class capture; 166 provisional records/history retained, no B/A resume. Review per-vehicle provenance and notes before star/ownership confirmation.",
-    "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-75de576\\MA9-preview",
+    "next": "User runs only current-page readonly diagnostic from held B/C page. Inspect debug/duel-garage-page-*/report.json; do not ask for another full R/S/A traversal until diagnosis passes.",
+    "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-fa9d8be\\MA9-preview",
     "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
     "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
     "previous_capture": {
@@ -1956,7 +1956,7 @@
       "started_race": false
     },
     "cache_migrated": true,
-    "archive": "All historical run directories referenced by retained 166-record profile copied intact; original profile backup debug/archive-05U. Imported reports retain original runtime roots and are not new live runs.",
+    "archive": "183 provisional records preserved; all 3 referenced historical full-scan run directories copied intact. Probe writes only new page diagnostic folder and never changes garage cache.",
     "second_capture": {
       "run_id": "7c04db7c9c87417b87400428803c3d01",
       "reason": "B:page_ocr_unverified",
@@ -1972,7 +1972,7 @@
       "C_D_scanned": false,
       "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05U-inventory-continuity\\audit.json"
     },
-    "migrated_vehicle_count": 166,
+    "migrated_vehicle_count": 183,
     "continuity_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05U-inventory-continuity\\results.json",
     "third_capture": {
       "run_id": "62de4343448e4f8bb3533b1ebb0e47db",
@@ -1988,7 +1988,28 @@
       "navigation_inputs": 20,
       "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05V-per-vehicle-evidence\\report.json"
     },
-    "per_vehicle_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05V-per-vehicle-evidence\\results.json"
+    "per_vehicle_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05V-per-vehicle-evidence\\results.json",
+    "last_full_scan_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-fa9d8be\\MA9-preview",
+    "read_only": true,
+    "profile_updated": false,
+    "fourth_capture": {
+      "run_id": "b8ebb7e58f0a4793b0b7d48613682568",
+      "reason": "B:class_or_ocr_unverified",
+      "unexpected_classes": [
+        "S"
+      ],
+      "captures": 169,
+      "navigation_inputs": 51,
+      "current_run_classes": {
+        "R": 3,
+        "S": 51,
+        "A": 55,
+        "B": 54
+      },
+      "cumulative_profile_vehicles": 183,
+      "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05W-name-band\\report.json"
+    },
+    "name_band_probe_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05W-name-band\\results.json"
   },
   "model_dispatch": {
     "approved": "2026-09-27",

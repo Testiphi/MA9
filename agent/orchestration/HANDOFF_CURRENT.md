@@ -75,7 +75,7 @@ f7bf3f0包实机14:43:43至14:50:32，run 7c04db7c9c87417b87400428803c3d01。par
 161条既有正向记录逐字段保持待核验状态，仅重绑runtime_root并加来源SHA；对应05T的137帧/原报告逐文件hash一致地保留在新包debug原run-id路径，保证历史证据引用可用。原profile副本位于debug/archive-05T；旧包不改，历史报告runtime_root保留原根，不当作新实机记录。星级/拥有没有晋升，coverage_complete/allocation_ready仍False。
 下一步用户关闭旧包，打开新包先自检，保持当前车辆选择页，单独运行全等级采集。仍从R遍历六级，不支持B断点续扫；已有161条保留增补，无需清空五车。结束后总控查本次新run，不把导入的旧run算新成功。05U随后实机在A停止，最新05V进展见下文。无设备操作、无推送。
 
-## 当前05V：第三次实机A页阻塞，改逐车库存证据
+## 05V历史修复：第三次实机A页阻塞
 75de576包run 62de4343448e4f8bb3533b1ebb0e47db于15:54:25至15:58:39采集，A第2页page_ocr_unverified。本轮R3/S54/A7，累计档案166条，74帧/20次导航，无选车/开赛。证据MA9-evidence/20260927-05V-per-vehicle-evidence/report.json。
 67..74页面几何稳定，FE3在69/72、Lexus在67/68/70/71/72/73读出，但四车仅72同时出现一次。05U“整组指纹重复且最新帧含全部seen”仍过严。根全量审计三轮348帧/118真实导航窗口：68成功、49旧短记录不足以评估、1新A窗口失败；不能把49项包装成通过。audit_windows.py/windows-baseline.json可重放。
 独立Sol high设计审查同意B：库存逐ID同一连续epoch内两份原帧证据，独立collector保存每车原capture/确认pair，最新frame/current_cards只负责当前页面与安全定位；不要求所有滚动车名同帧。限定预算末在连续性与类别证据成立时允许pending记notes后浏览，单次不入owned；higher class与B/C边界不能因OCR暂失放宽。历史库存记录标inventory_only并禁止点击，目标单槽双读/详情路径保持。stars仍raw，coverage/allocation仍False。
@@ -83,7 +83,15 @@ f7bf3f0包实机14:43:43至14:50:32，run 7c04db7c9c87417b87400428803c3d01。par
 独立Sol high成品复核通过，05V/review-fixed.md；源Agent474(1skip)/tools30(1skip)实际exit0。全部118已存导航窗口回放比对，68基线成功窗口均不退步；历史短记录的帧不足仍单独标记，不虚构额外画面。三个关键段经真实原PNG/OCR和包内代码回放均通过，A67..74确认四ID，FE3 pair69/72、source72；旧B两段保持136/135确认。仍非新包动态证明或完整库存验收。
 准确包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-garage-fa9d8be\MA9-preview。exe SHA256：95f0a09f7a546d9be06143b20fe3c1c81391f902f85e2ec2d15fc196b23d3067。包内29模块代码一致、116测试(1skip)进程0，旧runtime/profile负对照预期exit1；新interface schema0，资源hash与已验证业务输入一致，仅排除旧GUI运行后生成mfa_layout.json，不重复解析大分片。完整结果05V/results.json。
 现有166条待核验记录/采样历史原样保留，只重绑本包根并留原profile SHA。所有被档案引用的历史run（当前2个）连同PNG/OCR逐文件hash复制到新debug原run-id路径，确保旧引用可用。备份profile在debug/archive-05U，旧包不改；导入旧报告仍保留原runtime_root，不能当作新实机成功。
-下一步用户关闭旧包、打开新包先自检，保持当前车辆选择页面，单独运行全等级采集。仍从R遍历六级，无A/B断点续扫；不清空五车，已有166条保留增补。新包实机未运行，coverage_complete/allocation_ready仍False；owner/reviewer均结束，无设备操作、无推送。
+下一步用户关闭旧包、打开新包先自检，保持当前车辆选择页面，单独运行全等级采集。仍从R遍历六级，无A/B断点续扫；不清空五车，已有166条保留增补。05V随后实机仍在B/C失败，见下文05W；coverage_complete/allocation_ready仍False。无设备操作、无推送。
+
+## 当前05W：第四次B/C停点，改为当前页只读验证
+fa9d8be实机run b8ebb7e58f0a4793b0b7d48613682568，R3/S51/A55/B54，A已走完，B第13页class_or_ocr_unverified/S。169帧、51导航，无选车/开赛；累计183条。证据MA9-evidence/20260927-05W-name-band/report.json。
+根因168/169：邻卡数字18(box x0,w24)被并入Ford(left60)文字组，brand变18ford，绕过滚动家族歧义检查而fuzzy为S FD。name_bands已排除几何完全在左界之外的纯数字（用既有_key含小数/逗号/空格/%归一），保留卡内/相交数字、字母和数字车型；不改matcher/阈值/等级保护。独立最初发现仅isdigit漏小数，已修复六变体。
+功能78a0f19944f3ef8e8ec8278c5cb4fac0cd7b6626，合入fe17a55df74fb172439a5cffaeab022344fd579b；8文件含新只读入口及测试。Agent480(1skip)/tools30(1skip)实际0，两改变schema输入0，其余复用Git/hash未变证据。四轮517帧169窗口，119原可用窗口无回退；49原短记录加最新末尾3帧共50窗口不足。旧168/169假S已消失，但不能用这3帧宣称已动态过B。独立review-fixed.md无剩余阻断；初次review有tmp fallback及MaaDeps退出1，提权纠正后6项/反例实际0，原记录未抹去。
+新增“对决车库：当前页自检（只读，不翻页）”，入口对决_隔离当前车库页只读，固定Action忽略argv。复用账号/root/profile预检和exclusive lock；入口2帧+最多8采样，专用Controller硬拒绝任何点击/滑动/其它输入（即使active_class改变）；不写车库缓存。只写debug/duel-garage-page-<run-id>/PNG/OCR/report.json，4..10记录帧、stable且有confirmed且零input才observed。observed只是读页完成，不代表类别准确、完整库存或星级确认。
+准确只读专包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-garage-page-78a0f19\MA9-preview。exe SHA256：2bff8f71e20e3f2fb9aeaa6a69787d86cd1e5c40873590f7138875feb094f551。GUI仅数据自检和当前页自检，不展示全库扫描。包内29模块一致、122测试(1skip)进程0，三个旧代码负对照预期1，新包pipeline/interface schema0，资料/历史引用hash通过；结果05W/results.json。
+原183条待核验记录及全部3个引用历史run完整保留，原profile备份debug/archive-05V。新probe不改profile；导入历史run仍是旧运行，不能当新成功。用户下一步关闭旧包打开新包，保持当前B/C页，只运行当前页自检，结束后总控查新page报告，先不要再要求从R扫全级。owner/reviewer均完成，无设备操作、无推送；新probe实机未运行。
 
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。库存身份双读不等于星级双读；当前仅保留某一原帧的raw星级，未做完整星条一致性确认，不具备可信星级档案证明。
