@@ -105,7 +105,9 @@ class _Controller:
 
     def post_click(self, x: int, y: int) -> Any:
         args = (x, y)
-        allowed = self.proxy.active_class is not None and args == (CLASS_X[self.proxy.active_class], 103)
+        typed = all(type(value) is int for value in args)
+        allowed = (typed and self.proxy.active_class is not None
+                   and args == (CLASS_X[self.proxy.active_class], 103))
         self.proxy.input_attempt("click", args, allowed)
         if not allowed:
             raise PermissionError("survey forbids this click")
@@ -113,7 +115,9 @@ class _Controller:
         return self.source.post_click(x, y)
 
     def post_swipe(self, *args: int) -> Any:
-        allowed = self.proxy.active_class is not None and args in (PAGE_SWIPE, EDGE_REPOSITION_SWIPE)
+        typed = all(type(value) is int for value in args)
+        allowed = (typed and self.proxy.active_class is not None
+                   and args in (PAGE_SWIPE, EDGE_REPOSITION_SWIPE))
         self.proxy.input_attempt("swipe", args, allowed)
         if not allowed:
             raise PermissionError("survey forbids this swipe")
@@ -293,7 +297,8 @@ def run_garage_survey(context: Any, root: Path, *,
                                "vehicles": len(result.get("vehicles", [])),
                                "checkpoint": checkpoint}
                     report["classes"][vehicle_class] = summary
-                    if result.get("status") not in ("class_boundary", "edge_reached"):
+                    if (result.get("status") not in ("class_boundary", "edge_reached")
+                            or result.get("scan_complete") is not True):
                         report["reason"] = f"{vehicle_class}:{result.get('status')}"
                         break
                 else:

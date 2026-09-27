@@ -163,6 +163,17 @@ class SurveyTests(unittest.TestCase):
         self.assertEqual(profile["vehicles"]["one"]["stars_status"], "unknown")
         self.assertFalse((self.root / "config/.duel-garage-scan.lock").exists())
 
+    def test_complete_status_without_scan_complete_stops_partial(self):
+        seen = []
+        def inconsistent_scan(proxy, vehicle_class, catalog, **kwargs):
+            seen.append(vehicle_class)
+            return {"status": "class_boundary", "pages": 1,
+                    "scan_complete": False, "vehicles": []}
+        report, _ = run_garage_survey(Context(), self.root, scan_fn=inconsistent_scan)
+        self.assertEqual(seen, ["R"])
+        self.assertEqual(report["status"], "partial")
+        self.assertFalse(report["traversal_finished"])
+
     def test_two_frame_guard_rejects_other_screen_without_input(self):
         context = Context("车辆选择")
         report, _ = run_garage_survey(context, self.root, scan_fn=lambda *a, **k: self.fail())
@@ -204,8 +215,16 @@ class SurveyTests(unittest.TestCase):
                 proxy.tasker.controller.post_key(27)
             with self.assertRaises(PermissionError):
                 proxy.run_task("start")
+            for args in ((float(CLASS_X["R"]), 103), (CLASS_X["R"], True)):
+                with self.assertRaises(PermissionError):
+                    proxy.tasker.controller.post_click(*args)
+            for args in ((1090.0, 480, 400, 480, 300),
+                         (1090, 480, 400, 480, True)):
+                with self.assertRaises(PermissionError):
+                    proxy.tasker.controller.post_swipe(*args)
             self.assertEqual(context.controller.calls, [
                 ("click", CLASS_X["R"], 103), ("swipe", *EDGE_REPOSITION_SWIPE)])
+            self.assertEqual(sum(not item["allowed"] for item in proxy.inputs), 8)
 
     def test_collision_and_redirect_rejected_safely(self):
         context = Context()

@@ -102,6 +102,17 @@ class DuelGarageProfileTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 load_profile(path, self.root, "account", self.catalog)
 
+    def test_owned_rejects_numeric_boolean_impostors(self):
+        path = self.root / "duel_garage.json"
+        entry = {"id": "one", "title": "One", "class": "R",
+                 "stars_status": "unknown", "star_observations": []}
+        self.profile["vehicles"]["one"] = entry
+        for invalid in (0, 1):
+            entry["owned"] = invalid
+            atomic_json(path, self.profile)
+            with self.assertRaises(ValueError):
+                load_profile(path, self.root, "account", self.catalog)
+
 
 if __name__ == "__main__":
     unittest.main()

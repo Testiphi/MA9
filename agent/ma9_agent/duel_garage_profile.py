@@ -48,7 +48,8 @@ def load_profile(path: Path, root: Path, account_key: str,
                 or entry.get("title") != row["title"]
                 or entry.get("class") != row["class"]):
             raise ValueError("Duel garage profile disagrees with catalog")
-        if (entry.get("owned") not in (True, False, None)
+        owned = entry.get("owned")
+        if (not (owned is True or owned is False or owned is None)
                 or not isinstance(entry.get("star_observations", []), list)
                 or entry.get("stars_status", "unknown") not in
                    ("unknown", "unverified", "confirmed")):
