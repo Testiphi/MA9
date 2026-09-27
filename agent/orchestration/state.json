@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27",
+  "updated_at": "2026-09-27T06:28:06+00:00",
   "policy": "native-subagents-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -1449,7 +1449,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05S全R/S/A/B/C/D独立车库采集已实现并复核，准确包user-test-garage-3dab97f待用户实机；允许限定切级/横向翻页，不点车卡/选择/返回/开赛。首次先全车库建档，不限11候选。原始星级未确认、覆盖缺口未关闭，allocation_ready=false；拥有+星级档案跑通且输入适配验证后才完整分配。不操作设备，不访问根外分配器，不推送。",
+  "next": "05T已修复首次全库扫描B尾周年Ford误识S而停止；准确新包待用户重跑六级，保持现有选车页及五车。旧160条及137帧仅归档不作为有效缓存继承。先身份/覆盖/星级建档，未获完整自动分配验收；不操作设备、不访问根外分配器、不推送。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1862,11 +1862,11 @@
     "existing_limit": "fixed single-pixel star sampling; no independent two-frame star confirmation; EVO37 edge/sidebar gap remains"
   },
   "garage_survey_task": {
-    "source_head": "3dab97fcd87a101d37cb74c360ef20707ee058bb",
-    "merge_commit": "0bfa73d51e593b4209cdd90fd8dfd1615e00f73c",
-    "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-3dab97f\\MA9-preview",
-    "exe_sha256": "2b5b8855195e2d398ace095aba2ef1eb94f090b87f0c36eba95c7d45c096bd7c",
-    "agent_tests": 454,
+    "source_head": "f7bf3f070935a2678d0c8764570f3fd6e5709ab0",
+    "merge_commit": "663b91e17c5578867aa7471b6c0907e7423c5535",
+    "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-f7bf3f0\\MA9-preview",
+    "exe_sha256": "e4153000e0caa35770aa890a14864910feda23bc5b22aec81fb30e8db9b457b3",
+    "agent_tests": 461,
     "agent_skip": 1,
     "agent_exit": 0,
     "tools_tests": 30,
@@ -1876,14 +1876,13 @@
     "schema_exit": 0,
     "schema_reuse": "full at f9bf2be; unchanged schema/tool inputs after narrow fix",
     "compiled_modules_equal": 29,
-    "packaged_tests": 20,
+    "packaged_tests": 103,
     "packaged_skip": 1,
     "package_verify_exit": 0,
     "package_schema_exit": 0,
     "negative_exits": {
-      "negative": 1,
-      "negative_profile": 1,
-      "negative_survey": 1
+      "screen": 1,
+      "runtime": 1
     },
     "smoke_usage_exit": 1,
     "entry_replay": [
@@ -1898,16 +1897,16 @@
         "captures": 1
       }
     ],
-    "review": "independent Sol high counterexamples closed",
-    "review_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05SR-garage",
+    "review": "Sol high initial W Motors blocker repaired and independently replayed",
+    "review_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05TR-ford-review\\review-fixed.md",
     "browse_only": true,
     "allowed_device_inputs": "current class tab and two bounded horizontal swipe shapes only",
     "selection_attempted": false,
     "starts_race": false,
     "allocation_ready": false,
     "coverage_complete": false,
-    "device_test": "not_run",
-    "release": "ready_for_user_full_class_evidence_capture",
+    "device_test": "05S partial at B/C boundary; 05T corrected package not run",
+    "release": "ready_for_user_corrected_full_garage_capture",
     "remote_push": "not_attempted",
     "first_scan_scope": [
       "R",
@@ -1927,7 +1926,7 @@
       "visible-list ownership is provisional",
       "external allocator not invoked"
     ],
-    "phase": "merged_exact_package_ready_user_full_garage_capture_pending",
+    "phase": "first_capture_partial_identity_fix_reviewed_new_package_ready",
     "owner": "gpt-6-sol medium",
     "reviewer": "gpt-6-sol high",
     "active_owner": null,
@@ -1936,7 +1935,28 @@
     "push_authorized": false,
     "gui_entry": "对决_隔离全车库采集",
     "private_request": "config/duel_garage_scan.json",
-    "next": "User manually enters Duel vehicle-selection list and runs new all-class capture; inspect coverage and star evidence before any allocation"
+    "next": "User keeps current vehicle-selection page, opens corrected package, self-check then full R/S/A/B/C/D capture; inspect logs before star confirmation and allocation.",
+    "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-3dab97f\\MA9-preview",
+    "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
+    "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
+    "previous_capture": {
+      "status": "partial",
+      "reason": "B:class_or_ocr_unverified",
+      "vehicles": 160,
+      "classes": {
+        "R": 3,
+        "S": 54,
+        "A": 51,
+        "B": 52
+      },
+      "C_D_scanned": false,
+      "frames": 137,
+      "inputs": 49,
+      "selected_vehicle": false,
+      "started_race": false
+    },
+    "cache_migrated": false,
+    "archive": "debug/archive-05S: previous report, checkpoints, 137 PNG, OCR, input attempts and profile; hashes verified; not active cache"
   },
   "model_dispatch": {
     "approved": "2026-09-27",

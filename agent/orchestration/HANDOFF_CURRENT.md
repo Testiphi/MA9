@@ -47,11 +47,23 @@ Agent exe SHA256：e63603d5a6feaeccff4657ac5b852fa6df140fda8e771bccaa323033cc1f4
 新包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-garage-3dab97f\MA9-preview。Agent exe SHA256：2b5b8855195e2d398ace095aba2ef1eb94f090b87f0c36eba95c7d45c096bd7c。
 证据MA9-evidence/20260927-05S1-garage/results.json，独立MA9-evidence/20260927-05SR-garage/review-fixed.md。旧候选user-test-garage-f9bf2be标未放行，勿使用；此前正式包未改。
 
-## 下一步：用户首次全等级采集
-打开新包先数据自检。用户手动从资格赛已有任一槽的选择/更换车辆入口进入“车辆选择”列表，不手动确认换车；单独运行“对决车库：全等级采集（切级翻页，不选车）”。运行中保持同一账号、前台页面，不手动操作。程序顺序R/S/A/B/C/D，每类最多50页，到边界提前停；只允许当前等级标签和旧扫描器两种横向滑动，禁止车卡/选择/返回/按键/开赛。它不是零输入读图，不复用已消费赛区session。
-账号档案config/duel_garage.json独立于旧garage.json；请求config/duel_garage_scan.json不含choose/target。每类完整checkpoint、逐帧PNG/hash/尺寸、OCR和输入日志、report.json/review.md保存于debug/duel-garage-<run-id>/。用户运行完反馈，总控直接查日志；partial保留现场不盲目重跑。
-review_required/traversal_finished只表示六类走完；owned为provisional列表观察、star读数为raw未确认。coverage_complete/allocation_ready始终False。未知/未扫到不等于未拥有，不覆盖手工记录；缓存并不是完整分配器输入。
-实机尚未运行；当前无活跃owner/reviewer，garage_survey_owner/garage_survey_review/garage_star_feasibility已结束。模型仍Astra medium/Standard。
+## 首次全等级采集：B尾受保护停止，未完成全库
+用户05S首次运行2026-09-27 13:38:25至13:46:13，停在B尾/C起点。report为partial、B:class_or_ocr_unverified；R3/S54/A51/B52共160条初步记录，C/D未扫。137帧哈希已核对，49次限定导航，无选车/开赛。证据MA9-evidence/20260927-05S-live-boundary。
+原因：Ford Mustang RTR Spec 5 10th Anniv.滚动共同前缀被旧fuzzy误识为S级Spec 5-FD；等级保护正确拦停。两个Ford ID均未写旧缓存。131帧审计另发现Porsche瞬时短款误识，但最终旧档案中两Porsche均为正确长款，不把瞬时误识泛化成缓存已损坏。
+
+## 当前05T修复及准确新包
+功能f7bf3f070935a2678d0c8764570f3fd6e5709ab0，合入663b91e17c5578867aa7471b6c0907e7423c5535。仅修改Duel本地身份融合/库存采样及两测试：公共非完整前缀拒绝，唯一合格长尾可纠正短款fuzzy，完整合法短名保留；库存窗口不让重复少车集吞掉更完整单次读数，未稳交第二窗口确认。共享matcher/阈值、class guard及目标双帧/跨窗逻辑保持。
+初版独立Sol high发现W Motors完整短名因存在长版而被拒，已窄修、同反例独立复核通过；新增不依赖私有截图的跨窗回归。131原OCR/PNG回放，130..137 Ford序列无/无/B/无/无/无/B/B，最终8帧稳定B；完整FD合成反例仍识S且B扫描拒绝。仅离线回放，不是新包动态实机验收。
+库存采样只修复本次最大卡数单帧被重复少集压掉的情况，未建立所有非目标身份的跨窗追踪，不保证任意OCR丢字下普遍防漏；仍有未知与覆盖关卡。
+总控Agent461(1skip)、tools30(1skip)进程exit0；schema28文件沿用05S，assets/tools/data/deps输入diff为空。准确包29模块代码匹配、包内103测试(1skip)、131帧回放、归档逐文件hash、旧screen/runtime负对照、包schema及Usage检查通过。证据MA9-evidence/20260927-05T-ford-fix/results.json；独立MA9-evidence/20260927-05TR-ford-review/review-fixed.md。
+新包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-garage-f7bf3f0\MA9-preview。
+Agent exe SHA256：e4153000e0caa35770aa890a14864910feda23bc5b22aec81fb30e8db9b457b3。
+旧160条档案及137帧全证据保存在新包debug/archive-05S，旧包不改；不直接继承为有效缓存，以修正后重新采集结果建档。新请求仅重绑runtime_root，账号保持一致。无需清空五车或重跑选车。
+
+## 下一步：用户在当前选车页重跑修正版全级采集
+关闭旧测试包窗口，打开新包MFAAvalonia.exe，先数据自检。保持当前“车辆选择”页面，单独运行“对决车库：全等级采集（切级翻页，不选车）”；从R重新遍历六级，未实现B断点恢复。运行时不手动切页/账号。每类最多50页，只允许当前等级标签及既有两种横向滑动；禁止车卡/选择/返回/按键/开赛。
+新config/duel_garage.json与每次debug/duel-garage-<run-id>保留结果；结束后用户反馈，总控查日志。partial保持现场，不盲目重跑。review_required/traversal_finished仅表示遍历六类，星级仍raw未确认、拥有provisional，coverage_complete/allocation_ready始终False；未扫到不等于未拥有。
+本轮修正版实机尚未运行。当前owner/reviewer已结束；无活跃写入。主模型Astra medium/Standard不改，无推送。
 
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。现有stable仅比车型不比星，旧scan保留首读，不具备可信星级档案证明。
