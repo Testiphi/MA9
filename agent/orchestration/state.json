@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T10:44:32+00:00",
+  "updated_at": "2026-09-27T11:11:38+00:00",
   "policy": "native-subagents-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -1926,7 +1926,7 @@
       "visible-list ownership is provisional",
       "external allocator not invoked"
     ],
-    "phase": "05Y_offline_identity_star_audit_complete",
+    "phase": "05Z_ten_offline_identity_reviews_closed",
     "owner": "gpt-6-sol medium",
     "reviewer": "gpt-6-sol high",
     "active_owner": null,
@@ -1935,7 +1935,7 @@
     "push_authorized": false,
     "gui_entry": "对决_隔离车库补采BCD",
     "private_request": "config/duel_garage_scan.json",
-    "next": "Implement separate offline region-based star reader and review overlay using saved frames; 2 boundary identity candidates, 10 single-full-frame pending; retain all raw evidence. No full rescan or source/profile promotion in audit.",
+    "next": "Ten remaining identities now visually reviewed with independent B/CD reviews; no identity recapture needed. Proceed to independent offline star-region reader and evidence overlay, without changing live target guards or promoting owned/stars from identity alone.",
     "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-page-78a0f19\\MA9-preview",
     "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
     "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
@@ -2105,6 +2105,19 @@
       "source_changed": false,
       "device_operations": false,
       "allocation_ready": false
+    },
+    "identity_closeout": {
+      "evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05Z-identity-closeout/results.json",
+      "overlay": "E:/hzz/work/MA9/MA9-evidence/20260927-05Z-identity-closeout/identity-review-overlay.json",
+      "reviewed": 10,
+      "identity_recapture_required": 0,
+      "historical_runs": 4,
+      "frame_manifest_count": 509,
+      "replay_exit": 0,
+      "hash_validation_exit": 0,
+      "independent_review": "Sol high B4 / CD6 passed",
+      "production_profile_unchanged": true,
+      "owned_or_stars_promoted": false
     }
   },
   "model_dispatch": {
