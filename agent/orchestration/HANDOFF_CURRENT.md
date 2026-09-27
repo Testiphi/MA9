@@ -25,10 +25,27 @@ GUI仅“多人运行时数据自检（Agent）”和“对决防守：读取五
 05Q纯离线候选预览提交444e0019aec0c0697bd2eb20554a9d067397a0d3，合入ea83d35a5acd31ffb79c2c3846495554bb667c96；Luna high实现、Sol medium独立复核。Agent416、tools30(1skip)退出0；schema输入未变复用05P的28文件exit0；真实32条映射与原排名/车型/来源SHA逐项核对通过。证据MA9-evidence/20260927-05Q-candidates/results.json。
 预览：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-maps-19da67b\MA9-preview\debug\duel-map-candidates-d89b003923c34de3921bbf9612fbd52b.md；同名JSON保留来源hash和账号/根绑定。五区18、四区14条关系，不是32辆不同车；拥有/可用均未知，跨图重复车型保留，尚未生成互斥方案。只读取现有实机报告，没有新包/GUI/选车/开赛。
 
-## 下一步：读取本次首页赛区
-用户明确擂台首页完整“赛区 V”对应五区、“赛区 IV”对应四区；不得把IV的V子串识作五区。应自动读取，不让用户手选。
-当前五图JSON没有首页赛区证据，预览保留两区；当前赛区未知，不从旧截图/静态图推断。下一阶段设计隔离只读首页识别及同账号/本次流程的证据绑定，缺失/冲突不得自动选区。然后才推进拥有/可用确认、互斥方案和复用单槽执行；保留现有五车。
-当前无活跃owner/reviewer；candidate_preview_owner/candidate_preview_review/python_popup_audit已结束，勿重复派发已完成工作。
+## 当前阶段：首页赛区及同流程五图候选已实现
+主模型按用户要求保持GPT-6 Astra medium、Standard；仅子模型适度分层，勿再建议切换主模型。
+05R功能f6f3b5a曾被独立复核阻断：新start输入路径预检失败时旧token残留。已由1fb9e90f84fb5931b9c7a2d1b2207b887bd5b2ab修复为安全session/lock定位、加锁、先废旧token再完整预检。独立同一反例exit0：失败start0capture、旧token不存、finish0capture拒绝。无剩余业务阻断。
+已合入4fad4072c30bc8608655060c2d8037e22ff46788；总控Agent434进程exit0、tools30(1skip)exit0、全schema28文件exit0（修复未改schema输入）；包内27模块与源码一致、18测试进程exit0、地图18+首页3静态回放、哈希及包schema通过。IV只有合成覆盖，没有原生IV实景证明；用户1916x1082截图经既有normalize，不伪称原生1280。
+准确包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-zone-1fb9e90\MA9-preview。
+Agent exe SHA256：e63603d5a6feaeccff4657ac5b852fa6df140fda8e771bccaa323033cc1f477d。证据MA9-evidence/20260927-05R1-zone/results.json；独立复核MA9-evidence/20260927-05RR-zone/review.md。
+被拒绝的user-test-zone-f6f3b5a已标blocked，禁止交用户或让用户运行；旧user-test-maps-19da67b和FE3包保持不变。
+
+## 下一步：用户两步只读实机
+保留现有五车，在原测试账号的多人首页运行新包数据自检，再单独运行“对决防守：①读取首页赛区（只读）”。V对应五区、IV对应四区，完整匹配不猜。成功应zone_ready/zone_verified/session_ready=true。
+用户手动进入已有资格赛防守阵容，展开任一槽，在600秒内单独运行“对决防守：②读取五图与本赛区候选（只读）”。程序均不导航/点击/选车/开赛；两步之间保持同一账号。第二步只读新五图，token单次消费，成功candidates_ready且zone_verified/maps_verified=true、仅所选赛区候选；拥有/可用仍未知。
+回传新包debug/duel-zone-*.json及同名Markdown、对应duel-lineup-maps-*.json（同session/hash绑定）。缺失/过期/变更/已消费或失败停止，重试需重新从首页建会话；锁冲突回传日志，不自动绕过或删除不明锁。账号标签不是视觉认证，会话不作选车执行授权。
+本轮未操作设备，两步实机尚未完成。当前无活跃owner/reviewer；home_zone_owner/home_zone_review/garage_star_design已结束。
+
+## 后续车库及星级设计（未实施）
+详见E:\hzz\work\MA9\MA9-evidence\20260927-05R1-zone\garage-star-plan.md。账号根确认后可读该账号缓存；实际游戏读取等赛区+五图确定、候选去重后按等级/页位置合并补查。未缓存/缺扫不是未拥有，不能用部分owned交集丢弃未知候选；EVO37左缘/侧栏缺口未修。
+列表只给身份/位置/星条线索，最终候选详情补证；星级分别记录亮星数/总星槽、状态、来源、时间与完整星条证据。裁切、金底或冲突保持未知/冲突，未知不填0，不能由性能分推星。完整星条同车双帧一致后才确认；现有固定单点实现尚无此可靠性承诺。
+参考表没有最低星级要求，不自行发明星级门槛或重排原表。互斥配车之后、单槽执行之前还要即时检查身份/占用/可选状态；本阶段没有改车库、星级阈值或共享matcher。
+
+## 原生测试退出异常
+本轮独立review复现27项断言OK后MaaDeps ZeroMQ退出断言（Socket operation on non-socket 10038），挂住后仅终止该review自己的离线测试进程，实际exec exit -1，不能记成exit0。原用户0x40000015截图尚未一一对应，但已有同类退出阶段线索。总控修后Agent434、包内18测试实际exit0；新exe无参数Usage预期exit1且无该assert。不能宣称原生依赖退出问题已根治；报告已独立保留。
 
 ## 推送与恢复
 历史推送794d3f1到remote main被自动审批拒绝，未获该批精确授权；不可借“继续”重试/推送更新HEAD。本轮未推送。远端最后核实591e119，需推送时重新核对并满足精确审批。

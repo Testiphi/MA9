@@ -1449,7 +1449,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05P用户实机五图通过（slot1展开、两帧3.954秒）；05Q纯离线五区18/四区14候选关系已复核合入。下一步按用户规则从擂台首页新鲜识别完整赛区V/IV并绑定账号/本次流程；无赛区证据不默认选择、不让用户手选，不操作设备/选车/开赛。当前无活跃owner/reviewer，不推送。",
+  "next": "05R首页赛区与单次五图候选会话已复核合入；准确包user-test-zone-1fb9e90待用户两步只读实机。保留现有五车，程序不导航/选车/开赛；新start废旧token、600秒、单次消费。车库/星级后续设计已登记，未实施扫描。主模型Astra medium/standard不改，无活跃owner/reviewer，不推送。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1667,7 +1667,7 @@
     "rollout": "current entry first; other transitions audited when touched or evidence identifies a defect",
     "early_success": "two verified target samples then proceed immediately"
   },
-  "future_garage_inventory": "User idea only: recognize owned garage and save locally later; not in current implementation scope",
+  "future_garage_inventory": "User requested timing/star design; recorded in garage_star_plan, not implemented this stage",
   "readonly_maps_gui_task": {
     "phase": "user_readonly_five_maps_passed",
     "base_main": "a4cad2fadec0fa172a9375cdcc9dfd9e3a77c5d2",
@@ -1754,10 +1754,97 @@
       "四区": "赛区 IV",
       "match": "complete normalized token; IV must not match V substring",
       "current_zone": null,
-      "implementation": "pending fresh home-page observation",
+      "implementation": "two-step readonly home zone session implemented; user live acceptance pending",
       "failure": "missing/conflicting evidence must not choose a zone"
     },
-    "next": "Implement isolated fresh homepage-zone observation and bind it to the same account/run before allocation; do not alter existing five cars"
+    "next": "Validate new zone package; then candidate-directed garage/star evidence before allocation"
+  },
+  "home_zone_task": {
+    "source_head": "1fb9e90f84fb5931b9c7a2d1b2207b887bd5b2ab",
+    "merge_commit": "4fad4072c30bc8608655060c2d8037e22ff46788",
+    "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-zone-1fb9e90\\MA9-preview",
+    "exe_sha256": "e63603d5a6feaeccff4657ac5b852fa6df140fda8e771bccaa323033cc1f477d",
+    "source_tests": {
+      "agent": 434,
+      "agent_exit": 0,
+      "tools": 30,
+      "tools_skip": 1,
+      "tools_exit": 0,
+      "schema_files": 28,
+      "schema_exit": 0,
+      "schema_source": "05R f6f3b5a; unchanged inputs at 1fb9e90"
+    },
+    "compiled_modules_equal": 27,
+    "packaged_tests": 18,
+    "package_verify_exit": 0,
+    "static_maps_replay": 18,
+    "static_home_replay": 3,
+    "home_real_IV_sample": false,
+    "smoke_usage_exit": 1,
+    "negative_exits": {
+      "old_runtime": 1,
+      "expected": 1,
+      "old_session": 1
+    },
+    "review": "no_remaining_blockers; repair counterexample independently passed exit0",
+    "review_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05RR-zone",
+    "review_native_exit": {
+      "assertions_passed": 27,
+      "process_exit": -1,
+      "reason": "MaaDeps ZeroMQ exit assertion; only owned test processes terminated"
+    },
+    "device_test": "pending_user_two_step_readonly",
+    "read_only": true,
+    "selection_attempted": false,
+    "starts_race": false,
+    "ttl_seconds": 600,
+    "old_maps_request_unchanged": true,
+    "rejected_package": "user-test-zone-f6f3b5a",
+    "release": "ready_for_user_two_step_readonly_test",
+    "garage_star_plan": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05R1-zone\\garage-star-plan.md",
+    "remote_push": "not_attempted",
+    "phase": "merged_exact_package_ready_user_live_pending",
+    "owner": "gpt-6-sol medium",
+    "reviewer": "gpt-6-sol high",
+    "active_owner": null,
+    "active_reviewer": null,
+    "device_authorized": false,
+    "push_authorized": false,
+    "gui_entries": [
+      "对决_隔离首页赛区只读",
+      "对决_隔离赛区五图候选只读"
+    ],
+    "next": "User runs home-zone then manually enters existing lineup within 600s and runs fresh-map candidates; do not select cars or race"
+  },
+  "garage_star_plan": {
+    "status": "design_only_not_implemented",
+    "plan_file": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05R1-zone\\garage-star-plan.md",
+    "sequence": [
+      "account/root-bound positive cache",
+      "fresh zone and five maps",
+      "deduplicate per-zone candidates",
+      "grouped candidate-directed garage reading",
+      "detail star confirmation for finalists",
+      "mutual exclusion plan",
+      "live single-slot identity/occupancy/button checks"
+    ],
+    "unknown_ownership": "uncached or unscanned is unknown, never absent; do not intersect partial cache to drop candidates",
+    "stars_fields": [
+      "stars_lit",
+      "star_slots",
+      "confirmed/unknown/conflict",
+      "source",
+      "observed_at",
+      "full_star_bar_evidence"
+    ],
+    "stars_rules": [
+      "unknown is null, not zero",
+      "complete star bar and same vehicle across independent frames",
+      "gold background/cropping/conflicts require detail evidence",
+      "do not infer stars from rating or catalog maximum",
+      "no invented minimum-star threshold in current Auto reference"
+    ],
+    "existing_limit": "fixed single-pixel star sampling; no independent two-frame star confirmation; EVO37 edge/sidebar gap remains"
   },
   "model_dispatch": {
     "approved": "2026-09-27",
@@ -1775,8 +1862,11 @@
     "complex_owner_effort": "medium",
     "critical_safety_review_effort": "high",
     "budget_policy": "short context; scripts for mechanical work; one writer; one bounded repair then triage; one final full suite; no redundant rebuild",
-    "current_orchestrator_model": "unchanged_by_this_task",
+    "current_orchestrator_model": "gpt-6-astra",
     "pricing_source": "https://learn.chatgpt.com/docs/pricing",
-    "model_guidance_source": "https://learn.chatgpt.com/docs/models"
+    "model_guidance_source": "https://learn.chatgpt.com/docs/models",
+    "current_orchestrator_effort": "medium",
+    "speed_preference": "standard",
+    "orchestrator_preference_authority": "user explicit 2026-09-27 keep main unchanged"
   }
 }
