@@ -13,7 +13,9 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ma9_agent.duel_garage_survey import (PAGE_SWIPE, _SurveyContext,
-                                          load_survey, run_garage_survey, run_garage_page_probe)
+                                          load_survey, run_garage_survey, run_garage_remainder,
+                                          run_garage_page_probe)
+from ma9_agent.duel_garage_profile import empty_profile
 from ma9_agent.duel_vehicle_runtime import CLASS_X, EDGE_REPOSITION_SWIPE, scan
 
 
@@ -83,6 +85,107 @@ class SurveyTests(unittest.TestCase):
     def save_request(self):
         (self.root / "config/duel_garage_scan.json").write_text(
             json.dumps(self.request), encoding="utf-8")
+
+    def seed_remainder(self):
+        catalog = [{"id": "one", "title": "One", "class": "R"}]
+        catalog += [{"id": cls.lower(), "title": cls, "class": cls}
+                    for cls in "BCD"]
+        (self.root / "data/generated/vehicle_catalog.json").write_text(
+            json.dumps({"schema_version": 1, "vehicles": catalog}), encoding="utf-8")
+        profile = empty_profile(self.root, "acct")
+        profile["vehicles"]["one"] = {
+            "id": "one", "title": "One", "class": "R", "owned": True,
+            "ownership_source": "manual", "stars_status": "confirmed",
+            "manual": {"stars": 4}, "star_observations": []}
+        profile["coverage"] = {
+            cls: {"status": "class_boundary", "claimed_scan_complete": True,
+                  "source_run": "earlier"} for cls in "RSA"}
+        path = self.root / "config/duel_garage.json"
+        path.write_text(json.dumps(profile), encoding="utf-8")
+        return path, profile
+
+    def test_remainder_scans_only_bcd_and_preserves_prior_evidence(self):
+        path, before = self.seed_remainder()
+        seen = []
+        def fake_scan(proxy, vehicle_class, catalog, **kwargs):
+            seen.append((vehicle_class, kwargs))
+            proxy.tasker.controller.post_click(CLASS_X[vehicle_class], 103).wait()
+            return {"status": "class_boundary", "pages": 1, "scan_complete": True,
+                    "vehicles": [{"vehicle": {"id": vehicle_class.lower()},
+                                  "class": vehicle_class, "stars_lit": 2,
+                                  "star_slots": 6, "page": 1}]}
+        context = Context()
+        report, report_path = run_garage_remainder(context, self.root, scan_fn=fake_scan)
+        after = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual([item[0] for item in seen], list("BCD"))
+        self.assertTrue(all(item[1] == {"target_id": None, "choose": False,
+                                         "max_pages": 1} for item in seen))
+        self.assertEqual({cls: after["coverage"][cls] for cls in "RSA"}, before["coverage"])
+        self.assertEqual(after["vehicles"]["one"], before["vehicles"]["one"])
+        self.assertEqual(set(after["vehicles"]), {"one", "b", "c", "d"})
+        self.assertEqual(after["vehicles"]["b"]["stars_status"], "unverified")
+        self.assertEqual(set(report["classes"]), set("BCD"))
+        self.assertEqual(report["scope_classes"], list("BCD"))
+        self.assertEqual(report["previous_coverage"], before["coverage"])
+        self.assertTrue(report["scope_traversal_finished"])
+        self.assertFalse(report["traversal_finished"])
+        self.assertEqual(report["status"], "review_required")
+        self.assertFalse(report["coverage_complete"])
+        self.assertFalse(report["allocation_ready"])
+        self.assertFalse(after["allocation_ready"])
+        self.assertEqual(set(p.name for p in report_path.parent.glob("checkpoint-*.json")),
+                         {f"checkpoint-{cls}.json" for cls in "BCD"})
+        review = (report_path.parent / "review.md").read_text(encoding="utf-8")
+        self.assertIn("R、S、A 本次未扫描", review)
+        self.assertIn("B 类从等级入口重新扫描", review)
+
+    def test_remainder_requires_complete_prior_coverage_before_capture(self):
+        context = Context()
+        with self.assertRaises(ValueError):
+            run_garage_remainder(context, self.root)
+        path, profile = self.seed_remainder()
+        for bad in (None, {}, {"status": "page_limit", "claimed_scan_complete": True},
+                    {"status": "class_boundary", "claimed_scan_complete": 1},
+                    {"status": "edge_reached", "claimed_scan_complete": "true"}):
+            with self.subTest(bad=bad):
+                candidate = json.loads(json.dumps(profile))
+                candidate["coverage"]["S"] = bad
+                path.write_text(json.dumps(candidate), encoding="utf-8")
+                with self.assertRaises(ValueError):
+                    run_garage_remainder(context, self.root)
+        self.assertEqual(context.controller.calls, [])
+        self.assertFalse((self.root / "config/.duel-garage-scan.lock").exists())
+
+    def test_remainder_stops_after_b_failure_and_keeps_checkpoint(self):
+        path, before = self.seed_remainder()
+        seen = []
+        def failed(proxy, vehicle_class, catalog, **kwargs):
+            seen.append(vehicle_class)
+            return {"status": "page_limit", "pages": 1, "scan_complete": False,
+                    "vehicles": [{"vehicle": {"id": "b"}, "class": "B",
+                                  "stars_lit": None, "star_slots": None, "page": 1}]}
+        report, report_path = run_garage_remainder(Context(), self.root, scan_fn=failed)
+        after = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(seen, ["B"])
+        self.assertEqual(report["status"], "partial")
+        self.assertFalse(report["scope_traversal_finished"])
+        self.assertEqual(set(report["classes"]), {"B"})
+        self.assertIn("b", after["vehicles"])
+        self.assertEqual(after["vehicles"]["one"], before["vehicles"]["one"])
+        self.assertEqual({cls: after["coverage"][cls] for cls in "RSA"}, before["coverage"])
+        self.assertTrue((report_path.parent / "checkpoint-B.json").is_file())
+
+    def test_remainder_controller_rejects_prior_class_even_if_active_class_changes(self):
+        self.seed_remainder()
+        context = Context()
+        def malicious(proxy, vehicle_class, catalog, **kwargs):
+            proxy.active_class = "R"
+            proxy.tasker.controller.post_click(CLASS_X["R"], 103)
+        report, _ = run_garage_remainder(context, self.root, scan_fn=malicious)
+        self.assertEqual(report["status"], "partial")
+        self.assertEqual([call[0] for call in context.controller.calls], ["capture", "capture"])
+        self.assertFalse(report["navigation_attempted"])
+        self.assertFalse(report["input_attempts"][0]["allowed"])
 
     def test_page_probe_is_readonly_and_does_not_create_or_change_profile(self):
         context = Context()

@@ -41,6 +41,13 @@
     "timeout": 120000,
     "next": []
   },
+  "对决_隔离车库补采BCD": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "ma9_duel_garage_remainder",
+    "timeout": 3600000,
+    "next": []
+  },
   "对决_隔离全车库采集": {
     "recognition": "DirectHit",
     "action": "Custom",
