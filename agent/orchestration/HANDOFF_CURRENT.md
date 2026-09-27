@@ -51,7 +51,7 @@ Agent exe SHA256：e63603d5a6feaeccff4657ac5b852fa6df140fda8e771bccaa323033cc1f4
 用户05S首次运行2026-09-27 13:38:25至13:46:13，停在B尾/C起点。report为partial、B:class_or_ocr_unverified；R3/S54/A51/B52共160条初步记录，C/D未扫。137帧哈希已核对，49次限定导航，无选车/开赛。证据MA9-evidence/20260927-05S-live-boundary。
 原因：Ford Mustang RTR Spec 5 10th Anniv.滚动共同前缀被旧fuzzy误识为S级Spec 5-FD；等级保护正确拦停。两个Ford ID均未写旧缓存。131帧审计另发现Porsche瞬时短款误识，但最终旧档案中两Porsche均为正确长款，不把瞬时误识泛化成缓存已损坏。
 
-## 当前05T修复及准确新包
+## 05T历史修复及当时测试包
 功能f7bf3f070935a2678d0c8764570f3fd6e5709ab0，合入663b91e17c5578867aa7471b6c0907e7423c5535。仅修改Duel本地身份融合/库存采样及两测试：公共非完整前缀拒绝，唯一合格长尾可纠正短款fuzzy，完整合法短名保留；库存窗口不让重复少车集吞掉更完整单次读数，未稳交第二窗口确认。共享matcher/阈值、class guard及目标双帧/跨窗逻辑保持。
 初版独立Sol high发现W Motors完整短名因存在长版而被拒，已窄修、同反例独立复核通过；新增不依赖私有截图的跨窗回归。131原OCR/PNG回放，130..137 Ford序列无/无/B/无/无/无/B/B，最终8帧稳定B；完整FD合成反例仍识S且B扫描拒绝。仅离线回放，不是新包动态实机验收。
 库存采样只修复本次最大卡数单帧被重复少集压掉的情况，未建立所有非目标身份的跨窗追踪，不保证任意OCR丢字下普遍防漏；仍有未知与覆盖关卡。
@@ -60,7 +60,7 @@ Agent exe SHA256：e63603d5a6feaeccff4657ac5b852fa6df140fda8e771bccaa323033cc1f4
 Agent exe SHA256：e4153000e0caa35770aa890a14864910feda23bc5b22aec81fb30e8db9b457b3。
 旧160条档案及137帧全证据保存在新包debug/archive-05S，旧包不改；不直接继承为有效缓存，以修正后重新采集结果建档。新请求仅重绑runtime_root，账号保持一致。无需清空五车或重跑选车。
 
-## 下一步：用户在当前选车页重跑修正版全级采集
+## 05T当时复测步骤（已失败，请用下文05U）
 关闭旧测试包窗口，打开新包MFAAvalonia.exe，先数据自检。保持当前“车辆选择”页面，单独运行“对决车库：全等级采集（切级翻页，不选车）”；从R重新遍历六级，未实现B断点恢复。运行时不手动切页/账号。每类最多50页，只允许当前等级标签及既有两种横向滑动；禁止车卡/选择/返回/按键/开赛。
 新config/duel_garage.json与每次debug/duel-garage-<run-id>保留结果；结束后用户反馈，总控查日志。partial保持现场，不盲目重跑。review_required/traversal_finished仅表示遍历六类，星级仍raw未确认、拥有provisional，coverage_complete/allocation_ready始终False；未扫到不等于未拥有。
 05T修正版已由用户运行，仍停B尾，当前进展见下文05U。主模型Astra medium/Standard不改，无推送。
@@ -69,7 +69,11 @@ Agent exe SHA256：e4153000e0caa35770aa890a14864910feda23bc5b22aec81fb30e8db9b45
 f7bf3f0包实机14:43:43至14:50:32，run 7c04db7c9c87417b87400428803c3d01。partial为B:page_ocr_unverified，R3/S53/A54/B51共161条，C/D未扫；137帧hash全部通过、49导航，无选车/开赛。证据MA9-evidence/20260927-05U-inventory-continuity/audit.json。
 本次130移动中首帧4车、131停稳后2车；131和135读到正确B周年Ford，中间车名滚动仅余STO，两个窗口分别判未稳。没有新S误识，旧回放通过不代表所有时序已解决。
 已裁决仅库存路径在固定几何epoch内跨窗确认当前最新完整重复指纹（总预算仍8帧），保留未确认身份，禁止较少集合吞掉单例；移动/无公共锚/冲突等不得混页。130的Porsche911GT1/Brabham仅一次观察，必须独立notes保留、不入owned；survey显式覆盖欠账、profile追加sampling_history。scan_complete只代表遍历终止，coverage_complete/allocation_ready始终False。
-原owner ford_identity_fix（Sol medium）实现runtime/survey/profile及三测试共6文件，禁止改screen/共享matcher/阈值/输入权限；独立Sol high设计已同意，后续须复核成品。无设备授权。用户保持现场，不让用户再盲目重跑；须同时重放两次实机及窗口相位/移动/证据历史反例后再交包。
+05U功能75de57601d5b7d70188e500e10c73b3ebcd7c56b，合入daaed40dc2aed185e07b6406bf69e98f499076f2。仅runtime/survey/profile及三测试，screen/共享matcher/阈值、目标单槽双帧逻辑、账号根/输入白名单未放宽。非目标库存同一固定几何epoch内跨窗确认，移动或断续观测另存sampling_notes；survey显式计数与覆盖欠账，profile顶层追加sampling_history，单次观察不入owned。
+独立Sol high成品复核通过，见MA9-evidence/20260927-05U-inventory-continuity/review-fixed.md；不把设计审查当成代码验收。源Agent468(1skip)、tools30(1skip)进程0；源码schema输入未变。包内29模块代码一致、110测试(1skip)进程0；两次真实PNG/hash/原OCR经包内采样器回放均通过，旧序列136确认、新序列135确认，移动首帧未确认身份只进notes。旧runtime/profile/survey负对照预期exit1；新interface schema exit0，新包全部资源hash与05T完整schema已测输入一致；仅排除旧GUI在验证后新增的mfa_layout.json布局文件，见resource-baseline.json，不重复解析大型分片。
+准确新包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-garage-75de576\MA9-preview。Agent exe SHA256：28292cf59c99ef24441b61912183558f39b16f55ebab620c286ad791d84c668d。全部结果MA9-evidence/20260927-05U-inventory-continuity/results.json。
+161条既有正向记录逐字段保持待核验状态，仅重绑runtime_root并加来源SHA；对应05T的137帧/原报告逐文件hash一致地保留在新包debug原run-id路径，保证历史证据引用可用。原profile副本位于debug/archive-05T；旧包不改，历史报告runtime_root保留原根，不当作新实机记录。星级/拥有没有晋升，coverage_complete/allocation_ready仍False。
+下一步用户关闭旧包，打开新包先自检，保持当前车辆选择页，单独运行全等级采集。仍从R遍历六级，不支持B断点续扫；已有161条保留增补，无需清空五车。结束后总控查本次新run，不把导入的旧run算新成功。05U实机未运行；owner/reviewer均结束，无设备操作、无推送。
 
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。现有stable仅比车型不比星，旧scan保留首读，不具备可信星级档案证明。
