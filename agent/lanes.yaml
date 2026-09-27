@@ -37,13 +37,19 @@ orchestration_policy:
     默认一个写入owner；独立只读reviewer可与总控核验并行，同文件禁止并发写入。
     用户仅负责实机验证和问题反馈；设备仍串行，子席不得自行接设备或派下级。
   active_model_policy:
-    implementation: gpt-6-sol
+    implementation: gpt-6-luna
     implementation_effort: high
     independent_review: gpt-6-sol
-    review_effort: high
+    review_effort: medium
     mechanical_tasks: gpt-6-luna
     mechanical_effort: medium
     authority: user_explicit_2026_09_27
+    scope: bounded_readonly_or_pure_leaf_tasks
+    complex_implementation: gpt-6-sol
+    complex_effort: medium
+    critical_recognition_or_input_safety_effort: high
+    escalation: one_bounded_failed_repair_then_orchestrator_triage
+    notes: 2026-09-27用户要求节省额度；低风险窄实现Luna high，复杂实现Sol medium，识别/输入安全关键审查Sol high。短上下文、默认串行，不重复全套验证。
   reviewer_semantics: >
     lane 出现 reviewer 时，owner 验收通过后必须进行只读复核。reviewer 不修代码，
     只提交问题清单；最终修复派回 owner，是否合入由 Astra 编排层裁决。
@@ -522,6 +528,10 @@ lanes:
       - agent/tests/test_duel_lineup_maps.py
       - agent/ma9_agent/duel_lineup_maps_test.py
       - agent/tests/test_duel_lineup_maps_test.py
+      - agent/ma9_agent/duel_map_candidates.py
+      - agent/tests/test_duel_map_candidates.py
+      - tools/preview_duel_map_candidates.py
+      - docs/zh_cn/develop/duel_map_candidates.md
       - agent/ma9_agent/duel_slot_selection.py
       - agent/tests/test_duel_slot_selection.py
       - agent/ma9_agent/duel_slot_entry.py
