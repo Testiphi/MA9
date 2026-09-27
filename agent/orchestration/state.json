@@ -1449,7 +1449,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05U库存固定几何epoch跨窗确认+单次观察独立notes已实现复核并精确打包；同账号161条待核验正向记录及137帧原证据已保留，无星级/拥有晋升。待用户新包在当前选车页自检后全六级扫描；仍不具备完整库存/分配验收，不操作设备或推送。",
+  "next": "05U第三次实机A第2页停；FE3与Lexus各自已双读但整组同帧未重复。05V改逐车带原帧来源的库存双证据，当前可点击卡独立，目标路径不变。348帧118窗口审计：68可重现成功、49历史短记录不足、1新A完整窗口失败。用户保持现场，不盲目重跑。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1906,8 +1906,8 @@
     "starts_race": false,
     "allocation_ready": false,
     "coverage_complete": false,
-    "device_test": "05T live partial; 05U not run",
-    "release": "ready_for_user_continuity_garage_capture",
+    "device_test": "05U live partial A:page_ocr_unverified",
+    "release": "05U live failed; await 05V evidence separation",
     "remote_push": "not_attempted",
     "first_scan_scope": [
       "R",
@@ -1927,16 +1927,16 @@
       "visible-list ownership is provisional",
       "external allocator not invoked"
     ],
-    "phase": "05U_continuity_and_sampling_notes_verified_package_ready",
+    "phase": "third_capture_A_stall_per_vehicle_evidence_implementation",
     "owner": "gpt-6-sol medium",
     "reviewer": "gpt-6-sol high",
-    "active_owner": null,
+    "active_owner": "inventory_evidence_owner",
     "active_reviewer": null,
     "device_authorized": false,
     "push_authorized": false,
     "gui_entry": "对决_隔离全车库采集",
     "private_request": "config/duel_garage_scan.json",
-    "next": "User runs corrected full six-class capture from current vehicle-selection page; 161 provisional positives retained, no B-only resume. Review sampling notes/history before ownership/stars/allocation.",
+    "next": "05V separate per-vehicle two-read inventory records from latest live cards; all 118 archived windows plus asynchronous-name counterexamples; no immediate user rerun.",
     "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-f7bf3f0\\MA9-preview",
     "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
     "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
@@ -1974,7 +1974,21 @@
       "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05U-inventory-continuity\\audit.json"
     },
     "migrated_vehicle_count": 161,
-    "continuity_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05U-inventory-continuity\\results.json"
+    "continuity_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05U-inventory-continuity\\results.json",
+    "third_capture": {
+      "run_id": "62de4343448e4f8bb3533b1ebb0e47db",
+      "reason": "A:page_ocr_unverified",
+      "page": 2,
+      "cumulative_profile_vehicles": 166,
+      "current_run_classes": {
+        "R": 3,
+        "S": 54,
+        "A": 7
+      },
+      "frames": 74,
+      "navigation_inputs": 20,
+      "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05V-per-vehicle-evidence\\report.json"
+    }
   },
   "model_dispatch": {
     "approved": "2026-09-27",

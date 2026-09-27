@@ -73,7 +73,13 @@ f7bf3f0包实机14:43:43至14:50:32，run 7c04db7c9c87417b87400428803c3d01。par
 独立Sol high成品复核通过，见MA9-evidence/20260927-05U-inventory-continuity/review-fixed.md；不把设计审查当成代码验收。源Agent468(1skip)、tools30(1skip)进程0；源码schema输入未变。包内29模块代码一致、110测试(1skip)进程0；两次真实PNG/hash/原OCR经包内采样器回放均通过，旧序列136确认、新序列135确认，移动首帧未确认身份只进notes。旧runtime/profile/survey负对照预期exit1；新interface schema exit0，新包全部资源hash与05T完整schema已测输入一致；仅排除旧GUI在验证后新增的mfa_layout.json布局文件，见resource-baseline.json，不重复解析大型分片。
 准确新包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-garage-75de576\MA9-preview。Agent exe SHA256：28292cf59c99ef24441b61912183558f39b16f55ebab620c286ad791d84c668d。全部结果MA9-evidence/20260927-05U-inventory-continuity/results.json。
 161条既有正向记录逐字段保持待核验状态，仅重绑runtime_root并加来源SHA；对应05T的137帧/原报告逐文件hash一致地保留在新包debug原run-id路径，保证历史证据引用可用。原profile副本位于debug/archive-05T；旧包不改，历史报告runtime_root保留原根，不当作新实机记录。星级/拥有没有晋升，coverage_complete/allocation_ready仍False。
-下一步用户关闭旧包，打开新包先自检，保持当前车辆选择页，单独运行全等级采集。仍从R遍历六级，不支持B断点续扫；已有161条保留增补，无需清空五车。结束后总控查本次新run，不把导入的旧run算新成功。05U实机未运行；owner/reviewer均结束，无设备操作、无推送。
+下一步用户关闭旧包，打开新包先自检，保持当前车辆选择页，单独运行全等级采集。仍从R遍历六级，不支持B断点续扫；已有161条保留增补，无需清空五车。结束后总控查本次新run，不把导入的旧run算新成功。05U随后实机在A停止，最新05V进展见下文。无设备操作、无推送。
+
+## 当前05V：第三次实机A页阻塞，改逐车库存证据
+75de576包run 62de4343448e4f8bb3533b1ebb0e47db于15:54:25至15:58:39采集，A第2页page_ocr_unverified。本轮R3/S54/A7，累计档案166条，74帧/20次导航，无选车/开赛。证据MA9-evidence/20260927-05V-per-vehicle-evidence/report.json。
+67..74页面几何稳定，FE3在69/72、Lexus在67/68/70/71/72/73读出，但四车仅72同时出现一次。05U“整组指纹重复且最新帧含全部seen”仍过严。根全量审计三轮348帧/118真实导航窗口：68成功、49旧短记录不足以评估、1新A窗口失败；不能把49项包装成通过。audit_windows.py/windows-baseline.json可重放。
+独立Sol high设计审查同意B：库存逐ID同一连续epoch内两份原帧证据，独立collector保存每车原capture/确认pair，最新frame/current_cards只负责当前页面与安全定位；不要求所有滚动车名同帧。限定预算末在连续性与类别证据成立时允许pending记notes后浏览，单次不入owned；higher class与B/C边界不能因OCR暂失放宽。历史库存记录标inventory_only并禁止点击，目标单槽双读/详情路径保持。stars仍raw，coverage/allocation仍False。
+当前inventory_evidence_owner（Sol high）唯一写入，限runtime/profile及各test四文件；不改screen/共享matcher/阈值/GUI/输入白名单。设计记录05V/design.md，后续须独立成品复核、全118窗口比较与准确包校验。无设备授权、无推送；先完成验证再请用户实机。
 
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。现有stable仅比车型不比星，旧scan保留首读，不具备可信星级档案证明。
