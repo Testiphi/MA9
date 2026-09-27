@@ -217,7 +217,12 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
         if fingerprint:
             counts[fingerprint] = counts.get(fingerprint, 0) + 1
     repeated = {key for key, count in counts.items() if count >= 2}
-    candidates = [sample for sample in samples if sample[2] in repeated] or samples
+    # Inventory has no target id to protect a newly read car.  A shorter
+    # repeated OCR fingerprint must not hide a more complete singleton at the
+    # end of the window; return that page as unstable so the second window can
+    # confirm it before any swipe or assignment.
+    candidates = (samples if target_id is None else
+                  [sample for sample in samples if sample[2] in repeated] or samples)
     # Prefer a complete OCR pass; for ties use the newest coordinates.
     frame, cards, fingerprint, clipped = max(
         enumerate(candidates), key=lambda item: (len(item[1][1]), item[0]))[1]

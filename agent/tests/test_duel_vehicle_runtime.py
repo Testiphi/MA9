@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import inspect
+import hashlib
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -8,6 +10,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 import numpy as np
+import cv2
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -22,6 +25,7 @@ from ma9_agent.duel_vehicle_runtime import (CLASS_X, EDGE_REPOSITION_LIMIT,
                                             _stable_sample_visible, _try_target,
                                             assign_visible, scan)
 from ma9_agent.vehicle_screen import match_vehicle
+from ma9_agent.duel_vehicle_screen import read_visible_cards
 
 _UNSET = object()
 
@@ -1572,6 +1576,101 @@ class DuelTargetStabilityTest(unittest.TestCase):
         self.assertEqual(opened["vehicle"]["id"], "wanted")
         self.assertEqual(opened["target"], [187, 273])
         self.assertEqual(report["status"], "detail_verified")
+
+
+class FrozenFordBoundaryTest(unittest.TestCase):
+    """Replay captured pixels and OCR; replace only capture and timing IO."""
+
+    def test_inventory_keeps_a_full_singleton_until_next_window_confirms(self):
+        frame = np.zeros((720, 1280, 3), dtype=np.uint8)
+        three = [_card(value, "B") for value in ("one", "two", "three")]
+        four = [*three, _card("new", "B")]
+        pages = [(three, []), (three, []), (four, []), (three, []),
+                 (four, []), (four, [])]
+        catalog = [{"id": value, "title": value, "class": "B"}
+                   for value in ("one", "two", "three", "new")]
+        with patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=pages[:4]), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            _frame_value, cards, stable, _clipped = _sample_visible(
+                _Context(), catalog, target_id=None)
+        self.assertFalse(stable)
+        self.assertIn("new", [card["vehicle"]["id"] for card in cards])
+        with patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=pages) as visible, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            _frame_value, cards, stable, _clipped = _stable_sample_visible(
+                _Context(), catalog, target_id=None)
+        self.assertTrue(stable)
+        self.assertEqual(visible.call_count, 6)
+        self.assertIn("new", [card["vehicle"]["id"] for card in cards])
+
+    def test_real_fd_identity_still_stops_a_b_inventory_scan(self):
+        frame = np.zeros((720, 1280, 3), dtype=np.uint8)
+        catalog = [{"id": "car_e8df360ad07558bd",
+                    "title": "Ford Mustang RTR Spec 5-FD", "class": "S"}]
+        words = [{"text": "FORD", "confidence": .99, "box": [396, 558, 62, 24]},
+                 {"text": "MUSTANG RTR SPEC 5-FD", "confidence": .99,
+                  "box": [400, 578, 190, 22]}]
+        cards = read_visible_cards(frame, words, catalog)
+        self.assertEqual(cards[0]["vehicle"]["id"], catalog[0]["id"])
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._stable_sample_visible",
+                      return_value=(frame, cards, True, [])), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = scan(_Context(), "B", catalog, max_pages=1)
+        self.assertEqual(report["status"], "class_or_ocr_unverified")
+        self.assertEqual(report["unexpected_classes"], ["S"])
+
+    def test_b_boundary_130_through_137(self):
+        root = (Path(__file__).resolve().parents[2] / "build" /
+                "user-test-garage-3dab97f" / "MA9-preview" / "debug" /
+                "duel-garage-688af9416505470d953e43931a25ac92")
+        if not (root / "frames.jsonl").exists():
+            self.skipTest("user's frozen frame archive is unavailable")
+        catalog = json.loads((Path(__file__).resolve().parents[2] / "data" /
+                              "generated" / "vehicle_catalog.json").read_text(
+                                  encoding="utf8"))["vehicles"]
+        metadata = [json.loads(line) for line in (root / "frames.jsonl").read_text(
+            encoding="utf8").splitlines() if 130 <= json.loads(line)["frame"] <= 137]
+        ocr = {row["frame"]: row["words"] for line in (root / "ocr.jsonl").read_text(
+            encoding="utf8").splitlines() if (row := json.loads(line))["frame"] in
+            range(130, 138) and row["roi"] == [0, 120, 1280, 500]}
+        observed = []
+        for row in metadata:
+            content = (root / row["file"]).read_bytes()
+            self.assertEqual(hashlib.sha256(content).hexdigest(), row["sha256"])
+            frame = cv2.imdecode(np.frombuffer(content, dtype=np.uint8), cv2.IMREAD_COLOR)
+            cards = read_visible_cards(frame, ocr[row["frame"]], catalog)
+            observed.append((frame, cards, []))
+        anniversary = "car_034bc4bec211f3f7"
+        fd = "car_e8df360ad07558bd"
+        self.assertEqual([anniversary in [card["vehicle"]["id"] for card in cards]
+                          for _, cards, _ in observed],
+                         [False, False, True, False, False, False, True, True])
+        self.assertTrue(all(fd not in [card["vehicle"]["id"] for card in cards]
+                            for _, cards, _ in observed))
+        with patch("ma9_agent.duel_vehicle_runtime._frame",
+                   side_effect=[frame for frame, _, _ in observed]), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=[(cards, clipped) for _, cards, clipped in observed]) as visible, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            frame, cards, stable, _clipped = _stable_sample_visible(
+                _Context(), catalog, target_id=None)
+        self.assertEqual(visible.call_count, 8)
+        self.assertTrue(stable)
+        self.assertIn(anniversary, [card["vehicle"]["id"] for card in cards])
+        self.assertIs(frame, observed[-1][0])
 
 
 if __name__ == "__main__":
