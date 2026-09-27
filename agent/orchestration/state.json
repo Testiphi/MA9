@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T12:46:36+00:00",
+  "updated_at": "2026-09-27T14:03:55+00:00",
   "policy": "native-subagents-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -1935,7 +1935,7 @@
     "push_authorized": false,
     "gui_entry": "对决_隔离车库补采BCD",
     "private_request": "config/duel_garage_scan.json",
-    "next": "No detail screenshots required for the two upgrade-ready cars; policy excludes them from automatic allocation without unlocking/upgrading. Next repair and review runtime Lykan/Huracan association risks and reconcile extra4 historical IDs before controlled account/allocator integration; new allocation integration must consume eligibility policy.",
+    "next": "Offline sync/allocator integration is complete. Before execution/client release, resolve real auto example missing availability (Nevera R/Gemera/Centodieci/Sian), runtime Lykan/Huracan association risks, and extra4 historical IDs. Auto slot3 currently only Nevera R and remains empty; do not fabricate ownership, stars, or substitute another tier. Future upstream JSON updates use validated sync; new logic remains staged until compatibility review.",
     "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-page-78a0f19\\MA9-preview",
     "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
     "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
@@ -2226,6 +2226,49 @@
       "car_f177611972a2d6ef",
       "car_f821b6ff3c1e14ff"
     ],
-    "runtime_integration_pending": true
+    "runtime_integration_pending": true,
+    "offline_allocator_request_applied": true
+  },
+  "allocator_integration_task": {
+    "phase": "05AE_reviewed_merged_sync_and_offline_report_ready",
+    "authority": "user_explicit_2026_09_27_reuse_allocator_and_support_future_sync",
+    "external_source": "E:/hzz/work/MutualExclusionAllocator/repo",
+    "external_access": "readonly; overrides earlier do-not-read boundary only for named allocator inspection/sync",
+    "external_write_authorized": false,
+    "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
+    "owner": "gpt-6-sol medium",
+    "active_owner": null,
+    "reviewer": "gpt-6-sol high",
+    "active_reviewer": null,
+    "owns_new": [
+      "tools/duel_allocator_sync.py",
+      "tools/duel_allocator_bridge.js",
+      "tools/tests/test_duel_allocator_sync.py"
+    ],
+    "scope": "local versioned upstream snapshots; validated data-only sync; code-change compatibility gate; verified rollback; offline plans only",
+    "evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05AE-allocator",
+    "device_authorized": false,
+    "push_authorized": false,
+    "known_partial_case": "Auto slot3 requires unreviewed Nevera R; unknown must stay explicit, no fabricated ownership or tier substitution",
+    "source_head": "1486050420ae64d893b12abb93fb70daa36052a6",
+    "merge_commit": "bd614830777f57ea5f01474627f3d885d52cc99f",
+    "store": "E:\\hzz\\work\\MA9\\MA9-evidence\\allocator-store",
+    "active_snapshot": "f0e73206dc4645cba21d8a0afacbbe6c5d196e478f1a17968a8eaf1e111878b4",
+    "results": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05AE-allocator\\results.json",
+    "report": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05AE-allocator\\report.md",
+    "documentation": "docs/zh_cn/develop/duel_allocator_sync.md",
+    "review": "independent_Sol_high_no_remaining_blockers",
+    "unit_tests_run": 4,
+    "unit_tests_skipped": 1,
+    "unit_exit": 0,
+    "independent_core_cases": 5,
+    "real_front_count": 3,
+    "real_front_exact_match": true,
+    "expert_status": "blocked_missing_candidate_stars",
+    "sync_update_and_rollback": "passed",
+    "source_and_profile_unchanged": true,
+    "new_user_gui": false,
+    "background_automation_created": false,
+    "next": "Offline sync/allocator integration is complete. Before execution/client release, resolve real auto example missing availability (Nevera R/Gemera/Centodieci/Sian), runtime Lykan/Huracan association risks, and extra4 historical IDs. Auto slot3 currently only Nevera R and remains empty; do not fabricate ownership, stars, or substitute another tier. Future upstream JSON updates use validated sync; new logic remains staged until compatibility review."
   }
 }

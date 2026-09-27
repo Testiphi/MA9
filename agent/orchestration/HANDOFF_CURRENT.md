@@ -3,7 +3,7 @@
 
 ## 协作与约束
 成本分层：清晰低风险窄实现Luna high，机械检查Luna medium/脚本；复杂实现及独立复核Sol medium，识别/输入安全关键问题保留Sol high；owner/reviewer分离，一个写入owner，总控可并行只读核验。用户只做实机和反馈，不搬运提示词；禁止子席派下级，不主动新建用户任务。
-根E:/hzz/work/MA9；lane E:/hzz/work/MA9/MA9-worktrees/duel-scan，lane/duel-scan。所有产物在MA9，不碰根外MutualExclusionAllocator，不读六个大型multiplayer分片，04暂停。
+根E:/hzz/work/MA9；lane E:/hzz/work/MA9/MA9-worktrees/duel-scan，lane/duel-scan。所有产物在MA9；按05AE用户新授权可只读检查/同步根外E:/hzz/work/MutualExclusionAllocator/repo，不得修改该项目；不读六个大型multiplayer分片，04暂停。
 Python .venv/Scripts/python.exe -X utf8 -B，TMPDIR/TMP/TEMP指向当前证据tmp；禁字节码。设备/GUI/ADB/MuMu不得代用户操作。冻结A bd9a535336750d8fae3799f20d321498e21f5b00、B ab13bf9ec91f916754aa0910bd1138e2f038d0a5只验祖先不重冻。合格阶段自动本地提交，不乱stage截图/.workbuddy。
 
 ## 已有实机基线
@@ -148,6 +148,15 @@ B4（EB110/750S/LEGO M4 GT3 EVO/Ford GT MKII）与CD6（TVR Sagaris/Bolwell MK X
 取消05AC两车截图请求，无需用户再补图。原星级未知/拥有记录与源图不变，不推断owned=False、具体星级或客观强弱；不能扩展为所有星级未知或普通非满星都排除。其余262条未改，也不自动宣称可用。正式profile未改，allocation_ready仍False。
 当前参考表候选预览未读取车库，运行时未接该策略；后续账号档案/分配接线必须明确消费资格排除。结果05AD/results.json，精确仅2项排除/262项不变/星级原值不变核验actual0。
 下一步处理运行时Lykan/Huracan关联窄修及额外4历史ID核验，再做受控账号/分配接线。不要再等待两车详情页，不操作设备、不推送。
+
+## 当前05AE：可同步分配器与离线报告已接通
+用户明确指定复用持续维护中的MutualExclusionAllocator，并要求后续同步更新。新增授权仅对E:/hzz/work/MutualExclusionAllocator/repo只读检查/同步，覆盖早期“不碰根外”对该项目的读取限制，不授权外部写入/推送。所有适配、快照、报告仍在MA9。
+Sol medium owner+Sol high独立review，3新文件tools/duel_allocator_sync.py、duel_allocator_bridge.js及test；1486050420ae64d893b12abb93fb70daa36052a6已合入main bd614830777f57ea5f01474627f3d885d52cc99f。同步五文件内容快照、二次源hash检查、数据/映射/逻辑门槛、原子active、diff/list/兼容回退；未知逻辑staging不激活，坏数据保持旧active。逐段拒绝reparse/链接防缓存写出MA9。上游目录移走后快照仍能回放。没有后台定时任务。
+桥复用已审上游纯函数，不运行DOM/网络；稳定车型ID互斥，显式zone/tier/星级/跑法，未知不补默认，四区不静默回落五区。小补丁ma9-empty-every-slot-v1修复原核心漏枚举空槽部分方案；非重写solver。枚举上界200000及VM超时，输出始终executable=false。上游cd425744b111604d6e0505341cba29989a16ef7a，实际快照按文件hash，源git dirty含既有未跟踪文件。
+当前store E:/hzz/work/MA9/MA9-evidence/allocator-store，active f0e73206dc4645cba21d8a0afacbbe6c5d196e478f1a17968a8eaf1e111878b4。83图/69引用昵称/6481条参考数据。使用docs/zh_cn/develop/duel_allocator_sync.md中的sync/list/diff/rollback/crosswalk命令；数据更新可重复同步，新计算逻辑需兼容复核，账号车库/证据不被覆盖。
+主根4项定向测试actual0（3通过、1实体symlink因权限skip）；独立SC布尔/map-key和模拟reparse拒绝actual0，5个独立穷举oracle均过。真实自动档85个可行分配的3前沿逐项匹配，sync更新/幂等/坏数据保旧/未审隔离/回退通过。外部五文件与正式profile哈希核对均不变。证据05AE-allocator/results.json、review/review.md。
+历史五图报告MA9-evidence/20260927-05AE-allocator/report.md：方案1 Nevera/Speedtail/空/Bolide/Vanda；其余两套是合法互斥取舍，均非执行授权。自动档第3槽仅Nevera R，而当前复核车库缺Nevera R/Gemera/Centodieci/Sian可用性/星级，必须标未知，不是未拥有。高手档缺13昵称星级而阻断，未填默认6或抬星。不要宣称已实现完整五槽自动配车或用户GUI功能。
+下一步先处理报告暴露的4候选资料缺口与运行时车型关联风险，再推进用户端/执行接线。额外4历史ID继续隔离；升星就绪2车策略不可用已在本次请求排除。无设备操作、新包或推送，主模型设置不变。
 
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。库存身份双读不等于星级双读；当前仅保留某一原帧的raw星级，未做完整星条一致性确认，不具备可信星级档案证明。
