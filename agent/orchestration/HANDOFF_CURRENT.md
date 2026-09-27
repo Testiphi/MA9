@@ -91,7 +91,12 @@ fa9d8be实机run b8ebb7e58f0a4793b0b7d48613682568，R3/S51/A55/B54，A已走完�
 功能78a0f19944f3ef8e8ec8278c5cb4fac0cd7b6626，合入fe17a55df74fb172439a5cffaeab022344fd579b；8文件含新只读入口及测试。Agent480(1skip)/tools30(1skip)实际0，两改变schema输入0，其余复用Git/hash未变证据。四轮517帧169窗口，119原可用窗口无回退；49原短记录加最新末尾3帧共50窗口不足。旧168/169假S已消失，但不能用这3帧宣称已动态过B。独立review-fixed.md无剩余阻断；初次review有tmp fallback及MaaDeps退出1，提权纠正后6项/反例实际0，原记录未抹去。
 新增“对决车库：当前页自检（只读，不翻页）”，入口对决_隔离当前车库页只读，固定Action忽略argv。复用账号/root/profile预检和exclusive lock；入口2帧+最多8采样，专用Controller硬拒绝任何点击/滑动/其它输入（即使active_class改变）；不写车库缓存。只写debug/duel-garage-page-<run-id>/PNG/OCR/report.json，4..10记录帧、stable且有confirmed且零input才observed。observed只是读页完成，不代表类别准确、完整库存或星级确认。
 准确只读专包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-garage-page-78a0f19\MA9-preview。exe SHA256：2bff8f71e20e3f2fb9aeaa6a69787d86cd1e5c40873590f7138875feb094f551。GUI仅数据自检和当前页自检，不展示全库扫描。包内29模块一致、122测试(1skip)进程0，三个旧代码负对照预期1，新包pipeline/interface schema0，资料/历史引用hash通过；结果05W/results.json。
-原183条待核验记录及全部3个引用历史run完整保留，原profile备份debug/archive-05V。新probe不改profile；导入历史run仍是旧运行，不能当新成功。用户下一步关闭旧包打开新包，保持当前B/C页，只运行当前页自检，结束后总控查新page报告，先不要再要求从R扫全级。owner/reviewer均完成，无设备操作、无推送；新probe实机未运行。
+原183条待核验记录及全部3个引用历史run完整保留，原profile备份debug/archive-05V。新probe不改profile；导入历史run仍是旧运行，不能当新成功。当前页只读实机已通过，见下文；不要再次要求同页自检或盲目R/S/A重扫。owner/reviewer均完成，无设备操作、无推送。
+
+## 05W当前页实机已通过
+用户17:30:13至17:30:32运行准确只读包，run fcb9e54d85d64818b3b603704afdeedf。7帧约19秒，stable/observed，原生Tasker.Task.Succeeded。全部7PNG hash通过；task期间输入API日志匹配0，input_attempts=[]，无选车/开赛。profile按构建原件重建预期字节后完全一致，183条未变。证据MA9-evidence/20260927-05W-live/results.json及run/、maafw-task.log。
+四车身份：B Ford Mustang RTR Spec 5 10th Anniv.由帧4/7确认，source7；B Huracan STO、C Ferrari296GTB、C DaytonaSP3均帧3/4确认。observed_classes仅B/C，无S FD，sampling_notes为空。本次已提供现场身份修复证据，但没有切级/翻页，不能说已动态跨越B/C或完成全库。
+星级仍raw未确认（296GTB本次无读数，不视为0星）；未将probe记录合入profile。当前页无需再测。下一阶段应准备受控B尾/C/D补采及资料核验，保留既有183条；当前专包只有只读入口，尚无续扫功能，不直接让用户改classes绕过固定guard。未进行新设备操作、实现补采或推送。
 
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。库存身份双读不等于星级双读；当前仅保留某一原帧的raw星级，未做完整星条一致性确认，不具备可信星级档案证明。
