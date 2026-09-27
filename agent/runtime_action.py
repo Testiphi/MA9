@@ -405,3 +405,51 @@ class DuelLineupMapsTestAction(CustomAction):
                 and report.get("read_only") is True
                 and report.get("selection_attempted") is False
                 and report.get("starts_race") is False)
+
+
+@AgentServer.custom_action("ma9_duel_home_zone")
+class DuelHomeZoneAction(CustomAction):
+    """Start a one-use read-only zone session from the current home page."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv
+        from ma9_agent.duel_zone_session import start_zone_session
+        try:
+            report, destination = start_zone_session(context, find_project_root())
+        except Exception as error:
+            print(json.dumps({"event": "ma9_duel_home_zone_error", "error": str(error),
+                              "read_only": True, "selection_attempted": False,
+                              "starts_race": False}, ensure_ascii=False), flush=True)
+            return False
+        print(json.dumps({"event": "ma9_duel_home_zone", "status": report["status"],
+                          "selected_zone": report.get("selected_zone"),
+                          "report_file": str(destination), "read_only": True,
+                          "starts_race": False}, ensure_ascii=False), flush=True)
+        return (report.get("status") == "zone_ready" and report.get("zone_verified") is True
+                and report.get("session_ready") is True and report.get("selected_zone") in {"五区", "四区"}
+                and report.get("read_only") is True and report.get("selection_attempted") is False
+                and report.get("starts_race") is False)
+
+
+@AgentServer.custom_action("ma9_duel_zone_candidates")
+class DuelZoneCandidatesAction(CustomAction):
+    """Read new lineup maps and preview candidates for the same zone session."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv
+        from ma9_agent.duel_zone_session import finish_zone_candidates
+        try:
+            report, destination = finish_zone_candidates(context, find_project_root())
+        except Exception as error:
+            print(json.dumps({"event": "ma9_duel_zone_candidates_error", "error": str(error),
+                              "read_only": True, "selection_attempted": False,
+                              "starts_race": False}, ensure_ascii=False), flush=True)
+            return False
+        print(json.dumps({"event": "ma9_duel_zone_candidates", "status": report["status"],
+                          "selected_zone": report.get("selected_zone"),
+                          "report_file": str(destination), "read_only": True,
+                          "starts_race": False}, ensure_ascii=False), flush=True)
+        return (report.get("status") == "candidates_ready" and report.get("zone_verified") is True
+                and report.get("maps_verified") is True and report.get("selected_zone") in {"五区", "四区"}
+                and report.get("read_only") is True and report.get("selection_attempted") is False
+                and report.get("starts_race") is False)
