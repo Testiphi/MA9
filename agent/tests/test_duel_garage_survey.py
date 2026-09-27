@@ -163,6 +163,27 @@ class SurveyTests(unittest.TestCase):
         self.assertEqual(profile["vehicles"]["one"]["stars_status"], "unknown")
         self.assertFalse((self.root / "config/.duel-garage-scan.lock").exists())
 
+    def test_unconfirmed_receipt_is_visible_but_never_owned(self):
+        note = {"id": "one", "title": "One", "class": "R",
+                "card": [100, 168, 420, 212], "target": [285, 273],
+                "capture": 4, "page": 1, "reason": "page_epoch_changed"}
+        def fake_scan(proxy, vehicle_class, catalog, **kwargs):
+            return {"status": "page_ocr_unverified", "pages": 1,
+                    "scan_complete": False, "vehicles": [],
+                    "sampling_notes": [note]}
+        report, path = run_garage_survey(Context(), self.root, scan_fn=fake_scan)
+        self.assertEqual(report["classes"]["R"]["sampling_notes"], 1)
+        self.assertEqual(report["unique_vehicle_count"], 0)
+        checkpoint = json.loads((path.parent / "checkpoint-R.json").read_text(encoding="utf-8"))
+        self.assertEqual(checkpoint["sampling_notes"], [note])
+        profile = json.loads((self.root / "config/duel_garage.json").read_text(encoding="utf-8"))
+        self.assertNotIn("one", profile["vehicles"])
+        self.assertEqual(profile["sampling_history"][0]["capture"], 4)
+        self.assertFalse(profile["allocation_ready"])
+        review = (path.parent / "review.md").read_text(encoding="utf-8")
+        self.assertIn("未确认采样 1", review)
+        self.assertIn("page_epoch_changed", review)
+
     def test_complete_status_without_scan_complete_stops_partial(self):
         seen = []
         def inconsistent_scan(proxy, vehicle_class, catalog, **kwargs):

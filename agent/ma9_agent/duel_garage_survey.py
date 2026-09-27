@@ -231,7 +231,16 @@ def _review_text(report: dict[str, Any], profile: dict[str, Any]) -> str:
         if item is None:
             lines.append(f"- {vehicle_class}: 未扫描")
         else:
-            lines.append(f"- {vehicle_class}: {item['status']}；页数 {item['pages']}；识别 {item['vehicles']}")
+            lines.append(f"- {vehicle_class}: {item['status']}；页数 {item['pages']}；"
+                         f"识别 {item['vehicles']}；未确认采样 {item.get('sampling_notes', 0)}")
+    lines += ["", "## 未确认采样欠账", ""]
+    for note in profile.get("sampling_history", []):
+        lines.append(f"- {note['class']} {note['title']} ({note['id']})："
+                     f"run {note.get('source_run')}；页 {note.get('page')}；"
+                     f"帧 {note.get('capture')}；{note.get('reason')}；"
+                     f"证据 {note.get('evidence')}")
+    if not profile.get("sampling_history"):
+        lines.append("- 无")
     lines += ["", "## 已记录车辆", ""]
     for vehicle_id, entry in sorted(profile["vehicles"].items(),
                                     key=lambda item: (CLASSES.index(item[1]["class"]), item[1]["title"])):
@@ -295,6 +304,7 @@ def run_garage_survey(context: Any, root: Path, *,
                     summary = {"status": result.get("status"), "pages": result.get("pages"),
                                "claimed_scan_complete": result.get("scan_complete") is True,
                                "vehicles": len(result.get("vehicles", [])),
+                               "sampling_notes": len(result.get("sampling_notes", [])),
                                "checkpoint": checkpoint}
                     report["classes"][vehicle_class] = summary
                     if (result.get("status") not in ("class_boundary", "edge_reached")

@@ -1581,14 +1581,152 @@ class DuelTargetStabilityTest(unittest.TestCase):
 class FrozenFordBoundaryTest(unittest.TestCase):
     """Replay captured pixels and OCR; replace only capture and timing IO."""
 
+    @staticmethod
+    def _inventory_card(vehicle_id, left, top=168):
+        card = _card(vehicle_id, "B")
+        card["card"] = [left, top, 420, 212]
+        card["target"] = [left + 185, top + 105]
+        return card
+
+    def test_moving_full_frame_is_receipted_then_two_card_epoch_confirms(self):
+        moved = [self._inventory_card("sto", 454),
+                 self._inventory_card("ford", 454, 395),
+                 self._inventory_card("porsche", 900),
+                 self._inventory_card("brabham", 900, 395)]
+        sto = self._inventory_card("sto", 374)
+        ford = self._inventory_card("ford", 374, 395)
+        pages = [([*moved], []), ([sto, ford], []), ([sto], []),
+                 ([sto], []), ([sto], []), ([sto, ford], [])]
+        frames = [np.full((720, 1280, 3), index, dtype=np.uint8)
+                  for index in range(len(pages))]
+        context = _Context()
+        context.current_frame = 129
+        remaining = iter(frames)
+        def capture(_context):
+            context.current_frame += 1
+            return next(remaining)
+        notes = []
+        with patch("ma9_agent.duel_vehicle_runtime._frame", side_effect=capture), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=pages) as visible, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            frame, cards, stable, _clipped = _stable_sample_visible(
+                context, [], target_id=None, sampling_notes=notes)
+        self.assertTrue(stable)
+        self.assertEqual(visible.call_count, 6)
+        self.assertIs(frame, frames[5])
+        self.assertEqual({card["vehicle"]["id"] for card in cards}, {"sto", "ford"})
+        self.assertTrue({"porsche", "brabham"}.issubset(
+            {note["id"] for note in notes}))
+        self.assertTrue(all(note["capture"] == 130 for note in notes))
+
+    def test_epoch_resets_on_missing_anchor_empty_duplicate_and_slot_conflict(self):
+        first = [self._inventory_card("anchor", 100),
+                 self._inventory_card("other", 500)]
+        cases = [
+            ("no_anchor", [self._inventory_card("fresh", 900)], "page_epoch_changed"),
+            ("empty", [], "empty_page"),
+            ("duplicate", [first[0], first[0]], "duplicate_identity"),
+            ("slot_conflict", [first[0], self._inventory_card("fresh", 500)],
+             "page_epoch_changed"),
+        ]
+        for name, second, reason in cases:
+            with self.subTest(name=name):
+                state = {"baseline": {}, "previous": {}, "seen": {},
+                         "counts": {}, "max_size": 0, "notes": [], "captures": 0}
+                with patch("ma9_agent.duel_vehicle_runtime._frame",
+                           return_value=np.zeros((720, 1280, 3), dtype=np.uint8)), \
+                        patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                              return_value=True), \
+                        patch("ma9_agent.duel_vehicle_runtime._visible",
+                              side_effect=[(first, []), (second, [])]), \
+                        patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+                    _frame_value, _cards, stable, _clipped = _sample_visible(
+                        _Context(), [], attempts=2, inventory_state=state)
+                self.assertFalse(stable)
+                self.assertIn(reason, {note["reason"] for note in state["notes"]})
+
+    def test_duplicate_frame_receipts_survive_later_clean_confirmation(self):
+        duplicate = [self._inventory_card("ambiguous", 100),
+                     self._inventory_card("ambiguous", 500)]
+        clean = [self._inventory_card("sto", 100),
+                 self._inventory_card("ford", 500)]
+        pages = [(duplicate, []), (clean, []), (clean, []), (clean, [])]
+        frames = [np.full((720, 1280, 3), index, dtype=np.uint8)
+                  for index in range(4)]
+        context = _Context()
+        context.current_frame = 20
+        remaining = iter(frames)
+        def capture(_context):
+            context.current_frame += 1
+            return next(remaining)
+        notes = []
+        with patch("ma9_agent.duel_vehicle_runtime._frame", side_effect=capture), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=pages) as visible, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            frame, cards, stable, _clipped = _stable_sample_visible(
+                context, [], sampling_notes=notes)
+        self.assertTrue(stable)
+        self.assertEqual(visible.call_count, 4)
+        self.assertIs(frame, frames[3])
+        self.assertEqual({card["vehicle"]["id"] for card in cards},
+                         {"sto", "ford"})
+        duplicates = [note for note in notes
+                      if note["reason"] == "duplicate_identity"]
+        self.assertEqual(len(duplicates), 2)
+        self.assertEqual({note["capture"] for note in duplicates}, {21})
+        self.assertEqual({tuple(note["card"]) for note in duplicates},
+                         {(100, 168, 420, 212), (500, 168, 420, 212)})
+        self.assertTrue(all(note["id"] == "ambiguous" for note in duplicates))
+
+    def test_epoch_checks_first_geometry_and_lost_title(self):
+        frames = [self._inventory_card("anchor", left)
+                  for left in (100, 108, 116)]
+        state = {"baseline": {}, "previous": {}, "seen": {},
+                 "counts": {}, "max_size": 0, "notes": [], "captures": 0}
+        with patch("ma9_agent.duel_vehicle_runtime._frame",
+                   return_value=np.zeros((720, 1280, 3), dtype=np.uint8)), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=[([card], []) for card in frames]), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            _sample_visible(_Context(), [], attempts=3, inventory_state=state)
+        self.assertIn("page_epoch_changed",
+                      {note["reason"] for note in state["notes"]})
+        with patch("ma9_agent.duel_vehicle_runtime._frame",
+                   return_value=np.zeros((720, 1280, 3), dtype=np.uint8)), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      side_effect=[True, False]), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      return_value=([frames[0]], [])), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            _frame_value, _cards, stable, _clipped = _sample_visible(
+                _Context(), [], attempts=2, inventory_state=state)
+        self.assertFalse(stable)
+        self.assertIn("selection_lost", {note["reason"] for note in state["notes"]})
+
     def test_inventory_keeps_a_full_singleton_until_next_window_confirms(self):
         frame = np.zeros((720, 1280, 3), dtype=np.uint8)
         three = [_card(value, "B") for value in ("one", "two", "three")]
-        four = [*three, _card("new", "B")]
+        for card, left in zip(three, (100, 430, 760)):
+            card["card"] = [left, 168, 420, 212]
+            card["target"] = [left + 185, 273]
+        newest = _card("new", "B")
+        newest["card"] = [100, 395, 420, 212]
+        newest["target"] = [285, 500]
+        four = [*three, newest]
         pages = [(three, []), (three, []), (four, []), (three, []),
                  (four, []), (four, [])]
         catalog = [{"id": value, "title": value, "class": "B"}
                    for value in ("one", "two", "three", "new")]
+        state = {"baseline": {}, "previous": {}, "seen": {}, "counts": {},
+                 "max_size": 0, "notes": [], "captures": 0}
         with patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
                 patch("ma9_agent.duel_vehicle_runtime._selection_title",
                       return_value=True), \
@@ -1596,9 +1734,9 @@ class FrozenFordBoundaryTest(unittest.TestCase):
                       side_effect=pages[:4]), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             _frame_value, cards, stable, _clipped = _sample_visible(
-                _Context(), catalog, target_id=None)
+                _Context(), catalog, target_id=None, inventory_state=state)
         self.assertFalse(stable)
-        self.assertIn("new", [card["vehicle"]["id"] for card in cards])
+        self.assertIn("new", state["seen"])
         with patch("ma9_agent.duel_vehicle_runtime._frame", return_value=frame), \
                 patch("ma9_agent.duel_vehicle_runtime._selection_title",
                       return_value=True), \
@@ -1608,7 +1746,7 @@ class FrozenFordBoundaryTest(unittest.TestCase):
             _frame_value, cards, stable, _clipped = _stable_sample_visible(
                 _Context(), catalog, target_id=None)
         self.assertTrue(stable)
-        self.assertEqual(visible.call_count, 6)
+        self.assertEqual(visible.call_count, 5)
         self.assertIn("new", [card["vehicle"]["id"] for card in cards])
 
     def test_real_fd_identity_still_stops_a_b_inventory_scan(self):
@@ -1667,10 +1805,10 @@ class FrozenFordBoundaryTest(unittest.TestCase):
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             frame, cards, stable, _clipped = _stable_sample_visible(
                 _Context(), catalog, target_id=None)
-        self.assertEqual(visible.call_count, 8)
+        self.assertEqual(visible.call_count, 7)
         self.assertTrue(stable)
         self.assertIn(anniversary, [card["vehicle"]["id"] for card in cards])
-        self.assertIs(frame, observed[-1][0])
+        self.assertIs(frame, observed[6][0])
 
 
 if __name__ == "__main__":

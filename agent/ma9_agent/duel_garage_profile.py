@@ -22,7 +22,8 @@ def empty_profile(root: Path, account_key: str) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION, "runtime_root": str(root),
         "account_key": account_key, "updated_at": None, "vehicles": {},
-        "coverage": {}, "coverage_complete": False, "allocation_ready": False,
+        "coverage": {}, "sampling_history": [],
+        "coverage_complete": False, "allocation_ready": False,
         "known_gaps": ["known_left_sidebar_gap", "stars_not_confirmed",
                        "duel_selection_ownership_equivalence_unverified"],
     }
@@ -38,8 +39,15 @@ def load_profile(path: Path, root: Path, account_key: str,
             or profile.get("runtime_root") != str(root)
             or profile.get("account_key") != account_key
             or not isinstance(profile.get("vehicles"), dict)
-            or not isinstance(profile.get("coverage"), dict)):
+            or not isinstance(profile.get("coverage"), dict)
+            or not isinstance(profile.get("sampling_history", []), list)):
         raise ValueError("invalid or cross-account Duel garage profile")
+    for note in profile.get("sampling_history", []):
+        if (not isinstance(note, dict) or note.get("id") not in catalog
+                or note.get("class") != catalog[note["id"]]["class"]
+                or note.get("title") != catalog[note["id"]]["title"]):
+            raise ValueError("invalid Duel garage sampling history")
+    profile.setdefault("sampling_history", [])
     if set(profile["vehicles"]) - set(catalog):
         raise ValueError("Duel garage profile contains unknown catalog IDs")
     for vehicle_id, entry in profile["vehicles"].items():
@@ -81,6 +89,16 @@ def merge_class(profile: dict[str, Any], vehicle_class: str,
     """Only add positive sightings; keep manual decisions and old sightings."""
     if vehicle_class not in CLASSES:
         raise ValueError("invalid class")
+    if not isinstance(result.get("sampling_notes", []), list):
+        raise ValueError("invalid scan sampling notes")
+    for note in result.get("sampling_notes", []):
+        if (not isinstance(note, dict) or note.get("id") not in catalog
+                or note.get("class") != catalog[note["id"]]["class"]
+                or note.get("title") != catalog[note["id"]]["title"]):
+            raise ValueError("invalid scan sampling note")
+        profile.setdefault("sampling_history", []).append({
+            **note, "source_run": run_id, "observed_at": observed_at,
+            "evidence": evidence_ref})
     for card in result.get("vehicles", []):
         if not isinstance(card, dict) or not isinstance(card.get("vehicle"), dict):
             raise ValueError("invalid scan card")
@@ -114,6 +132,7 @@ def merge_class(profile: dict[str, Any], vehicle_class: str,
         "status": result.get("status"), "pages": result.get("pages"),
         "claimed_scan_complete": result.get("scan_complete") is True,
         "coverage_complete": False, "known_gaps": list(profile["known_gaps"]),
+        "sampling_note_count": len(result.get("sampling_notes", [])),
         "source_run": run_id, "observed_at": observed_at,
     }
     profile["updated_at"] = observed_at
