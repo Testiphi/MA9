@@ -1449,7 +1449,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05P只读五图GUI与准确包已完成并独立Sol复核；现五车保留，用户运行user-test-maps-19da67b/MA9-preview的五图只读任务一次，回传debug/duel-lineup-maps-*.json；未实机通过前不推进候选预览/选车/进攻。无活跃写入owner/reviewer，不推送。",
+  "next": "05P用户实机五图通过（slot1展开、两帧3.954秒）；05Q纯离线五区18/四区14候选关系已复核合入。下一步按用户规则从擂台首页新鲜识别完整赛区V/IV并绑定账号/本次流程；无赛区证据不默认选择、不让用户手选，不操作设备/选车/开赛。当前无活跃owner/reviewer，不推送。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1669,7 +1669,7 @@
   },
   "future_garage_inventory": "User idea only: recognize owned garage and save locally later; not in current implementation scope",
   "readonly_maps_gui_task": {
-    "phase": "merged_exact_package_ready_user_readonly_pending",
+    "phase": "user_readonly_five_maps_passed",
     "base_main": "a4cad2fadec0fa172a9375cdcc9dfd9e3a77c5d2",
     "base_lane": "f476272a2b31ade42359b64330da07a9db6241c1",
     "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
@@ -1690,7 +1690,7 @@
     ],
     "scope": "guarded readonly five-map GUI entry and persisted report; fresh exact package; reuse existing account/root guard",
     "device_authorized": false,
-    "device_test": "pending_user",
+    "device_test": "passed_user_slot1_two_frames",
     "push_authorized": false,
     "start_weekly_used_percent": 4,
     "evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05P-maps-gui",
@@ -1718,18 +1718,65 @@
     "defense_positives": 6,
     "end_weekly_used_percent": 8,
     "test_scope_adjustment": "Only the old 05O no-GUI assertion now checks guarded readonly wiring; reader behavior tests and production reader unchanged.",
-    "next": "User runs the new readonly five-map task once on the existing five-car defense lineup; inspect new business JSON before candidate preview."
+    "next": "05Q offline candidate preview completed; acquire fresh homepage zone evidence before allocation",
+    "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05P-live/results.json",
+    "live_samples": 2,
+    "live_elapsed_seconds": 3.954,
+    "live_expanded_slot": 1
+  },
+  "candidate_preview_task": {
+    "phase": "offline_preview_reviewed_merged",
+    "source_head": "444e0019aec0c0697bd2eb20554a9d067397a0d3",
+    "merge_commit": "ea83d35a5acd31ffb79c2c3846495554bb667c96",
+    "owner": "gpt-6-luna high",
+    "reviewer": "gpt-6-sol medium",
+    "active_owner": null,
+    "active_reviewer": null,
+    "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05Q-candidates",
+    "preview_json": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-maps-19da67b\\MA9-preview\\debug\\duel-map-candidates-d89b003923c34de3921bbf9612fbd52b.json",
+    "preview_markdown": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-maps-19da67b\\MA9-preview\\debug\\duel-map-candidates-d89b003923c34de3921bbf9612fbd52b.md",
+    "candidate_counts": {
+      "五区": 18,
+      "四区": 14
+    },
+    "agent_tests": 416,
+    "agent_exit": 0,
+    "tools_tests": 30,
+    "tools_skip": 1,
+    "tools_exit": 0,
+    "schema_reused": true,
+    "device_authorized": false,
+    "push_authorized": false,
+    "zone_rule": {
+      "source": "user clarified 2026-09-27",
+      "page": "擂台首页",
+      "五区": "赛区 V",
+      "四区": "赛区 IV",
+      "match": "complete normalized token; IV must not match V substring",
+      "current_zone": null,
+      "implementation": "pending fresh home-page observation",
+      "failure": "missing/conflicting evidence must not choose a zone"
+    },
+    "next": "Implement isolated fresh homepage-zone observation and bind it to the same account/run before allocation; do not alter existing five cars"
   },
   "model_dispatch": {
     "approved": "2026-09-27",
-    "owner": "gpt-6-sol",
+    "owner": "gpt-6-luna",
     "owner_effort": "high",
     "reviewer": "gpt-6-sol",
-    "reviewer_effort": "high",
+    "reviewer_effort": "medium",
     "mechanical": "gpt-6-luna",
     "mechanical_effort": "medium",
     "user_relay_required": false,
     "user_device_operator": true,
-    "parallel_writers_per_lane": 1
+    "parallel_writers_per_lane": 1,
+    "owner_scope": "clear bounded readonly/pure leaf tasks",
+    "complex_owner": "gpt-6-sol",
+    "complex_owner_effort": "medium",
+    "critical_safety_review_effort": "high",
+    "budget_policy": "short context; scripts for mechanical work; one writer; one bounded repair then triage; one final full suite; no redundant rebuild",
+    "current_orchestrator_model": "unchanged_by_this_task",
+    "pricing_source": "https://learn.chatgpt.com/docs/pricing",
+    "model_guidance_source": "https://learn.chatgpt.com/docs/models"
   }
 }
