@@ -275,6 +275,120 @@ class LineupMapsTest(unittest.TestCase):
         observed = [(row["big"], row["small"]) for row in report["tracks"]]
         self.assertEqual(observed.count(PAIRS[1]), 2)
 
+    # --------------------------------------------- same-cell candidate audit
+    def conflicting_rows(self, *, text: str = "完全不同赛道", top: int = 270):
+        """``lineup_rows(3)`` plus a second *small* candidate in cell 1.
+
+        The extra row copies cell 1's small line, changes its text and moves it
+        lower - still inside the ``200..275`` band.  The committed parser reads
+        only a group's first two rows, so before the cell audit this candidate
+        was silently discarded and the frame still reported five verified maps.
+        """
+        rows = lineup_rows(3)
+        extra = copy.deepcopy(rows[2])            # cell 1's small map line
+        extra["text"] = text
+        extra["box"][1] = top
+        rows.append(extra)
+        return rows
+
+    def conflicting_table(self, small: str = "完全不同赛道") -> dict:
+        return {"tracks": [*TABLE["tracks"],
+                           {"big": PAIRS[0][0], "small": small}]}
+
+    def test_a_conflicting_second_small_map_line_in_one_cell_is_refused(self):
+        report = self.observe(lineup_frame(3), self.conflicting_rows(),
+                              reference=self.conflicting_table())
+        self.assertFalse(report["maps_verified"])
+        self.assertEqual(report["status"], "partial")
+        self.assertEqual(report["reason"], "map_row_conflict")
+        self.assertEqual(report["expanded_slot"], 3)
+        # The refused cell is not re-numbered: the other four keep real slots.
+        self.assertEqual([row["slot"] for row in report["tracks"]], [2, 3, 4, 5])
+        self.assertEqual(report["evidence"]["slots_missing"], [1])
+        rejected = report["evidence"]["rejected_tracks"]
+        self.assertEqual(len(rejected), 1)
+        self.assertEqual(rejected[0]["reject"], "map_cell_candidates_conflict")
+        self.assertEqual(rejected[0]["slot"], 1)
+        self.assertEqual([row["text"] for row in rejected[0]["cell_rows"]],
+                         [PAIRS[0][0], PAIRS[0][1], "完全不同赛道"])
+
+    def test_a_conflicting_second_big_map_line_in_one_cell_is_refused(self):
+        # The same omission with a *big* map name as the discarded row: the cell
+        # audit refuses on the row set, not on which side the extra line is.
+        report = self.observe(lineup_frame(3), self.conflicting_rows(text=PAIRS[1][0]),
+                              reference=self.conflicting_table())
+        self.assertFalse(report["maps_verified"])
+        self.assertEqual(report["reason"], "map_row_conflict")
+        self.assertEqual([row["slot"] for row in report["tracks"]], [2, 3, 4, 5])
+        self.assertEqual([row["text"] for row
+                          in report["evidence"]["rejected_tracks"][0]["cell_rows"]],
+                         [PAIRS[0][0], PAIRS[0][1], PAIRS[1][0]])
+
+    def test_the_verdict_of_a_conflicting_cell_ignores_the_row_input_order(self):
+        rows = self.conflicting_rows()
+        reports = [self.observe(lineup_frame(3), rows,
+                                reference=self.conflicting_table()),
+                   self.observe(lineup_frame(3), list(reversed(rows)),
+                                reference=self.conflicting_table())]
+        for report in reports:
+            self.assertFalse(report["maps_verified"])
+            self.assertEqual(report["reason"], "map_row_conflict")
+            self.assertEqual([row["slot"] for row in report["tracks"]],
+                             [2, 3, 4, 5])
+
+    def test_an_equal_height_pair_leaves_the_cell_unresolved(self):
+        # Two map lines at one height cannot be ordered into big/small; both
+        # insertion orders must refuse rather than let the sort order decide.
+        for order in ((0, 1), (1, 0)):
+            with self.subTest(order=order):
+                rows = [dict(QUALIFIER_ROW)]
+                for index in range(1, 6):
+                    lines = pair_rows(3, index)
+                    if index == 1:
+                        flat = [map_row(row["text"], row["box"][0] + 30, 250)
+                                for row in lines]
+                        lines = [flat[position] for position in order]
+                    rows.extend(lines)
+                report = self.observe(lineup_frame(3), rows)
+                self.assertFalse(report["maps_verified"])
+                self.assertEqual([row["slot"] for row in report["tracks"]],
+                                 [2, 3, 4, 5])
+                self.assertEqual(report["evidence"]["slots_missing"], [1])
+
+    def test_an_exact_duplicate_map_line_is_deduped_not_refused(self):
+        # A legitimate OCR repeat is the *same physical line*: identical text and
+        # identical box.  It is collapsed, so it can neither block the read nor
+        # be miscounted as a second candidate.
+        rows = lineup_rows(3)
+        rows.append(copy.deepcopy(rows[2]))       # cell 1's small line, again
+        report = self.observe(lineup_frame(3), rows)
+        self.assertTrue(report["maps_verified"])
+        self.assertEqual(report["evidence"]["duplicate_rows"], 1)
+        self.assertEqual([row["slot"] for row in report["tracks"]], [1, 2, 3, 4, 5])
+
+    def test_the_same_text_at_a_different_height_is_a_candidate_not_a_repeat(self):
+        # De-duplication is by physical line, never by text alone: the same name
+        # printed at two heights is two candidates and must be refused.
+        rows = lineup_rows(3)
+        near = copy.deepcopy(rows[2])
+        near["box"][1] = 270                      # same text, different line
+        rows.append(near)
+        report = self.observe(lineup_frame(3), rows)
+        self.assertFalse(report["maps_verified"])
+        self.assertEqual(report["reason"], "map_row_conflict")
+        self.assertEqual([row["slot"] for row in report["tracks"]], [2, 3, 4, 5])
+
+    def test_a_non_lineup_page_with_a_conflicting_cell_is_still_refused(self):
+        # The cell audit never overrides the page gate: off the lineup page the
+        # verdict stays the page-level refusal, with no map rows reported.
+        rows = [dict(GARAGE_ROW)] + self.conflicting_rows()[1:]
+        report = self.observe(lineup_frame(3), rows,
+                              reference=self.conflicting_table())
+        self.assertFalse(report["maps_verified"])
+        self.assertEqual(report["reason"], "lineup_page_unverified")
+        self.assertEqual(report["tracks"], [])
+        self.assertIsNone(report["expanded_slot"])
+
     # ------------------------------------------------- reference uniqueness
     def test_a_reference_that_lists_the_same_pair_twice_is_refused(self) -> None:
         table = {"tracks": [*TABLE["tracks"], dict(TABLE["tracks"][2])]}
@@ -564,6 +678,32 @@ class StableLineupMapsTest(unittest.TestCase):
         self.assertEqual(report["reason"], "lineup_maps_unstable")
         self.assertEqual(report["latest"]["reason"], "lineup_maps_verified")
         self.assertEqual(report["latest"]["expanded_slot"], 5)
+
+    def test_a_conflicting_cell_never_confirms_over_two_frames(self):
+        # Two *independent* frames carrying the same second candidate are not an
+        # agreement on the maps: the cell never resolves, so the pair is broken
+        # on every sample and the reader stays unverified.
+        table = {"tracks": [*TABLE["tracks"],
+                            {"big": PAIRS[0][0], "small": "完全不同赛道"}]}
+        rows = lineup_rows(3)
+        extra = copy.deepcopy(rows[2])
+        extra["text"] = "完全不同赛道"
+        extra["box"][1] = 270
+        rows.append(extra)
+        frame = lineup_frame(3)
+        self.case["rows"][id(frame)] = rows
+        report = self.run_reader(attempts=3, reference=table, frames=[frame, frame])
+        self.assertFalse(report["maps_verified"])
+        self.assertFalse(report["stable"])
+        self.assertEqual(report["status"], "unverified")
+        self.assertEqual(report["reason"], "lineup_maps_unstable")
+        self.assertEqual(report["samples"], 3)
+        self.assertEqual(report["latest"]["reason"], "map_row_conflict")
+        self.assertEqual([row["slot"] for row in report["latest"]["tracks"]],
+                         [2, 3, 4, 5])
+        self.assertTrue(report["read_only"])
+        self.assertFalse(report["selection_attempted"])
+        self.assertFalse(report["starts_race"])
 
     def test_the_attempt_budget_caps_the_samples(self) -> None:
         for slot in (1, 2, 3, 4, 5):

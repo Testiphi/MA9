@@ -34,6 +34,13 @@ and adds the two things it cannot do:
    still matches confidently (``AMBIGUITY_MARGIN``), the pair is refused.  A tie
    - including a duplicated reference entry - yields a zero margin and is
    refused.  The decision never depends on the directory order of the table.
+3. **audit the whole cell, not only the pair the parser picked.**  The parser
+   reads just the first two rows of each x-group, so a second big *or* small
+   line in the same cell is invisible to it.  Every cell must present exactly
+   two map lines at different heights; a third candidate (or an equal-height
+   pair) is refused with the conflicting rows named in the evidence.  OCR
+   repeats of one physical line - identical text *and* identical box - are
+   collapsed first, so a genuine repeat is not mistaken for a conflict.
 
 Because nothing here reads the vehicle score, no map is ever inferred from a
 car, a file name, a previous frame, an expected list or a known sample.
@@ -127,6 +134,7 @@ REASON_PAGE_UNVERIFIED = "lineup_page_unverified"
 REASON_CHALLENGE_UNSUPPORTED = "challenge_page_unsupported"
 REASON_MAP_ROWS_INVALID = "map_rows_invalid"
 REASON_MAPS_INCOMPLETE = "maps_incomplete"
+REASON_MAP_ROW_CONFLICT = "map_row_conflict"
 REASON_DUPLICATE_MAPS = "duplicate_maps"
 REASON_REFERENCE_AMBIGUOUS = "reference_ambiguous"
 REASON_SLOT_MISMATCH = "map_slot_mismatch"
@@ -140,6 +148,7 @@ TRACK_PAIR_SPANS_CELLS = "pair_spans_cells"
 TRACK_PAIR_LINES_DISAGREE = "pair_lines_disagree"
 TRACK_OUTSIDE_CELLS = "map_outside_slot_cells"
 TRACK_CELL_AMBIGUOUS = "map_cell_ambiguous"
+TRACK_CELL_CONFLICT = "map_cell_candidates_conflict"
 TRACK_SLOT_TAKEN = "map_slot_taken"
 TRACK_REFERENCE_AMBIGUOUS = "reference_match_ambiguous"
 
@@ -246,6 +255,32 @@ def _entries(rows: Iterable[Any]) -> tuple[list[dict[str, Any]], int]:
     return found, malformed
 
 
+def _dedupe_lines(entries: Sequence[dict[str, Any]]
+                  ) -> tuple[list[dict[str, Any]], int]:
+    """Collapse OCR repeats of the *same physical line*.
+
+    Two band rows are one line when both their text and their full box are
+    identical - the identity ``_merge_rows`` already uses across the two OCR
+    regions.  This is deliberately *not* "same text": the same map name printed
+    twice at two different heights is two candidates, not a repeat, and stays in
+    the group for the cell audit to refuse.  Order does not matter: the first
+    occurrence is kept and every later exact repeat is dropped, so a duplicated
+    row cannot be counted as two lines (nor as a conflict).  ``(kept, dropped)``
+    is returned so the count is reported in the evidence.
+    """
+    kept: list[dict[str, Any]] = []
+    seen: set[Any] = set()
+    dropped = 0
+    for entry in entries:
+        key = (entry["text"], tuple(entry["box"]))
+        if key in seen:
+            dropped += 1
+            continue
+        seen.add(key)
+        kept.append(entry)
+    return kept, dropped
+
+
 def _groups(entries: Sequence[dict[str, Any]]) -> list[list[dict[str, Any]]]:
     """Cluster the band rows into lineup cells, exactly as the base parser does.
 
@@ -269,13 +304,40 @@ def _groups(entries: Sequence[dict[str, Any]]) -> list[list[dict[str, Any]]]:
 
 
 def _pair_lines(groups: Sequence[Sequence[dict[str, Any]]],
-                observed: Sequence[str], center: int) -> tuple[Any, Any] | None:
-    """The unique group the base parser turned into this pair at ``center``."""
+                observed: Sequence[str], center: int
+                ) -> list[dict[str, Any]] | None:
+    """The unique group the base parser turned into this pair at ``center``.
+
+    The *whole* group is returned, not just its first two rows: the caller must
+    be able to see every other map row the same cell produced, because the base
+    parser only ever looks at ``lines[:2]`` and would otherwise hide a second,
+    conflicting candidate behind the pair it happened to pick.
+    """
     hits = [group for group in groups
             if len(group) >= 2
             and group[0]["text"] == observed[0] and group[1]["text"] == observed[1]
             and round(group[0]["center"]) == center]
-    return (hits[0][0], hits[0][1]) if len(hits) == 1 else None
+    return list(hits[0]) if len(hits) == 1 else None
+
+
+def _cell_has_unique_pair(group: Sequence[dict[str, Any]]) -> bool:
+    """Whether a cell's map rows resolve to one ordered big/small pair.
+
+    ``group`` is the cell's usable rows, already collapsed to physical lines by
+    :func:`_dedupe_lines`.  Exactly two lines are required, and they must sit at
+    different heights so the upper line is unambiguously the big map and the
+    lower one the small map.  A third map line - an alternative big *or* small
+    candidate - or two lines at the same height leaves the cell without a unique
+    interpretation, and is refused instead of silently choosing the first two or
+    the highest-scoring pair.
+    """
+    return len(group) == 2 and group[0]["top"] != group[1]["top"]
+
+
+def _row_evidence(entry: Mapping[str, Any]) -> dict[str, Any]:
+    """Bounded description of one candidate map line, for diagnostics."""
+    return {"text": entry["text"], "top": entry["top"],
+            "center": round(entry["center"], 1), "box": list(entry["box"])}
 
 
 def _cells_of(cells: Sequence[dict[str, Any]],
@@ -364,17 +426,33 @@ def _locate_track(track: Mapping[str, Any], groups: Sequence[Sequence[dict[str, 
     """Locate one parser track in the real slot cells and re-check its match.
 
     ``groups`` are the band rows clustered into cells (used to recover *both*
-    line boxes), ``cells`` the five geometric slot spans, ``pairs`` the
-    reference table and ``rows`` the raw OCR rows the parser consumed (re-parsed
-    for the runner-up).  All state is passed in: the function is a pure function
-    of its arguments.
+    line boxes and to audit the cell's whole row set), ``cells`` the five
+    geometric slot spans, ``pairs`` the reference table and ``rows`` the raw OCR
+    rows the parser consumed (re-parsed for the runner-up).  All state is passed
+    in: the function is a pure function of its arguments.
     """
     observed = list(track["observed"])
-    lines = _pair_lines(groups, observed, int(track["x"]))
-    if lines is None:
+    group = _pair_lines(groups, observed, int(track["x"]))
+    if group is None:
         return {"reject": TRACK_ROW_NOT_FOUND, "observed": observed,
                 "confidence": track["confidence"], "center_x": track["x"]}
-    big_line, small_line = lines
+    if not _cell_has_unique_pair(group):
+        # The cell offered more than the one big/small pair (or two lines at one
+        # height).  The base parser still published a pair - it only reads
+        # ``lines[:2]`` - so this is exactly the discarded second candidate it
+        # could not see.  Refuse rather than let the first two rows, or the
+        # highest score, absorb the conflict.
+        hits = _cells_of(cells, group[0]["center"])
+        conflict: dict[str, Any] = {
+            "reject": TRACK_CELL_CONFLICT, "observed": observed,
+            "confidence": track["confidence"], "center_x": group[0]["center"],
+            "big_box": list(group[0]["box"]), "small_box": list(group[1]["box"]),
+            "cell_rows": [_row_evidence(row) for row in group]}
+        if len(hits) == 1:
+            conflict["slot"] = hits[0]["slot"]
+            conflict["cell"] = dict(hits[0])
+        return conflict
+    big_line, small_line = group[0], group[1]
     big_hits = _cells_of(cells, big_line["center"])
     if not big_hits:
         return {"reject": TRACK_OUTSIDE_CELLS, "observed": observed,
@@ -459,13 +537,16 @@ def observe_lineup_maps(frame: Any, *, ocr: Iterable[Any],
       (``geometry_and_title`` + ``资格赛``) and a unique expanded slot;
     * all five reference pairs are matched with a unique, unambiguous
       reference entry;
-    * each pair's two lines sit in the same cell, one pair per cell, and the
-      five occupied cells are exactly slots 1..5.
+    * each pair's two lines sit in the same cell, one pair per cell, the cell
+      offers *exactly* those two map lines (a second big or small candidate is
+      refused, not silently dropped), and the five occupied cells are exactly
+      slots 1..5.
 
     Anything else - a missing map, a duplicate map, an ambiguous reference
-    match, a pair straddling two cells, the challenge page, a wrong/missing
-    title, a bad reference table, a stretched screenshot - returns
-    ``maps_verified=False`` with the real slot evidence kept in ``evidence``.
+    match, a cell whose rows hold a conflicting second map line, a pair
+    straddling two cells, the challenge page, a wrong/missing title, a bad
+    reference table, a stretched screenshot - returns ``maps_verified=False``
+    with the real slot evidence kept in ``evidence``.
     There is no expected-slot input, no default slot 1, no click permission and
     no ``can_click``/``action_ready`` field.
     """
@@ -510,9 +591,11 @@ def observe_lineup_maps(frame: Any, *, ocr: Iterable[Any],
     except TypeError:
         rows = []
     band, malformed = _entries(rows)
-    usable = [entry["row"] for entry in band]
+    lines, duplicates = _dedupe_lines(band)
+    usable = [entry["row"] for entry in lines]
     base_evidence["map_rows"] = len(band)
     base_evidence["malformed_rows"] = malformed
+    base_evidence["duplicate_rows"] = duplicates
     try:
         base = read_five_tracks(usable, _as_base_reference(pairs))
     except (KeyError, IndexError, TypeError, ValueError) as error:
@@ -523,7 +606,7 @@ def observe_lineup_maps(frame: Any, *, ocr: Iterable[Any],
 
     located: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
-    groups = _groups(band)
+    groups = _groups(lines)
     for track in base["tracks"]:
         outcome = _locate_track(track, groups, observer["cells"], pairs, usable)
         if "reject" in outcome:
@@ -551,9 +634,12 @@ def observe_lineup_maps(frame: Any, *, ocr: Iterable[Any],
     base_evidence["observed_groups"] = base.get("observed_groups")
 
     if len(base["tracks"]) != 5 or len(tracks) != 5 or missing:
-        ambiguous = any(row["reject"] == TRACK_REFERENCE_AMBIGUOUS
-                        for row in rejected)
-        reason = REASON_REFERENCE_AMBIGUOUS if ambiguous else REASON_MAPS_INCOMPLETE
+        if any(row["reject"] == TRACK_REFERENCE_AMBIGUOUS for row in rejected):
+            reason = REASON_REFERENCE_AMBIGUOUS
+        elif any(row["reject"] == TRACK_CELL_CONFLICT for row in rejected):
+            reason = REASON_MAP_ROW_CONFLICT
+        else:
+            reason = REASON_MAPS_INCOMPLETE
         status = STATUS_PARTIAL if tracks else STATUS_REJECTED
         return _observation(status, verified=False, slot=slot, page_title=title,
                             tracks=tracks, reason=reason, evidence=base_evidence)
