@@ -146,6 +146,7 @@ def _inventory_sample(context: Any, catalog: list[dict[str, Any]], *,
                       ) -> tuple[np.ndarray | None, list[dict[str, Any]], bool,
                                  list[dict[str, Any]]]:
     """One inventory window in a page epoch shared across the two windows."""
+    state.setdefault("confirmed", {})
     last: tuple[np.ndarray | None, list[dict[str, Any]], bool,
                 list[dict[str, Any]]] = (None, [], False, [])
     for attempt in range(attempts):
@@ -153,7 +154,7 @@ def _inventory_sample(context: Any, catalog: list[dict[str, Any]], *,
         if not _selection_title(context, frame):
             for card, capture in state["seen"].values():
                 state["notes"].append(_inventory_note(card, capture, "selection_lost"))
-            state.update(baseline={}, previous={}, seen={}, counts={}, max_size=0)
+            state.update(baseline={}, previous={}, seen={}, confirmed={})
             return None, [], False, []
         cards, clipped = _visible(context, frame, catalog)
         state["captures"] += 1
@@ -184,7 +185,7 @@ def _inventory_sample(context: Any, catalog: list[dict[str, Any]], *,
                     if ids.count(card["vehicle"]["id"]) > 1:
                         state["notes"].append(_inventory_note(
                             card, capture, "duplicate_identity"))
-            state.update(baseline={}, previous={}, seen={}, counts={}, max_size=0)
+            state.update(baseline={}, previous={}, seen={}, confirmed={})
             if not cards or len(current) != len(cards):
                 return frame, cards, False, clipped
         if not state["baseline"]:
@@ -198,21 +199,25 @@ def _inventory_sample(context: Any, catalog: list[dict[str, Any]], *,
                     state["notes"].append(_inventory_note(
                         old_card, first_capture, "identity_geometry_changed"))
                 state.update(baseline=current.copy(), previous={}, seen={},
-                             counts={}, max_size=0)
+                             confirmed={})
                 break
         for vehicle_id, card in current.items():
-            state["seen"].setdefault(vehicle_id, (card, capture))
+            prior = state["seen"].get(vehicle_id)
+            if prior is None:
+                state["seen"][vehicle_id] = (card, capture)
+            elif vehicle_id not in state["confirmed"]:
+                state["confirmed"][vehicle_id] = {
+                    **card, "inventory_only": True,
+                    "source_capture": capture,
+                    "identity_capture_pair": [prior[1], capture]}
         state["previous"] = current
-        state["max_size"] = max(state["max_size"], len(cards))
-        state["counts"][ids] = state["counts"].get(ids, 0) + 1
         last = (frame, cards, False, clipped)
-        if (state["counts"][ids] >= 2 and len(cards) >= state["max_size"]
-                and (len(cards) >= 4 or state["captures"] >= attempts)
-                and set(current) == set(state["seen"])):
-            for vehicle_id, (card, first_capture) in state["seen"].items():
-                if vehicle_id not in current:
-                    state["notes"].append(_inventory_note(
-                        card, first_capture, "not_in_stable_capture"))
+        # Short pages get the full first-window budget: independently rolling
+        # names can alternate even while the fixed cards remain in place.
+        if (state["confirmed"] and set(current) & set(state["confirmed"])
+                and ((set(state["seen"]) <= set(state["confirmed"])
+                      and (len(cards) >= 4 or state["captures"] >= attempts))
+                     or state["captures"] >= 2 * attempts)):
             return frame, cards, True, clipped
         if attempt + 1 < attempts:
             time.sleep(interval)
@@ -260,8 +265,8 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
     """
     if target_id is None:
         state = inventory_state if inventory_state is not None else {
-            "baseline": {}, "previous": {}, "seen": {}, "counts": {},
-            "max_size": 0, "notes": [], "captures": 0}
+            "baseline": {}, "previous": {}, "seen": {}, "confirmed": {},
+            "notes": [], "captures": 0}
         return _inventory_sample(context, catalog, attempts=attempts,
                                  interval=interval, state=state)
     samples: list[tuple[np.ndarray, list[dict[str, Any]], tuple[str, ...],
@@ -342,6 +347,7 @@ def _stable_sample_visible(context: Any, catalog: list[dict[str, Any]], *,
                            attempts: int = 4, interval: float = .18,
                            target_id: str | None = None,
                            sampling_notes: list[dict[str, Any]] | None = None,
+                           inventory_evidence: dict[str, Any] | None = None,
                            ) -> tuple[np.ndarray | None, list[dict[str, Any]], bool,
                                       list[dict[str, Any]]]:
     """Give an animated page one extra complete sampling window before use.
@@ -366,7 +372,7 @@ def _stable_sample_visible(context: Any, catalog: list[dict[str, Any]], *,
     """
     if target_id is None:
         inventory = {"baseline": {}, "previous": {}, "seen": {},
-                     "counts": {}, "max_size": 0, "notes": [], "captures": 0}
+                     "confirmed": {}, "notes": [], "captures": 0}
         frame, cards, stable, clipped = _sample_visible(
             context, catalog, attempts=attempts, interval=interval,
             target_id=None, inventory_state=inventory)
@@ -376,11 +382,24 @@ def _stable_sample_visible(context: Any, catalog: list[dict[str, Any]], *,
                 context, catalog, attempts=attempts, interval=interval,
                 target_id=None, inventory_state=inventory)
         if not stable and frame is not None:
-            for card, capture in inventory["seen"].values():
+            for vehicle_id, (card, capture) in inventory["seen"].items():
+                if vehicle_id in inventory["confirmed"]:
+                    continue
                 inventory["notes"].append(_inventory_note(
                     card, capture, "page_unverified"))
+        elif stable:
+            for vehicle_id, (card, capture) in inventory["seen"].items():
+                if vehicle_id not in inventory["confirmed"]:
+                    inventory["notes"].append(_inventory_note(
+                        card, capture, "identity_unconfirmed"))
         if sampling_notes is not None:
             sampling_notes.extend(inventory["notes"])
+        if inventory_evidence is not None:
+            inventory_evidence.update(
+                confirmed_records=[inventory["confirmed"][key]
+                                   for key in sorted(inventory["confirmed"])],
+                current_epoch_seen_classes={card["class"]
+                                            for card, _ in inventory["seen"].values()})
         return frame, cards, stable, clipped
     state: list[dict[str, Any] | None] = [None]
     frame, cards, stable, clipped = _sample_visible(
@@ -630,6 +649,8 @@ def _try_target(context: Any, card: dict[str, Any], page: int,
                 verify_list_detail_rating: bool = True,
                 attempts: int = 2) -> dict[str, Any]:
     """Reacquire a card after a moving list opens a neighbouring detail."""
+    if card.get("inventory_only"):
+        return _result("target_temporarily_unreadable", page, vehicles)
     current = card
     last: dict[str, Any] | None = None
     for attempt in range(attempts):
@@ -761,9 +782,12 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
     edge_repositions = 0
     for page in range(fast_forward + 1, max_pages + 1):
         page_notes: list[dict[str, Any]] = []
+        inventory_evidence: dict[str, Any] = {}
         frame, cards, stable, clipped = _stable_sample_visible(
             context, catalog, target_id=target_id,
-            sampling_notes=page_notes if target_id is None else None)
+            sampling_notes=page_notes if target_id is None else None,
+            **({"inventory_evidence": inventory_evidence}
+               if target_id is None else {}))
         sampling_notes.extend({**note, "page": page} for note in page_notes)
         page_notes.clear()
         if frame is None:
@@ -801,8 +825,12 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
                 return finish("page_ocr_unverified", page, list(found.values()),
                                edge_repositions=edge_repositions)
             target_cards = [row for row in cards if row["class"] == vehicle_class]
-            foreign_classes = {row["class"] for row in cards
-                               if row["class"] != vehicle_class}
+            confirmed = (inventory_evidence.get("confirmed_records", [])
+                         if target_id is None else [])
+            epoch_classes = (inventory_evidence.get("current_epoch_seen_classes", set())
+                             if target_id is None else {row["class"] for row in cards})
+            foreign_classes = {row_class for row_class in epoch_classes
+                               if row_class != vehicle_class}
             unexpected = foreign_classes - lower_classes
             if unexpected:
                 return finish("class_or_ocr_unverified", page, list(found.values()),
@@ -813,9 +841,14 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
             # only on a stable page containing lower classes alone.
             next_class_card = next((row for row in cards
                                     if row["class"] in lower_classes), None)
-            at_boundary = not target_cards and bool(foreign_classes) and stable
-            fingerprint = _fingerprint(target_cards)
-            for row in target_cards:
+            at_boundary = (vehicle_class not in epoch_classes
+                           and bool(foreign_classes) and stable)
+            inventory_targets = ([row for row in confirmed
+                                  if row["class"] == vehicle_class]
+                                 if target_id is None else target_cards)
+            fingerprint = (tuple(sorted(_fingerprint(inventory_targets)))
+                           if target_id is None else _fingerprint(target_cards))
+            for row in inventory_targets:
                 found.setdefault(row["vehicle"]["id"], {**row, "page": page})
             if not at_boundary and target_id in fingerprint:
                 card = next(row for row in target_cards
@@ -872,7 +905,9 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
             time.sleep(EDGE_REPOSITION_INTERVAL)
             frame, cards, stable, clipped = _stable_sample_visible(
                 context, catalog, target_id=target_id,
-                sampling_notes=page_notes if target_id is None else None)
+                sampling_notes=page_notes if target_id is None else None,
+                **({"inventory_evidence": inventory_evidence}
+                   if target_id is None else {}))
             sampling_notes.extend({**note, "page": page} for note in page_notes)
             page_notes.clear()
             if frame is None:

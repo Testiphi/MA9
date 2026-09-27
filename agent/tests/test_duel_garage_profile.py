@@ -66,6 +66,21 @@ class DuelGarageProfileTests(unittest.TestCase):
         self.assertTrue(item["owned"])
         self.assertEqual(item["ownership_status"], "provisional")
 
+    def test_inventory_star_observation_names_its_original_capture(self):
+        card = {"vehicle": {"id": "one"}, "class": "R", "page": 2,
+                "stars_lit": 4, "star_slots": 6, "inventory_only": True,
+                "source_capture": 72, "identity_capture_pair": [69, 72]}
+        merge_class(self.profile, "R", {"status": "page_limit", "pages": 2,
+            "scan_complete": False, "vehicles": [card]}, self.catalog,
+            "run", "now", "frames.jsonl")
+        entry = self.profile["vehicles"]["one"]
+        reading = entry["star_observations"][0]
+        self.assertEqual(reading["source_capture"], 72)
+        self.assertEqual(reading["identity_capture_pair"], [69, 72])
+        self.assertEqual(reading["stars_lit"], 4)
+        self.assertEqual(entry["stars_status"], "unverified")
+        self.assertFalse(self.profile["allocation_ready"])
+
     def test_sampling_notes_remain_unowned_across_class_merges(self):
         note = {"id": "one", "title": "One", "class": "R",
                 "card": [100, 168, 420, 212], "target": [285, 273],
