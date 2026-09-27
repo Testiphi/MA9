@@ -117,15 +117,21 @@ def merge_class(profile: dict[str, Any], vehicle_class: str,
             entry["ownership_source"] = "duel_selection_visible"
             entry["ownership_status"] = "provisional"
         entry["last_seen_at"] = observed_at
-        entry.setdefault("star_observations", []).append({
+        observation = {
             "stars_lit": card.get("stars_lit"),
             "star_slots": card.get("star_slots"),
-            "source": "duel_selection_list_first_stable_read",
+            "source": ("duel_selection_list_confirming_capture"
+                       if card.get("inventory_only") else
+                       "duel_selection_list_first_stable_read"),
             "source_run": run_id, "page": card.get("page"),
             "observed_at": observed_at, "evidence": evidence_ref,
             "frames_index": f"debug/duel-garage-{run_id}/frames.jsonl",
             "ocr_log": f"debug/duel-garage-{run_id}/ocr.jsonl",
-        })
+        }
+        if card.get("inventory_only"):
+            observation["source_capture"] = card.get("source_capture")
+            observation["identity_capture_pair"] = card.get("identity_capture_pair")
+        entry.setdefault("star_observations", []).append(observation)
         if entry.get("stars_status") != "confirmed":
             entry["stars_status"] = "unverified" if card.get("stars_lit") is not None else "unknown"
     profile["coverage"][vehicle_class] = {

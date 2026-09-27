@@ -81,6 +81,25 @@ def _card(vehicle_id: str, vehicle_class: str = "D") -> dict:
     }
 
 
+def _settled_inventory_samples(pages):
+    """Mock sampling windows with the per-id evidence a stable read implies."""
+    samples = iter(pages)
+
+    def sample(_context, _catalog, *, inventory_state=None, **_kwargs):
+        frame, cards, stable, clipped = next(samples)
+        if stable and inventory_state is not None:
+            inventory_state["seen"] = {
+                row["vehicle"]["id"]: (row, None) for row in cards}
+            inventory_state["confirmed"] = {
+                row["vehicle"]["id"]: {**row, "inventory_only": True,
+                                        "source_capture": None,
+                                        "identity_capture_pair": [None, None]}
+                for row in cards}
+        return frame, cards, stable, clipped
+
+    return sample
+
+
 def _lineup_frame(slot: int = 1, *, select_button: bool = False) -> np.ndarray:
     """A lineup page whose expanded ``slot`` passes the real observer.
 
@@ -217,7 +236,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                    return_value=self.frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      side_effect=pages), \
+                      side_effect=_settled_inventory_samples(pages)), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             report = scan(context, "D", catalog, max_pages=8)
         self.assertEqual(report["status"], "edge_reached")
@@ -242,7 +261,7 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                    return_value=self.frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      side_effect=pages), \
+                      side_effect=_settled_inventory_samples(pages)), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             report = scan(context, "R", catalog, max_pages=5)
         self.assertEqual(report["status"], "class_boundary")
@@ -318,7 +337,8 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                    return_value=self.frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      side_effect=[unstable, settled, settled, settled]), \
+                      side_effect=_settled_inventory_samples(
+                          [unstable, settled, settled, settled])), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             report = scan(context, "D", catalog, max_pages=4)
         self.assertEqual(report["status"], "edge_reached")
@@ -400,8 +420,9 @@ class DuelVehicleRuntimeTest(unittest.TestCase):
                    return_value=self.frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._sample_visible",
-                      side_effect=[(self.frame, [trusted], True, []),
-                                   unstable_lower, unstable_lower]), \
+                      side_effect=_settled_inventory_samples([
+                          (self.frame, [trusted], True, []),
+                          unstable_lower, unstable_lower])), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             report = scan(context, "R", catalog, max_pages=3)
         self.assertEqual(report["status"], "page_ocr_unverified")
@@ -1132,10 +1153,21 @@ class DuelScanCounterexampleFixTest(unittest.TestCase):
                                      "confidence": 1.0},
                   "performance": 1000, "stars_lit": 6, "star_slots": 6,
                   "occupied_elsewhere": False, "select_available": True}
+        samples = iter(pages)
+
+        def sampled(_context, _catalog, *, inventory_evidence=None, **_kwargs):
+            frame, cards, stable, clipped = next(samples)
+            if inventory_evidence is not None and stable:
+                inventory_evidence.update(
+                    confirmed_records=[{**row, "inventory_only": True}
+                                       for row in cards],
+                    current_epoch_seen_classes={row["class"] for row in cards})
+            return frame, cards, stable, clipped
+
         with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
                    return_value=self.FRAME), \
                 patch("ma9_agent.duel_vehicle_runtime._stable_sample_visible",
-                      side_effect=pages), \
+                      side_effect=sampled), \
                 patch("ma9_agent.duel_vehicle_runtime._click",
                       side_effect=lambda _context, x, y: clicks.append((x, y)) or True), \
                 patch("ma9_agent.duel_vehicle_runtime._detail",
@@ -1588,6 +1620,129 @@ class FrozenFordBoundaryTest(unittest.TestCase):
         card["target"] = [left + 185, top + 105]
         return card
 
+    def test_alternating_full_names_confirm_independently_in_one_epoch(self):
+        anchor = self._inventory_card("anchor", 100)
+        x = self._inventory_card("x", 500)
+        y = self._inventory_card("y", 900)
+        pages = [([anchor, x], []), ([anchor, y], []),
+                 ([anchor, x], []), ([anchor, y], []), ([anchor], [])]
+        frames = [np.full((720, 1280, 3), index, dtype=np.uint8)
+                  for index in range(len(pages))]
+        context = _Context()
+        context.current_frame = 0
+        remaining = iter(frames)
+
+        def capture(_context):
+            context.current_frame += 1
+            return next(remaining)
+
+        evidence = {}
+        with patch("ma9_agent.duel_vehicle_runtime._frame", side_effect=capture), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=pages) as visible, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            frame, cards, stable, _clipped = _stable_sample_visible(
+                context, [], attempts=5, inventory_evidence=evidence)
+        self.assertTrue(stable)
+        self.assertEqual(visible.call_count, 5)
+        self.assertIs(frame, frames[-1])
+        self.assertEqual([row["vehicle"]["id"] for row in cards], ["anchor"])
+        records = {row["vehicle"]["id"]: row
+                   for row in evidence["confirmed_records"]}
+        self.assertEqual(set(records), {"anchor", "x", "y"})
+        self.assertEqual(records["x"]["identity_capture_pair"], [1, 3])
+        self.assertEqual(records["y"]["identity_capture_pair"], [2, 4])
+        self.assertEqual(records["x"]["source_capture"], 3)
+        self.assertTrue(all(row["inventory_only"] for row in records.values()))
+
+    def test_single_inventory_sighting_stays_only_in_notes(self):
+        anchor = self._inventory_card("anchor", 100)
+        singleton = self._inventory_card("singleton", 500)
+        pages = [([anchor, singleton], [])] + [([anchor], [])] * 7
+        notes = []
+        evidence = {}
+        with patch("ma9_agent.duel_vehicle_runtime._frame",
+                   return_value=np.zeros((720, 1280, 3), dtype=np.uint8)), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._visible",
+                      side_effect=pages) as visible, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            _frame_value, _cards, stable, _clipped = _stable_sample_visible(
+                _Context(), [], sampling_notes=notes,
+                inventory_evidence=evidence)
+        self.assertTrue(stable)
+        self.assertEqual(visible.call_count, 8)
+        self.assertEqual([row["vehicle"]["id"]
+                          for row in evidence["confirmed_records"]], ["anchor"])
+        self.assertIn(("singleton", "identity_unconfirmed"),
+                      {(note["id"], note["reason"]) for note in notes})
+
+    def test_inventory_only_record_cannot_open_target_detail(self):
+        card = {**self._inventory_card("wanted", 100), "inventory_only": True}
+        with patch("ma9_agent.duel_vehicle_runtime._finish_target") as finish:
+            result = _try_target(_Context(), card, 1, [], "wanted", [],
+                                 choose=True, expected_performance=None,
+                                 expected_stars=None)
+        self.assertEqual(result["status"], "target_temporarily_unreadable")
+        finish.assert_not_called()
+
+    def test_missing_b_name_in_current_frame_is_not_c_boundary(self):
+        frame = np.zeros((720, 1280, 3), dtype=np.uint8)
+        b = self._inventory_card("b", 100)
+        c = {**self._inventory_card("c", 500), "class": "C"}
+        reports = iter([
+            (frame, [c], True, [], [b, c], {"B", "C"}),
+            (frame, [c], True, [], [c], {"C"}),
+        ])
+
+        def sampled(_context, _catalog, *, inventory_evidence=None, **_kwargs):
+            image, cards, stable, clipped, confirmed, classes = next(reports)
+            inventory_evidence.update(
+                confirmed_records=[{**row, "inventory_only": True}
+                                   for row in confirmed],
+                current_epoch_seen_classes=classes)
+            return image, cards, stable, clipped
+
+        catalog = [{"id": "b", "title": "b", "class": "B"},
+                   {"id": "c", "title": "c", "class": "C"}]
+        context = _Context()
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._stable_sample_visible",
+                      side_effect=sampled), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            result = scan(context, "B", catalog, max_pages=3)
+        self.assertEqual(result["status"], "class_boundary")
+        self.assertEqual(context.tasker.controller.swipes, 1)
+        self.assertEqual([row["vehicle"]["id"] for row in result["vehicles"]],
+                         ["b"])
+
+    def test_seen_higher_class_still_blocks_inventory_page(self):
+        frame = np.zeros((720, 1280, 3), dtype=np.uint8)
+        b = self._inventory_card("b", 100)
+        catalog = [{"id": "b", "title": "b", "class": "B"},
+                   {"id": "a", "title": "a", "class": "A"}]
+
+        def sampled(_context, _catalog, *, inventory_evidence=None, **_kwargs):
+            inventory_evidence.update(
+                confirmed_records=[{**b, "inventory_only": True}],
+                current_epoch_seen_classes={"A", "B"})
+            return frame, [b], True, []
+
+        with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
+                   return_value=frame), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._stable_sample_visible",
+                      side_effect=sampled), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            result = scan(_Context(), "B", catalog, max_pages=1)
+        self.assertEqual(result["status"], "class_or_ocr_unverified")
+        self.assertEqual(result["unexpected_classes"], ["A"])
+
     def test_moving_full_frame_is_receipted_then_two_card_epoch_confirms(self):
         moved = [self._inventory_card("sto", 454),
                  self._inventory_card("ford", 454, 395),
@@ -1758,11 +1913,17 @@ class FrozenFordBoundaryTest(unittest.TestCase):
                   "box": [400, 578, 190, 22]}]
         cards = read_visible_cards(frame, words, catalog)
         self.assertEqual(cards[0]["vehicle"]["id"], catalog[0]["id"])
+        def sampled(_context, _catalog, *, inventory_evidence=None, **_kwargs):
+            inventory_evidence.update(
+                confirmed_records=[{**row, "inventory_only": True}
+                                   for row in cards],
+                current_epoch_seen_classes={row["class"] for row in cards})
+            return frame, cards, True, []
         with patch("ma9_agent.duel_vehicle_runtime._wait_selection_frame",
                    return_value=frame), \
                 patch("ma9_agent.duel_vehicle_runtime._click", return_value=True), \
                 patch("ma9_agent.duel_vehicle_runtime._stable_sample_visible",
-                      return_value=(frame, cards, True, [])), \
+                      side_effect=sampled), \
                 patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
             report = scan(_Context(), "B", catalog, max_pages=1)
         self.assertEqual(report["status"], "class_or_ocr_unverified")
