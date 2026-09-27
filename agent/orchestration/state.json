@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T10:07:32+00:00",
+  "updated_at": "2026-09-27T10:28:16+00:00",
   "policy": "native-subagents-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -1905,8 +1905,8 @@
     "starts_race": false,
     "allocation_ready": false,
     "coverage_complete": false,
-    "device_test": "05W readonly B/C page already passed; 05X BCD collection not run",
-    "release": "ready_for_user_fixed_BCD_collection",
+    "device_test": "user_BCD_scope_traversal_passed_data_review_required",
+    "release": "user_collection_completed_offline_review_next",
     "remote_push": "not_attempted",
     "first_scan_scope": [
       "R",
@@ -1926,7 +1926,7 @@
       "visible-list ownership is provisional",
       "external allocator not invoked"
     ],
-    "phase": "05X_fixed_BCD_collection_ready",
+    "phase": "05X_user_BCD_supplementary_traversal_passed",
     "owner": "gpt-6-sol medium",
     "reviewer": "gpt-6-sol high",
     "active_owner": null,
@@ -1935,7 +1935,7 @@
     "push_authorized": false,
     "gui_entry": "对决_隔离车库补采BCD",
     "private_request": "config/duel_garage_scan.json",
-    "next": "User starts fixed B/C/D supplementary task from Duel vehicle-selection page; B resets to class entry, no R/S/A rescan. Preserve same account/five cars. Inspect new run after completion; no star or full inventory claim.",
+    "next": "Review saved identity/coverage/star evidence offline first. No repeat full scan or R/S/A scan now. Twelve note IDs remain outside profile; 91 records lack raw star readings and one has conflicting raw pairs. Do not promote provisional inventory or raw stars to complete allocation input.",
     "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-page-78a0f19\\MA9-preview",
     "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
     "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
@@ -2025,7 +2025,73 @@
       "C",
       "D"
     ],
-    "remainder_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05X-remainder\\results.json"
+    "remainder_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05X-remainder\\results.json",
+    "live_remainder_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05X-live/results.json",
+    "live_remainder_capture": {
+      "run_id": "ce3b515fe3624bb5b32b1951eb0fbf4f",
+      "status": "user_BCD_supplementary_traversal_passed",
+      "classes": {
+        "B": {
+          "status": "class_boundary",
+          "pages": 13,
+          "claimed_scan_complete": true,
+          "vehicles": 55,
+          "sampling_notes": 60,
+          "checkpoint": "debug/duel-garage-ce3b515fe3624bb5b32b1951eb0fbf4f/checkpoint-B.json"
+        },
+        "C": {
+          "status": "class_boundary",
+          "pages": 9,
+          "claimed_scan_complete": true,
+          "vehicles": 42,
+          "sampling_notes": 34,
+          "checkpoint": "debug/duel-garage-ce3b515fe3624bb5b32b1951eb0fbf4f/checkpoint-C.json"
+        },
+        "D": {
+          "status": "edge_reached",
+          "pages": 7,
+          "claimed_scan_complete": true,
+          "vehicles": 21,
+          "sampling_notes": 23,
+          "checkpoint": "debug/duel-garage-ce3b515fe3624bb5b32b1951eb0fbf4f/checkpoint-D.json"
+        }
+      },
+      "scope_traversal_finished": true,
+      "traversal_finished": false,
+      "elapsed_seconds": 596.0,
+      "captures": 129,
+      "navigation_inputs": 38,
+      "class_clicks": [
+        "B",
+        "C",
+        "D"
+      ],
+      "selection_attempted": false,
+      "starts_race": false,
+      "previous_records": 183,
+      "current_records": 252,
+      "added_records": 69,
+      "old_records_preserved": true,
+      "RSA_coverage_and_entries_unchanged": true,
+      "totals_by_class": {
+        "A": 65,
+        "B": 61,
+        "C": 42,
+        "D": 21,
+        "R": 3,
+        "S": 60
+      },
+      "sampling_notes": 117,
+      "unique_note_ids": 105,
+      "note_ids_not_in_profile": 12,
+      "raw_star_conflict_vehicles": 1,
+      "no_raw_star_reading_vehicles": 91,
+      "framework_task_succeeded": true,
+      "profile_sha256": "b5cdd0de1fae09758ab7d3dc231766efdb88374b038d5e2b711569f08f3eae1d",
+      "coverage_complete": false,
+      "allocation_ready": false,
+      "stars_confirmed": false
+    }
   },
   "model_dispatch": {
     "approved": "2026-09-27",

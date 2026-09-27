@@ -105,7 +105,13 @@ run_garage_remainder固定BCD、旧run_garage_survey仍全6，共用安全收集
 功能4ef2923b5c3b401b5ac47c4ec83511dc4798da16，合入f5c6fafbc88f9b93b3c6cc5c05ffdb1fc42da3d7。6文件；识别/采样器/共享matcher/阈值/冻结A/B未改。总控Agent485(1skip)、tools30(1skip)、变更pipeline/interface schema实际0，其余Git/hash未变复用。独立Sol high代码无阻断；5定向断言OK但进程1（已知MaaDeps/ZeroMQ10038），不可写成进程0，见05X/review-fixed.md。
 准确包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-garage-bcd-4ef2923\MA9-preview。exe SHA256：20f0b4bdf92b30c7134a895682d86951e827fbe51cb4c7ca5b8f06b53725dde2。29模块代码一致，包内127测试(1skip)实际0，旧runtime/survey负对照预期1，包schema与来源hash通过。真实183条副本+模拟控制器离线演练只BCD、RSA/history/手工数据保留；不是设备证明。结果05X/results.json。
 新包GUI为数据自检、当前页只读自检、补采B/C/D；本次只运行补采项，已通过的当前页自检无需重复。保持同账号、任一车辆选择页与现有五车；运行时不手动切页。结束反馈，总控读新debug/duel-garage-<id>/report.json。旧183条及全部3引用历史run已原样迁移，原profile备份debug/archive-05W；旧报告保留原root，不算新运行。
-当前owner/reviewer均结束，新补采实机未运行；未代操作设备、未推送。若失败保留现场，按新证据修，不绕过guard；不要宣称完整owned/星级/自动分配已完成。
+当前owner/reviewer均结束，05X补采实机已通过，见下节；未代操作设备、未推送。不要宣称完整owned/星级/自动分配已完成。
+
+## 05X用户补采实机验收
+2026-09-27 18:10:29至18:20:25，run ce3b515fe3624bb5b32b1951eb0fbf4f，耗时596秒。B13页55条、C9页42条均到下一等级边界，D7页21条到列表末端；scope_traversal_finished=True，traversal_finished=False是仅补采BCD的预期语义，不是失败或本次新鲜六级遍历。原生任务Task.Succeeded；本次任务窗口没有10038退出断言，不代表历史异常根治。
+129帧哈希与38次受限导航记录核验通过，只切B/C/D并使用既有两种翻页；无选车、无开赛。累计档案183→252，新增69条，旧ID/历史保留，R/S/A条目与coverage逐项不变。累计R3/S60/A65/B61/C42/D21，不等同本次各级数量或已确认完整拥有集合。
+证据MA9-evidence/20260927-05X-live/results.json；run/保留完整原始文件，profile-after.json及maafw-task.log已归档，audit.py实际进程exit0。profile SHA256 b5cdd0de1fae09758ab7d3dc231766efdb88374b038d5e2b711569f08f3eae1d。
+下一步先离线复核已存身份/覆盖/星级，不让用户重复全扫或R/S/A。117条采样备注涉及105个ID，其中12个ID尚未入档，不能称117辆漏车或把单次线索直接晋升owned；包括Kimera EVO37。252条中91条无非空raw星级，Formula E Gen 2 Asphalt Edition存在(5,5)/(5,6)冲突，其余raw也未确认。清单MA9-evidence/20260927-05X-live/review-queue.json。复制到不同包的相同run/capture不能充作独立双帧证据。coverage_complete/allocation_ready/stars_confirmed仍False。
 
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。库存身份双读不等于星级双读；当前仅保留某一原帧的raw星级，未做完整星条一致性确认，不具备可信星级档案证明。
