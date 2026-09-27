@@ -532,6 +532,11 @@ lanes:
       - agent/tests/test_duel_map_candidates.py
       - tools/preview_duel_map_candidates.py
       - docs/zh_cn/develop/duel_map_candidates.md
+      - agent/ma9_agent/duel_home_zone.py
+      - agent/tests/test_duel_home_zone.py
+      - agent/ma9_agent/duel_zone_session.py
+      - agent/tests/test_duel_zone_session.py
+      - docs/zh_cn/develop/duel_zone_session.md
       - agent/ma9_agent/duel_slot_selection.py
       - agent/tests/test_duel_slot_selection.py
       - agent/ma9_agent/duel_slot_entry.py
