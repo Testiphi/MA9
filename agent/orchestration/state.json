@@ -1449,7 +1449,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05R首页赛区与单次五图候选会话已复核合入；准确包user-test-zone-1fb9e90待用户两步只读实机。保留现有五车，程序不导航/选车/开赛；新start废旧token、600秒、单次消费。车库/星级后续设计已登记，未实施扫描。主模型Astra medium/standard不改，无活跃owner/reviewer，不推送。",
+  "next": "05R两步只读实机已通过：五区、展开第3槽、首页2帧2.724秒/五图2帧3.052秒；同session/hash关联、token已消费、18条候选关系去重11辆，无输入API记录。下一阶段按既有设计登记候选定向车库/详情星级读取边界；未拥有/星级/可用/配车验收，不重复本次读图，不把已消费会话用于执行。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1793,7 +1793,7 @@
       "process_exit": -1,
       "reason": "MaaDeps ZeroMQ exit assertion; only owned test processes terminated"
     },
-    "device_test": "pending_user_two_step_readonly",
+    "device_test": "passed_user_V_zone_expanded_slot3",
     "read_only": true,
     "selection_attempted": false,
     "starts_race": false,
@@ -1803,7 +1803,7 @@
     "release": "ready_for_user_two_step_readonly_test",
     "garage_star_plan": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05R1-zone\\garage-star-plan.md",
     "remote_push": "not_attempted",
-    "phase": "merged_exact_package_ready_user_live_pending",
+    "phase": "user_two_step_readonly_passed",
     "owner": "gpt-6-sol medium",
     "reviewer": "gpt-6-sol high",
     "active_owner": null,
@@ -1814,7 +1814,22 @@
       "对决_隔离首页赛区只读",
       "对决_隔离赛区五图候选只读"
     ],
-    "next": "User runs home-zone then manually enters existing lineup within 600s and runs fresh-map candidates; do not select cars or race"
+    "next": "Plan bounded candidate-directed garage and star evidence work; current verification does not prove ownership or authorize assignment",
+    "live_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05R-live\\results.json",
+    "live_home_samples": 2,
+    "live_home_seconds": 2.724,
+    "live_map_samples": 2,
+    "live_map_seconds": 3.052,
+    "live_selected_zone": "五区",
+    "live_expanded_slot": 3,
+    "live_session_consumed": true,
+    "live_candidate_relations": 18,
+    "live_unique_candidates": 11,
+    "live_candidate_classes": {
+      "R": 2,
+      "S": 8,
+      "A": 1
+    }
   },
   "garage_star_plan": {
     "status": "design_only_not_implemented",

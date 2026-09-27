@@ -33,11 +33,12 @@ GUI仅“多人运行时数据自检（Agent）”和“对决防守：读取五
 Agent exe SHA256：e63603d5a6feaeccff4657ac5b852fa6df140fda8e771bccaa323033cc1f477d。证据MA9-evidence/20260927-05R1-zone/results.json；独立复核MA9-evidence/20260927-05RR-zone/review.md。
 被拒绝的user-test-zone-f6f3b5a已标blocked，禁止交用户或让用户运行；旧user-test-maps-19da67b和FE3包保持不变。
 
-## 下一步：用户两步只读实机
-保留现有五车，在原测试账号的多人首页运行新包数据自检，再单独运行“对决防守：①读取首页赛区（只读）”。V对应五区、IV对应四区，完整匹配不猜。成功应zone_ready/zone_verified/session_ready=true。
-用户手动进入已有资格赛防守阵容，展开任一槽，在600秒内单独运行“对决防守：②读取五图与本赛区候选（只读）”。程序均不导航/点击/选车/开赛；两步之间保持同一账号。第二步只读新五图，token单次消费，成功candidates_ready且zone_verified/maps_verified=true、仅所选赛区候选；拥有/可用仍未知。
-回传新包debug/duel-zone-*.json及同名Markdown、对应duel-lineup-maps-*.json（同session/hash绑定）。缺失/过期/变更/已消费或失败停止，重试需重新从首页建会话；锁冲突回传日志，不自动绕过或删除不明锁。账号标签不是视觉认证，会话不作选车执行授权。
-本轮未操作设备，两步实机尚未完成。当前无活跃owner/reviewer；home_zone_owner/home_zone_review/garage_star_design已结束。
+## 本次两步只读实机已通过
+2026-09-27 12:26:51至12:27:15，用户运行准确1fb9e90包。首页两帧2.724秒确认五区；阵容展开第3槽，新五图两帧3.052秒确认真槽1..5；同session关联，完成时距首页读取约23.473秒，token已消费。
+五区候选关系各槽7/3/1/2/5，共18条，去重11辆（R2/S8/A1）。拥有、星级与可用性仍未知。zone/map/reference/catalog hash全部核对一致，两GUI任务均Task.Succeeded；日志无输入API匹配，无本次Assertion failed。get_reco_result ERR随后有成功识别/任务完成，本次不构成业务失败，不泛化为所有同类日志无害。
+证据MA9-evidence/20260927-05R-live/results.json，原始业务JSON/Markdown与maafw.log已复制保留。原始五图文件不自带session字段，由最终报告的路径/SHA和内嵌内容关联；不得假称该文件直接包含账号身份。
+本次仅验证V区、展开槽3及正常两步流程；不是IV实景/车库/星级/配车或开赛验收，也未证明原生依赖退出异常已修复。用户无需重复此步；已消费会话不能重用为执行授权。
+下一阶段先登记候选定向车库/详情星级读取边界，再实施；保持现有五车。当前无活跃owner/reviewer，主模型Astra medium/Standard不改。
 
 ## 后续车库及星级设计（未实施）
 详见E:\hzz\work\MA9\MA9-evidence\20260927-05R1-zone\garage-star-plan.md。账号根确认后可读该账号缓存；实际游戏读取等赛区+五图确定、候选去重后按等级/页位置合并补查。未缓存/缺扫不是未拥有，不能用部分owned交集丢弃未知候选；EVO37左缘/侧栏缺口未修。
