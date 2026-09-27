@@ -300,6 +300,54 @@ def rolling_identity(items: list[dict[str, Any]], catalog: list[dict[str, Any]]
             "identity_basis": "rolling_fragment"}
 
 
+def _duel_identity(items: list[dict[str, Any]], catalog: list[dict[str, Any]]
+                   ) -> dict[str, Any] | None:
+    """Let a qualified scrolling name resolve or veto a fuzzy family match.
+
+    A common visible prefix can describe several variants.  Conversely, a
+    complete long tail can identify one variant even when the generic fuzzy
+    matcher prefers a shorter sibling.  Other OCR shapes retain the generic
+    matcher, including brand aliases and short model names.
+    """
+    fuzzy = match_vehicle(items, catalog)
+    if fuzzy is not None:
+        lines = _name_lines(items)
+        if len(lines) == 2:
+            complete_key = "".join("".join(_line_words(line)) for line in lines)
+            if (complete_key == _key(fuzzy["title"])
+                    and sum(_key(row["title"]) == complete_key for row in catalog) == 1):
+                # An exact complete short title remains itself even when its
+                # name is also the prefix of an extended edition.
+                return fuzzy
+    signature = _rolling_signature(items)
+    if signature is None:
+        # A shorter but readable common prefix can still make a fuzzy family
+        # choice unsafe.  Require two name lines and a substantial model run;
+        # brief complete names such as Nevera remain on the generic path.
+        readable = [item for item in items if item["confidence"] >= ROLLING_MIN_CONFIDENCE
+                    and re.search(r"[A-Za-z0-9]{2}", item["text"])]
+        lines = _name_lines(readable)
+        if fuzzy is not None and len(lines) == 2:
+            brand, model = ("".join(_line_words(line)) for line in lines)
+            prefix = brand + model
+            if (len(brand) >= ROLLING_MIN_BRAND and len(model) >= 10
+                    and sum(_key(row["title"]).startswith(prefix) for row in catalog) > 1):
+                return None
+        return fuzzy
+    brand, fragments, _confidence = signature
+    candidates = [row for row in catalog
+                  if _candidate_fragments((brand, fragments), _key(row["title"]))
+                  is not None]
+    if candidates:
+        # rolling_identity also enforces uniqueness after the 0/o OCR reading.
+        resolved = rolling_identity(items, catalog)
+        return fuzzy if resolved is not None and fuzzy is not None and resolved["id"] == fuzzy["id"] else resolved
+    if fuzzy is not None and _key(fuzzy["title"]).startswith(brand):
+        # A qualified, unexplained tail contradicts this exact-brand match.
+        return None
+    return fuzzy
+
+
 def _name_bands(ocr: list[dict[str, Any]], top: int
                 ) -> list[tuple[int, list[dict[str, Any]]]]:
     """Name-band text of one row, grouped into per-card identity blocks."""
@@ -358,9 +406,8 @@ def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
                        ) -> list[dict[str, Any]]:
     """Return fully visible cards only; incomplete OCR fields remain None.
 
-    A card whose name scrolls inside it is first offered to
-    :func:`vehicle_screen.match_vehicle` and only then to the local
-    :func:`rolling_identity` fallback.
+    A qualified scrolling name is checked against all catalog variants before
+    accepting a generic fuzzy match to one member of that family.
     """
     frame = normalize(image)
     result = []
@@ -370,7 +417,7 @@ def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
             # its name, rating, stars and click target remain fully visible.
             if left < 0 or left + CARD_WIDTH > 1295:
                 continue
-            vehicle = match_vehicle(group, catalog) or rolling_identity(group, catalog)
+            vehicle = _duel_identity(group, catalog)
             if vehicle is None:
                 continue
             performance_items = [item for item in ocr if _inside(

@@ -506,5 +506,51 @@ class DuelRollingTailTest(unittest.TestCase):
                 self.assertEqual(resolved["id"], "fe3")
 
 
+class DuelFamilyIdentityTest(unittest.TestCase):
+    """A scrolling common prefix cannot choose a shorter family member."""
+
+    CATALOG = [
+        {"id": "anniversary", "title": "Ford Mustang RTR Spec 5 10th Anniv.", "class": "B"},
+        {"id": "fd", "title": "Ford Mustang RTR Spec 5-FD", "class": "S"},
+    ]
+
+    def _read(self, brand: str, model: str, catalog=None):
+        words = [{"text": brand, "confidence": .97, "box": [396, 558, 62, 24]},
+                 {"text": model, "confidence": .96, "box": [400, 578, 190, 22]}]
+        return read_visible_cards(np.zeros((720, 1280, 3), dtype=np.uint8),
+                                  words, catalog or self.CATALOG)
+
+    def test_common_prefix_is_ambiguous_and_anniversary_tail_is_unique(self):
+        for model in ("MUSTANG RTR", "MUSTANG RTR SPEC 5", "MUSTANG RTR SF"):
+            with self.subTest(model=model):
+                self.assertEqual(self._read("FORD", model), [])
+        for model in ("SPEC 5 10TH ANNIV.", "JSTANG RTR SPEC 5 11"):
+            with self.subTest(model=model):
+                self.assertEqual(self._read("FORD", model)[0]["vehicle"]["id"],
+                                 "anniversary")
+
+    def test_full_fd_stays_fd_and_unknown_tail_does_not_complete(self):
+        self.assertEqual(self._read("FORD", "MUSTANG RTR SPEC 5-FD")
+                         [0]["vehicle"]["id"], "fd")
+        self.assertEqual(self._read("FORD", "MUSTANG RTR SPEC 5 UNKNOWN"), [])
+
+    def test_short_name_and_unanchored_brand_keep_generic_match(self):
+        self.assertEqual(self._read("RIMAC", "NEVERA", [
+            {"id": "nevera", "title": "Rimac Nevera", "class": "S"}])
+                         [0]["vehicle"]["id"], "nevera")
+
+    def test_complete_short_title_survives_a_longer_edition(self):
+        catalog = [
+            {"id": "short", "title": "W Motors Lykan Hypersport", "class": "S"},
+            {"id": "edition", "title": "W Motors Lykan Hypersport Neon Edition", "class": "S"},
+        ]
+        self.assertEqual(self._read("W MOTORS", "LYKAN HYPERSPORT", catalog)
+                         [0]["vehicle"]["id"], "short")
+        self.assertEqual(self._read("W MOTORS", "LYKAN HYPERSPORT NEON EDITION",
+                                    catalog)[0]["vehicle"]["id"], "edition")
+        self.assertEqual(self._read("W MOTORS", "LYKAN HYPERSPORT EXTRA EDITION",
+                                    catalog), [])
+
+
 if __name__ == "__main__":
     unittest.main()
