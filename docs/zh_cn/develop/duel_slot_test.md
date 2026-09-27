@@ -26,3 +26,15 @@ GUI另有“对决防守：独立账号单槽选择测试（停阵容，不开�
 GUI另有“对决防守：核验当前槽位车辆（只读，不点击）”。复用隔离根内duel_slot_assign_test.json的账号标签/目标槽/目标车作为期望，只调用截图和OCR，不执行其中的choose，不进入车库、点击、滑动或开赛。用户保持已配置的目标槽展开即可。连续两帧资格赛标题/几何/槽号/车型一致才lineup_verified，最多120次与30秒截止限制新采样，后台单次调用不硬中断。
 
 结果写入新的debug/duel-slot-verification-*.json：configuration_verified只表示当前观察匹配；selection_attempted和assignment_complete始终false，不追认旧运行已自动确认，也不改写旧assignment_unverified报告。此任务不证明是谁/哪次操作配置了车辆。
+
+## 五图与真实槽号只读入口
+
+GUI任务为“对决防守：读取五图与槽号（只读，不点击）”。用户保留已选五车，在资格赛防守阵容页展开任一地图即可，不必清空阵容或重新选车。入口只截图和OCR，不导航、不点击、不滑动，不执行选车或开赛。
+
+沿用隔离包内 `config/duel_slot_assign_test.json` 的现有校验：便携标记、绝对运行根、已确认账号标签、防守测试环境及有效车型配置必须全部通过。此文件的 `choose=true` 只供兼容校验，五图入口不会执行它；`expected_slot` 与目标车也不限制本次地图观察。账号仍由用户确认，不是视觉认证。新包只重绑自身的绝对运行根，不改旧包配置，不读取主账号车库。
+
+参考地图来自包内 `data/generated/duel_auto_candidates.json`，只用于匹配地图名，本入口不生成车辆候选。使用已复核的五图读取器，将每对大小地图绑定到几何槽号1至5；连续两帧五图及展开槽一致才成功。缺图、冲突、进攻页、未知页或观察不稳定均拒绝确认；30秒截止仅限制新截图，不能中断正在执行的OCR。
+
+每次有效请求保存独立的 `debug/duel-lineup-maps-*.json`，包含 `tracks`、`expanded_slot`、`maps_verified`、`stable`、账号标签、运行根及原始判定证据。成功应同时满足 `status=verified`、`maps_verified=true`、`stable=true`，且五个 `tracks.slot` 为1至5；`read_only=true`、`selection_attempted=false`、`starts_race=false`。失败报告中的部分地图只作诊断，不是完整五图结果。配置或输出路径无效时，在截图前停止，错误写入Agent日志。
+
+测试包应仅显示数据自检和此五图只读任务。用户运行一次后回传业务JSON；五图读取得到实机确认后，再推进参考表候选预览。离线测试和准确包校验不能替代此实机验收。

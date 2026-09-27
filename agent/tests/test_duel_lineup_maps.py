@@ -950,16 +950,42 @@ class ReaderHygieneTest(unittest.TestCase):
         signature = inspect.signature(observe_lineup_slot)
         self.assertEqual(list(signature.parameters), ["frame", "ocr"])
 
-    def test_the_measuring_round_does_not_wire_the_new_layer_in(self) -> None:
-        # 05O is observation only.  The GUI task registry and the action root are
-        # the wiring points owned by other lanes; relaxing this assertion is part
-        # of a later, separately authorised wiring task - never of this one.
+    def test_only_the_guarded_read_only_action_wires_the_map_reader(self) -> None:
+        # The separately authorised GUI entry may call the isolated wrapper.
+        # Other actions and the production defense path must stay independent.
         root = MODULE_PATH.parents[2]
-        for relative in ("agent/runtime_action.py", "assets/interface.json",
-                         "agent/ma9_agent/duel_defense_setup.py"):
-            with self.subTest(file=relative):
-                self.assertNotIn("duel_lineup_maps",
-                                 (root / relative).read_text(encoding="utf-8"))
+        action_tree = ast.parse((root / "agent/runtime_action.py")
+                                .read_text(encoding="utf-8"))
+        actions = [node for node in action_tree.body if isinstance(node, ast.ClassDef)]
+        wired = [node for node in actions if node.name == "DuelLineupMapsTestAction"]
+        self.assertEqual(len(wired), 1)
+        imports = [node for node in ast.walk(action_tree)
+                   if isinstance(node, ast.ImportFrom)
+                   and node.module and "duel_lineup_maps" in node.module]
+        self.assertEqual(len(imports), 1)
+        self.assertIn(imports[0], ast.walk(wired[0]))
+        self.assertEqual(imports[0].module, "ma9_agent.duel_lineup_maps_test")
+        self.assertEqual([(alias.name, alias.asname) for alias in imports[0].names],
+                         [("run_lineup_maps_test", None)])
+        calls = [node for node in ast.walk(action_tree)
+                 if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+                 and node.func.id == "run_lineup_maps_test"]
+        self.assertEqual(len(calls), 1)
+        run = next(node for node in wired[0].body
+                   if isinstance(node, ast.FunctionDef) and node.name == "run")
+        self.assertTrue(any(isinstance(node, ast.Delete)
+                            and any(isinstance(target, ast.Name) and target.id == "argv"
+                                    for target in node.targets)
+                            for node in ast.walk(run)))
+        self.assertTrue(any(isinstance(node, ast.Try) and calls[0] in ast.walk(node)
+                            for node in ast.walk(run)))
+        self.assertEqual([ast.unparse(arg) for arg in calls[0].args],
+                         ["context", "find_project_root()"])
+        self.assertEqual(calls[0].keywords, [])
+        self.assertNotIn("read_stable_lineup_maps",
+                         (root / "agent/runtime_action.py").read_text(encoding="utf-8"))
+        self.assertNotIn("duel_lineup_maps",
+                         DEFENSE_PATH.read_text(encoding="utf-8"))
 
     def test_the_row_band_mirrors_the_committed_parser(self) -> None:
         source = MAP_SCREEN_PATH.read_text(encoding="utf-8")
