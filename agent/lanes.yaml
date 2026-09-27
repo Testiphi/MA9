@@ -33,9 +33,17 @@ orchestration_policy:
   child_may_spawn_agents: false
   cross_lane_communication: through_orchestrator
   concurrency: >
-    默认只派一个外部 owner；用户为每次子任务创建全新对话并转交完整提示词。
-    reviewer 使用独立 GLM-5.3 对话。禁止自动启动 GPT 子智能体。
-    needs_device=true 的实机验证始终串行，默认由用户执行。
+    2026-09-27用户授权总控直接调度原生子智能体，不再要求用户搬运提示词。
+    默认一个写入owner；独立只读reviewer可与总控核验并行，同文件禁止并发写入。
+    用户仅负责实机验证和问题反馈；设备仍串行，子席不得自行接设备或派下级。
+  active_model_policy:
+    implementation: gpt-6-sol
+    implementation_effort: high
+    independent_review: gpt-6-sol
+    review_effort: high
+    mechanical_tasks: gpt-6-luna
+    mechanical_effort: medium
+    authority: user_explicit_2026_09_27
   reviewer_semantics: >
     lane 出现 reviewer 时，owner 验收通过后必须进行只读复核。reviewer 不修代码，
     只提交问题清单；最终修复派回 owner，是否合入由 Astra 编排层裁决。
@@ -54,6 +62,7 @@ orchestration_files:
     - agent/orchestration/duel_scan_stability_report.md
     - agent/orchestration/migration_20260923.md
     - agent/orchestration/prompts/00-orchestrator.md
+    - agent/orchestration/HANDOFF_CURRENT.md
     - agent/orchestration/prompts/01-nav.md
     - agent/orchestration/prompts/02-build.md
     - agent/orchestration/prompts/02R-root-review.md
@@ -156,9 +165,9 @@ support_roles:
 
 execution_transports:
   codex_direct:
-    models: [astra]
-    mode: orchestrator_only
-    notes: 禁止自动启动 GPT 子智能体；总控保留在用户新建的 MA9 对话。
+    models: [astra, gpt-6-sol, gpt-6-luna]
+    mode: native_subagents_orchestrated
+    notes: 总控保留当前对话；2026-09-27起可直接派Sol/Luna，owner与reviewer分离。
   external_user_relay:
     models: [deepseek, hy4, hy3, glm, glm_flash, minimax, kimi, qwen, qwen_flash]
     mode: fresh_conversation_user_relay
@@ -212,10 +221,18 @@ verify_default:
   - "{python} -X utf8 tools/validate_schema.py --schema-dir deps/tools --resource-dirs assets/resource --exclude-dirs assets/resource/announcement --interface-files assets/interface.json"
 
 model_tiers:
+  gpt-6-sol:
+    product: GPT-6 Sol
+    efforts: [medium, high]
+    note: 原生实现与独立复核默认high；依据任务复杂度选择。
+  gpt-6-luna:
+    product: GPT-6 Luna
+    efforts: [medium, high]
+    note: 原生机械资料核对和配置整理，默认medium。
   astra:
     product: GPT-6 Astra
     efforts: [medium, high]
-    note: 仅总控；不创建 GPT 子智能体。
+    note: 仅总控；由其直接调度Sol/Luna子智能体，子席不得递归派发。
   deepseek:
     product: ds-v4.1flash
     efforts: [low, high, max]
@@ -484,7 +501,7 @@ lanes:
     scheduling: first_priority
     title: 擂台① 车库遍历
     branch: lane/duel-scan
-    model: deepseek
+    model: gpt-6-sol
     effort: high
     needs_device: true
     depends_on: [contract]
@@ -509,12 +526,12 @@ lanes:
       - agent/tests/test_duel_slot_entry.py
       - assets/resource/image/navigation/duel/detail_select_text.png
     reviewer:
-      model: qwen_flash
-      effort: null
+      model: gpt-6-sol
+      effort: high
       mode: read_only
       trigger: 合入前独立检查模板证据、滚动车名、等级边界和快速定位兜底
     notes: >
-      用户改回 DeepSeek high 人工中转；它是 ②③ 的硬前置，保留独立只读复核。
+      2026-09-27改为原生Sol high自动调度；它是②③的硬前置，保留独立只读复核。
       先用固定截图/现有测试核对剩余缺口，不重写已成功的 D 级流程。
       具体难题两轮修复失败后交总控诊断，保存证据交总控，不自动升级 GPT 或 max。
       当前D级f5472bc已实机five_assigned、五车互斥且未开赛，耗时449.013秒；已通过组合集成。

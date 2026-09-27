@@ -1,7 +1,7 @@
 {
   "version": 1,
   "updated_at": "2026-09-27",
-  "policy": "external-fresh-conversations-root-contained",
+  "policy": "native-subagents-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
   "active_owner_limit": 1,
@@ -1143,8 +1143,8 @@
         }
       },
       "map_observer_task": {
-        "head": "1f99c0baf82fe6b75044fa39523aaee492a31715",
-        "phase": "blocked_conflicting_same_cell_map_rows",
+        "head": "9676d48a829e5d139f821ed22e7e29d9e30d2a4f",
+        "phase": "05O2_native_owner_fixing_orphan_group_blocker",
         "targeted_exit": 0,
         "targeted_count": 43,
         "native_frozen_replay": 18,
@@ -1152,7 +1152,14 @@
         "counterexample_exit": 1,
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05O-orchestrator",
         "repair_prompt": "agent/orchestration/prompts/05O1-conflicting-map-rows.md",
-        "merged": false
+        "merged": false,
+        "prior_f1_closed": true,
+        "agent_count": 396,
+        "agent_exit": 0,
+        "tools_exit": 0,
+        "blocker": "extra map row in another x-group within the same geometric cell bypasses audit",
+        "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05OR-native-sol",
+        "owner_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05O2-cell-row-audit"
       }
     },
     "duel-defense": {
@@ -1440,7 +1447,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05O1窄修复：同槽额外冲突小地图行被忽略，单帧和双帧均误verified。派ds新对话，仅maps模块+测试；旧原生正例保留，暂不合入/GUI/打包。",
+  "next": "原生Sol owner正在05O2按整个几何槽审计地图候选；Sol reviewer独立发现孤立x-group绕过。不得合入/GUI/实机，待修复再独立复核。用户无需搬运提示词，保留当前五车。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1658,5 +1665,17 @@
     "rollout": "current entry first; other transitions audited when touched or evidence identifies a defect",
     "early_success": "two verified target samples then proceed immediately"
   },
-  "future_garage_inventory": "User idea only: recognize owned garage and save locally later; not in current implementation scope"
+  "future_garage_inventory": "User idea only: recognize owned garage and save locally later; not in current implementation scope",
+  "model_dispatch": {
+    "approved": "2026-09-27",
+    "owner": "gpt-6-sol",
+    "owner_effort": "high",
+    "reviewer": "gpt-6-sol",
+    "reviewer_effort": "high",
+    "mechanical": "gpt-6-luna",
+    "mechanical_effort": "medium",
+    "user_relay_required": false,
+    "user_device_operator": true,
+    "parallel_writers_per_lane": 1
+  }
 }
