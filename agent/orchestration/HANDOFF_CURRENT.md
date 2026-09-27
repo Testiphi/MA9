@@ -63,7 +63,13 @@ Agent exe SHA256：e4153000e0caa35770aa890a14864910feda23bc5b22aec81fb30e8db9b45
 ## 下一步：用户在当前选车页重跑修正版全级采集
 关闭旧测试包窗口，打开新包MFAAvalonia.exe，先数据自检。保持当前“车辆选择”页面，单独运行“对决车库：全等级采集（切级翻页，不选车）”；从R重新遍历六级，未实现B断点恢复。运行时不手动切页/账号。每类最多50页，只允许当前等级标签及既有两种横向滑动；禁止车卡/选择/返回/按键/开赛。
 新config/duel_garage.json与每次debug/duel-garage-<run-id>保留结果；结束后用户反馈，总控查日志。partial保持现场，不盲目重跑。review_required/traversal_finished仅表示遍历六类，星级仍raw未确认、拥有provisional，coverage_complete/allocation_ready始终False；未扫到不等于未拥有。
-本轮修正版实机尚未运行。当前owner/reviewer已结束；无活跃写入。主模型Astra medium/Standard不改，无推送。
+05T修正版已由用户运行，仍停B尾，当前进展见下文05U。主模型Astra medium/Standard不改，无推送。
+
+## 当前05U：第二次实机停B尾，修库存采样连续性
+f7bf3f0包实机14:43:43至14:50:32，run 7c04db7c9c87417b87400428803c3d01。partial为B:page_ocr_unverified，R3/S53/A54/B51共161条，C/D未扫；137帧hash全部通过、49导航，无选车/开赛。证据MA9-evidence/20260927-05U-inventory-continuity/audit.json。
+本次130移动中首帧4车、131停稳后2车；131和135读到正确B周年Ford，中间车名滚动仅余STO，两个窗口分别判未稳。没有新S误识，旧回放通过不代表所有时序已解决。
+已裁决仅库存路径在固定几何epoch内跨窗确认当前最新完整重复指纹（总预算仍8帧），保留未确认身份，禁止较少集合吞掉单例；移动/无公共锚/冲突等不得混页。130的Porsche911GT1/Brabham仅一次观察，必须独立notes保留、不入owned；survey显式覆盖欠账、profile追加sampling_history。scan_complete只代表遍历终止，coverage_complete/allocation_ready始终False。
+原owner ford_identity_fix（Sol medium）实现runtime/survey/profile及三测试共6文件，禁止改screen/共享matcher/阈值/输入权限；独立Sol high设计已同意，后续须复核成品。无设备授权。用户保持现场，不让用户再盲目重跑；须同时重放两次实机及窗口相位/移动/证据历史反例后再交包。
 
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。现有stable仅比车型不比星，旧scan保留首读，不具备可信星级档案证明。

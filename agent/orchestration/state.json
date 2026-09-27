@@ -1449,7 +1449,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05T已修复首次全库扫描B尾周年Ford误识S而停止；准确新包待用户重跑六级，保持现有选车页及五车。旧160条及137帧仅归档不作为有效缓存继承。先身份/覆盖/星级建档，未获完整自动分配验收；不操作设备、不访问根外分配器、不推送。",
+  "next": "05T第二次实机仍停B尾，但原因变为page_ocr_unverified，Ford身份已正确。05U正在修复移动首帧/跨窗时序，显式保存单次观察欠账，不再只靠旧时序回放；161条初步档案及137帧已审计。用户保持现场，不盲目重跑。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1905,8 +1905,8 @@
     "starts_race": false,
     "allocation_ready": false,
     "coverage_complete": false,
-    "device_test": "05S partial at B/C boundary; 05T corrected package not run",
-    "release": "ready_for_user_corrected_full_garage_capture",
+    "device_test": "05T live partial B:page_ocr_unverified; no new S Ford misidentification",
+    "release": "05T live failed; do not blindly rerun",
     "remote_push": "not_attempted",
     "first_scan_scope": [
       "R",
@@ -1926,16 +1926,16 @@
       "visible-list ownership is provisional",
       "external allocator not invoked"
     ],
-    "phase": "first_capture_partial_identity_fix_reviewed_new_package_ready",
+    "phase": "second_capture_partial_inventory_continuity_implementation",
     "owner": "gpt-6-sol medium",
     "reviewer": "gpt-6-sol high",
-    "active_owner": null,
+    "active_owner": "ford_identity_fix",
     "active_reviewer": null,
     "device_authorized": false,
     "push_authorized": false,
     "gui_entry": "对决_隔离全车库采集",
     "private_request": "config/duel_garage_scan.json",
-    "next": "User keeps current vehicle-selection page, opens corrected package, self-check then full R/S/A/B/C/D capture; inspect logs before star confirmation and allocation.",
+    "next": "05U inventory-only fixed-geometry epoch sampling with explicit unconfirmed observation history; owner six files, independent review then exact package; no device use.",
     "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-3dab97f\\MA9-preview",
     "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
     "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
@@ -1956,7 +1956,22 @@
       "started_race": false
     },
     "cache_migrated": false,
-    "archive": "debug/archive-05S: previous report, checkpoints, 137 PNG, OCR, input attempts and profile; hashes verified; not active cache"
+    "archive": "debug/archive-05S: previous report, checkpoints, 137 PNG, OCR, input attempts and profile; hashes verified; not active cache",
+    "second_capture": {
+      "run_id": "7c04db7c9c87417b87400428803c3d01",
+      "reason": "B:page_ocr_unverified",
+      "vehicles": 161,
+      "classes": {
+        "R": 3,
+        "S": 53,
+        "A": 54,
+        "B": 51
+      },
+      "frames": 137,
+      "inputs": 49,
+      "C_D_scanned": false,
+      "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05U-inventory-continuity\\audit.json"
+    }
   },
   "model_dispatch": {
     "approved": "2026-09-27",
