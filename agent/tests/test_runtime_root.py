@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from runtime_action import find_project_root
+from runtime_action import find_project_root, DuelHomeZoneAction, DuelZoneCandidatesAction
 from ma9_agent import garage_profile, models, selection_runtime, selection_strategy, vehicle_screen
 
 
@@ -73,13 +73,46 @@ class FrozenPublicContractTest(unittest.TestCase):
             ('对决防守：独立账号单槽选择测试（停阵容，不开赛）', '对决_隔离单槽选择测试'),
             ('对决防守：核验当前槽位车辆（只读，不点击）', '对决_隔离单槽只读核验'),
             ('对决防守：读取五图与槽号（只读，不点击）', '对决_隔离五图只读核验'),
+            ('对决防守：①读取首页赛区（只读）', '对决_隔离首页赛区只读'),
+            ('对决防守：②读取五图与本赛区候选（只读）', '对决_隔离赛区五图候选只读'),
             ('普通任务', 'MyTask1'),
             ('选项任务', 'MyTask2'),
             ('参数任务', 'MyTask3'),
             ('带Custom的任务', 'MyTask4'),
         ]
         self.assertEqual([(task["name"], task["entry"]) for task in tasks], expected)
-        self.assertEqual(len(tasks), 53)
+        self.assertEqual(len(tasks), 55)
+
+    def test_zone_actions_ignore_overrides_and_fail_closed(self) -> None:
+        from types import SimpleNamespace
+        for action, function, status in (
+                (DuelHomeZoneAction, "start_zone_session", "zone_ready"),
+                (DuelZoneCandidatesAction, "finish_zone_candidates", "candidates_ready")):
+            report = dict(status=status, selected_zone="五区", zone_verified=True,
+                          session_ready=True, maps_verified=True, read_only=True,
+                          selection_attempted=False, starts_race=False)
+            context, root = object(), Path.cwd()
+            argv = SimpleNamespace(custom_action_param='{"root":"wrong","zone":"四区","choose":true}')
+            with self.subTest(action=action.__name__), patch("builtins.print"), \
+                 patch("runtime_action.find_project_root", return_value=root), \
+                 patch("ma9_agent.duel_zone_session." + function,
+                       return_value=(report, root / "debug/result.json")) as run:
+                self.assertTrue(action().run(context, argv))
+                run.assert_called_once_with(context, root)
+                report["read_only"] = False
+                self.assertFalse(action().run(context, argv))
+                run.side_effect = ValueError("invalid session")
+                self.assertFalse(action().run(context, argv))
+
+    def test_zone_nodes_have_no_navigation_or_recovery_followups(self) -> None:
+        import json
+        path = Path(__file__).resolve().parents[2] / "assets/resource/pipeline/duel_slot_test.json"
+        nodes = json.loads(path.read_text(encoding="utf8"))
+        for name, custom in (("对决_隔离首页赛区只读", "ma9_duel_home_zone"),
+                             ("对决_隔离赛区五图候选只读", "ma9_duel_zone_candidates")):
+            with self.subTest(node=name):
+                self.assertEqual(nodes[name], dict(recognition="DirectHit", action="Custom",
+                                                 custom_action=custom, timeout=600000, next=[]))
 
     def test_leagues_round_trip_and_order(self) -> None:
         labels = ("青铜", "白银", "黄金", "白金", "翡翠", "钻石", "精英", "宗师", "传奇")
