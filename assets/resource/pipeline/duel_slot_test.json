@@ -13,6 +13,13 @@
     "timeout": 600000,
     "recognition": "DirectHit"
   },
+  "对决_隔离五图只读核验": {
+    "recognition": "DirectHit",
+    "action": "Custom",
+    "custom_action": "ma9_duel_lineup_maps_test",
+    "timeout": 600000,
+    "next": []
+  },
   "对决_隔离单槽只读核验": {
     "next": [],
     "custom_action": "ma9_duel_slot_verify",

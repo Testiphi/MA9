@@ -376,3 +376,32 @@ class DuelSlotVerifyAction(CustomAction):
                 and report.get("read_only") is True
                 and report.get("selection_attempted") is False
                 and report.get("starts_race") is False)
+
+
+@AgentServer.custom_action("ma9_duel_lineup_maps_test")
+class DuelLineupMapsTestAction(CustomAction):
+    """Read five defensive map pairs in the isolated account root, without input."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv  # The GUI cannot redirect files, choose a car or change the mode.
+        from ma9_agent.duel_lineup_maps_test import run_lineup_maps_test
+        try:
+            report, destination = run_lineup_maps_test(context, find_project_root())
+        except Exception as error:
+            print(json.dumps({"event": "ma9_duel_lineup_maps_test_error",
+                              "error": str(error), "read_only": True,
+                              "selection_attempted": False, "starts_race": False},
+                             ensure_ascii=False), flush=True)
+            return False
+        print(json.dumps({"event": "ma9_duel_lineup_maps_test",
+                          "status": report["status"], "maps_verified": report["maps_verified"],
+                          "expanded_slot": report["expanded_slot"], "tracks": report["tracks"],
+                          "report_file": str(destination), "read_only": True,
+                          "selection_attempted": False, "starts_race": False},
+                         ensure_ascii=False), flush=True)
+        return (report["status"] == "verified"
+                and report.get("maps_verified") is True
+                and report.get("stable") is True
+                and report.get("read_only") is True
+                and report.get("selection_attempted") is False
+                and report.get("starts_race") is False)
