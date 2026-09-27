@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "authority": "user_explicit_2026_09_27",
+  "purpose": "garage_allocation_eligibility",
+  "rules": [
+    {
+      "id": "exclude_upgrade_ready",
+      "condition": "positively_observed_upgrade_ready_banner",
+      "decision": "unavailable_for_automatic_allocation",
+      "retain_inventory_record": true,
+      "infer_owned_false": false,
+      "infer_star_count": false,
+      "require_detail_star_capture_for_excluded_vehicle": false
+    }
+  ],
+  "automatic_unlock_allowed": false,
+  "automatic_star_upgrade_allowed": false,
+  "unknown_star_count_alone_triggers_exclusion": false,
+  "non_max_stars_alone_triggers_exclusion": false,
+  "other_vehicles_automatically_eligible": false,
+  "implementation": "applied_to_review_overlay; runtime_garage_allocation_integration_pending"
+}
