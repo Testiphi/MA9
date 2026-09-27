@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T09:37:33+00:00",
+  "updated_at": "2026-09-27T10:07:32+00:00",
   "policy": "native-subagents-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -1449,7 +1449,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05W当前B/C页只读实机已通过：7帧约19秒，Ford周年款B(4/7帧)、STO B、296GTB/Daytona C，零输入，183条档案字节未变。无需重复此页自检。后续应设计受控剩余车库补采，避免再盲目R/S/A重扫；现包只有只读入口，不能声称已支持续扫。星级/完整库存/分配仍未确认。",
+  "next": "05X固定B/C/D补采已实现并精确打包：B从等级入口重扫，再C/D；锁内要求旧同账号R/S/A遍历记录，输入scope限BCD。183条/历史保留，补采scope完成与全六级本次完成分开。用户运行新补采任务后反馈；不用再做已通过的只读页自检，也不重复R/S/A。星级/完整库存/分配未确认，不代操作设备、不推送。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1862,11 +1862,11 @@
     "existing_limit": "fixed single-pixel star sampling; no independent two-frame star confirmation; EVO37 edge/sidebar gap remains"
   },
   "garage_survey_task": {
-    "source_head": "78a0f19944f3ef8e8ec8278c5cb4fac0cd7b6626",
-    "merge_commit": "fe17a55df74fb172439a5cffaeab022344fd579b",
-    "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-page-78a0f19\\MA9-preview",
-    "exe_sha256": "2bff8f71e20e3f2fb9aeaa6a69787d86cd1e5c40873590f7138875feb094f551",
-    "agent_tests": 480,
+    "source_head": "4ef2923b5c3b401b5ac47c4ec83511dc4798da16",
+    "merge_commit": "f5c6fafbc88f9b93b3c6cc5c05ffdb1fc42da3d7",
+    "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-bcd-4ef2923\\MA9-preview",
+    "exe_sha256": "20f0b4bdf92b30c7134a895682d86951e827fbe51cb4c7ca5b8f06b53725dde2",
+    "agent_tests": 485,
     "agent_skip": 1,
     "agent_exit": 0,
     "tools_tests": 30,
@@ -1876,13 +1876,13 @@
     "schema_exit": 0,
     "schema_reuse": "Changed interface and duel_slot_test pipeline validated directly; other business resources unchanged by git/hash comparison; ignore only old post-validation GUI mfa_layout.json",
     "compiled_modules_equal": 29,
-    "packaged_tests": 122,
+    "packaged_tests": 127,
     "packaged_skip": 1,
     "package_verify_exit": 0,
     "package_schema_exit": 0,
     "negative_exits": {
-      "negative_runtime": 1,
-      "negative_profile": 1
+      "runtime_action": 1,
+      "survey": 1
     },
     "smoke_usage_exit": 1,
     "entry_replay": [
@@ -1897,16 +1897,16 @@
         "captures": 1
       }
     ],
-    "review": "independent Sol high no remaining blockers",
-    "review_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05W-name-band\\review-fixed.md",
+    "review": "independent Sol high code review: no blockers",
+    "review_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05X-remainder\\review-fixed.md",
     "browse_only": true,
-    "allowed_device_inputs": "none in current page-probe task",
+    "allowed_device_inputs": "B/C/D current class tab plus the two existing bounded horizontal swipe shapes only",
     "selection_attempted": false,
     "starts_race": false,
     "allocation_ready": false,
     "coverage_complete": false,
-    "device_test": "Current B/C page probe passed; full traversal not yet revalidated",
-    "release": "readonly_probe_live_passed",
+    "device_test": "05W readonly B/C page already passed; 05X BCD collection not run",
+    "release": "ready_for_user_fixed_BCD_collection",
     "remote_push": "not_attempted",
     "first_scan_scope": [
       "R",
@@ -1926,17 +1926,17 @@
       "visible-list ownership is provisional",
       "external allocator not invoked"
     ],
-    "phase": "05W_user_readonly_BC_page_passed",
-    "owner": "gpt-6-sol high",
+    "phase": "05X_fixed_BCD_collection_ready",
+    "owner": "gpt-6-sol medium",
     "reviewer": "gpt-6-sol high",
     "active_owner": null,
     "active_reviewer": null,
     "device_authorized": false,
     "push_authorized": false,
-    "gui_entry": "对决_隔离当前车库页只读",
+    "gui_entry": "对决_隔离车库补采BCD",
     "private_request": "config/duel_garage_scan.json",
-    "next": "Current-page proof complete; no repeat probe needed. Plan bounded remaining B-tail/C/D collection preserving 183 records; current readonly package cannot perform that step. Do not claim full traversal or star confirmation.",
-    "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-fa9d8be\\MA9-preview",
+    "next": "User starts fixed B/C/D supplementary task from Duel vehicle-selection page; B resets to class entry, no R/S/A rescan. Preserve same account/five cars. Inspect new run after completion; no star or full inventory claim.",
+    "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-page-78a0f19\\MA9-preview",
     "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
     "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
     "previous_capture": {
@@ -1956,7 +1956,7 @@
       "started_race": false
     },
     "cache_migrated": true,
-    "archive": "183 provisional records preserved; all 3 referenced historical full-scan run directories copied intact. Probe writes only new page diagnostic folder and never changes garage cache.",
+    "archive": "183-record profile and 3 referenced prior full-scan runs copied intact; original profile backup debug/archive-05W. Historical source roots retained. No promotion to confirmed ownership/stars.",
     "second_capture": {
       "run_id": "7c04db7c9c87417b87400428803c3d01",
       "reason": "B:page_ocr_unverified",
@@ -1990,8 +1990,7 @@
     },
     "per_vehicle_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05V-per-vehicle-evidence\\results.json",
     "last_full_scan_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-fa9d8be\\MA9-preview",
-    "read_only": true,
-    "profile_updated": false,
+    "read_only": false,
     "fourth_capture": {
       "run_id": "b8ebb7e58f0a4793b0b7d48613682568",
       "reason": "B:class_or_ocr_unverified",
@@ -2019,7 +2018,14 @@
       "B",
       "C"
     ],
-    "live_page_profile_unchanged": true
+    "live_page_profile_unchanged": true,
+    "integration_owner": "orchestrator",
+    "scope_classes": [
+      "B",
+      "C",
+      "D"
+    ],
+    "remainder_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05X-remainder\\results.json"
   },
   "model_dispatch": {
     "approved": "2026-09-27",

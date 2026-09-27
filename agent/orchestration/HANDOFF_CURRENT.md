@@ -85,7 +85,7 @@ f7bf3f0包实机14:43:43至14:50:32，run 7c04db7c9c87417b87400428803c3d01。par
 现有166条待核验记录/采样历史原样保留，只重绑本包根并留原profile SHA。所有被档案引用的历史run（当前2个）连同PNG/OCR逐文件hash复制到新debug原run-id路径，确保旧引用可用。备份profile在debug/archive-05U，旧包不改；导入旧报告仍保留原runtime_root，不能当作新实机成功。
 下一步用户关闭旧包、打开新包先自检，保持当前车辆选择页面，单独运行全等级采集。仍从R遍历六级，无A/B断点续扫；不清空五车，已有166条保留增补。05V随后实机仍在B/C失败，见下文05W；coverage_complete/allocation_ready仍False。无设备操作、无推送。
 
-## 当前05W：第四次B/C停点，改为当前页只读验证
+## 05W历史修复与当前页只读验证
 fa9d8be实机run b8ebb7e58f0a4793b0b7d48613682568，R3/S51/A55/B54，A已走完，B第13页class_or_ocr_unverified/S。169帧、51导航，无选车/开赛；累计183条。证据MA9-evidence/20260927-05W-name-band/report.json。
 根因168/169：邻卡数字18(box x0,w24)被并入Ford(left60)文字组，brand变18ford，绕过滚动家族歧义检查而fuzzy为S FD。name_bands已排除几何完全在左界之外的纯数字（用既有_key含小数/逗号/空格/%归一），保留卡内/相交数字、字母和数字车型；不改matcher/阈值/等级保护。独立最初发现仅isdigit漏小数，已修复六变体。
 功能78a0f19944f3ef8e8ec8278c5cb4fac0cd7b6626，合入fe17a55df74fb172439a5cffaeab022344fd579b；8文件含新只读入口及测试。Agent480(1skip)/tools30(1skip)实际0，两改变schema输入0，其余复用Git/hash未变证据。四轮517帧169窗口，119原可用窗口无回退；49原短记录加最新末尾3帧共50窗口不足。旧168/169假S已消失，但不能用这3帧宣称已动态过B。独立review-fixed.md无剩余阻断；初次review有tmp fallback及MaaDeps退出1，提权纠正后6项/反例实际0，原记录未抹去。
@@ -96,7 +96,16 @@ fa9d8be实机run b8ebb7e58f0a4793b0b7d48613682568，R3/S51/A55/B54，A已走完�
 ## 05W当前页实机已通过
 用户17:30:13至17:30:32运行准确只读包，run fcb9e54d85d64818b3b603704afdeedf。7帧约19秒，stable/observed，原生Tasker.Task.Succeeded。全部7PNG hash通过；task期间输入API日志匹配0，input_attempts=[]，无选车/开赛。profile按构建原件重建预期字节后完全一致，183条未变。证据MA9-evidence/20260927-05W-live/results.json及run/、maafw-task.log。
 四车身份：B Ford Mustang RTR Spec 5 10th Anniv.由帧4/7确认，source7；B Huracan STO、C Ferrari296GTB、C DaytonaSP3均帧3/4确认。observed_classes仅B/C，无S FD，sampling_notes为空。本次已提供现场身份修复证据，但没有切级/翻页，不能说已动态跨越B/C或完成全库。
-星级仍raw未确认（296GTB本次无读数，不视为0星）；未将probe记录合入profile。当前页无需再测。下一阶段应准备受控B尾/C/D补采及资料核验，保留既有183条；当前专包只有只读入口，尚无续扫功能，不直接让用户改classes绕过固定guard。未进行新设备操作、实现补采或推送。
+星级仍raw未确认（296GTB本次无读数，不视为0星）；未将probe记录合入profile。当前页无需再测。后续固定BCD补采已实现，见下文05X；此处只读专包仍无补采功能，不直接让用户改classes绕过固定guard。未进行新设备操作或推送。
+
+## 当前05X：固定B/C/D补采包待用户运行
+用户“继续”后完成固定补采：B从等级标签入口重新扫，再C、D，不从任意当前页断点续滑；R/S/A本次不扫。既有183条及手工/历史保留。旧config.classes仍必须原全6，GUI参数不能改scope或choose。
+run_garage_remainder固定BCD、旧run_garage_survey仍全6，共用安全收集；私有scope只接受这两种。锁内load同账号profile后、0capture前要求R/S/A各有terminal status和严格claimed_scan_complete=True，否则拒绝。Controller允许类限定BCD，改active_class为R也不能点击；只读probe仍硬拒所有输入。partial在失败类停止并存checkpoint；merge只碰本次类别，不覆盖R/S/A。
+报告scope_classes/scope_traversal_finished/previous_coverage明确本次范围；补采成功也保持traversal_finished=False，不能当作本次新鲜六级遍历。coverage_complete/allocation_ready一直False，星级未晋升。Action核对scope/三类summary/输入/flags，忽略argv，pipeline next=[]。
+功能4ef2923b5c3b401b5ac47c4ec83511dc4798da16，合入f5c6fafbc88f9b93b3c6cc5c05ffdb1fc42da3d7。6文件；识别/采样器/共享matcher/阈值/冻结A/B未改。总控Agent485(1skip)、tools30(1skip)、变更pipeline/interface schema实际0，其余Git/hash未变复用。独立Sol high代码无阻断；5定向断言OK但进程1（已知MaaDeps/ZeroMQ10038），不可写成进程0，见05X/review-fixed.md。
+准确包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-garage-bcd-4ef2923\MA9-preview。exe SHA256：20f0b4bdf92b30c7134a895682d86951e827fbe51cb4c7ca5b8f06b53725dde2。29模块代码一致，包内127测试(1skip)实际0，旧runtime/survey负对照预期1，包schema与来源hash通过。真实183条副本+模拟控制器离线演练只BCD、RSA/history/手工数据保留；不是设备证明。结果05X/results.json。
+新包GUI为数据自检、当前页只读自检、补采B/C/D；本次只运行补采项，已通过的当前页自检无需重复。保持同账号、任一车辆选择页与现有五车；运行时不手动切页。结束反馈，总控读新debug/duel-garage-<id>/report.json。旧183条及全部3引用历史run已原样迁移，原profile备份debug/archive-05W；旧报告保留原root，不算新运行。
+当前owner/reviewer均结束，新补采实机未运行；未代操作设备、未推送。若失败保留现场，按新证据修，不绕过guard；不要宣称完整owned/星级/自动分配已完成。
 
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。库存身份双读不等于星级双读；当前仅保留某一原帧的raw星级，未做完整星条一致性确认，不具备可信星级档案证明。
