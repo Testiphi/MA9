@@ -191,3 +191,6 @@ G60业务04f4ec4202584dc4b6ced038827a4812 assigned/same_slot_confirmed，before/
 
 ## 2026-09-27 用户批准地图识别：05O
 05O-readonly-lineup-maps.md给ds high请求新对话，lane基点0b8f1de；只新增duel_lineup_maps.py与测试。06地图解析与全部选车/GUI只读；复用基础解析+observer几何，缺图不重排、歧义拒绝、同帧真实标题+五图连续两次有界确认。先静态原生OCR及离线回归，后独立复核再GUI/策略；现五车保留，左边缘不在本轮。
+
+## 05O总控发现同槽额外冲突行漏审，05O1待返修
+交付1f99c0b两新文件；定向43exit0，18真帧hash+冻结OCR重放6防守通过。但总控合成F1同槽追加合法band小地图候选，旧parser和新层都只取前两行，单帧/稳定双帧仍verified=True；probe真实exit1。证据20260927-05O-orchestrator，05O1-conflicting-map-rows.md给ds新对话，仅两文件，保持原生样本。未合/未包/未GUI。

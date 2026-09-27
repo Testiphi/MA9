@@ -1141,6 +1141,18 @@
             "does_not_block": "readonly map recognition and offline candidate planning"
           }
         }
+      },
+      "map_observer_task": {
+        "head": "1f99c0baf82fe6b75044fa39523aaee492a31715",
+        "phase": "blocked_conflicting_same_cell_map_rows",
+        "targeted_exit": 0,
+        "targeted_count": 43,
+        "native_frozen_replay": 18,
+        "defense_verified": 6,
+        "counterexample_exit": 1,
+        "evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05O-orchestrator",
+        "repair_prompt": "agent/orchestration/prompts/05O1-conflicting-map-rows.md",
+        "merged": false
       }
     },
     "duel-defense": {
@@ -1428,7 +1440,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05O-readonly-lineup-maps.md给ds新对话，基点0b8f1de，两新增文件：只读五地图观察与连续双帧确认，不接GUI/策略/选车。保留当前五车，左边缘问题另列待办。",
+  "next": "05O1窄修复：同槽额外冲突小地图行被忽略，单帧和双帧均误verified。派ds新对话，仅maps模块+测试；旧原生正例保留，暂不合入/GUI/打包。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

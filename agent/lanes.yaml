@@ -84,6 +84,7 @@ orchestration_files:
     - agent/orchestration/prompts/05N2A-window-state.md
     - agent/orchestration/prompts/05N2R-target-review.md
     - agent/orchestration/prompts/05O-readonly-lineup-maps.md
+    - agent/orchestration/prompts/05O1-conflicting-map-rows.md
     - agent/orchestration/prompts/05HR-wiring-review.md
     - agent/orchestration/prompts/06-duel-defense.md
     - agent/orchestration/prompts/07-duel-attack.md
