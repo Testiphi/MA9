@@ -507,3 +507,39 @@ class DuelGaragePageProbeAction(CustomAction):
                 and report.get("input_attempts") == []
                 and isinstance(report.get("confirmed_records"), list) and bool(report["confirmed_records"])
                 and type(report.get("captures")) is int and 4 <= report["captures"] <= 10)
+
+
+@AgentServer.custom_action("ma9_duel_garage_remainder")
+class DuelGarageRemainderAction(CustomAction):
+    """Collect only B/C/D; arguments cannot expand scope or enable selection."""
+
+    def run(self, context: Context, argv: CustomAction.RunArg) -> bool:
+        del argv
+        from ma9_agent.duel_garage_survey import run_garage_remainder
+        try:
+            report, destination = run_garage_remainder(context, find_project_root())
+        except Exception as error:
+            print(json.dumps({"event": "ma9_duel_garage_remainder_error", "error": str(error)},
+                             ensure_ascii=False), flush=True)
+            return False
+        print(json.dumps({"event": "ma9_duel_garage_remainder", "status": report["status"],
+                          "report_file": str(destination)}, ensure_ascii=False), flush=True)
+        summaries = report.get("classes")
+        return (report.get("status") == "review_required"
+                and report.get("scope_classes") == ["B", "C", "D"]
+                and report.get("scope_traversal_finished") is True
+                and report.get("traversal_finished") is False
+                and report.get("browse_only") is True
+                and report.get("navigation_attempted") is True
+                and report.get("coverage_complete") is False and report.get("allocation_ready") is False
+                and report.get("selection_attempted") is False and report.get("starts_race") is False
+                and isinstance(summaries, dict) and set(summaries) == {"B", "C", "D"}
+                and all(isinstance(item, dict) and item.get("claimed_scan_complete") is True
+                        and item.get("status") in ("class_boundary", "edge_reached")
+                        for item in summaries.values())
+                and isinstance(report.get("input_attempts"), list)
+                and bool(report["input_attempts"])
+                and all(isinstance(item, dict) and item.get("allowed") is True
+                        and item.get("kind") in ("click", "swipe")
+                        and item.get("class") in ("B", "C", "D")
+                        for item in report["input_attempts"]))

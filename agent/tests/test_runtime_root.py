@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from runtime_action import find_project_root, DuelHomeZoneAction, DuelZoneCandidatesAction, DuelGarageSurveyAction, DuelGaragePageProbeAction
+from runtime_action import find_project_root, DuelHomeZoneAction, DuelZoneCandidatesAction, DuelGarageSurveyAction, DuelGaragePageProbeAction, DuelGarageRemainderAction
 from ma9_agent import garage_profile, models, selection_runtime, selection_strategy, vehicle_screen
 
 
@@ -76,6 +76,7 @@ class FrozenPublicContractTest(unittest.TestCase):
             ('对决防守：①读取首页赛区（只读）', '对决_隔离首页赛区只读'),
             ('对决防守：②读取五图与本赛区候选（只读）', '对决_隔离赛区五图候选只读'),
             ('对决车库：当前页自检（只读，不翻页）', '对决_隔离当前车库页只读'),
+            ('对决车库：补采 B/C/D（切级翻页，不选车）', '对决_隔离车库补采BCD'),
             ('对决车库：全等级采集（切级翻页，不选车）', '对决_隔离全车库采集'),
             ('普通任务', 'MyTask1'),
             ('选项任务', 'MyTask2'),
@@ -83,7 +84,44 @@ class FrozenPublicContractTest(unittest.TestCase):
             ('带Custom的任务', 'MyTask4'),
         ]
         self.assertEqual([(task["name"], task["entry"]) for task in tasks], expected)
-        self.assertEqual(len(tasks), 57)
+        self.assertEqual(len(tasks), 58)
+
+    def test_garage_remainder_action_requires_only_completed_bcd(self):
+        from types import SimpleNamespace
+        report = dict(status="review_required", scope_classes=["B", "C", "D"],
+                      scope_traversal_finished=True, traversal_finished=False, browse_only=True,
+                      coverage_complete=False, allocation_ready=False, selection_attempted=False,
+                      starts_race=False, navigation_attempted=True,
+                      input_attempts=[{"allowed": True, "class": "B", "kind": "click"}],
+                      classes={c: {"status": "class_boundary", "claimed_scan_complete": True}
+                               for c in "BCD"})
+        root, context = Path.cwd(), object()
+        with patch("runtime_action.find_project_root", return_value=root), patch("builtins.print"), \
+             patch("ma9_agent.duel_garage_survey.run_garage_remainder",
+                   return_value=(report, root / "debug/report.json")) as run:
+            argv = SimpleNamespace(custom_action_param='{"classes":["R"],"choose":true}')
+            self.assertTrue(DuelGarageRemainderAction().run(context, argv))
+            run.assert_called_once_with(context, root)
+            for key, bad in (("scope_classes", ["D"]), ("scope_traversal_finished", 1),
+                             ("traversal_finished", True), ("allocation_ready", True),
+                             ("navigation_attempted", False),
+                             ("input_attempts", [{"allowed": True, "class": "R"}]),
+                             ("input_attempts", [{"allowed": True, "class": "B", "kind": "key"}]),
+                             ("input_attempts", [None]),
+                             ("input_attempts", []),
+                             ("classes", {"B": report["classes"]["B"]})):
+                before = report[key]
+                report[key] = bad
+                self.assertFalse(DuelGarageRemainderAction().run(context, argv))
+                report[key] = before
+            report["classes"]["D"]["claimed_scan_complete"] = 1
+            self.assertFalse(DuelGarageRemainderAction().run(context, argv))
+        import json
+        node = json.loads((Path(__file__).resolve().parents[2] /
+                           "assets/resource/pipeline/duel_slot_test.json").read_text(encoding="utf8"))[
+                               "对决_隔离车库补采BCD"]
+        self.assertEqual(node, dict(recognition="DirectHit", action="Custom",
+                                   custom_action="ma9_duel_garage_remainder", timeout=3600000, next=[]))
 
     def test_garage_page_probe_ignores_arguments_and_requires_zero_input(self):
         from types import SimpleNamespace

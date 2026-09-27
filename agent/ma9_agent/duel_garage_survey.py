@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import math
@@ -20,6 +21,7 @@ from .duel_vehicle_runtime import CLASS_X, EDGE_REPOSITION_SWIPE, scan, _stable_
 
 
 PAGE_SWIPE = (1090, 480, 400, 480, 300)
+REMAINDER_CLASSES = ("B", "C", "D")
 
 
 def _safe(root: Path, relative: str) -> Path:
@@ -106,7 +108,7 @@ class _Controller:
     def post_click(self, x: int, y: int) -> Any:
         args = (x, y)
         typed = all(type(value) is int for value in args)
-        allowed = (typed and self.proxy.active_class is not None
+        allowed = (typed and self.proxy.active_class in self.proxy.allowed_classes
                    and args == (CLASS_X[self.proxy.active_class], 103))
         self.proxy.input_attempt("click", args, allowed)
         if not allowed:
@@ -116,7 +118,7 @@ class _Controller:
 
     def post_swipe(self, *args: int) -> Any:
         typed = all(type(value) is int for value in args)
-        allowed = (typed and self.proxy.active_class is not None
+        allowed = (typed and self.proxy.active_class in self.proxy.allowed_classes
                    and args in (PAGE_SWIPE, EDGE_REPOSITION_SWIPE))
         self.proxy.input_attempt("swipe", args, allowed)
         if not allowed:
@@ -129,9 +131,11 @@ class _Controller:
 
 
 class _SurveyContext:
-    def __init__(self, source: Any, run_dir: Path, max_pages: int) -> None:
+    def __init__(self, source: Any, run_dir: Path, max_pages: int,
+                 allowed_classes: tuple[str, ...] = CLASSES) -> None:
         self.source, self.run_dir = source, run_dir
         self.active_class: str | None = None
+        self.allowed_classes = allowed_classes
         self.capture_count = self.input_count = 0
         self.capture_limit = 6 * max_pages * 20 + 120
         self.input_limit = 6 * (max_pages * 4 + 4)
@@ -289,6 +293,9 @@ def _review_text(report: dict[str, Any], profile: dict[str, Any]) -> str:
              f"账号标签：{report['account_key']}（用户确认，非视觉认证）", "",
              "遍历完成不等于账号车库完整。左侧栏缺口、可选列表与拥有关系、星级均需复核。",
              "本档案不能供完整分配器使用。", "", "## 分类遍历", ""]
+    if "scope_classes" in report:
+        lines += ["本次范围：B、C、D；R、S、A 本次未扫描。",
+                  "B 类从等级入口重新扫描，不从任意当前页断点续滑。", ""]
     for vehicle_class in CLASSES:
         item = report["classes"].get(vehicle_class)
         if item is None:
@@ -325,6 +332,19 @@ def _review_text(report: dict[str, Any], profile: dict[str, Any]) -> str:
 def run_garage_survey(context: Any, root: Path, *,
                       scan_fn: Callable[..., dict[str, Any]] = scan) -> tuple[dict[str, Any], Path]:
     """Collect all six classes, retaining partial evidence on a failed class."""
+    return _run_garage_survey(context, root, CLASSES, scan_fn=scan_fn)
+
+
+def run_garage_remainder(context: Any, root: Path, *,
+                         scan_fn: Callable[..., dict[str, Any]] = scan) -> tuple[dict[str, Any], Path]:
+    """Collect B/C/D after verified same-account R/S/A class checkpoints."""
+    return _run_garage_survey(context, root, REMAINDER_CLASSES, scan_fn=scan_fn)
+
+
+def _run_garage_survey(context: Any, root: Path, scope_classes: tuple[str, ...], *,
+                       scan_fn: Callable[..., dict[str, Any]]) -> tuple[dict[str, Any], Path]:
+    if scope_classes not in (CLASSES, REMAINDER_CLASSES):
+        raise ValueError("unsupported fixed garage collection scope")
     root = Path(root).absolute()
     request, catalog, profile_path = load_survey(root)
     by_id = {row["id"]: row for row in catalog}
@@ -335,10 +355,19 @@ def run_garage_survey(context: Any, root: Path, *,
     with lock.open("x", encoding="utf-8") as stream:
         stream.write(token)
     try:
+        if scope_classes == REMAINDER_CLASSES and not profile_path.is_file():
+            raise ValueError("remainder requires an existing same-account garage profile")
+        profile = load_profile(profile_path, root, request["account_key"], by_id)
+        if scope_classes == REMAINDER_CLASSES:
+            for vehicle_class in CLASSES[:3]:
+                coverage = profile["coverage"].get(vehicle_class)
+                if (not isinstance(coverage, dict)
+                        or coverage.get("status") not in ("class_boundary", "edge_reached")
+                        or coverage.get("claimed_scan_complete") is not True):
+                    raise ValueError(f"remainder requires completed {vehicle_class} traversal")
         run_dir.mkdir(parents=True, exist_ok=False)
         (run_dir / "frames").mkdir()
-        profile = load_profile(profile_path, root, request["account_key"], by_id)
-        proxy = _SurveyContext(context, run_dir, request["max_pages"])
+        proxy = _SurveyContext(context, run_dir, request["max_pages"], scope_classes)
         report: dict[str, Any] = {
             "schema_version": 1, "run_id": run_id, "runtime_root": str(root),
             "account_key": request["account_key"], "status": "partial",
@@ -349,12 +378,17 @@ def run_garage_survey(context: Any, root: Path, *,
             "started_at": timestamp(), "report_file": str(run_dir / "report.json"),
             "profile_file": str(profile_path), "unique_vehicle_count": len(profile["vehicles"]),
         }
+        if scope_classes == REMAINDER_CLASSES:
+            report.update(scope_classes=list(REMAINDER_CLASSES), scope_traversal_finished=False,
+                          previous_coverage=copy.deepcopy({
+                              vehicle_class: profile["coverage"][vehicle_class]
+                              for vehicle_class in CLASSES[:3]}))
         try:
             if not _entrance_guard(proxy):
                 report["status"] = "rejected"
                 report["reason"] = "two_frame_duel_selection_guard_failed"
             else:
-                for vehicle_class in CLASSES:
+                for vehicle_class in scope_classes:
                     proxy.active_class = vehicle_class
                     result = scan_fn(proxy, vehicle_class, catalog, target_id=None,
                                      choose=False, max_pages=request["max_pages"])
@@ -376,7 +410,10 @@ def run_garage_survey(context: Any, root: Path, *,
                         break
                 else:
                     report["status"] = "review_required"
-                    report["traversal_finished"] = True
+                    if scope_classes == CLASSES:
+                        report["traversal_finished"] = True
+                    else:
+                        report["scope_traversal_finished"] = True
         except Exception as error:
             report["status"] = "partial"
             report["reason"] = f"{type(error).__name__}: {error}"
