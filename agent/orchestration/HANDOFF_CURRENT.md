@@ -38,12 +38,24 @@ Agent exe SHA256：e63603d5a6feaeccff4657ac5b852fa6df140fda8e771bccaa323033cc1f4
 五区候选关系各槽7/3/1/2/5，共18条，去重11辆（R2/S8/A1）。拥有、星级与可用性仍未知。zone/map/reference/catalog hash全部核对一致，两GUI任务均Task.Succeeded；日志无输入API匹配，无本次Assertion failed。get_reco_result ERR随后有成功识别/任务完成，本次不构成业务失败，不泛化为所有同类日志无害。
 证据MA9-evidence/20260927-05R-live/results.json，原始业务JSON/Markdown与maafw.log已复制保留。原始五图文件不自带session字段，由最终报告的路径/SHA和内嵌内容关联；不得假称该文件直接包含账号身份。
 本次仅验证V区、展开槽3及正常两步流程；不是IV实景/车库/星级/配车或开赛验收，也未证明原生依赖退出异常已修复。用户无需重复此步；已消费会话不能重用为执行授权。
-下一阶段先登记候选定向车库/详情星级读取边界，再实施；保持现有五车。当前无活跃owner/reviewer，主模型Astra medium/Standard不改。
+05R实机完成，无需重复；后续按用户新决定先全擂台车库建档，见下文05S。主模型Astra medium/Standard不改。
 
-## 后续车库及星级设计（未实施）
-详见E:\hzz\work\MA9\MA9-evidence\20260927-05R1-zone\garage-star-plan.md。账号根确认后可读该账号缓存；实际游戏读取等赛区+五图确定、候选去重后按等级/页位置合并补查。未缓存/缺扫不是未拥有，不能用部分owned交集丢弃未知候选；EVO37左缘/侧栏缺口未修。
-列表只给身份/位置/星条线索，最终候选详情补证；星级分别记录亮星数/总星槽、状态、来源、时间与完整星条证据。裁切、金底或冲突保持未知/冲突，未知不填0，不能由性能分推星。完整星条同车双帧一致后才确认；现有固定单点实现尚无此可靠性承诺。
-参考表没有最低星级要求，不自行发明星级门槛或重排原表。互斥配车之后、单槽执行之前还要即时检查身份/占用/可选状态；本阶段没有改车库、星级阈值或共享matcher。
+## 当前05S：先全车库建档，再完整分配
+用户明确MutualExclusionAllocator依赖已有车库及星级，并选择首次扫描整个擂台车库，不只扫描当前11候选。当前MA9导入表只有车型排序、plan_attack只有owned集合，没有完整星级输入，不能宣称已复用完整分配方案。仍不访问根外MutualExclusionAllocator。
+采集功能f9bf2be经独立复核发现owned数字布尔、浮点导航参数、完成标志不一致三处校验问题；由3dab97fcd87a101d37cb74c360ef20707ee058bb修复，独立3反例进程exit0，合法整数导航仍可用。合入0bfa73d51e593b4209cdd90fd8dfd1615e00f73c，主根与已测lane树一致。
+总控Agent454(1skip)、tools30(1skip)进程exit0；全schema28文件exit0，窄修未改输入。准确包29业务模块代码匹配，包内20测试(1skip)进程0，文件集/hash、保存图入口正反例、旧版本三个负对照预期exit1、包schema和Usage启动退出均通过。真实symlink创建因Windows权限skip；独立模拟reparse属性在0capture拒绝，不冒充实机文件系统全覆盖。
+新包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-garage-3dab97f\MA9-preview。Agent exe SHA256：2b5b8855195e2d398ace095aba2ef1eb94f090b87f0c36eba95c7d45c096bd7c。
+证据MA9-evidence/20260927-05S1-garage/results.json，独立MA9-evidence/20260927-05SR-garage/review-fixed.md。旧候选user-test-garage-f9bf2be标未放行，勿使用；此前正式包未改。
+
+## 下一步：用户首次全等级采集
+打开新包先数据自检。用户手动从资格赛已有任一槽的选择/更换车辆入口进入“车辆选择”列表，不手动确认换车；单独运行“对决车库：全等级采集（切级翻页，不选车）”。运行中保持同一账号、前台页面，不手动操作。程序顺序R/S/A/B/C/D，每类最多50页，到边界提前停；只允许当前等级标签和旧扫描器两种横向滑动，禁止车卡/选择/返回/按键/开赛。它不是零输入读图，不复用已消费赛区session。
+账号档案config/duel_garage.json独立于旧garage.json；请求config/duel_garage_scan.json不含choose/target。每类完整checkpoint、逐帧PNG/hash/尺寸、OCR和输入日志、report.json/review.md保存于debug/duel-garage-<run-id>/。用户运行完反馈，总控直接查日志；partial保留现场不盲目重跑。
+review_required/traversal_finished只表示六类走完；owned为provisional列表观察、star读数为raw未确认。coverage_complete/allocation_ready始终False。未知/未扫到不等于未拥有，不覆盖手工记录；缓存并不是完整分配器输入。
+实机尚未运行；当前无活跃owner/reviewer，garage_survey_owner/garage_survey_review/garage_star_feasibility已结束。模型仍Astra medium/Standard。
+
+## 后续星级与覆盖关卡
+先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。现有stable仅比车型不比星，旧scan保留首读，不具备可信星级档案证明。
+EVO37左缘/侧栏与可选列表是否等价完整拥有集合仍是覆盖关卡。首轮保存证据用于离线补识别，必要时针对缺口补采，不强行凑完整。当前参考表无最低星级要求，不自创满星门槛；后续要核对原分配器真正所需星级输入/约束，不能只用车型排序替代。车库数据未确认前不做完整自动分配；本轮未配置车/升级/购买/开赛。
 
 ## 原生测试退出异常
 本轮独立review复现27项断言OK后MaaDeps ZeroMQ退出断言（Socket operation on non-socket 10038），挂住后仅终止该review自己的离线测试进程，实际exec exit -1，不能记成exit0。原用户0x40000015截图尚未一一对应，但已有同类退出阶段线索。总控修后Agent434、包内18测试实际exit0；新exe无参数Usage预期exit1且无该assert。不能宣称原生依赖退出问题已根治；报告已独立保留。

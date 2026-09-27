@@ -1449,7 +1449,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "05R两步只读实机已通过：五区、展开第3槽、首页2帧2.724秒/五图2帧3.052秒；同session/hash关联、token已消费、18条候选关系去重11辆，无输入API记录。下一阶段按既有设计登记候选定向车库/详情星级读取边界；未拥有/星级/可用/配车验收，不重复本次读图，不把已消费会话用于执行。",
+  "next": "05S全R/S/A/B/C/D独立车库采集已实现并复核，准确包user-test-garage-3dab97f待用户实机；允许限定切级/横向翻页，不点车卡/选择/返回/开赛。首次先全车库建档，不限11候选。原始星级未确认、覆盖缺口未关闭，allocation_ready=false；拥有+星级档案跑通且输入适配验证后才完整分配。不操作设备，不访问根外分配器，不推送。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,
@@ -1667,7 +1667,7 @@
     "rollout": "current entry first; other transitions audited when touched or evidence identifies a defect",
     "early_success": "two verified target samples then proceed immediately"
   },
-  "future_garage_inventory": "User requested timing/star design; recorded in garage_star_plan, not implemented this stage",
+  "future_garage_inventory": "Full-class evidence capture implemented; trustworthy star/coverage confirmation and allocation adapter still pending",
   "readonly_maps_gui_task": {
     "phase": "user_readonly_five_maps_passed",
     "base_main": "a4cad2fadec0fa172a9375cdcc9dfd9e3a77c5d2",
@@ -1814,7 +1814,7 @@
       "对决_隔离首页赛区只读",
       "对决_隔离赛区五图候选只读"
     ],
-    "next": "Plan bounded candidate-directed garage and star evidence work; current verification does not prove ownership or authorize assignment",
+    "next": "User two-step zone test already passed; do not repeat. New standalone full-garage capture comes first.",
     "live_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05R-live\\results.json",
     "live_home_samples": 2,
     "live_home_seconds": 2.724,
@@ -1860,6 +1860,83 @@
       "no invented minimum-star threshold in current Auto reference"
     ],
     "existing_limit": "fixed single-pixel star sampling; no independent two-frame star confirmation; EVO37 edge/sidebar gap remains"
+  },
+  "garage_survey_task": {
+    "source_head": "3dab97fcd87a101d37cb74c360ef20707ee058bb",
+    "merge_commit": "0bfa73d51e593b4209cdd90fd8dfd1615e00f73c",
+    "package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-3dab97f\\MA9-preview",
+    "exe_sha256": "2b5b8855195e2d398ace095aba2ef1eb94f090b87f0c36eba95c7d45c096bd7c",
+    "agent_tests": 454,
+    "agent_skip": 1,
+    "agent_exit": 0,
+    "tools_tests": 30,
+    "tools_skip": 1,
+    "tools_exit": 0,
+    "schema_files": 28,
+    "schema_exit": 0,
+    "schema_reuse": "full at f9bf2be; unchanged schema/tool inputs after narrow fix",
+    "compiled_modules_equal": 29,
+    "packaged_tests": 20,
+    "packaged_skip": 1,
+    "package_verify_exit": 0,
+    "package_schema_exit": 0,
+    "negative_exits": {
+      "negative": 1,
+      "negative_profile": 1,
+      "negative_survey": 1
+    },
+    "smoke_usage_exit": 1,
+    "entry_replay": [
+      {
+        "sample": "duel_list",
+        "accepted": true,
+        "captures": 2
+      },
+      {
+        "sample": "home_negative",
+        "accepted": false,
+        "captures": 1
+      }
+    ],
+    "review": "independent Sol high counterexamples closed",
+    "review_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05SR-garage",
+    "browse_only": true,
+    "allowed_device_inputs": "current class tab and two bounded horizontal swipe shapes only",
+    "selection_attempted": false,
+    "starts_race": false,
+    "allocation_ready": false,
+    "coverage_complete": false,
+    "device_test": "not_run",
+    "release": "ready_for_user_full_class_evidence_capture",
+    "remote_push": "not_attempted",
+    "first_scan_scope": [
+      "R",
+      "S",
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "max_pages_per_class": 50,
+    "rejected_candidate": "user-test-garage-f9bf2be",
+    "profile": "config/duel_garage.json",
+    "evidence_pattern": "debug/duel-garage-*/",
+    "limits": [
+      "stars are raw/unverified",
+      "left/sidebar coverage gap unresolved",
+      "visible-list ownership is provisional",
+      "external allocator not invoked"
+    ],
+    "phase": "merged_exact_package_ready_user_full_garage_capture_pending",
+    "owner": "gpt-6-sol medium",
+    "reviewer": "gpt-6-sol high",
+    "active_owner": null,
+    "active_reviewer": null,
+    "device_authorized": false,
+    "push_authorized": false,
+    "gui_entry": "对决_隔离全车库采集",
+    "private_request": "config/duel_garage_scan.json",
+    "next": "User manually enters Duel vehicle-selection list and runs new all-class capture; inspect coverage and star evidence before any allocation"
   },
   "model_dispatch": {
     "approved": "2026-09-27",
