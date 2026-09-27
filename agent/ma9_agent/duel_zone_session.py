@@ -185,14 +185,18 @@ def start_zone_session(context, root: Path) -> tuple[dict, Path]:
     root = Path(root).resolve()
     sid = str(uuid4())
     report_id = uuid4().hex
-    paths = _paths(root, report_id)
-    paths["session"].parent.mkdir(parents=True, exist_ok=True)
-    with _locked(paths["lock"]):
+    # Only the fixed state/lock paths are needed to invalidate an old session.
+    # Other preflight paths may be unsafe, but must not prevent invalidation.
+    session_path = _safe(root, SESSION_NAME)
+    lock_path = _safe(root, LOCK_NAME)
+    session_path.parent.mkdir(parents=True, exist_ok=True)
+    with _locked(lock_path):
         # A new start invalidates the previous token before either the account
         # guard or any capture. A crash at this point also leaves no usable token.
-        paths["session"].unlink(missing_ok=True)
+        session_path.unlink(missing_ok=True)
         report = _base(None, root, sid, "zone_failed", "preflight_failed")
         try:
+            paths = _paths(root, report_id)
             request, _, _ = load_slot_test(root, choose=True)
             report["account_key"] = request.account_key
             capture_started_at = utc_now()
@@ -213,6 +217,11 @@ def start_zone_session(context, root: Path) -> tuple[dict, Path]:
                               created_at_utc=capture_started_at.isoformat())
         except Exception as error:  # save a failure, never resurrect the old session
             report["reason"] = f"{type(error).__name__}: {error}"
+            # Full preflight can fail on an input path while debug remains safe.
+            # Keep a failure report without touching the rejected path.
+            paths = {"report": _safe(root, f"debug/duel-zone-{report_id}.json"),
+                     "markdown": _safe(root, f"debug/duel-zone-{report_id}.md"),
+                     "session": session_path}
         report, destination = _save(report, paths)
         if report["status"] == "zone_ready":
             token = {"schema_version": 1, "session_id": sid,

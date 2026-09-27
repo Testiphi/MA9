@@ -93,6 +93,27 @@ class ZoneSessionTest(unittest.TestCase):
         self.assertEqual(captures, 0)
         self.assertEqual(finish["status"], "candidates_failed")
 
+    def test_reference_path_preflight_failure_invalidates_old_token(self):
+        self.start()
+        token_path = self.root / session.SESSION_NAME
+        self.assertTrue(token_path.exists())
+        reference_path = self.root / session.REFERENCE_NAME
+        real_is_symlink = Path.is_symlink
+
+        def is_symlink(path):
+            return path == reference_path or real_is_symlink(path)
+
+        with patch.object(Path, "is_symlink", is_symlink), \
+             patch.object(home, "frame_of") as capture:
+            failure, _ = session.start_zone_session(NoInput(), self.root)
+        capture.assert_not_called()
+        self.assertEqual(failure["status"], "zone_failed")
+        self.assertIn("symlink", failure["reason"])
+        self.assertFalse(token_path.exists())
+        (finish, _), captures = self.finish()
+        self.assertEqual(captures, 0)
+        self.assertEqual(finish["status"], "candidates_failed")
+
     def test_tamper_account_time_root_and_report_fail_without_capture(self):
         for change in ("account", "root", "future", "expired", "hash", "missing"):
             with self.subTest(change=change):
