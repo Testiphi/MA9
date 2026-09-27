@@ -125,6 +125,13 @@ B4（EB110/750S/LEGO M4 GT3 EVO/Ford GT MKII）与CD6（TVR Sagaris/Bolwell MK X
 离线复核结果identity-review-overlay.json与results.json已保存，每车至少两张不同原帧hash，全部引用原图哈希复核exit0；正式252条档案SHA仍b5cdd0de1fae09758ab7d3dc231766efdb88374b038d5e2b711569f08f3eae1d。未改源码/owned/stars/实时guard，未自动入库、未设备操作；“身份审核通过”不是库存完整或星级确认。
 下一步可以进入独立离线星条区域识别及同车完整星条双帧验证，再设计受控档案合入。上一节05Y“10个单帧待身份审核”已由此节收口，原始单帧标记不篡改。本次仅本地提交，未推送新HEAD。
 
+## 当前05AA：离线星条识别已合入
+唯一Sol medium owner、独立Sol high reviewer，新建tools/duel_garage_stars_offline.py及test，仅两文件；bbf3c5b已合入main b79b005。无CLI/设备/运行时接线/profile写入，无新包。
+区域差分、星形与边界检查代替单像素；聚合绑定vehicle/account/evidence_scope及原run/capture/hash，坏完整记录fail-closed，同图副本不算双帧，冲突不择多数。仅offline_consistent/conflict/unknown，不是confirmed/owned。
+8窄测试actual0、独立4定向及3旧反例actual0、46真图样例（含10未调参）全部正确，偏移/遮挡/矩形圆形拒绝。没有本地原图时5图像tests会skip。证据MA9-evidence/20260927-05AA-stars/results.json与report.md。
+264身份范围1790观测，1706完整读数；248双帧一致/2冲突/14不足。原91空读数中88一致/3不足。正式252条profile SHA仍b5cdd0de1fae09758ab7d3dc231766efdb88374b038d5e2b711569f08f3eae1d。
+下一步先核Lykan5/5 vs5/6与STO2/5 vs5/5车型关联：主控原图看到STO混入Super Trofeo EVO滚动候选、Lykan有不同卡片，暂不择多数或改共享matcher；再补14条星级证据。广泛历史回放另4个未审ID隔离在root/unreviewed-historical-identities.json，不计入264。身份已审不等于星条完整，优先保存图，不要求全库重扫。owner/reviewer结束；未推送。
+
 ## 后续星级与覆盖关卡
 先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。库存身份双读不等于星级双读；当前仅保留某一原帧的raw星级，未做完整星条一致性确认，不具备可信星级档案证明。
 EVO37左缘/侧栏与可选列表是否等价完整拥有集合仍是覆盖关卡。首轮保存证据用于离线补识别，必要时针对缺口补采，不强行凑完整。当前参考表无最低星级要求，不自创满星门槛；后续要核对原分配器真正所需星级输入/约束，不能只用车型排序替代。车库数据未确认前不做完整自动分配；本轮未配置车/升级/购买/开赛。

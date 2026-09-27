@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T11:11:38+00:00",
+  "updated_at": "2026-09-27T11:43:48+00:00",
   "policy": "native-subagents-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -1935,7 +1935,7 @@
     "push_authorized": false,
     "gui_entry": "对决_隔离车库补采BCD",
     "private_request": "config/duel_garage_scan.json",
-    "next": "Ten remaining identities now visually reviewed with independent B/CD reviews; no identity recapture needed. Proceed to independent offline star-region reader and evidence overlay, without changing live target guards or promoting owned/stars from identity alone.",
+    "next": "Offline identity association review for Lykan/STO conflicts and existing-image star evidence for14 unknown. Keep extra4 historical IDs isolated. No profile promotion or full rescan.",
     "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-page-78a0f19\\MA9-preview",
     "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
     "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
@@ -2150,5 +2150,37 @@
     "authorization": "user explicit destination and 70-commit payload confirmation",
     "verified": "git ls-remote exact SHA",
     "further_HEAD_push_authorized": false
+  },
+  "garage_star_offline_task": {
+    "phase": "05AA_offline_reader_reviewed_merged",
+    "owner": "gpt-6-sol medium",
+    "active_owner": null,
+    "reviewer": "gpt-6-sol high",
+    "active_reviewer": null,
+    "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
+    "base_head": "4ef2923b5c3b401b5ac47c4ec83511dc4798da16",
+    "owns_new": [
+      "tools/duel_garage_stars_offline.py",
+      "tools/tests/test_duel_garage_stars_offline.py"
+    ],
+    "scope": "pure offline region-based star reader and evidence aggregation; no CLI/device/runtime/profile writes",
+    "evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05AA-stars",
+    "production_profile_unchanged": true,
+    "device_authorized": false,
+    "push_authorized": false,
+    "source_head": "bbf3c5bfcf4027008fcc21dd62dd7cd882f60be7",
+    "merge_commit": "b79b0055753c4e382c65dac677417aba866beaf2",
+    "review": "independent_Sol_high_passed",
+    "results": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05AA-stars\\results.json",
+    "statuses": {
+      "offline_consistent": 248,
+      "conflict": 2,
+      "unknown": 14
+    },
+    "known_no_raw_91_statuses": {
+      "offline_consistent": 88,
+      "unknown": 3
+    },
+    "next": "Offline identity association review for Lykan/STO conflicts and existing-image star evidence for14 unknown. Keep extra4 historical IDs isolated. No profile promotion or full rescan."
   }
 }
