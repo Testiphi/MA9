@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T14:03:55+00:00",
+  "updated_at": "2026-09-27T14:50:47+00:00",
   "policy": "native-subagents-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
@@ -1935,7 +1935,7 @@
     "push_authorized": false,
     "gui_entry": "对决_隔离车库补采BCD",
     "private_request": "config/duel_garage_scan.json",
-    "next": "Offline sync/allocator integration is complete. Before execution/client release, resolve real auto example missing availability (Nevera R/Gemera/Centodieci/Sian), runtime Lykan/Huracan association risks, and extra4 historical IDs. Auto slot3 currently only Nevera R and remains empty; do not fabricate ownership, stars, or substitute another tier. Future upstream JSON updates use validated sync; new logic remains staged until compatibility review.",
+    "next": "Current user-selected preview tier is Normal, with14 complete conditional Pareto schemes; Automatic3-slot-gap result is historical only. Preserve unknown12 candidate flags and upgrade-ready exclusions. User paused runtime repair to request Normal tier/English-default bilingual README/push; no new device or GUI execution. Follow next user instruction before resuming runtime/client work.",
     "previous_package": "E:\\hzz\\work\\MA9\\MA9-worktrees\\duel-scan\\build\\user-test-garage-page-78a0f19\\MA9-preview",
     "live_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05S-live-boundary/audit.json",
     "identity_fix_evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05T-ford-fix\\results.json",
@@ -2146,9 +2146,8 @@
   "last_exact_push": {
     "repository": "https://github.com/Testiphi/MA9.git",
     "branch": "main",
-    "commit": "5a1589e397c07c827ce9c8a5d3c04b6ef8cecb16",
-    "authorization": "user explicit destination and 70-commit payload confirmation",
-    "verified": "git ls-remote exact SHA",
+    "commit": "8da5dbc28b1225ae26698872a28b8103887d6436",
+    "verified": "prior turn git ls-remote; this turn before new commit",
     "further_HEAD_push_authorized": false
   },
   "garage_star_offline_task": {
@@ -2269,6 +2268,24 @@
     "source_and_profile_unchanged": true,
     "new_user_gui": false,
     "background_automation_created": false,
-    "next": "Offline sync/allocator integration is complete. Before execution/client release, resolve real auto example missing availability (Nevera R/Gemera/Centodieci/Sian), runtime Lykan/Huracan association risks, and extra4 historical IDs. Auto slot3 currently only Nevera R and remains empty; do not fabricate ownership, stars, or substitute another tier. Future upstream JSON updates use validated sync; new logic remains staged until compatibility review."
+    "next": "Current user-selected preview tier is Normal, with14 complete conditional Pareto schemes; Automatic3-slot-gap result is historical only. Preserve unknown12 candidate flags and upgrade-ready exclusions. User paused runtime repair to request Normal tier/English-default bilingual README/push; no new device or GUI execution. Follow next user instruction before resuming runtime/client work.",
+    "preferred_tier": "普通",
+    "latest_request": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05AF-normal-readme\\normal-request.json",
+    "latest_report": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05AF-normal-readme\\report.md",
+    "normal_front_count": 14,
+    "normal_full_five_slot_count": 14,
+    "normal_unknown_candidate_count": 12
+  },
+  "normal_tier_readme_task": {
+    "phase": "05AF_normal_preview_and_bilingual_readme_verified",
+    "authority": "user_explicit_normal_tier_and_English_default_readme_and_push",
+    "evidence": "E:\\hzz\\work\\MA9\\MA9-evidence\\20260927-05AF-normal-readme\\results.json",
+    "readmes": [
+      "README.md",
+      "README.zh-CN.md"
+    ],
+    "default_language": "English",
+    "source_engine_changed": false,
+    "runtime_execution_enabled": false
   }
 }

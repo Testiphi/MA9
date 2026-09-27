@@ -2,6 +2,9 @@
   "schema_version": 1,
   "authority": "user_explicit_2026_09_27",
   "purpose": "garage_allocation_eligibility",
+  "preferred_candidate_tier": "普通",
+  "candidate_tier_authority": "user_explicit_normal_tier_2026_09_27",
+  "candidate_tier_scope": "offline_allocator_preview; request must explicitly set tier",
   "rules": [
     {
       "id": "exclude_upgrade_ready",

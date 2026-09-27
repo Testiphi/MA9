@@ -1,108 +1,96 @@
 # MA9
 
-基于 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 的《狂野飙车 9》国服自动化脚本。目前主要在 MuMu 模拟器上开发，重点完善多人游戏循环。
+English · [简体中文](README.zh-CN.md)
 
-项目处于公开测试阶段。Windows 测试包已经包含图形界面、MaaFramework 和独立运行时，普通使用者不需要安装 VS Code 或 Python。当前重点验证 3 局和 20 局多人循环；长时间运行、不同账号车库和实际升降级后的稳定性仍在测试。
+MA9 is an automation project for the Chinese version of Asphalt 9, built on [MaaFramework](https://github.com/MaaXYZ/MaaFramework). Development has mainly used the MuMu emulator. The project remains in public testing. Existing multiplayer loop tasks remain available, while further multiplayer development is currently paused. Duel garage and allocation work is being reviewed offline.
 
-## 下载
+## Download
 
-前往 [GitHub Releases](https://github.com/Testiphi/MA9/releases) 下载最新的 Windows x64 测试包并完整解压。请不要直接在压缩包内运行，也不要下载仓库的 Source code 代替测试包。
+Download and fully extract the Windows x64 test package from [GitHub Releases](https://github.com/Testiphi/MA9/releases). Do not run it inside the archive or use the repository's Source code archive in place of the test package. The test package includes the graphical interface, MaaFramework, and a standalone runtime; users do not need VS Code or Python.
 
-测试包暂时只面向 Windows 和《狂野飙车 9》国服。它会真实操作游戏、消耗车辆油量并开始多人比赛，请先使用方便观察的账号和 3 局任务试跑。
+The package currently targets Windows and the Chinese version of Asphalt 9. It controls the game, uses vehicle fuel, and starts multiplayer races. For a first run, use an account you can watch and start with the three-race task.
 
-## 使用前准备
+## Before you start
 
-1. 安装 MuMu 模拟器，并在模拟器设置中开启 ADB 调试。其他支持 ADB 的安卓模拟器理论上可以连接，但尚未验证。
-2. 在模拟器中安装并登录《狂野飙车 9》国服，把游戏语言设为中文。
-3. 将游戏切到横屏，建议使用 1280×720 或相同比例；MA9 控制器的短边保持 720。
-4. 关闭可能遮挡游戏的悬浮窗，并确保游戏至少已经进入主页。
+1. Install MuMu and enable ADB debugging in its settings. Other Android emulators with ADB support have not been verified.
+2. Install and sign in to the Chinese version of Asphalt 9, and set the game language to Chinese.
+3. Put the game in landscape mode. Use 1280×720 or the same aspect ratio if possible; keep the MA9 controller's short side at 720.
+4. Close overlays that could cover the game, and enter at least the game home screen.
 
-## 第一次运行
+## First run
 
-1. 解压测试包，双击 `MFAAvalonia.exe`。
-2. 控制器选择“安卓端”，资源选择“官服”。
-3. 在设备列表选择正在运行的模拟器。如果没有自动出现，先确认 MuMu 的 ADB 开关和端口，再刷新设备列表。
-4. 连接成功后，先运行“多人运行时数据自检（Agent）”。只有自检成功才继续。
-5. 从游戏主页运行“多人循环试跑（白金/黄金/白银自动识别，连续3局，自动开赛）”。第一次请观察选车、TouchDrive、开赛、氮气和结算返回是否正常。
-6. 3 局完整结束后，再考虑运行连续 20 局版本。
+1. Extract the test package and open `MFAAvalonia.exe`.
+2. Select “安卓端” as the controller and “官服” as the resource.
+3. Select the running emulator in the device list. If it does not appear, check MuMu's ADB setting and port, then refresh the list.
+4. After connecting, run “多人运行时数据自检（Agent）” first. Continue only when it succeeds.
+5. From the game home screen, run “多人循环试跑（白金/黄金/白银自动识别，连续3局，自动开赛）”. Watch vehicle selection, TouchDrive, race start, nitro, and the return from results.
+6. Try the 20-race task only after the three races finish normally.
 
-任务显示完成并不一定代表所有比赛都已跑完。如果画面停住、选错车辆或提前结束，请停止任务并保留测试包内的 `debug` 目录。提交问题时说明模拟器版本、游戏分辨率、开始任务时所在页面和最后停留页面，并附上 `debug/maafw.log` 与 `debug/on_error` 中对应截图；日志可能包含本机路径或游戏昵称，公开上传前请自行检查。
+A completed task status does not necessarily mean every race finished. If the screen stalls, the wrong car is selected, or the task ends early, stop it and keep the package's `debug` directory. When reporting an issue, include the emulator version, game resolution, starting and final screens, `debug/maafw.log`, and relevant screenshots from `debug/on_error`. Logs may contain local paths or your in-game name; review them before posting publicly.
 
-## 当前功能
+## Current features
 
-- 主页导航、进入多人游戏及经典系列赛。
-- 每局从系列赛首页“我的评级分”左侧徽章确认玩家段位，目前支持白金、黄金、白银。白金可按账号策略使用白金及以下车辆，黄金和白银同样向下兼容。
-- 推荐车按审核后的顺序查找，先从相邻高段位起点反向搜索，再从本段位起点正向搜索；开启“仅拥有”，跳过缺油、未拥有和无法参赛的车辆。
-- 推荐车全部不可用时倒序遍历车辆详情，找到有油且能参赛的车；到青铜首车仍不可用时停止，避免环绕死循环。
-- 以车名定位、点击左侧车身，避开未满星车辆的整张图纸区域。误入图纸获取页时关闭 ×，返回后重新选择同一候选，恢复次数有上限。
-- 开赛前确认 TouchDrive 开启。局内采用通用双击氮气兜底：两次间隔 0.75 秒，组合间等待 6 秒。
-- 成绩→奖励→跳过广告机会→名人堂奖励（若出现，点击继续）→返回系列赛；处理升级“继续”、降级“确定”，下一局重新确认段位。
-- 广告关闭具有最高识别优先级。处理多人服务器错误、连接错误重试和通用广告关闭；服务器错误返回选车列表后用独立计数重新查找推荐车。
-- 英文界面切换为中文并应用重启设置，以及车库外观弹窗处理。
-- 擂台资格赛五车页面可从图形界面生成弱防方案，或按所选等级自动配置五辆当前性能分最低的已拥有车辆；支持 D/C/B/A/S/R。若所选等级不足五辆，会依次使用更低等级补足且不会重复用车。配置完成后停在五车页面，不会点击“开始”。
+The multiplayer loop navigates from the home screen to Classic Series. Before each race it reads the badge beside “我的评级分” on the series home screen to identify Platinum, Gold, or Silver. Eligible vehicles can come from that rank or lower ranks. It searches cars in the reviewed recommendation order, uses the game's “仅拥有” filter, and skips cars without fuel, ownership, or race eligibility. If the recommended cars cannot be used, it checks vehicle details in reverse order until it finds an eligible car or reaches the first Bronze car. It locates cars by name and taps the left side of the vehicle body to avoid blueprint areas on cars below maximum stars; recovery from an accidental blueprint page is bounded.
 
-选车顶部高亮表示列表位置，车辆详情段位图标表示参赛要求，两者都不作为玩家当前段位依据。黄金车辆因段位不可用时会返回系列赛首页重新确认。
+Before starting, it checks TouchDrive. In the race it uses a general double-tap nitro fallback: 0.75 seconds between taps and 6 seconds between pairs. After the race it handles results, rewards, ad opportunities, Hall of Fame rewards when shown, and the return to the series. It handles promotion and demotion prompts, then checks the rank again for the next race. Ad dismissal takes priority, while server and connection errors have bounded retries. There are also tasks for switching an English game interface to Chinese, applying a restart, and closing garage appearance popups.
 
-## 测试版范围
+The Duel qualifying five-car page has defense setup tasks. The GUI can preview a weak defense plan or configure the five owned cars with the lowest current performance rating from a selected class (D/C/B/A/S/R). If the class has fewer than five cars, it fills from lower classes without reusing a car. It leaves an existing five-car defense intact and can resume at the first expanded empty slot. The vehicle scan uses multiple OCR frames; failed quick positioning falls back to a full scan with bounded retries. Setup stops on the five-car page and does not press “开始”. For a first use, run “生成五车弱防方案（预演）” and check its results before configuring cars.
 
-- 当前自动识别白金、黄金、白银段位；其他段位会停止。
-- 测试包不包含开发者的车库、个人选车排序、截图或日志。多人循环先使用内置推荐顺序和游戏内“仅拥有”筛选。
-- 未知页面、无法确认段位、恢复次数耗尽或所有车辆不可用时会停止。
-- 20 局表示局数上限，不是 60 分钟计时器。
-- “账号被其他设备登录：立即顶回并重进擂台”会确认顶号标题和说明，点击右上角 ×，然后从游戏主页重新进入擂台；自定义等待时间后续加入。
-- 擂台五车自动配置已加入图形界面，可从多人模式首页、资格赛失败/重开页或资格赛五张地图页面启动；已有五辆防守车时会原样保留并结束，中断后可从当前展开的第一个空位继续。车辆列表采用自适应多帧 OCR，稳定页面连续两次一致即可继续；首次扫描会记录车辆所在页，后续选车快速滑到附近再核对名称、性能分和星级。快速定位失败时会自动退回完整扫描，滚动车名或误入相邻车辆详情会进行有限重试。首次请先运行“生成五车弱防方案（预演）”，确认识别结果后再运行实际配置。进攻选车策略仍在开发。
+The highlight at the top of a vehicle list indicates list position. A rank icon in vehicle details indicates entry requirements. Neither establishes the player's current rank; if a Gold car is unavailable because of rank, the task returns to the series home screen to check again.
 
-## 开发与本地打包
+## Offline Duel review and allocation
 
-开发者可在 VS Code 安装 **Maa Pipeline Support**，直接加载 `assets` 资源调试。现有 `install/` 是本机运行目录，可能含日志和本机配置，不能原样发送给别人。已有 Windows x64 的 MFAAvalonia、MaaFramework 与独立 Agent 打包流程；本地构建 Agent 后，可运行 `tools/prepare_portable_preview.py --zip` 在 `build/portable/` 生成经过清理的试用包。
+Developer tools can review vehicle identity and star strips from saved Duel garage frames, sync versioned local snapshots of MutualExclusionAllocator data and reviewed logic, roll back a snapshot, and produce Pareto allocation previews. The current offline planning workflow uses the Normal tier (普通档). This does not expand automated game control. Offline allocation is not connected to execution, and there is no complete user-facing garage GUI for it. These developer tools should not be assumed to be in the public test package. See [Allocator sync and offline allocation](docs/zh_cn/develop/duel_allocator_sync.md) for use and limits.
 
-## 数据与开发
+## Test scope and limitations
 
-| 目录 | 内容 |
-|---|---|
-| `assets/resource/pipeline/` | 已生成的导航、选车、异常恢复及多人循环任务 |
-| `assets/resource/image/navigation/` | 识别用裁剪模板 |
-| `captures/` | 原始截图与离线识别检查结果 |
-| `data/sources/` | 车辆 CSV、推荐源文档及人工修正数据 |
-| `data/generated/` | 车辆目录、已审核推荐快照和生成清单 |
-| `tools/` | 数据导入、素材整理、任务生成和检查脚本 |
+- Automatic rank changes currently cover Platinum, Gold, and Silver. The task stops on other ranks, unknown pages, uncertain states, exhausted recovery attempts, or no eligible vehicles.
+- The test package contains no developer garage profile, personal vehicle order, screenshots, or logs. The multiplayer loop initially uses its built-in recommendation order and the game's “仅拥有” filter. The 20-race task has a race limit, not a 60-minute timer.
+- “账号被其他设备登录：立即顶回并重进擂台” checks the account-login warning, closes it with the upper-right ×, and re-enters Duel from the home screen. Custom wait time has not been added.
+- Track loading recognition has only preliminary assets; there is no track-specific percentage control. In-race nitro remains a general fallback. Duel attack-car selection is still under development.
+- List OCR reduces the need for a template for every car, but emulator scrolling, moving car names, and detail states still need testing. Offline recognition, branch, and format checks cannot replace actual taps and long-running emulator tests.
 
-账号策略初始把 `data/sources/各级别霸主.docx` 中人工审核的“自动霸主”和“自动挡/脚本”车辆排在前面，其余已确认拥有的兼容车辆追加在后；用户可在 GUI 中重排。审核快照为 `data/generated/champion_rotation.json`，车型别名及段位修正保存在源数据和覆盖表中，旧 Excel 序列不再用于当前循环。
+## Development and local packaging
 
-修改素材或已审核推荐数据后，在项目根目录生成动态循环并检查分支：
+Developers can install **Maa Pipeline Support** in VS Code and load `assets` for debugging. `install/` is a local runtime directory and may contain logs or machine-specific settings; do not distribute it as-is. On Windows, `.\tools\setup_dev.ps1` sets up the development environment. Dependency lists are in `agent/requirements*.txt`.
+
+After changing assets or reviewed recommendation data, regenerate and check the dynamic multiplayer loop from the project root:
 
 ```powershell
-python -X utf8 tools/prepare_dynamic_multiplayer_loop.py
-python -X utf8 tools/check_dynamic_multiplayer_loop.py
+./.venv/Scripts/python.exe -X utf8 -B tools/prepare_dynamic_multiplayer_loop.py
+./.venv/Scripts/python.exe -X utf8 -B tools/check_dynamic_multiplayer_loop.py
 ```
 
-Windows 开发环境可运行 `.\tools\setup_dev.ps1` 一键建立；固定依赖见 `agent/requirements*.txt`。不要用旧的静态 `prepare_multiplayer_loop.py` 直接覆盖动态循环结果。推荐源重新匹配后须先人工审核，再使用 `approve_champion_rotation.py` 保存审核快照。
+Do not use the old static `prepare_multiplayer_loop.py` to overwrite the dynamic loop. Review rematched recommendation sources before saving an approved snapshot with `approve_champion_rotation.py`. The multiplayer loop combines Pipeline and a Python Agent. Account vehicle order starts from reviewed cars confirmed as owned; `tools/selection_gui.py` opens a separate sorting window, provided as `ma9-selection.exe` in the package. Saved order is read on the next multiplayer selection, with reverse-order fallback if priority cars cannot be used. See [Selection strategy](docs/zh_cn/develop/selection_strategy.md) and [Multiplayer runtime refactor](docs/zh_cn/develop/runtime_refactor.md).
 
-多人循环使用 Pipeline 与 Python Agent 混合结构。账号选车策略从完整的已拥有车辆列表生成，可用 `tools/selection_gui.py` 打开独立排序窗口；发行包提供 `ma9-selection.exe`。保存后的顺序会在下一次多人选车时读取，所有优先车不可用则进入倒序兜底。九个段位的账号扫描确认拥有 292 辆，存档中的 425 张卡片 OCR 交叉检查全部通过；新运行时选车动作仍需在模拟器上完成多人试跑。开发说明见 [选车策略](docs/zh_cn/develop/selection_strategy.md) 和 [多人运行时改造](docs/zh_cn/develop/runtime_refactor.md)。
+The local Windows x64 packaging workflow puts MFAAvalonia, MaaFramework, the standalone Agent, and the vehicle-order tool in one directory. After `.\tools\prepare_release_deps.ps1`, use `.\tools\build_windows_package.ps1` to assemble it. After a local Agent build, `tools/prepare_portable_preview.py --zip` can produce a cleaned trial package under `build/portable/`. These are local build steps, not a claim that the new offline allocation tools are in a public release.
 
-发布目标为 Windows x64 免 Python 环境包：MFAAvalonia 界面、MaaFramework 原生运行库、独立 MA9 Agent 和选车排序程序会被放进同一目录。运行 `.\tools\prepare_release_deps.ps1` 后即可用 `.\tools\build_windows_package.ps1` 组装本地包，详细说明见上述开发文档。
+| Path | Contents |
+| --- | --- |
+| `assets/resource/pipeline/` | Navigation, vehicle selection, recovery, and multiplayer loop tasks |
+| `assets/resource/image/navigation/` | Cropped recognition templates |
+| `captures/` | Original screenshots and offline recognition checks |
+| `data/sources/` | Vehicle CSVs, recommendation source documents, and manual corrections |
+| `data/generated/` | Vehicle catalog, reviewed recommendation snapshots, and generated manifests |
+| `tools/` | Data import, asset preparation, task generation, and checking scripts |
 
-## 目前限制
+The initial account policy prioritizes the reviewed “自动霸主” and “自动挡/脚本” cars from `data/sources/各级别霸主.docx`, then appends other compatible cars confirmed as owned. Users can reorder them in the GUI. The current multiplayer loop uses the reviewed `data/generated/champion_rotation.json` snapshot rather than the old Excel sequence.
 
-- 自动段位切换覆盖白金、黄金、白银；其他玩家段位需补充首页识别及流程。
-- 当前账号的推荐选车使用列表 OCR，不要求每辆车单独制作列表模板；实机滑动、滚动车名和详情状态仍需验证。
-- 赛道加载识别仅有初步素材，尚未实现逐赛道百分比操作。局内氮气操作是通用兜底。
-- 离线模板、分支和格式检查已经用于验证当前资源，不能替代模拟器实际点击与长时运行测试。
+## Further reading
 
-## 相关说明
+- [Multiplayer loop trial](docs/zh_cn/develop/multiplayer_loop_test.md)
+- [Current multiplayer logic](docs/zh_cn/develop/current_multiplayer_model.md)
+- [Specific vehicle location test](docs/zh_cn/develop/vehicle_location_test.md)
+- [Dynamic rank recognition](docs/zh_cn/develop/dynamic_league.md)
+- [Safe selection below maximum stars](docs/zh_cn/develop/blueprint_safe_selection.md)
+- [Reverse-order vehicle fallback](docs/zh_cn/develop/reverse_fallback.md)
+- [Offline Duel recognition checklist](docs/zh_cn/develop/duel_offline_recognition.md)
+- [Allocator sync and offline allocation](docs/zh_cn/develop/duel_allocator_sync.md)
+- [Data directory](data/README.md)
+- [Framework development guide](docs/zh_cn/develop/how_to_develop.md)
 
-- [多人循环试跑](docs/zh_cn/develop/multiplayer_loop_test.md)
-- [当前多人逻辑模型](docs/zh_cn/develop/current_multiplayer_model.md)
-- [指定车辆定位测试](docs/zh_cn/develop/vehicle_location_test.md)
-- [动态段位判断](docs/zh_cn/develop/dynamic_league.md)
-- [未满星车辆安全选车](docs/zh_cn/develop/blueprint_safe_selection.md)
-- [倒序选车兜底](docs/zh_cn/develop/reverse_fallback.md)
-- [数据目录说明](data/README.md)
-- [擂台离线识别清单](docs/zh_cn/develop/duel_offline_recognition.md)
-- [框架开发指南](docs/zh_cn/develop/how_to_develop.md)
+## Credits and license
 
-## 鸣谢与许可
+MA9 is based on [MaaPracticeBoilerplate](https://github.com/MaaXYZ/MaaPracticeBoilerplate), powered by [MaaFramework](https://github.com/MaaXYZ/MaaFramework), and draws on [MaaAssistantArknights](https://github.com/MaaAssistantArknights/MaaAssistantArknights) for runtime state handling, battle action scheduling, and base selector design.
 
-本项目基于 [MaaPracticeBoilerplate](https://github.com/MaaXYZ/MaaPracticeBoilerplate)，由 [MaaFramework](https://github.com/MaaXYZ/MaaFramework) 驱动，并参考 [MaaAssistantArknights](https://github.com/MaaAssistantArknights/MaaAssistantArknights) 的运行时状态管理、战斗动作调度和基建选择器设计。
-
-MA9 以 [GNU AGPL-3.0-or-later](LICENSE) 发布。源自 MaaPracticeBoilerplate 的部分保留原 MIT 版权和许可声明，详见 [NOTICE](NOTICE) 与 [LICENSES/MIT-MaaPracticeBoilerplate.txt](LICENSES/MIT-MaaPracticeBoilerplate.txt)。
+MA9 is released under [GNU AGPL-3.0-or-later](LICENSE). Parts derived from MaaPracticeBoilerplate retain their original MIT copyright and license notices; see [NOTICE](NOTICE) and [LICENSES/MIT-MaaPracticeBoilerplate.txt](LICENSES/MIT-MaaPracticeBoilerplate.txt).
