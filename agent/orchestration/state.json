@@ -1143,23 +1143,25 @@
         }
       },
       "map_observer_task": {
-        "head": "9676d48a829e5d139f821ed22e7e29d9e30d2a4f",
-        "phase": "05O2_native_owner_fixing_orphan_group_blocker",
+        "head": "f476272a2b31ade42359b64330da07a9db6241c1",
+        "phase": "readonly_maps_reviewed_and_merged_gui_pending",
         "targeted_exit": 0,
-        "targeted_count": 43,
+        "targeted_count": 55,
         "native_frozen_replay": 18,
         "defense_verified": 6,
         "counterexample_exit": 1,
         "evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05O-orchestrator",
         "repair_prompt": "agent/orchestration/prompts/05O1-conflicting-map-rows.md",
-        "merged": false,
+        "merged": true,
         "prior_f1_closed": true,
-        "agent_count": 396,
+        "agent_count": 400,
         "agent_exit": 0,
         "tools_exit": 0,
-        "blocker": "extra map row in another x-group within the same geometric cell bypasses audit",
-        "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05OR-native-sol",
-        "owner_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05O2-cell-row-audit"
+        "blocker": null,
+        "review_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05O2R-native-sol",
+        "owner_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05O2-cell-row-audit",
+        "merge_commit": "4d662f4a854f97d78a5ee0d516591a433e0e0478",
+        "integration_evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05O-integration/results.json"
       }
     },
     "duel-defense": {
@@ -1447,7 +1449,7 @@
     "select_button_fix": "E:/hzz/work/MA9/MA9-evidence/select-button-fix"
   },
   "verification_notes": "01/02: Agent 82 pass; tools 12 pass+1 existing skip; schema pass. build npm ci/check pass. These are historical results at their recorded heads, not new lane acceptance. 2026-09-23迁移后总控独立验收05D f5472bc：Agent101、tools12+1skip、schema全部通过，仍待外部独立review和实机。",
-  "next": "原生Sol owner正在05O2按整个几何槽审计地图候选；Sol reviewer独立发现孤立x-group绕过。不得合入/GUI/实机，待修复再独立复核。用户无需搬运提示词，保留当前五车。",
+  "next": "05O+O1+O2只读五地图模块已独立Sol复核并合入4d662f4；主仓库Agent400/tools30(1skip)均exit0。下一阶段总控设计隔离只读GUI入口/报告/准确用户包，无选车/开赛；现五车保留。建议以HANDOFF_CURRENT.md启动干净总控任务，无活跃owner，原生Sol/Luna自动调度政策已生效。",
   "policy_commit": "103977249b2312ae5cb01b2e1221314553f8ff0c",
   "usage_snapshot_start": {
     "weekly_used_percent": 7,

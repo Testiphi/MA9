@@ -7,12 +7,13 @@
 ## 已完成
 0b8f1de目标采样修复已合入；五槽S Nevera/C 296GTB/A FE3/B GT65/D G60分别实机assigned+同槽返回，未开赛。证据20260927-slot3-fe3-assigned、slot4-success-slot5-config、slot5-success-left-edge。不是自动五槽循环/进攻验收。
 当前测试包build/user-test-fe3-0b8f1de/MA9-preview，exe a2ad2c9acb468af39e2e6d5113fdc55d58451df229fe22d1797a42893ba0cea3；私有配置仍slot5，勿让用户重跑。左缘裁切/侧栏遮挡EVO37覆盖缺口已登记，未修，不可宣称完整库存或未找到即未拥有。
-## 当前地图识别任务
-05O基点0b8f1de，新duel_lineup_maps.py+test，交付1f99c0b；同槽额外冲突行误verified，05O1修至9676d48。总控旧反例0、冻结18帧6防守正例不变，Agent396/tools30(1skip)exit0；实测提交仅2文件clean，“8文件”UI尾注不对应Git范围。
-原生Sol reviewer又发现另一x-group但同几何cell的孤立额外行被忽略；证据MA9-evidence/20260927-05OR-native-sol。不同Sol owner任务maps_cell_fix在做05O2，仅修改上述两文件；新证据20260927-05O2-cell-row-audit。结束前核对state与lane最新HEAD，勿同时写这两文件，勿未经独立复核合入。
-用户目标：防守只读五图及真槽号→参考表候选预览→复用单槽执行，之后进攻。当前不接GUI/策略，不改原duel_map_screen(归06)/observer/共享matcher/阈值。原生18静态样本+冻结OCR不等于实机动态通过。
+## 当前地图识别任务已收口
+完整范围0b8f1de..f476272：05O交付1f99c0b、05O1修复9676d48、原生Sol 05O2修复f476272a2b31ade42359b64330da07a9db6241c1。仅新duel_lineup_maps.py与test。第一阻塞为同x组额外地图行被忽略；第二阻塞为同几何槽的孤立x-group行被忽略；现按全部几何槽合格去重行审计，独立Sol reviewer重放新旧反例，55项定向exit0。证据05OR-native-sol、05O2-cell-row-audit、05O2R-native-sol。
+已合入main 4d662f4a854f97d78a5ee0d516591a433e0e0478；总控集成Agent400/tools30(1skip)实际exit0，见MA9-evidence/20260927-05O-integration/results.json。原生18静态样本+冻结OCR回放6防守正例不变，其余拒绝；不是设备动态证明。
+当前没有活跃写入owner或未完成reviewer；原生任务maps_cell_fix/maps_review均已完成。无需等旧对话agent，不要重复05O实现。
+用户目标：防守只读五图及真槽号→参考表候选预览→复用单槽执行，之后进攻。当前模块尚未接GUI/账号根/持久报告，不改原duel_map_screen(归06)/observer/共享matcher/阈值。
 ## 尚待
-完成05O2独立复核后再定只读GUI入口和准确包；用户无需清空当前五车。
+下一步设计并实现隔离只读GUI入口和准确包，复用现有root/account guard，报告五对地图与槽号；仍不调用选车/开赛。之后用户在已选五车阵容页进行只读实机验证，再推进策略候选。用户无需清空当前五车。
 历史推送794d3f1到remote main被自动审批拒绝，尚未获该批精确授权；不可借“继续”重试/推送更新HEAD。远端最后核实591e119，若需推送先重新核对并满足精确审批。
 ## 恢复顺序
 读state.json与本文件→git status/HEAD/worktree→读当前任务证据→确认活跃子agent/写入owner→继续同一边界。若新会话没有旧agent控制柄，先只读核对其是否结束，避免重复写入。

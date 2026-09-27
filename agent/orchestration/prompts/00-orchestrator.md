@@ -194,3 +194,6 @@ G60业务04f4ec4202584dc4b6ced038827a4812 assigned/same_slot_confirmed，before/
 
 ## 05O总控发现同槽额外冲突行漏审，05O1待返修
 交付1f99c0b两新文件；定向43exit0，18真帧hash+冻结OCR重放6防守通过。但总控合成F1同槽追加合法band小地图候选，旧parser和新层都只取前两行，单帧/稳定双帧仍verified=True；probe真实exit1。证据20260927-05O-orchestrator，05O1-conflicting-map-rows.md给ds新对话，仅两文件，保持原生样本。未合/未包/未GUI。
+
+## 2026-09-27 原生调度试点收口：05O2复核通过并合入
+用户已授权原生Sol/Luna调度，见lanes与HANDOFF_CURRENT。05O1原反例绿但Sol reviewer发现同槽孤立x-group被忽略；独立Sol owner修f476272、reviewer复核55exit0，合main4d662f4，集成400/tools30(1skip)exit0。只读地图模块完成，GUI/动态设备未接；下一步隔离只读GUI/报告/准确包，用户现五车保留。没有活跃owner；可新总控读HANDOFF_CURRENT继续，不再让用户搬运子任务提示词。
