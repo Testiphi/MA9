@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from runtime_action import find_project_root, DuelHomeZoneAction, DuelZoneCandidatesAction
+from runtime_action import find_project_root, DuelHomeZoneAction, DuelZoneCandidatesAction, DuelGarageSurveyAction
 from ma9_agent import garage_profile, models, selection_runtime, selection_strategy, vehicle_screen
 
 
@@ -75,13 +75,41 @@ class FrozenPublicContractTest(unittest.TestCase):
             ('对决防守：读取五图与槽号（只读，不点击）', '对决_隔离五图只读核验'),
             ('对决防守：①读取首页赛区（只读）', '对决_隔离首页赛区只读'),
             ('对决防守：②读取五图与本赛区候选（只读）', '对决_隔离赛区五图候选只读'),
+            ('对决车库：全等级采集（切级翻页，不选车）', '对决_隔离全车库采集'),
             ('普通任务', 'MyTask1'),
             ('选项任务', 'MyTask2'),
             ('参数任务', 'MyTask3'),
             ('带Custom的任务', 'MyTask4'),
         ]
         self.assertEqual([(task["name"], task["entry"]) for task in tasks], expected)
-        self.assertEqual(len(tasks), 55)
+        self.assertEqual(len(tasks), 56)
+
+    def test_garage_action_fixed_scope_and_incomplete_data(self) -> None:
+        from types import SimpleNamespace
+        report = dict(status="review_required", traversal_finished=True, browse_only=True,
+                      coverage_complete=False, allocation_ready=False, selection_attempted=False,
+                      starts_race=False, navigation_attempted=True, unique_vehicle_count=3,
+                      input_attempts=[{"allowed": True}])
+        context, root = object(), Path.cwd()
+        argv = SimpleNamespace(custom_action_param='{"choose":true,"classes":["D"],"root":"wrong"}')
+        with patch("runtime_action.find_project_root", return_value=root), patch("builtins.print"), \
+             patch("ma9_agent.duel_garage_survey.run_garage_survey",
+                   return_value=(report, root / "debug/report.json")) as run:
+            self.assertTrue(DuelGarageSurveyAction().run(context, argv))
+            run.assert_called_once_with(context, root)
+            report["allocation_ready"] = True
+            self.assertFalse(DuelGarageSurveyAction().run(context, argv))
+            report.update(allocation_ready=False, status="partial", traversal_finished=False)
+            self.assertFalse(DuelGarageSurveyAction().run(context, argv))
+            run.side_effect = ValueError("bad account root")
+            self.assertFalse(DuelGarageSurveyAction().run(context, argv))
+
+    def test_garage_node_has_no_assignment_or_navigation_followups(self) -> None:
+        import json
+        path = Path(__file__).resolve().parents[2] / "assets/resource/pipeline/duel_slot_test.json"
+        node = json.loads(path.read_text(encoding="utf8"))["对决_隔离全车库采集"]
+        self.assertEqual(node, dict(recognition="DirectHit", action="Custom",
+                                    custom_action="ma9_duel_garage_survey", timeout=3600000, next=[]))
 
     def test_zone_actions_ignore_overrides_and_fail_closed(self) -> None:
         from types import SimpleNamespace
