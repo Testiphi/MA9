@@ -1491,7 +1491,7 @@
     "reset_credits": 0,
     "note": "账号级14→18快照，不能精确归因某任务/模型"
   },
-  "gpt_subagents_enabled": false,
+  "gpt_subagents_enabled": true,
   "workspace_root": "E:/hzz/work/MA9",
   "fresh_conversation_per_task": true,
   "migration_report": "agent/orchestration/migration_20260923.md",
@@ -1668,6 +1668,24 @@
     "early_success": "two verified target samples then proceed immediately"
   },
   "future_garage_inventory": "User idea only: recognize owned garage and save locally later; not in current implementation scope",
+  "readonly_maps_gui_task": {
+    "phase": "design_and_boundary_registered",
+    "base_main": "a4cad2fadec0fa172a9375cdcc9dfd9e3a77c5d2",
+    "base_lane": "f476272a2b31ade42359b64330da07a9db6241c1",
+    "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
+    "leaf_owner": "gpt-6-sol high",
+    "integration_owner": "orchestrator",
+    "reviewer": "independent gpt-6-sol high",
+    "leaf_files": ["agent/ma9_agent/duel_lineup_maps_test.py", "agent/tests/test_duel_lineup_maps_test.py"],
+    "integration_files": ["agent/runtime_action.py", "assets/interface.json", "agent/tests/test_runtime_root.py", "assets/resource/pipeline/duel_slot_test.json", "docs/zh_cn/develop/duel_slot_test.md"],
+    "scope": "guarded readonly five-map GUI entry and persisted report; fresh exact package; reuse existing account/root guard",
+    "device_authorized": false,
+    "device_test": "pending_user",
+    "push_authorized": false,
+    "start_weekly_used_percent": 4,
+    "evidence": "E:/hzz/work/MA9/MA9-evidence/20260927-05P-maps-gui",
+    "owner_limit": 1
+  },
   "model_dispatch": {
     "approved": "2026-09-27",
     "owner": "gpt-6-sol",

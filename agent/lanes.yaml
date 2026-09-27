@@ -520,6 +520,8 @@ lanes:
     owns_new:
       - agent/ma9_agent/duel_lineup_maps.py
       - agent/tests/test_duel_lineup_maps.py
+      - agent/ma9_agent/duel_lineup_maps_test.py
+      - agent/tests/test_duel_lineup_maps_test.py
       - agent/ma9_agent/duel_slot_selection.py
       - agent/tests/test_duel_slot_selection.py
       - agent/ma9_agent/duel_slot_entry.py
