@@ -65,7 +65,7 @@ Agent exe SHA256：e4153000e0caa35770aa890a14864910feda23bc5b22aec81fb30e8db9b45
 新config/duel_garage.json与每次debug/duel-garage-<run-id>保留结果；结束后用户反馈，总控查日志。partial保持现场，不盲目重跑。review_required/traversal_finished仅表示遍历六类，星级仍raw未确认、拥有provisional，coverage_complete/allocation_ready始终False；未扫到不等于未拥有。
 05T修正版已由用户运行，仍停B尾，当前进展见下文05U。主模型Astra medium/Standard不改，无推送。
 
-## 当前05U：第二次实机停B尾，修库存采样连续性
+## 05U历史修复：第二次实机停B尾
 f7bf3f0包实机14:43:43至14:50:32，run 7c04db7c9c87417b87400428803c3d01。partial为B:page_ocr_unverified，R3/S53/A54/B51共161条，C/D未扫；137帧hash全部通过、49导航，无选车/开赛。证据MA9-evidence/20260927-05U-inventory-continuity/audit.json。
 本次130移动中首帧4车、131停稳后2车；131和135读到正确B周年Ford，中间车名滚动仅余STO，两个窗口分别判未稳。没有新S误识，旧回放通过不代表所有时序已解决。
 已裁决仅库存路径在固定几何epoch内跨窗确认当前最新完整重复指纹（总预算仍8帧），保留未确认身份，禁止较少集合吞掉单例；移动/无公共锚/冲突等不得混页。130的Porsche911GT1/Brabham仅一次观察，必须独立notes保留、不入owned；survey显式覆盖欠账、profile追加sampling_history。scan_complete只代表遍历终止，coverage_complete/allocation_ready始终False。
@@ -79,10 +79,14 @@ f7bf3f0包实机14:43:43至14:50:32，run 7c04db7c9c87417b87400428803c3d01。par
 75de576包run 62de4343448e4f8bb3533b1ebb0e47db于15:54:25至15:58:39采集，A第2页page_ocr_unverified。本轮R3/S54/A7，累计档案166条，74帧/20次导航，无选车/开赛。证据MA9-evidence/20260927-05V-per-vehicle-evidence/report.json。
 67..74页面几何稳定，FE3在69/72、Lexus在67/68/70/71/72/73读出，但四车仅72同时出现一次。05U“整组指纹重复且最新帧含全部seen”仍过严。根全量审计三轮348帧/118真实导航窗口：68成功、49旧短记录不足以评估、1新A窗口失败；不能把49项包装成通过。audit_windows.py/windows-baseline.json可重放。
 独立Sol high设计审查同意B：库存逐ID同一连续epoch内两份原帧证据，独立collector保存每车原capture/确认pair，最新frame/current_cards只负责当前页面与安全定位；不要求所有滚动车名同帧。限定预算末在连续性与类别证据成立时允许pending记notes后浏览，单次不入owned；higher class与B/C边界不能因OCR暂失放宽。历史库存记录标inventory_only并禁止点击，目标单槽双读/详情路径保持。stars仍raw，coverage/allocation仍False。
-当前inventory_evidence_owner（Sol high）唯一写入，限runtime/profile及各test四文件；不改screen/共享matcher/阈值/GUI/输入白名单。设计记录05V/design.md，后续须独立成品复核、全118窗口比较与准确包校验。无设备授权、无推送；先完成验证再请用户实机。
+05V功能fa9d8beb6d141f66883d41510d6a7b617d7a3c6e，合入70878b04c2f0aa6aaa2a96d97015d179ff7740c6。仅runtime/profile及各test四文件；未改screen/共享matcher/阈值/GUI/输入白名单。库存旁路collector保存逐车双读原始证据；tuple当前frame/cards仍同帧，历史记录inventory_only禁止点击。class guard/边界使用当前epoch全部seen类，单次不进owned，预算末符合连续性时以notes保留欠账后浏览。星级source_capture对应整份原card，identity_capture_pair独立保存，不从多帧拼凑星级。
+独立Sol high成品复核通过，05V/review-fixed.md；源Agent474(1skip)/tools30(1skip)实际exit0。全部118已存导航窗口回放比对，68基线成功窗口均不退步；历史短记录的帧不足仍单独标记，不虚构额外画面。三个关键段经真实原PNG/OCR和包内代码回放均通过，A67..74确认四ID，FE3 pair69/72、source72；旧B两段保持136/135确认。仍非新包动态证明或完整库存验收。
+准确包：E:\hzz\work\MA9\MA9-worktrees\duel-scan\build\user-test-garage-fa9d8be\MA9-preview。exe SHA256：95f0a09f7a546d9be06143b20fe3c1c81391f902f85e2ec2d15fc196b23d3067。包内29模块代码一致、116测试(1skip)进程0，旧runtime/profile负对照预期exit1；新interface schema0，资源hash与已验证业务输入一致，仅排除旧GUI运行后生成mfa_layout.json，不重复解析大分片。完整结果05V/results.json。
+现有166条待核验记录/采样历史原样保留，只重绑本包根并留原profile SHA。所有被档案引用的历史run（当前2个）连同PNG/OCR逐文件hash复制到新debug原run-id路径，确保旧引用可用。备份profile在debug/archive-05U，旧包不改；导入旧报告仍保留原runtime_root，不能当作新实机成功。
+下一步用户关闭旧包、打开新包先自检，保持当前车辆选择页面，单独运行全等级采集。仍从R遍历六级，无A/B断点续扫；不清空五车，已有166条保留增补。新包实机未运行，coverage_complete/allocation_ready仍False；owner/reviewer均结束，无设备操作、无推送。
 
 ## 后续星级与覆盖关卡
-先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。现有stable仅比车型不比星，旧scan保留首读，不具备可信星级档案证明。
+先全库采集、校验身份/覆盖、确认星级，再形成可复用账号档案和验证完整分配输入。重复运行后可增量补查，但不能用部分owned交集丢弃未知候选。后续须确认完整星条同车双帧，金底/裁切/冲突转详情补证；未知不填0、不从性能分或目录上限推当前星级。库存身份双读不等于星级双读；当前仅保留某一原帧的raw星级，未做完整星条一致性确认，不具备可信星级档案证明。
 EVO37左缘/侧栏与可选列表是否等价完整拥有集合仍是覆盖关卡。首轮保存证据用于离线补识别，必要时针对缺口补采，不强行凑完整。当前参考表无最低星级要求，不自创满星门槛；后续要核对原分配器真正所需星级输入/约束，不能只用车型排序替代。车库数据未确认前不做完整自动分配；本轮未配置车/升级/购买/开赛。
 
 ## 原生测试退出异常
