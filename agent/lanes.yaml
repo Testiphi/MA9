@@ -537,6 +537,11 @@ lanes:
       - agent/ma9_agent/duel_zone_session.py
       - agent/tests/test_duel_zone_session.py
       - docs/zh_cn/develop/duel_zone_session.md
+      - agent/ma9_agent/duel_garage_profile.py
+      - agent/tests/test_duel_garage_profile.py
+      - agent/ma9_agent/duel_garage_survey.py
+      - agent/tests/test_duel_garage_survey.py
+      - docs/zh_cn/develop/duel_garage_survey.md
       - agent/ma9_agent/duel_slot_selection.py
       - agent/tests/test_duel_slot_selection.py
       - agent/ma9_agent/duel_slot_entry.py
