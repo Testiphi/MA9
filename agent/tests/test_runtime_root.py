@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from runtime_action import find_project_root, DuelHomeZoneAction, DuelZoneCandidatesAction, DuelGarageSurveyAction
+from runtime_action import find_project_root, DuelHomeZoneAction, DuelZoneCandidatesAction, DuelGarageSurveyAction, DuelGaragePageProbeAction
 from ma9_agent import garage_profile, models, selection_runtime, selection_strategy, vehicle_screen
 
 
@@ -75,6 +75,7 @@ class FrozenPublicContractTest(unittest.TestCase):
             ('对决防守：读取五图与槽号（只读，不点击）', '对决_隔离五图只读核验'),
             ('对决防守：①读取首页赛区（只读）', '对决_隔离首页赛区只读'),
             ('对决防守：②读取五图与本赛区候选（只读）', '对决_隔离赛区五图候选只读'),
+            ('对决车库：当前页自检（只读，不翻页）', '对决_隔离当前车库页只读'),
             ('对决车库：全等级采集（切级翻页，不选车）', '对决_隔离全车库采集'),
             ('普通任务', 'MyTask1'),
             ('选项任务', 'MyTask2'),
@@ -82,7 +83,34 @@ class FrozenPublicContractTest(unittest.TestCase):
             ('带Custom的任务', 'MyTask4'),
         ]
         self.assertEqual([(task["name"], task["entry"]) for task in tasks], expected)
-        self.assertEqual(len(tasks), 56)
+        self.assertEqual(len(tasks), 57)
+
+    def test_garage_page_probe_ignores_arguments_and_requires_zero_input(self):
+        from types import SimpleNamespace
+        report = dict(status="observed", stable=True, read_only=True, profile_updated=False,
+                      navigation_attempted=False, selection_attempted=False, starts_race=False,
+                      coverage_complete=False, allocation_ready=False, input_attempts=[], captures=4,
+                      confirmed_records=[{"vehicle": {"id": "one"}}])
+        root, context = Path.cwd(), object()
+        with patch("runtime_action.find_project_root", return_value=root), patch("builtins.print"), \
+             patch("ma9_agent.duel_garage_survey.run_garage_page_probe",
+                   return_value=(report, root / "debug/report.json")) as run:
+            argv = SimpleNamespace(custom_action_param='{"choose":true,"classes":["D"]}')
+            self.assertTrue(DuelGaragePageProbeAction().run(context, argv))
+            run.assert_called_once_with(context, root)
+            for key, value in (("profile_updated", True), ("input_attempts", [{"allowed": False}]),
+                               ("captures", 11), ("captures", True), ("stable", False),
+                               ("confirmed_records", [])):
+                old = report[key]
+                report[key] = value
+                self.assertFalse(DuelGaragePageProbeAction().run(context, argv))
+                report[key] = old
+        import json
+        node = json.loads((Path(__file__).resolve().parents[2] /
+                         "assets/resource/pipeline/duel_slot_test.json").read_text(encoding="utf8"))[
+                             "对决_隔离当前车库页只读"]
+        self.assertEqual(node, dict(recognition="DirectHit", action="Custom",
+                                   custom_action="ma9_duel_garage_page_probe", timeout=120000, next=[]))
 
     def test_garage_action_fixed_scope_and_incomplete_data(self) -> None:
         from types import SimpleNamespace

@@ -381,7 +381,14 @@ def _name_bands(ocr: list[dict[str, Any]], top: int
         # manufacturer line already supplies for identification.
         anchor = [item["box"][0] for item in group
                   if re.search(r"[A-Za-z]", item["text"])]
-        bands.append((min(anchor or [item["box"][0] for item in group]) - 4, group))
+        left = min(anchor or [item["box"][0] for item in group]) - 4
+        # A neighbouring column's bare statistic may have been grouped with
+        # this name. Keep digits that overlap the card edge (including model
+        # numbers), but exclude a number wholly outside this card.
+        group = [item for item in group if not (
+            _key(item["text"]).isdigit()
+            and item["box"][0] + item["box"][2] <= left)]
+        bands.append((left, group))
     return bands
 
 

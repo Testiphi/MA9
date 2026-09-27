@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ma9_agent.duel_selection import plan_live_weak_defense
 from ma9_agent.duel_vehicle_screen import (read_clipped_candidate, read_visible_cards,
-                                           rolling_identity)
+                                           rolling_identity, _name_bands)
 from ma9_agent.vehicle_screen import _key, match_vehicle
 
 #: The shipped full catalog, used as read-only input by the tail-rejection test.
@@ -533,6 +533,48 @@ class DuelFamilyIdentityTest(unittest.TestCase):
         self.assertEqual(self._read("FORD", "MUSTANG RTR SPEC 5-FD")
                          [0]["vehicle"]["id"], "fd")
         self.assertEqual(self._read("FORD", "MUSTANG RTR SPEC 5 UNKNOWN"), [])
+
+    def test_neighbour_statistic_cannot_choose_fd_from_ambiguous_ford_name(self):
+        image = np.zeros((720, 1280, 3), dtype=np.uint8)
+        neighbour = {"text": "18", "confidence": .99, "box": [0, 552, 24, 28]}
+        brand = {"text": "FORD", "confidence": .99, "box": [64, 560, 62, 19]}
+        for model in (
+            {"text": "MUSTANG RTR SPEC !", "confidence": .99,
+             "box": [69, 578, 196, 22]},
+            {"text": "USTANG RTR SPEC 5 1", "confidence": .99,
+             "box": [64, 578, 201, 22]},
+        ):
+            with self.subTest(model=model["text"]):
+                clean = read_visible_cards(image, [brand, model], self.CATALOG)
+                self.assertEqual(clean, [])
+                for text in ("18", "58.18", "58,18", "58 18", "18.0", "18%"):
+                    with self.subTest(neighbour=text):
+                        noisy = read_visible_cards(image, [{**neighbour, "text": text}, brand, model],
+                                                   self.CATALOG)
+                        self.assertEqual(noisy, clean)
+
+        complete = {"text": "MUSTANG RTR SPEC 5-FD", "confidence": .99,
+                    "box": [64, 578, 201, 22]}
+        clean = read_visible_cards(image, [brand, complete], self.CATALOG)
+        noisy = read_visible_cards(image, [neighbour, brand, complete], self.CATALOG)
+        self.assertEqual(noisy, clean)
+        self.assertEqual(noisy[0]["vehicle"]["id"], "fd")
+
+    def test_digits_inside_name_band_are_retained(self):
+        brand = {"text": "PORSCHE", "confidence": .99, "box": [64, 560, 92, 19]}
+        for model in ("911", "918", "004C", "G60", "911.5"):
+            with self.subTest(model=model):
+                number = {"text": model, "confidence": .99,
+                          "box": [64, 578, 50, 22]}
+                bands = _name_bands([brand, number], 395)
+                self.assertEqual([item["text"] for item in bands[0][1]],
+                                 ["PORSCHE", model])
+
+        crossing = {"text": "918", "confidence": .99,
+                    "box": [58, 578, 3, 22]}
+        bands = _name_bands([brand, crossing], 395)
+        self.assertEqual(bands[0][0], 60)
+        self.assertIn(crossing, bands[0][1])
 
     def test_short_name_and_unanchored_brand_keep_generic_match(self):
         self.assertEqual(self._read("RIMAC", "NEVERA", [
