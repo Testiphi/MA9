@@ -26,6 +26,17 @@ ROW_TOPS = (168, 395)
 ROLLING_MIN_CONFIDENCE = .85
 ROLLING_MIN_BRAND = 4
 ROLLING_MIN_FRAGMENT = 12
+#: Shortest visible model word that may still *contradict* a candidate or
+#: resolve an ambiguous one (MA9-05AG).  A word this short can never identify a
+#: car on its own, but on a card whose long name has not been revealed yet it is
+#: often the only evidence there is: the recorded Huracan card read ``HURACAN S``
+#: (the shared head of the STO and the Super Trofeo EVO) and the recorded Ford
+#: card read ``5-FD`` beside ``MUSTANG RTR``, where only the short word rules the
+#: anniversary out.  Below this length a word is OCR noise next to the real model
+#: line -- the same frames carry a stray ``HL`` -- so it decides nothing.
+#: Shortening this floor only ever *withholds* more, never confirms more: a word
+#: is evidence only by being absent from a candidate's name.
+ROLLING_MIN_PARTIAL = 3
 ROLLING_MAX_EDITS = 1
 ROLLING_MAX_HEAD_DROP = 1
 ROLLING_LINE_TOLERANCE = 8
@@ -194,7 +205,8 @@ def _window_run(fragment: str, candidate: str, start: int) -> tuple[int, int]:
     return length, edits
 
 
-def _fragment_window(fragment: str, candidate: str, position: int) -> tuple[int, int] | None:
+def _fragment_window(fragment: str, candidate: str, position: int,
+                     minimum: int = ROLLING_MIN_FRAGMENT) -> tuple[int, int] | None:
     """First window of ``candidate`` that explains the whole ``fragment``.
 
     A window counts only when it consumes the *entire* fragment (after the one
@@ -203,10 +215,14 @@ def _fragment_window(fragment: str, candidate: str, position: int) -> tuple[int,
     leaves the fragment's tail unexplained, and a visible tail that does not fit
     is a contradiction of that candidate, not a short match.  Requiring the full
     run is what keeps a long contradictory fragment from being read as a prefix.
+
+    ``minimum`` is the shortest fragment this search may even attempt.  The
+    rolling model line passes :data:`ROLLING_MIN_FRAGMENT`; the brand line and
+    the partial-name check below pass lower bounds of their own.
     """
     for drop in range(ROLLING_MAX_HEAD_DROP + 1):
         trimmed = fragment[drop:]
-        if len(trimmed) < ROLLING_MIN_FRAGMENT:
+        if len(trimmed) < minimum:
             continue
         for start in range(position, len(candidate)):
             # ``_window_run`` stops as soon as the edit budget is spent, so a
@@ -221,9 +237,17 @@ def _candidate_fragments(signature: tuple[str, list[str]], candidate: str
                          ) -> list[tuple[int, int]] | None:
     """Windows of ``candidate`` that satisfy the visible rolling signature."""
     brand, fragments = signature
-    if len(brand) < ROLLING_MIN_BRAND or not candidate.startswith(brand):
+    if len(brand) < ROLLING_MIN_BRAND:
         return None
-    position = len(brand)
+    # The whole identity block rolls, so the manufacturer line loses its own
+    # head too: the recorded card of the Neon Edition read ``OTORS`` for
+    # ``W MOTORS``.  The brand is therefore the first window of the candidate
+    # that explains it whole, and only the fragments after it are model text.
+    brand_window = _fragment_window(brand, candidate, 0,
+                                    minimum=ROLLING_MIN_BRAND)
+    if brand_window is None:
+        return None
+    position = brand_window[1]
     windows = []
     for fragment in fragments:
         if len(fragment) < ROLLING_MIN_FRAGMENT:
@@ -240,6 +264,97 @@ def _candidate_fragments(signature: tuple[str, list[str]], candidate: str
     return windows or None
 
 
+def _prefix_of_longer_title(key: str, catalog: list[dict[str, Any]]) -> bool:
+    """Whether a longer catalog title starts with this complete title.
+
+    Such a reading is the one shape a single frame cannot decide: the plain
+    car's own name and the not-yet-revealed head of its longer sibling are the
+    same visible text, so the reading carries
+    ``prefix_of_longer_title`` for the caller's identity gate. More identical
+    captures cannot resolve it.
+    """
+    return any(other != key and other.startswith(key)
+               for other in (_key(row["title"]) for row in catalog))
+
+
+def _within_one_difference(first: str, second: str) -> bool:
+    """Whether two short strings differ by at most one character of any kind.
+
+    A difference is one substituting, one extra or one missing character.
+    """
+    if first == second:
+        return True
+    if abs(len(first) - len(second)) > 1:
+        return False
+    if len(first) == len(second):
+        return sum(left != right for left, right in zip(first, second)) <= 1
+    longer, shorter = ((first, second) if len(first) > len(second)
+                       else (second, first))
+    return any(longer[:index] + longer[index + 1:] == shorter
+               for index in range(len(longer)))
+
+
+def _explains_word(word: str, candidate: str) -> bool:
+    """Whether ``candidate``'s key contains one visible model word.
+
+    True when some window of the key matches the word with at most
+    :data:`ROLLING_MAX_EDITS` differing characters.  The window is the same
+    length as the word, one character shorter or one character longer, because a
+    key can be short one character of the rendering or long one: ``_key`` applies
+    NFKC and then drops every non-``[a-z0-9]`` character, so the accent of
+    ``Spéirling`` disappears from the key (``spirling``) while the rendered name
+    still shows nine characters and the recorded OCR read ``SPEIRLING`` -- one
+    extra character, and nothing else.
+
+    The bound is deliberately one, not a shared substring: a word that merely
+    shares a run of characters (``HURACANXXX`` against ``...huracansto``, or
+    ``G60XXX`` against ``ginettag60``) is a different word, and treating it as
+    the same name confirms a car from text that was never on the card.
+    """
+    if len(word) < ROLLING_MIN_PARTIAL:
+        # Below the evidence minimum: neither a match nor a contradiction.
+        return True
+    for length in (len(word) - 1, len(word), len(word) + 1):
+        if length <= 0:
+            continue
+        for start in range(len(candidate) - length + 1):
+            if _within_one_difference(word, candidate[start:start + length]):
+                return True
+    return False
+
+
+def _visible_model_supports(brand: str, model_words: list[str], fuzzy: dict[str, Any],
+                            catalog: list[dict[str, Any]]) -> bool:
+    """Whether a short, unqualified model line still supports the fuzzy match.
+
+    This is the partial-name counterpart of :func:`rolling_identity`, used when
+    no fragment reaches :data:`ROLLING_MIN_FRAGMENT`.  The fuzzy car keeps the
+    reading only when the visible text either *names it* or does not contradict
+    it:
+
+    * When the visible ``brand + model`` is the head of at least one catalog
+      title -- the shared-prefix shape -- it must be the head of exactly one and
+      that one must be the fuzzy car.  The recorded ``HURACAN S`` heads the STO
+      and the Super Trofeo EVO alike, so it may name neither, while the recorded
+      ``HURACAN STO`` heads the STO alone and keeps it.
+    * Otherwise every word has to be in the fuzzy car's own name, so the recorded
+      ``FEO EVO`` may not fall back to the STO.  A word that a *second* visible
+      word merely disambiguates still decides: ``MUSTANG RTR`` is shared by two
+      Fords, but the recorded ``5-FD`` is in one of them only, and the words of
+      a scrolled line are sought in the name rather than as a head.
+
+    A line with no word of evidence (``MCLAREN`` + ``P1``) keeps the generic
+    matcher, exactly as before.
+    """
+    words = [word for word in model_words if len(word) >= ROLLING_MIN_PARTIAL]
+    keys = [key for key in (_key(row["title"]) for row in catalog) if key]
+    prefix = brand + "".join(model_words)
+    heads = [key for key in keys if key.startswith(prefix)]
+    if words and heads:
+        return len(heads) == 1 and heads[0] == _key(fuzzy["title"])
+    return all(_explains_word(word, _key(fuzzy["title"])) for word in words)
+
+
 def _swap_zero(text: str) -> str:
     """The evidenced OCR confusion of one glyph class, applied to one key."""
     return text.translate(str.maketrans("0", "o"))
@@ -254,11 +369,13 @@ def rolling_identity(items: list[dict[str, Any]], catalog: list[dict[str, Any]]
     condition below must hold:
 
     ``brand``
-        The card's first name line must be an exact prefix of the candidate key
-        and carry at least :data:`ROLLING_MIN_BRAND` characters.  The identity
-        block is left-aligned at the card's own left edge, so this anchors the
-        fragments to one vehicle instead of letting a neighbouring card's text
-        contribute.
+        The card's first name line must be a window of the candidate key
+        carrying at least :data:`ROLLING_MIN_BRAND` characters, consumed whole
+        from its own first visible character.  The identity block rolls as one
+        block, so the brand line loses its head together with the model line
+        (the recorded Neon Edition card read ``OTORS`` for ``W MOTORS``); the
+        window still anchors the fragments to one vehicle instead of letting a
+        neighbouring card's text contribute.
     ``fragment``
         Every word of at least :data:`ROLLING_MIN_FRAGMENT` characters on the
         remaining line must be a contiguous window of that candidate key that
@@ -284,9 +401,11 @@ def rolling_identity(items: list[dict[str, Any]], catalog: list[dict[str, Any]]
     if signature is None:
         return None
     brand, fragments, confidence = signature
+    # ``_candidate_fragments`` anchors the brand as a window of the candidate,
+    # so it subsumes the former exact-prefix test and admits a brand line that
+    # scrolled its own head out of view.
     matches = [(row, windows) for row in catalog
-               if _key(row["title"]).startswith(brand)
-               and (windows := _candidate_fragments(
+               if (windows := _candidate_fragments(
                    (brand, fragments), _key(row["title"]))) is not None]
     if len(matches) != 1:
         return None
@@ -304,10 +423,16 @@ def _duel_identity(items: list[dict[str, Any]], catalog: list[dict[str, Any]]
                    ) -> dict[str, Any] | None:
     """Let a qualified scrolling name resolve or veto a fuzzy family match.
 
-    A common visible prefix can describe several variants.  Conversely, a
-    complete long tail can identify one variant even when the generic fuzzy
-    matcher prefers a shorter sibling.  Other OCR shapes retain the generic
-    matcher, including brand aliases and short model names.
+    A common visible prefix can describe several variants.  A complete short
+    title is therefore returned as the frame's reading but is *not* proof of the
+    plain car: the name is revealed along a line that may still be moving, and a
+    single frame cannot tell a finished short name from the head of a longer one
+    that has not finished revealing -- the text is identical. Repetition alone
+    cannot resolve that ambiguity; callers must keep it out of confirmation.
+    Conversely, a complete long
+    tail can identify one variant even when the generic fuzzy matcher prefers a
+    shorter sibling.  Other OCR shapes retain the generic matcher, including
+    brand aliases and short model names.
     """
     fuzzy = match_vehicle(items, catalog)
     if fuzzy is not None:
@@ -316,22 +441,26 @@ def _duel_identity(items: list[dict[str, Any]], catalog: list[dict[str, Any]]
             complete_key = "".join("".join(_line_words(line)) for line in lines)
             if (complete_key == _key(fuzzy["title"])
                     and sum(_key(row["title"]) == complete_key for row in catalog) == 1):
-                # An exact complete short title remains itself even when its
-                # name is also the prefix of an extended edition.
-                return fuzzy
+                # An exact complete title is this frame's reading of this card.
+                # When a longer title starts with it the reading is *also* the
+                # head of that title, which no single frame can rule out, so the
+                # row carries that fact for the caller's confirmation gate.
+                return {**fuzzy,
+                        "prefix_of_longer_title":
+                            _prefix_of_longer_title(complete_key, catalog)}
     signature = _rolling_signature(items)
     if signature is None:
         # A shorter but readable common prefix can still make a fuzzy family
-        # choice unsafe.  Require two name lines and a substantial model run;
-        # brief complete names such as Nevera remain on the generic path.
+        # choice unsafe.  Require two name lines and a model line that both
+        # fits the candidate and picks it out; brief complete names such as
+        # Nevera keep going through the generic matcher.
         readable = [item for item in items if item["confidence"] >= ROLLING_MIN_CONFIDENCE
                     and re.search(r"[A-Za-z0-9]{2}", item["text"])]
         lines = _name_lines(readable)
         if fuzzy is not None and len(lines) == 2:
-            brand, model = ("".join(_line_words(line)) for line in lines)
-            prefix = brand + model
-            if (len(brand) >= ROLLING_MIN_BRAND and len(model) >= 10
-                    and sum(_key(row["title"]).startswith(prefix) for row in catalog) > 1):
+            brand = "".join(_line_words(lines[0]))
+            if not _visible_model_supports(brand, _line_words(lines[1]),
+                                           fuzzy, catalog):
                 return None
         return fuzzy
     brand, fragments, _confidence = signature
@@ -342,8 +471,9 @@ def _duel_identity(items: list[dict[str, Any]], catalog: list[dict[str, Any]]
         # rolling_identity also enforces uniqueness after the 0/o OCR reading.
         resolved = rolling_identity(items, catalog)
         return fuzzy if resolved is not None and fuzzy is not None and resolved["id"] == fuzzy["id"] else resolved
-    if fuzzy is not None and _key(fuzzy["title"]).startswith(brand):
-        # A qualified, unexplained tail contradicts this exact-brand match.
+    if fuzzy is not None and _fragment_window(brand, _key(fuzzy["title"]), 0,
+                                              minimum=ROLLING_MIN_BRAND) is not None:
+        # A qualified, unexplained tail contradicts this match.
         return None
     return fuzzy
 
@@ -404,12 +534,17 @@ def _card_row(vehicle: dict[str, Any], catalog: list[dict[str, Any]],
         "card": [left, top, CARD_WIDTH, CARD_HEIGHT],
         "target": [left + 185, top + 105],
         "identity_basis": vehicle.get("identity_basis", "title"),
+        # True when this reading is also the head of a longer catalog title.
+        # Repeated readings of a common prefix remain ambiguous, even if fuzzy
+        # matching rather than the exact-title path supplied the candidate.
+        "prefix_of_longer_title": _prefix_of_longer_title(_key(vehicle["title"]), catalog),
     }
 
 
 def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
                        catalog: list[dict[str, Any]],
-                       retry_ocr: Callable[[tuple[int, int, int, int]], list[dict[str, Any]]] | None = None
+                       retry_ocr: Callable[[tuple[int, int, int, int]], list[dict[str, Any]]] | None = None,
+                       identity_observations: list[dict[str, Any]] | None = None
                        ) -> list[dict[str, Any]]:
     """Return fully visible cards only; incomplete OCR fields remain None.
 
@@ -425,6 +560,17 @@ def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
             if left < 0 or left + CARD_WIDTH > 1295:
                 continue
             vehicle = _duel_identity(group, catalog)
+            ambiguous = vehicle is not None and _prefix_of_longer_title(
+                _key(vehicle["title"]), catalog)
+            if identity_observations is not None and (vehicle is None or ambiguous):
+                key = _key(vehicle["title"]) if vehicle is not None else None
+                identity_observations.append({
+                    "reason": "shared_title_prefix" if ambiguous else "identity_declined",
+                    "card": [left, top, CARD_WIDTH, CARD_HEIGHT],
+                    "visible_name": [item["text"] for item in group],
+                    "candidate_ids": [row["id"] for row in catalog
+                                      if key is not None and _key(row["title"]).startswith(key)],
+                })
             if vehicle is None:
                 continue
             performance_items = [item for item in ocr if _inside(
@@ -448,6 +594,10 @@ def read_visible_cards(image: np.ndarray, ocr: list[dict[str, Any]],
                 performance = (current, None) if current is not None else None
             stars_lit, star_slots = _stars(frame, left, top)
             row = _card_row(vehicle, catalog, left, top)
+            # The identity text this reading was made from, in the order the OCR
+            # reported it. Retained for diagnostics, not as a repetition-based
+            # proof that a name has finished revealing.
+            row["visible_name"] = [item["text"] for item in group]
             row["performance"] = list(performance) if performance else None
             row["stars_lit"] = stars_lit
             row["star_slots"] = star_slots

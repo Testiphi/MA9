@@ -581,17 +581,291 @@ class DuelFamilyIdentityTest(unittest.TestCase):
             {"id": "nevera", "title": "Rimac Nevera", "class": "S"}])
                          [0]["vehicle"]["id"], "nevera")
 
-    def test_complete_short_title_survives_a_longer_edition(self):
+    def test_complete_short_title_that_a_longer_edition_extends_is_this_frames_reading(self):
+        """A complete short title is what this frame shows, and no more.
+
+        Real call premise: the recorded Neon Edition card showed exactly this
+        reading on capture 23 of run ``62de...`` (``W MOTORS`` +
+        ``LYKAN HYPERSPORT``) while captures 24 and 25 revealed
+        ``...HYPERSPORT NE`` and ``...NEON EDITION`` of the same card.  The text
+        of the plain car's complete name and of the not-yet-revealed head of its
+        edition are identical, so a single frame cannot tell them apart and this
+        reader -- which sees one frame -- reports the plain car rather than
+        pretending to decide. The runtime's ``_identity_gate`` prevents this
+        candidate from becoming a confirmed identity; repeating the same
+        prefix cannot resolve it. A tail that only the
+        edition explains still names the edition on its own, even when the brand
+        line has scrolled its own head out of view (recorded capture 21).
+        """
         catalog = [
             {"id": "short", "title": "W Motors Lykan Hypersport", "class": "S"},
             {"id": "edition", "title": "W Motors Lykan Hypersport Neon Edition", "class": "S"},
         ]
         self.assertEqual(self._read("W MOTORS", "LYKAN HYPERSPORT", catalog)
                          [0]["vehicle"]["id"], "short")
+        self.assertEqual(self._read("OTORS", ".YKAN HYPERSPORT N", catalog)
+                         [0]["vehicle"]["id"], "edition")
         self.assertEqual(self._read("W MOTORS", "LYKAN HYPERSPORT NEON EDITION",
                                     catalog)[0]["vehicle"]["id"], "edition")
         self.assertEqual(self._read("W MOTORS", "LYKAN HYPERSPORT EXTRA EDITION",
                                     catalog), [])
+
+    def test_model_line_shared_by_two_huracans_names_neither(self):
+        """``HURACAN S`` is the head of the STO and of the Super Trofeo EVO.
+
+        Real call premise: the recorded captures 113 and 27 read exactly these
+        lines on one Huracan card of the B-class page.  The STO is not a longer
+        title's prefix, it is simply not supported: the same visible line fits
+        its sibling equally, so it may name neither car.
+        """
+        catalog = [
+            {"id": "sto", "title": "Lamborghini Huracan STO", "class": "B"},
+            {"id": "stevo", "title": "Lamborghini Huracan Super Trofeo EVO", "class": "B"},
+            {"id": "sterrato", "title": "Lamborghini Huracan Sterrato", "class": "C"},
+            {"id": "spyder", "title": "Lamborghini Huracan EVO Spyder", "class": "B"},
+        ]
+
+        def read(rows):
+            return read_visible_cards(
+                np.zeros((720, 1280, 3), dtype=np.uint8),
+                [{"text": text, "confidence": confidence, "box": box}
+                 for text, confidence, box in rows], catalog)
+
+        shared_head = [("LAMBORGHINI", .99, [100, 325, 130, 20]),
+                       ("HURACAN S", .97, [100, 345, 90, 20])]
+        self.assertEqual(read(shared_head), [])
+        out_of_order_tail = [("LAMBORGHINI", .99, [100, 325, 130, 20]),
+                             ("FEO EVO", .97, [100, 345, 60, 20]),
+                             ("HURACAN", .97, [180, 345, 80, 20])]
+        self.assertEqual(read(out_of_order_tail), [])
+        # The full name and a tail only one of them explains still decide, and
+        # the plain STO keeps its own exact reading.
+        self.assertEqual(read([("LAMBORGHINI", .99, [100, 325, 130, 20]),
+                               ("HURACAN SUPER TROI", .97, [100, 345, 200, 20])])
+                         [0]["vehicle"]["id"], "stevo")
+        self.assertEqual(read([("LAMBORGHINI", .99, [100, 325, 130, 20]),
+                               ("HURACAN STO", .97, [100, 345, 110, 20])])
+                         [0]["vehicle"]["id"], "sto")
+
+
+#: Verbatim name-band OCR of the card under test, from the 05AB/05AG runs'
+#: ``debug/<run>/ocr.jsonl`` at ROI ``(0, 120, 1280, 500)`` -- exactly the band
+#: :func:`read_visible_cards` reads.  Only the card under test is kept: its
+#: identity block is the whole input these tests measure, and these are the rows
+#: the live run really recorded, not a reconstruction.
+_RECORDED_FAMILY_CARDS = {
+    # 62de...: one Lykan card, the name revealed left to right over three frames.
+    ("62de...", 23): [("W MOTORS", .962361, (149, 332, 116, 22)),
+                      ("LYKAN HYPERSPORT", .990556, (162, 350, 186, 22))],
+    ("62de...", 24): [("KAN HYPERSPORT NE", .974809, (68, 345, 206, 30)),
+                      ("W MOTORS", .936154, (85, 334, 101, 19))],
+    ("62de...", 25): [("RT NEON EDITION", .980698, (69, 347, 159, 26)),
+                      ("W MOTORS", .971127, (80, 334, 106, 19))],
+    # 7c04...: the same card after the list scrolled 74 px left, and the
+    # Huracan card of the B-class page further on.
+    ("7c04...", 20): [("W MOTORS", .985024, (106, 334, 111, 19)),
+                      ("LYKAN HYPERSPORT", .987059, (109, 350, 188, 22))],
+    ("7c04...", 21): [(".YKAN HYPERSPORT N", .979922, (32, 349, 202, 22)),
+                      ("OTORS", .983566, (80, 334, 65, 19))],
+    ("7c04...", 113): [("0 EVO", .736857, (850, 577, 62, 23)),
+                       ("LAMBORGHINI", .997148, (853, 561, 135, 18)),
+                       ("HURACAN S", .935813, (938, 577, 112, 23))],
+    ("7c04...", 114): [("HURACAN SUPER TROI", .981821, (849, 575, 203, 26)),
+                       ("LAMBORGHINI", .994274, (853, 560, 135, 17))],
+    ("7c04...", 115): [("ER TROFEO EVO", .905060, (849, 574, 147, 29)),
+                       ("LAMBORGHINI", .997305, (854, 561, 134, 18)),
+                       ("HL", .874008, (1026, 577, 27, 23))],
+    ("ce3b...", 26): [("HURACAN SUPER TROI", .969055, (616, 578, 200, 22)),
+                      ("LAMBORGHINI", .996781, (618, 561, 135, 17))],
+    ("ce3b...", 27): [("FEO EVO", .944421, (529, 577, 79, 23)),
+                      ("LAMBORGHINI", .997128, (534, 561, 132, 18)),
+                      ("HURACAN", .993309, (638, 577, 92, 23))],
+    ("ce3b...", 28): [("HURACAN SUPER TROF", .933011, (530, 578, 200, 22)),
+                      ("LAMBORGHINI", .994336, (533, 560, 135, 17))],
+    ("ce3b...", 30): [("URACAN SUPER TROFE", .969405, (530, 578, 202, 22)),
+                      ("LAMBORGHINI", .994544, (533, 560, 135, 17))],
+}
+
+#: Ids of the real shipped catalog, so the assertions name the cars, not strings.
+_LYKAN = "car_ad3713da36d5a513"
+_LYKAN_NEON = "car_3a01ec165d1b76ca"
+_HURACAN_STO = "car_e1c0f0455a16f168"
+_HURACAN_STEVO = "car_80f0a08f56df5e1f"
+
+
+class DuelRecordedFamilyIdentityTest(unittest.TestCase):
+    """The five 05AB mis-associations, replayed over the shipped catalog.
+
+    Every reading below is the OCR the live run recorded for that card; only the
+    debounce of the same card over several captures is measured.  The catalog is
+    the shipped ``data/generated/vehicle_catalog.json`` with no hand-picked
+    entries, so the Lykan and Huracan families bring their real siblings.
+    """
+
+    @staticmethod
+    def _catalog() -> list[dict]:
+        return json.loads((_PROJECT_ROOT / "data" / "generated" /
+                           "vehicle_catalog.json").read_text(encoding="utf8"))["vehicles"]
+
+    def _ids(self, capture: tuple[str, int]) -> list[str]:
+        rows = _RECORDED_FAMILY_CARDS[capture]
+        return [card["vehicle"]["id"] for card in read_visible_cards(
+            np.zeros((720, 1280, 3), dtype=np.uint8),
+            [{"text": text, "confidence": confidence, "box": list(box)}
+             for text, confidence, box in rows], self._catalog())]
+
+    def _basis(self, capture: tuple[str, int]) -> list[str]:
+        rows = _RECORDED_FAMILY_CARDS[capture]
+        return [card["identity_basis"] for card in read_visible_cards(
+            np.zeros((720, 1280, 3), dtype=np.uint8),
+            [{"text": text, "confidence": confidence, "box": list(box)}
+             for text, confidence, box in rows], self._catalog())]
+
+    def test_shared_lykan_head_is_the_plain_reading_until_the_next_capture(self) -> None:
+        """Captures 23 and 20 read the plain Lykan; the next capture does not.
+
+        Real call premise, and the reason this reading is not an association:
+        capture 23's card is the *same physical card* as capture 24's and 25's
+        (its own text moves from ``LYKAN HYPERSPORT`` to ``KAN HYPERSPORT NE`` to
+        ``RT NEON EDITION`` while the list itself stops moving at left 64-65), and
+        capture 20's card is the same as capture 21's.  One frame of that card
+        cannot tell the plain car's complete name from the head of the edition
+        that is still being revealed, so this reader reports a plain-car
+        candidate. The runtime's ``_identity_gate`` withholds confirmation;
+        elapsed time or repeated prefix text cannot prove the plain variant.
+        """
+        for capture in (("62de...", 23), ("7c04...", 20)):
+            with self.subTest(capture=capture):
+                self.assertEqual(self._ids(capture), [_LYKAN])
+
+    def test_revealed_lykan_tail_names_the_neon_edition(self) -> None:
+        """The two later captures of the first run, and the scrolled second one.
+
+        Capture 21 is the same card as capture 20 after the list scrolled: its
+        visible ``...HYPERSPORT N`` ends in a letter only the edition continues,
+        so the edition is named rather than the plain car.  Together with the
+        captures above this is what makes the plain reading at 20 a reading of
+        the edition's card.
+        """
+        for capture in (("62de...", 24), ("62de...", 25), ("7c04...", 21)):
+            with self.subTest(capture=capture):
+                self.assertEqual(self._ids(capture), [_LYKAN_NEON])
+        self.assertEqual(self._basis(("62de...", 24)), ["rolling_fragment"])
+        self.assertEqual(self._basis(("7c04...", 21)), ["rolling_fragment"])
+
+    def test_shared_and_unknown_huracan_lines_never_name_the_sto(self) -> None:
+        """Captures 113 and 27 confirmed the STO; neither line supports it.
+
+        113's ``HURACAN S`` heads the STO and the Super Trofeo EVO alike, and
+        27's ``FEO EVO`` is no line of the STO at all.  Neither may fall back to
+        the short name.  Both are single-frame readings with no candidate at all,
+        so they stay unresolved rather than being guessed.
+        """
+        for capture in (("7c04...", 113), ("ce3b...", 27)):
+            with self.subTest(capture=capture):
+                self.assertEqual(self._ids(capture), [])
+
+    def test_clear_huracan_tail_names_the_super_trofeo_evo(self) -> None:
+        """The five captures whose text only the Super Trofeo EVO explains."""
+        for capture in (("7c04...", 114), ("7c04...", 115), ("ce3b...", 26),
+                        ("ce3b...", 28), ("ce3b...", 30)):
+            with self.subTest(capture=capture):
+                self.assertEqual(self._ids(capture), [_HURACAN_STEVO])
+
+    def test_plain_members_with_a_longer_sibling_keep_their_reading(self) -> None:
+        """The plain car of a family is readable, because nothing was proven.
+
+        ``Rimac Nevera`` / ``Rimac Nevera R``, ``Porsche 718 Cayman`` /
+        ``... GT4 Clubsport`` and ``Nissan 370Z Nismo`` / ``... Neon Edition`` all
+        have a longer sibling.  No single frame can prove which of the pair is on
+        the card, and that is a reason to require a second capture -- not a
+        reason for this reader to invent a font-capacity bound and drop the plain
+        car.  The recorded duel card that read ``RIMAC`` + ``NEVERA`` is the real
+        case this keeps (``test_vehicle_screen``).
+        """
+        for brand, model, expected in (
+                ("RIMAC", "NEVERA", "car_d51e24a1fd5f83c0"),
+                ("PORSCHE", "718 CAYMAN", "car_04ad069a2b362fde"),
+                ("NISSAN", "370Z NISMO", "car_d55c79c386967123")):
+            with self.subTest(model=model):
+                self.assertEqual(self._ids_from(brand, model), [expected])
+
+    def test_a_word_that_only_shares_characters_with_a_name_is_not_that_name(self):
+        """The bound is one difference, not a shared run of characters.
+
+        Synthetic counterexamples, and the two shapes that motivated the exact
+        rule (not device evidence): ``HURACANXXX`` shares ``hur``/``rac`` with
+        ``...huracansto`` and ``G60XXX`` shares ``g60`` with ``ginettag60``.
+        Sharing characters is not being that word; only text that is the word, or
+        one character away from it, may name the car.
+        """
+        catalog = self._catalog()
+        for brand, model, forbidden in (
+                ("LAMBORGHINI", "HURACANXXX", _HURACAN_STO),
+                ("GINETTA", "G60XXX", "car_5531a43a5f8c457d")):
+            with self.subTest(model=model):
+                words = [{"text": brand, "confidence": .99,
+                          "box": [200, 325, 130, 20]},
+                         {"text": model, "confidence": .99,
+                          "box": [200, 345, 200, 20]}]
+                cards = read_visible_cards(
+                    np.zeros((720, 1280, 3), dtype=np.uint8), words, catalog)
+                self.assertNotIn(forbidden,
+                                 [card["vehicle"]["id"] for card in cards])
+
+    def test_a_word_one_character_from_the_name_still_reads_it(self):
+        """One differing character is a reading of this word, two are not.
+
+        The one-character case is the recorded shape: ``_key`` drops the accent
+        of ``Spéirling``, so the key is ``mcmurtryspirling`` while the recorded
+        OCR read ``SPEIRLING`` -- one extra character and nothing else.  The
+        two-character case is the same card with a second character wrong, which
+        is a different word.
+        """
+        self.assertEqual(self._ids_from("MCMURTRY", "SPEIRLING"),
+                         ["car_01dac16eb10e0538"])
+        self.assertEqual(self._ids_from("MCMURTRY", "SPEIRLINGX"), [])
+
+    def test_reading_carries_the_text_it_was_made_from(self) -> None:
+        """The row exposes the identity text, so a caller can re-read the card.
+
+        The runtime compares that text between two consecutive captures; without
+        it the caller would have to trust one frame of an animated name.  The
+        recorded scrolled card of capture 21 carries both of its lines.
+        """
+        rows = _RECORDED_FAMILY_CARDS[("7c04...", 21)]
+        cards = read_visible_cards(
+            np.zeros((720, 1280, 3), dtype=np.uint8),
+            [{"text": text, "confidence": confidence, "box": list(box)}
+             for text, confidence, box in rows], self._catalog())
+        self.assertEqual(cards[0]["visible_name"],
+                         [".YKAN HYPERSPORT N", "OTORS"])
+
+    def test_a_scrolled_brand_that_fits_two_cars_names_neither(self) -> None:
+        """The brand window may not pick a car by matching another car's model.
+
+        The shipped catalog contains 19 keys where a manufacturer string sits
+        inside another title, and the LEGO editions are the real shape:
+        ``LEGO Technic Chevrolet Corvette Stingray`` contains ``chevrolet`` after
+        its own brand.  A scrolled ``HEVROLET`` + ``CORVETTE STINGRAY`` is
+        therefore a window of *both* the Chevrolet and the LEGO car, so the
+        reading must stay unresolved -- the relaxation widens the candidate set
+        and uniqueness turns every extra candidate into "undecided", never into a
+        wrong pick.  The car's own brand still names it.
+        """
+        self.assertEqual(self._ids_from("CHEVROLET", "CORVETTE STINGRAY"),
+                         ["car_3b4cad29c6ba9dfd"])
+        self.assertEqual(self._ids_from("HEVROLET", "CORVETTE STINGRAY"), [])
+        self.assertEqual(self._ids_from("RACING", "CORVETTE STINGRAY"), [])
+        self.assertEqual(self._ids_from("LEGO TECHNIC", "CORVETTE STINGRAY"),
+                         ["car_6cf4d7c2fe770bc3"])
+
+    def _ids_from(self, brand: str, model: str, catalog=None) -> list[str]:
+        words = [{"text": brand, "confidence": .97, "box": [200, 325, 60, 20]},
+                 {"text": model, "confidence": .96, "box": [200, 345, 120, 20]}]
+        return [card["vehicle"]["id"] for card in read_visible_cards(
+            np.zeros((720, 1280, 3), dtype=np.uint8), words,
+            catalog if catalog is not None else self._catalog())]
 
 
 if __name__ == "__main__":
