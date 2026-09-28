@@ -1,7 +1,14 @@
 # MA9 总控当前交接
-更新：2026-09-28，05AJ全局车库当前页只读识别提示词已准备。本文件不是设备操作授权。优先读本文件、state.json当前字段、lanes.yaml，再核对实际Git；不要从旧聊天或旧提示词重复派活。
+更新：2026-09-28，05AJ返修未验收，准备低成本外部模型同题筛选。本文件不是设备操作授权。优先读本文件、state.json当前字段、lanes.yaml，再核对实际Git；不要从旧聊天或旧提示词重复派活。
+
+## 最新模型选型试验
+- 用户允许尝试其他外部模型，仍未恢复原生子模型。倍率来自用户平台：GLM5.3=0.78；DeepSeek v4.1flash高峰0.13/闲时0.06；KimiK3=1.83；MiniMaxM3=0.26；Qwen3.8flash免费。不是能力排名或官方API价格。
+- 先由用户把MA9-evidence/20260928-model-pilot/common-prompt.md原样给Qwen和MiniMax两个全新对话，平台默认设置；纯函数答题不访问仓库、不写生产文件。总控预先保存47个用例（9个正例），尚无模型答卷或成绩，不得声称已比较出优胜者。
+- 实际扣费可见时记录，不可见则未知。总成本同时考虑总控核验/返工；不让免费模型无限重试。GLM保留关键复核，Kimi暂不进入首轮；05AJ两文件未验收且保持原样。
 
 ## 当前05AJ（优先于下方历史阶段）
+- repair1已回传，47项定向测试由总控重跑exit0，但仍有几何不确定却unique、低置信度状态判owned、星级总槽数硬编码6、OCR兜底误判页面及缩图不缩OCR等问题，未验收。唯一外部返修已用完，转总控诊断，不再派DeepSeek或GLM。详见05AJ证据目录root-repair1-review.md；两个新文件原样保留，未提交合入。
+- 05AJ初稿已回传，lane仍在b1ed86f且仅两个未跟踪新文件。总控重跑29项测试exit0，但独立探针证实错误星级、fuzzy前缀绕过、徽标ROI/置信度漏门禁、截断确认及暗卡漏检等问题，REQUEST_CHANGES。repair1-prompt.md位于05AJ证据目录，待用户交原DeepSeek完成唯一一次有界返修；暂不进入GLM。state.global_garage_readonly_task记录当前状态。
 - 用户已补齐13张全局车库截图（其中一对重复；12张1280×720、一张2420×1668状态参考），05AI报告及05AJ input-manifest.json定位原图，不重复索要。
 - 下一席为DeepSeek v4.1flash平台默认档位，用户中转；完整提示词agent/orchestration/prompts/05AJ-global-garage-readonly.md。目前等待用户中转，未启动原生模型或用户新任务。
 - lane已快进到b1ed86fab405e902e04967f2aa51928c484444eb且tracked clean。仅允许新建global_garage_screen.py及test_global_garage_screen.py；不修改已有运行时、05AG门禁或账号profile。完成后总控核验，再安排GLM独立只读终审。

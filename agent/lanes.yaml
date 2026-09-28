@@ -39,7 +39,9 @@ orchestration_policy:
     不再调用原生子智能体，除非用户再次明确恢复；外部子席也不得派下级。
     一个写入owner，reviewer只读且独立上下文；总控核对实际Git和证据后验收。
   active_model_policy:
-    allowed_external_models: [deepseek, qwen_flash, glm]
+    allowed_external_models: [deepseek, qwen_flash, glm, minimax, kimi]
+    selection_pilot: [qwen_flash, minimax]
+    selection_pilot_scope: external_relay_pure_function_no_repository_writes
     implementation: deepseek
     implementation_effort: null
     independent_review: qwen_flash
@@ -56,6 +58,8 @@ orchestration_policy:
       按用户提供的成本条件分配：DeepSeek v4.1flash日常实现/窄修；Qwen3.8flash免费机械核对/文档/低风险初审；
       GLM5.3仅关键识别/输入安全/同步边界终审，避免常驻和重复全审。不是未经验证的能力排名。
       外部平台档位未指定，使用平台默认并如实记录，不编造high/max支持。历史模型字段不支配新派工。
+      2026-09-28用户允许试用其他外部模型并提供倍率；先以同题小测试比较免费Qwen与MiniMax M3(0.26)，不预设能力排名。
+      GLM5.3(0.78)保留关键复核；Kimi K3(1.83)候选备用；DeepSeek高峰0.13/闲时0.06，05AJ不再继续返修。
   reviewer_semantics: >
     lane 出现 reviewer 时，owner 验收通过后必须进行只读复核。reviewer 不修代码，
     只提交问题清单；最终修复派回 owner，是否合入由 Astra 编排层裁决。
@@ -182,14 +186,14 @@ execution_transports:
     mode: orchestrator_only
     notes: 总控维持用户指定GPT-6 Astra medium/Standard；不启动原生子模型或自动新建用户任务。
   external_user_relay:
-    models: [deepseek, qwen_flash, glm]
+    models: [deepseek, qwen_flash, glm, minimax, kimi]
     mode: fresh_conversation_user_relay
     procedure:
       - 总控生成完整且已填好路径/HEAD/边界/验收的提示词；用户选择指定外部模型并粘贴到新对话
       - 外部席先确认指定文件访问能力；无本地工具只返回基于所给材料的分析/补丁，不能假称已执行
       - 一个写入owner，独立reviewer只读；子席不得创建下级或擅自操作设备/推送/合入
       - 用户回传结果与commit/diff/命令实际退出码；总控核对真实Git与证据后验收
-    notes: 成本/限流信息来自用户；只启用本次列出的三个外部模型，其他历史模型暂不派发。
+    notes: 成本/限流信息来自用户；2026-09-28允许五个外部模型有界选型，先测Qwen/MiniMax；不自动调用付费API或恢复原生子模型。
 
 live_verification:
   default_operator: user

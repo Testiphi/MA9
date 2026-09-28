@@ -2121,6 +2121,26 @@
     }
   },
   "model_dispatch": {
+    "latest_selection_authority": "user_2026_09_28_allow_other_external_models_cost_optimization",
+    "user_reported_cost_multipliers": {
+      "DeepSeek_v4.1flash_peak": 0.13,
+      "DeepSeek_v4.1flash_off_peak": 0.06,
+      "Qwen3.8flash": 0,
+      "MiniMaxM3": 0.26,
+      "GLM5.3": 0.78,
+      "KimiK3": 1.83
+    },
+    "selection_pilot": {
+      "phase": "same_prompt_pilot_prepared_no_external_runs_yet",
+      "models": ["Qwen3.8flash", "MiniMaxM3"],
+      "scope": "fresh_external_chats_pure_function_answers_no_tools_or_production_writes",
+      "prompt": "E:/hzz/work/MA9/MA9-evidence/20260928-model-pilot/common-prompt.md",
+      "plan": "E:/hzz/work/MA9/MA9-evidence/20260928-model-pilot/plan.md",
+      "case_count": 47,
+      "positive_case_count": 9,
+      "results": null,
+      "budget_rule": "one answer per model; no retry tournament; measured total cost includes root verification and repair"
+    },
     "approved": "latest_user_2026_09_27_external_relay",
     "transport": "external_user_relay",
     "owner": "DeepSeek v4.1flash",
@@ -2285,11 +2305,19 @@
     "runtime_execution_enabled": false
   },
   "global_garage_readonly_task": {
-    "phase": "05AJ_prompt_prepared_awaiting_user_relay",
+    "phase": "05AJ_repair1_reviewed_not_accepted_root_triage",
     "authority": "user_proceed_next_after_global_garage_samples_2026_09_28",
     "owner": "DeepSeek v4.1flash platform_default external_user_relay",
     "active_owner": null,
-    "writer_reserved": "DeepSeek_via_user_relay",
+    "writer_reserved": "orchestrator_triage_no_further_DeepSeek_repair",
+    "repair_round": 1,
+    "repair1_root_review": "E:/hzz/work/MA9/MA9-evidence/20260928-05AJ-global-garage-readonly/root-repair1-review.md",
+    "repair1_tests": {"run": 47, "exit": 0, "root_repeated": true},
+    "remaining_findings": ["uncertain geometry still unique", "low-confidence upgrade banner becomes owned", "six total star slots hardcoded without slot evidence", "isolated low-confidence OCR bypasses page gate", "resized pixels retain unscaled OCR coordinates", "same-class full-name completeness remains unfinished"],
+    "root_review": "E:/hzz/work/MA9/MA9-evidence/20260928-05AJ-global-garage-readonly/root-review.md",
+    "repair_prompt": "E:/hzz/work/MA9/MA9-evidence/20260928-05AJ-global-garage-readonly/repair1-prompt.md",
+    "initial_delivery_tests": {"run": 29, "exit": 0, "root_repeated": true},
+    "blocking_findings": ["false six-star readings on real three-star cards", "fuzzy prefix ambiguity bypass", "badge ROI and confidence ignored", "clipped card unique identity", "gray frame falsely classified as filter off", "dark and edge cards silently omitted", "field ROI and comma performance parsing incomplete"],
     "reviewer": "GLM5.3 independent_readonly_after_root_verification",
     "active_reviewer": null,
     "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
@@ -2316,7 +2344,7 @@
       "activity_banner_may_occlude_stars": true,
       "owned_filter_hides_unlock_ready_unowned": true
     },
-    "next": "User relays complete prompt to fresh DeepSeek conversation and returns delivery; root verifies evidence before GLM review. Do not auto-start native agents or device work."
+    "next": "Root takes over diagnosis after the single DeepSeek repair. No further DeepSeek retry or GLM review yet. Two untracked files remain unaccepted; no device or account writes."
   },
   "runtime_association_task": {
     "phase": "05AG_GLM_reviewed_gate_merged_locally",
