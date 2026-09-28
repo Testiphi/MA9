@@ -1,5 +1,13 @@
 # MA9 总控当前交接
-更新：2026-09-27，外部模型接力版。本文件不是设备操作授权。优先读本文件、state.json当前字段、lanes.yaml，再核对实际Git；不要从旧聊天或旧提示词重复派活。
+更新：2026-09-28，05AG经GLM终审通过并本地合入。本文件不是设备操作授权。优先读本文件、state.json当前字段、lanes.yaml，再核对实际Git；不要从旧聊天或旧提示词重复派活。
+
+## 最新05AG状态（覆盖下方旧阶段描述）
+- DeepSeek已交付初稿及唯一一次返修；总控确认重复前缀仍会被登记后，按用户“继续下一阶段”接手运行时门禁。不要再次派DeepSeek返修。
+- lane实现提交97ae30029f158b59feca204d68d5e7ee012233e3，main合并提交bb1a25315b528948d3480fe1753f70219a5497d2；随后总控提交本交接元数据，实际HEAD以Git为准。五个实现文件已合入：duel_vehicle_screen.py、duel_vehicle_runtime.py、duel_garage_survey.py（两行诊断透传）及screen/runtime两个测试。
+- 歧义候选不进入confirmed/点击；未知完整可见名称块通过identity_observations/unresolved_identities留存。重复共同前缀无法证明普通版；有未决位置时采样不稳定，自动遍历停止。普通版共同前缀仍是功能限制，未宣称实机可用。
+- 最终agent506项/1skip、tools42项/2skip，退出码均0；schema排除六个禁读分片后通过，不能宣称完整verify_default通过。正式profile、catalog、共享matcher/全局阈值未改；未设备操作或推送。合并后五个文件与lane提交逐项无差异，复用既有测试证据。
+- GLM5.3独立只读终审PASS；总控核实待审五文件哈希全部MATCH。R1/R2文档残留已修，不改逻辑；R3位置未决语义、R4保守兜底记录保留。目录338个标题中20个是长名严格前缀，普通版保守停止仍为限制。
+- 报告、日志、待审/最终哈希及review/review.md在MA9-evidence/20260928-05AG-runtime-gate/。当前无活跃owner/reviewer，不再重派05AG或等待旧席位。用户端接线、普通版区分证据及实机可用性是后续独立范围，本次不自动启动。
 
 ## 最新协作方式
 - 用户已撤回原生子模型调度方式。后续仅外部模型：总控给完整提示词，用户粘贴到指定模型的新对话并回传结果。禁止spawn/followup原生子模型，除非用户重新明确恢复。
@@ -7,7 +15,7 @@
 - 默认DeepSeek做实现/窄修；Qwen做机械整理、文档与低风险初审；GLM只用于关键识别/输入安全/同步边界终审，集中一次用。不猜外部high/max档位，按平台实际默认记录。
 - 一个写入owner；独立reviewer只读。外部席不得派下级。一次有界返修仍失败即交总控诊断，避免免费模型反复试错耗掉总控额度。
 - 每份提示词由总控填好模型、cwd/branch/实际HEAD、精确文件范围、输入、约束、验证和回传格式；用户不补技术参数。有本地工具先验证路径可读，无工具不能声称已读文件或跑过测试。
-- 所有旧原生agent已完成，当前无活跃写入owner或待完成review，也未派发新外部任务。不要等待旧对话agent。不要主动创建新的用户任务。
+- 所有旧原生agent已完成。05AG外部实现、唯一返修及GLM终审已结束，当前无活跃owner/reviewer。不要等待旧对话agent。不要主动创建新的用户任务。
 
 ## 根与硬边界
 根E:/hzz/work/MA9；实现lane E:/hzz/work/MA9/MA9-worktrees/duel-scan，分支lane/duel-scan。所有产物在MA9，不读六个大型multiplayer分片，04继续暂停。
