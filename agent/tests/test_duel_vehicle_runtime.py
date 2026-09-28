@@ -20,7 +20,8 @@ from ma9_agent.duel_lineup_slot import (BUTTON_CENTER_BASE, EXPANDED_WIDTH,
 from ma9_agent.duel_vehicle_runtime import (CLASS_X, EDGE_REPOSITION_LIMIT,
                                             EDGE_REPOSITION_SWIPE,
                                             TARGET_GEOMETRY_TOLERANCE, _detail,
-                                            _finish_target, _lineup_identity,
+                                            _finish_target, _inventory_sample,
+                                            _lineup_identity,
                                             _same_target_card, _sample_visible,
                                             _stable_sample_visible, _try_target,
                                             assign_visible, scan)
@@ -1970,6 +1971,376 @@ class FrozenFordBoundaryTest(unittest.TestCase):
         self.assertTrue(stable)
         self.assertIn(anniversary, [card["vehicle"]["id"] for card in cards])
         self.assertIs(frame, observed[6][0])
+
+
+#: The two recorded marquee phases of one Lykan card, verbatim name-band OCR of
+#: run ``7c04db7c9c87417b87400428803c3d01`` (``debug/<run>/ocr.jsonl``, ROI
+#: ``(0, 120, 1280, 500)`` -- exactly what ``_visible`` reads).  Frame 20 shows
+#: the plain name; frame 21 is the same card 74 px further left after the list
+#: scrolled, with the edition's first extra letter revealed.  Both frames also
+#: carry the four complete neighbours of that page.
+_LYKAN_PHASE_PREFIX = [
+    {"text": "W MOTORS", "confidence": .985024, "box": [106, 334, 111, 19]},
+    {"text": "LYKAN HYPERSPORT", "confidence": .987059, "box": [109, 350, 188, 22]},
+    {"text": "IMOLA", "confidence": .970575, "box": [541, 349, 63, 23]},
+    {"text": "PAGANI", "confidence": .982201, "box": [542, 332, 84, 22]},
+    {"text": "AURORA TUR", "confidence": .967444, "box": [976, 347, 122, 25]},
+    {"text": "ZENVO", "confidence": .982575, "box": [978, 329, 76, 26]},
+    {"text": "TARTARUS", "confidence": .998443, "box": [105, 578, 97, 22]},
+    {"text": "RAESR", "confidence": .987257, "box": [106, 558, 75, 22]},
+    {"text": "HUAYRA BC", "confidence": .962159, "box": [540, 575, 110, 26]},
+    {"text": "PAGANI", "confidence": .988634, "box": [542, 558, 84, 22]},
+    {"text": "21C", "confidence": .950644, "box": [978, 578, 44, 22]},
+    {"text": "CZINGER", "confidence": .990831, "box": [980, 558, 94, 24]},
+]
+_LYKAN_PHASE_TAIL = [
+    {"text": ".YKAN HYPERSPORT N", "confidence": .979922, "box": [32, 349, 202, 22]},
+    {"text": "OTORS", "confidence": .983566, "box": [80, 334, 65, 19]},
+    {"text": "PAGANI", "confidence": .988817, "box": [469, 332, 85, 22]},
+    {"text": "IMOLA", "confidence": .974596, "box": [469, 349, 64, 23]},
+    {"text": "ZENVO", "confidence": .984875, "box": [906, 329, 76, 26]},
+    {"text": "AURORA TUR", "confidence": .957394, "box": [906, 349, 120, 23]},
+    {"text": "TARTARUS", "confidence": .997048, "box": [34, 577, 95, 22]},
+    {"text": "RAESR", "confidence": .967271, "box": [36, 558, 73, 22]},
+    {"text": "HUAYRA BC", "confidence": .985173, "box": [468, 577, 109, 22]},
+    {"text": "PAGANI", "confidence": .987292, "box": [470, 558, 84, 22]},
+    {"text": "21C", "confidence": .956160, "box": [906, 578, 42, 21]},
+    {"text": "CZINGER", "confidence": .991850, "box": [908, 558, 93, 24]},
+]
+
+_LYKAN_BASIC = "car_ad3713da36d5a513"
+_LYKAN_NEON = "car_3a01ec165d1b76ca"
+_HURACAN_STO = "car_e1c0f0455a16f168"
+_HURACAN_STEVO = "car_80f0a08f56df5e1f"
+
+#: The recorded garage runs of 2026-09-27, and one settled page of each: the
+#: frames the scan held while the garage did not move, the car the *revealed*
+#: name names, and the car the same id was earlier misread as.
+_RECORDED_RUNS = {
+    "62de...": "duel-garage-62de4343448e4f8bb3533b1ebb0e47db",
+    "7c04...": "duel-garage-7c04db7c9c87417b87400428803c3d01",
+    "ce3b...": "duel-garage-ce3b515fe3624bb5b32b1951eb0fbf4f",
+}
+_RECORDED_PAGE_STRETCHES = [
+    ("62de...", (29, 30, 31), "W Motors Lykan Hypersport",
+     "W Motors Lykan Hypersport Neon Edition"),
+    ("62de...", (23, 24, 25), "W Motors Lykan Hypersport Neon Edition",
+     "W Motors Lykan Hypersport"),
+    ("7c04...", (130, 131, 132, 133), "Lamborghini Huracan STO",
+     "Lamborghini Huracan Super Trofeo EVO"),
+    ("7c04...", (113, 114, 115), "Lamborghini Huracan Super Trofeo EVO",
+     "Lamborghini Huracan STO"),
+    ("ce3b...", (26, 27, 28, 29, 30), "Lamborghini Huracan Super Trofeo EVO",
+     "Lamborghini Huracan STO"),
+    ("ce3b...", (93, 94, 95, 96), "Porsche 718 Cayman",
+     "Porsche 718 Cayman GT4 Clubsport"),
+]
+
+
+class _RecordedScrollScene:
+    """Replays recorded list-page OCR rows while the card list scrolls.
+
+    Only the capture IO is modelled -- the pixel array is a placeholder and the
+    text is the verbatim recording -- so ``read_visible_cards``, the sampler and
+    the page guards all run for real.  Each read of the list advances to the next
+    marquee phase, exactly as the recorded single OCR pass per capture did.
+    """
+
+    FRAME = np.zeros((720, 1280, 3), dtype=np.uint8)
+
+    def __init__(self, phases: list[list[dict]]) -> None:
+        self.phases = phases
+        self.active = phases[0]
+        self.index = 0
+        self.swipes: list[tuple[int, ...]] = []
+        self.clicks: list[tuple[int, int]] = []
+        self.controller = self
+
+    def post_swipe(self, *args):
+        self.swipes.append(args)
+        return _Job()
+
+    def frame(self, _context):
+        self.active = self.phases[min(self.index, len(self.phases) - 1)]
+        self.index += 1
+        return self.FRAME
+
+    def rows(self) -> list[dict]:
+        return self.active
+
+    def ocr(self, _context, _frame_value, roi):
+        return [{**row, "box": clipped} for row in self.rows()
+                if (clipped := _clip(row["box"], roi)) is not None]
+
+
+class DuelRecordedFamilyAssociationTest(unittest.TestCase):
+    """MA9-05AG: what the runtime may book from the recordings.
+
+    The five 05AB observations were list-page readings, so this drives the real
+    ``_stable_sample_visible`` / ``assign_visible`` chain over the recorded OCR
+    text and stubs only the capture, the click and ``time.sleep``.
+    """
+
+    @staticmethod
+    def _catalog() -> list[dict]:
+        """The two recorded families, with the shipped ids and titles."""
+        return [{"id": _LYKAN_BASIC, "title": "W Motors Lykan Hypersport",
+                 "class": "S"},
+                {"id": _LYKAN_NEON,
+                 "title": "W Motors Lykan Hypersport Neon Edition", "class": "S"},
+                {"id": _HURACAN_STO, "title": "Lamborghini Huracan STO",
+                 "class": "B"},
+                {"id": _HURACAN_STEVO,
+                 "title": "Lamborghini Huracan Super Trofeo EVO", "class": "B"},
+                {"id": "car_c67d8d703de717b0",
+                 "title": "Lamborghini Huracan Sterrato", "class": "C"},
+                {"id": "car_0830cf5cbe5608e6",
+                 "title": "Lamborghini Huracan EVO Spyder", "class": "B"}]
+
+    def _sampling(self, phases, target_id=None, **kwargs):
+        scene = _RecordedScrollScene(phases)
+        context = _Context()
+        context.tasker = SimpleNamespace(controller=scene)
+        with patch("ma9_agent.duel_vehicle_runtime._ocr", scene.ocr), \
+                patch("ma9_agent.duel_vehicle_runtime._frame", scene.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            result = _stable_sample_visible(context, self._catalog(),
+                                            target_id=target_id, **kwargs)
+        return result, context, scene
+
+    def test_repeated_shared_head_is_diagnostic_not_confirmed(self) -> None:
+        """Repeated recorded prefix text cannot distinguish a longer edition."""
+        notes: list[dict] = []
+        evidence: dict = {}
+        (_frame, cards, stable, _clipped), _context, scene = self._sampling(
+            [_LYKAN_PHASE_PREFIX] * 8 + [_LYKAN_PHASE_TAIL] * 4, sampling_notes=notes,
+            inventory_evidence=evidence)
+        self.assertFalse(stable)
+        self.assertEqual(scene.index, 8)
+        self.assertNotIn(_LYKAN_BASIC, [row["vehicle"]["id"] for row in cards])
+        confirmed = [row["vehicle"]["id"] for row in evidence["confirmed_records"]]
+        self.assertNotIn(_LYKAN_BASIC, confirmed)
+        self.assertNotIn(_LYKAN_NEON, confirmed)
+        self.assertTrue(evidence["unresolved_identities"])
+        self.assertTrue(evidence["identity_observations"])
+        for note in evidence["identity_observations"]:
+            self.assertNotIn("target", note)
+            self.assertNotIn("vehicle", note)
+            self.assertNotIn("id", note)
+
+    @staticmethod
+    def _name(brand, model, x=106):
+        # Synthetic fixed geometry: test identity evidence, not OCR acquisition.
+        return [{"text": brand, "confidence": .99, "box": [x, 334, 111, 19]},
+                {"text": model, "confidence": .99, "box": [x+3, 350, 188, 22]}]
+
+    def test_unique_tail_clears_debt_only_after_two_reads_at_same_card(self):
+        prefix = self._name("W MOTORS", "LYKAN HYPERSPORT")
+        tail = self._name("W MOTORS", "LYKAN HYPERSPORT NEON EDITION")
+        for target in (None, _LYKAN_NEON):
+            with self.subTest(target=target):
+                evidence = {}
+                (_frame, cards, stable, _), _, _ = self._sampling(
+                    [prefix, tail, tail, tail], target_id=target,
+                    inventory_evidence=evidence)
+                self.assertTrue(stable)
+                self.assertEqual(evidence["unresolved_identities"], [])
+                self.assertEqual([row["vehicle"]["id"] for row in cards], [_LYKAN_NEON])
+                self.assertTrue(evidence["identity_observations"])
+
+    def test_missing_frame_or_movement_does_not_resolve_a_debt(self):
+        prefix = self._name("W MOTORS", "LYKAN HYPERSPORT")
+        tail = self._name("W MOTORS", "LYKAN HYPERSPORT NEON EDITION")
+        moved = self._name("W MOTORS", "LYKAN HYPERSPORT NEON EDITION", x=430)
+        for phases in ([prefix, tail, [], tail], [prefix, moved, moved, moved]):
+            with self.subTest(phases=phases):
+                evidence = {}
+                (_, _, stable, _), _, _ = self._sampling(
+                    phases, attempts=2, target_id=_LYKAN_NEON,
+                    inventory_evidence=evidence)
+                self.assertFalse(stable)
+                self.assertTrue(evidence["unresolved_identities"])
+
+    def test_declined_name_survives_as_diagnostic_without_claimed_id(self):
+        evidence = {}
+        rows = self._name("LAMBORGHINI", "HURACANXXX")
+        (_, cards, stable, _), _, _ = self._sampling([rows]*8,
+                                                  inventory_evidence=evidence)
+        self.assertFalse(stable)
+        self.assertEqual(cards, [])
+        self.assertEqual(evidence["confirmed_records"], [])
+        note = evidence["identity_observations"][0]
+        self.assertEqual(note["reason"], "identity_declined")
+        self.assertEqual(note["candidate_ids"], [])
+        self.assertNotIn("target", note)
+
+    def test_fresh_call_does_not_inherit_pending_debt(self):
+        prefix = self._name("W MOTORS", "LYKAN HYPERSPORT")
+        self._sampling([prefix]*8)
+        tail = self._name("W MOTORS", "LYKAN HYPERSPORT NEON EDITION")
+        evidence = {}
+        (_, _, stable, _), _, _ = self._sampling([tail]*4,
+                                                inventory_evidence=evidence)
+        self.assertTrue(stable)
+        self.assertEqual(evidence["identity_observations"], [])
+
+    def test_repeated_prefix_never_reaches_assignment_click(self):
+        scene = _RecordedScrollScene([self._name("W MOTORS", "LYKAN HYPERSPORT")]*8)
+        context = _Context()
+        context.tasker = SimpleNamespace(controller=scene)
+        with patch("ma9_agent.duel_vehicle_runtime._ocr", scene.ocr), \
+                patch("ma9_agent.duel_vehicle_runtime._frame", scene.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._click") as click, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            result = assign_visible(context, _LYKAN_BASIC, self._catalog())
+        self.assertEqual(result["status"], "page_ocr_unverified")
+        self.assertFalse(result["assignment_complete"])
+        self.assertTrue(result["unresolved_identities"])
+        click.assert_not_called()
+        self.assertEqual(scene.swipes, [])
+
+    def test_the_shared_head_reading_records_that_a_longer_title_has_it(self):
+        """The plain reading and the edition's head are the same text, and say so.
+
+        Real call premise: the recorded frames 20 and 21, in that order, at the
+        recorded 74 px scroll.  Frame 20 reads the plain car -- its text is also
+        the head of the Neon Edition's -- and frame 21 names the edition from a
+        tail only it explains.  The reading itself carries
+        ``prefix_of_longer_title`` so the caller can withhold confirmation;
+        repeated prefix frames cannot clear it.
+        """
+        image = np.zeros((720, 1280, 3), dtype=np.uint8)
+        prefix_cards = read_visible_cards(image, _LYKAN_PHASE_PREFIX, self._catalog())
+        self.assertEqual([row["vehicle"]["id"] for row in prefix_cards],
+                         [_LYKAN_BASIC])
+        self.assertIs(prefix_cards[0]["prefix_of_longer_title"], True)
+        tail_cards = read_visible_cards(image, _LYKAN_PHASE_TAIL, self._catalog())
+        neon = [row for row in tail_cards if row["vehicle"]["id"] == _LYKAN_NEON]
+        self.assertEqual(len(neon), 1)
+        self.assertEqual(neon[0]["identity_basis"], "rolling_fragment")
+        self.assertEqual(neon[0]["card"], [28, 168, 420, 212])
+        self.assertIs(neon[0]["prefix_of_longer_title"], False)
+
+    def test_unresolved_scan_is_incomplete_and_does_not_swipe(self):
+        scene = _RecordedScrollScene([self._name("W MOTORS", "LYKAN HYPERSPORT")]*12)
+        context = _Context()
+        context.tasker = SimpleNamespace(controller=scene)
+        with patch("ma9_agent.duel_vehicle_runtime._ocr", scene.ocr), \
+                patch("ma9_agent.duel_vehicle_runtime._frame", scene.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title", return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._click", return_value=True) as click, \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            result = scan(context, "S", self._catalog(), max_pages=2)
+        self.assertFalse(result["scan_complete"])
+        self.assertEqual(result["vehicles"], [])
+        self.assertTrue(result["identity_observations"])
+        self.assertTrue(result["unresolved_identities"])
+        self.assertEqual(click.call_count, 1)  # Class tab only, no card click.
+        self.assertEqual(scene.swipes, [])
+
+    def test_direct_finish_cannot_click_an_ambiguous_candidate(self):
+        cards = read_visible_cards(np.zeros((720, 1280, 3), dtype=np.uint8),
+                                   self._name("W MOTORS", "LYKAN HYPERSPORT"),
+                                   self._catalog())
+        with patch("ma9_agent.duel_vehicle_runtime._click") as click:
+            result = _finish_target(_Context(), cards[0], 0, [], _LYKAN_BASIC,
+                                    self._catalog(), choose=True,
+                                    expected_performance=None, expected_stars=None)
+        click.assert_not_called()
+        self.assertEqual(result["status"], "target_temporarily_unreadable")
+
+    def test_assign_visible_refuses_the_lykan_the_next_capture_reads_as_the_edition(self):
+        """The recorded pair that produced the 05AB mis-association, end to end.
+
+        Frames 20 and 21 cycled: frame 20 reads the plain car and frame 21 the
+        edition, so the pair never presents one identity on one card geometry --
+        the id itself changes -- and the target is not opened.
+        """
+        phases = [_LYKAN_PHASE_PREFIX, _LYKAN_PHASE_TAIL]
+        scene = _RecordedScrollScene([phases[index % 2] for index in range(8)])
+        context = _Context()
+        context.tasker = SimpleNamespace(controller=scene)
+
+        def click(_context, x, y):
+            scene.clicks.append((x, y))
+            return True
+
+        with patch("ma9_agent.duel_vehicle_runtime._ocr", scene.ocr), \
+                patch("ma9_agent.duel_vehicle_runtime._frame", scene.frame), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True), \
+                patch("ma9_agent.duel_vehicle_runtime._click", click), \
+                patch("ma9_agent.duel_vehicle_runtime.time.sleep"):
+            report = assign_visible(context, _LYKAN_BASIC, self._catalog())
+        self.assertEqual(report["status"], "page_ocr_unverified")
+        self.assertFalse(report["assignment_complete"])
+        self.assertEqual(scene.clicks, [])
+        self.assertEqual(scene.swipes, [])
+
+
+class DuelRecordedPageBookingTest(unittest.TestCase):
+    """What the inventory books on the recorded pages, car by car.
+
+    Every capture of each named stretch is replayed through the real reader and
+    the real inventory window with the real recorded OCR, so the question is the
+    one the 05AB observations raised: which car does the runtime *book* from the
+    page?  Skips when the user's frozen frame archive is not on this machine,
+    like ``FrozenFordBoundaryTest``.
+    """
+
+    @staticmethod
+    def _archive():
+        return (Path(__file__).resolve().parents[2] / "build" /
+                "user-test-garage-bcd-4ef2923" / "MA9-preview" / "debug")
+
+    def _booked_titles(self, key: str, frames: tuple[int, ...]) -> set[str]:
+        run = self._archive() / _RECORDED_RUNS[key]
+        if not (run / "ocr.jsonl").exists():
+            self.skipTest("user's frozen frame archive is unavailable")
+        root = Path(__file__).resolve().parents[2]
+        catalog = json.loads((root / "data" / "generated" /
+                              "vehicle_catalog.json").read_text(
+                                  encoding="utf8"))["vehicles"]
+        pages: dict[int, dict[tuple, list]] = {}
+        for line in (run / "ocr.jsonl").read_text(encoding="utf8").splitlines():
+            row = json.loads(line)
+            pages.setdefault(row["frame"], {}).setdefault(
+                tuple(row["roi"]), []).extend(row["words"])
+        context = _Context()
+        context.pages = pages
+        state = {"baseline": {}, "previous": {}, "seen": {}, "confirmed": {},
+                 "notes": [], "captures": 0}
+        with patch("ma9_agent.duel_vehicle_runtime._frame",
+                   lambda context: np.zeros((720, 1280, 3), dtype=np.uint8)), \
+                patch("ma9_agent.duel_vehicle_runtime._ocr",
+                      lambda context, _frame, roi: context.pages.get(
+                          context.current_frame, {}).get(tuple(roi), [])), \
+                patch("ma9_agent.duel_vehicle_runtime._selection_title",
+                      return_value=True):
+            for frame in frames:
+                context.current_frame = frame
+                _inventory_sample(context, catalog, attempts=1, interval=0,
+                                  state=state)
+        return {row["vehicle"]["title"] for row in state["confirmed"].values()}
+
+    def test_each_recorded_page_books_the_car_its_revealed_name_names(self) -> None:
+        """Unique names are booked; prefixes remain unconfirmed candidates.
+
+        The archive's plain Lykan and 718 Cayman text cannot exclude a longer
+        sibling. Unique Neon, STO and Super Trofeo EVO readings still confirm.
+        """
+        for key, frames, expected, misread in _RECORDED_PAGE_STRETCHES:
+            with self.subTest(page=(key, frames)):
+                booked = self._booked_titles(key, frames)
+                if expected in {"W Motors Lykan Hypersport", "Porsche 718 Cayman"}:
+                    # These prefixes do not distinguish the plain car.
+                    self.assertNotIn(expected, booked)
+                else:
+                    self.assertIn(expected, booked)
+                self.assertNotIn(misread, booked)
 
 
 if __name__ == "__main__":

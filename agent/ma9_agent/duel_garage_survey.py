@@ -270,6 +270,8 @@ def run_garage_page_probe(context: Any, root: Path) -> tuple[dict[str, Any], Pat
                     proxy, catalog, target_id=None, sampling_notes=report["sampling_notes"],
                     inventory_evidence=evidence)
                 report.update(stable=stable, current_cards=cards, clipped=clipped,
+                              identity_observations=evidence.get("identity_observations", []),
+                              unresolved_identities=evidence.get("unresolved_identities", []),
                               confirmed_records=evidence.get("confirmed_records", []),
                               observed_classes=sorted(evidence.get("current_epoch_seen_classes", [])))
                 report["status"] = ("observed" if stable and report["confirmed_records"]

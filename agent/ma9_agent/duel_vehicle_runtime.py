@@ -69,6 +69,14 @@ def _wait_selection_frame(context: Any, timeout: float = 5.0) -> np.ndarray | No
         time.sleep(.35)
 
 
+class _CardReadings(list):
+    """List-compatible frame result with non-executable identity diagnostics."""
+
+    def __init__(self, cards, observations):
+        super().__init__(cards)
+        self.identity_observations = observations
+
+
 def _visible(context: Any, frame: np.ndarray, catalog: list[dict[str, Any]]
              ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Read one frame: the fully visible cards and the clipped right-edge card.
@@ -78,10 +86,59 @@ def _visible(context: Any, frame: np.ndarray, catalog: list[dict[str, Any]]
     full observation of that card is still owed.
     """
     words = _ocr(context, frame, (0, 120, 1280, 500))
+    observations: list[dict[str, Any]] = []
     cards = read_visible_cards(frame, words, catalog,
-                               retry_ocr=lambda roi: _ocr(context, frame, roi))
+                               retry_ocr=lambda roi: _ocr(context, frame, roi),
+                               identity_observations=observations)
     clipped = read_clipped_candidate(words, catalog)
-    return cards, ([clipped] if clipped is not None else [])
+    return _CardReadings(cards, observations), ([clipped] if clipped is not None else [])
+
+
+def _identity_gate(cards: list[dict[str, Any]], state: dict[str, Any],
+                   capture: int | None) -> list[dict[str, Any]]:
+    """Keep ambiguous readings as observations, never as confirmed identities.
+
+    An unresolved visible card is a debt for this bounded sampling call. Only
+    two consecutive unique readings at its original geometry can discharge it.
+    Missing text, a page shift or repeated ambiguous text cannot discharge it.
+    No diagnostic row carries a click target or a claimed vehicle identity.
+    """
+    observations = list(getattr(cards, "identity_observations", []))
+    ambiguous = [card for card in cards if card.get("prefix_of_longer_title")]
+    for card in ambiguous:
+        if not any(note["card"] == card["card"] for note in observations):
+            observations.append({"reason": "shared_title_prefix",
+                                 "card": list(card["card"]),
+                                 "visible_name": list(card.get("visible_name", [])),
+                                 "candidate_ids": [card["vehicle"]["id"]]})
+    readings = [card for card in cards if not card.get("prefix_of_longer_title")]
+    pending = state.setdefault("identity_pending", [])
+    history = state.setdefault("identity_observations", [])
+    def same_box(first, second):
+        return all(abs(a - b) <= TARGET_GEOMETRY_TOLERANCE
+                   for a, b in zip(first, second))
+    for note in observations:
+        history.append({**note, "capture": capture})
+        if not any(same_box(note["card"], debt["card"]) for debt in pending):
+            pending.append({**note, "previous": None})
+    remaining = []
+    for debt in pending:
+        candidates = [card for card in readings
+                      if same_box(card["card"], debt["card"])
+                      and (not debt["candidate_ids"]
+                           or card["vehicle"]["id"] in debt["candidate_ids"])]
+        # A second unresolved block at this location vetoes any apparent read.
+        candidate = (candidates[0] if len(candidates) == 1 and not any(
+            same_box(note["card"], debt["card"]) for note in observations) else None)
+        previous = debt["previous"]
+        if (candidate is not None and previous is not None
+                and candidate["vehicle"]["id"] == previous["vehicle"]["id"]
+                and _same_target_card(previous, candidate)):
+            continue
+        debt["previous"] = candidate
+        remaining.append(debt)
+    state["identity_pending"] = remaining
+    return readings
 
 
 def _fingerprint(cards: list[dict[str, Any]]) -> tuple[str, ...]:
@@ -159,6 +216,13 @@ def _inventory_sample(context: Any, catalog: list[dict[str, Any]], *,
         cards, clipped = _visible(context, frame, catalog)
         state["captures"] += 1
         capture = getattr(context, "current_frame", None)
+        cards = _identity_gate(cards, state, capture)
+        if not cards and state["identity_pending"]:
+            state.update(baseline={}, previous={}, seen={}, confirmed={})
+            last = (frame, cards, False, clipped)
+            if attempt + 1 < attempts:
+                time.sleep(interval)
+            continue
         ids = _fingerprint(cards)
         current = dict(zip(ids, cards))
         previous = state["previous"]
@@ -214,7 +278,7 @@ def _inventory_sample(context: Any, catalog: list[dict[str, Any]], *,
         last = (frame, cards, False, clipped)
         # Short pages get the full first-window budget: independently rolling
         # names can alternate even while the fixed cards remain in place.
-        if (state["confirmed"] and set(current) & set(state["confirmed"])
+        if (not state["identity_pending"] and state["confirmed"] and set(current) & set(state["confirmed"])
                 and ((set(state["seen"]) <= set(state["confirmed"])
                       and (len(cards) >= 4 or state["captures"] >= attempts))
                      or state["captures"] >= 2 * attempts)):
@@ -229,6 +293,7 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
                     target_id: str | None = None,
                     target_state: list[dict[str, Any] | None] | None = None,
                     inventory_state: dict[str, Any] | None = None,
+                    identity_state: dict[str, Any] | None = None,
                     ) -> tuple[np.ndarray | None, list[dict[str, Any]], bool,
                                list[dict[str, Any]]]:
     """Read a settled list page without trusting one animated OCR frame.
@@ -276,6 +341,7 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
     # while the second window of one bounded call starts from the first
     # window's own last actual capture.
     previous_target = target_state[0] if target_state is not None else None
+    identity_state = identity_state if identity_state is not None else {}
     claimed = False
     seen: tuple[np.ndarray, list[dict[str, Any]], list[dict[str, Any]]] | None = None
     for attempt in range(attempts):
@@ -285,6 +351,7 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
                 target_state[0] = None
             return None, [], False, []
         cards, clipped = _visible(context, frame, catalog)
+        cards = _identity_gate(cards, identity_state, getattr(context, "current_frame", None))
         fingerprint = _fingerprint(cards)
         target_card, target_claimed = _target_read(cards, target_id)
         if target_claimed:
@@ -301,8 +368,9 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
         # authorised to swipe past it.
         target_stable = (target_card is not None and previous_target is not None
                          and _same_target_card(previous_target, target_card))
-        if target_stable or (fingerprint == previous and len(cards) >= 4
-                             and not target_claimed and not claimed):
+        if not identity_state["identity_pending"] and (target_stable or (
+                fingerprint == previous and len(cards) >= 4
+                and not target_claimed and not claimed)):
             if target_state is not None:
                 target_state[0] = target_card
             return frame, cards, True, clipped
@@ -340,7 +408,8 @@ def _sample_visible(context: Any, catalog: list[dict[str, Any]], *,
         # weighs its second window.
         assert seen is not None
         return seen[0], seen[1], False, seen[2]
-    return frame, cards, bool(fingerprint and fingerprint in repeated), clipped
+    return frame, cards, bool(fingerprint and fingerprint in repeated
+                             and not identity_state["identity_pending"]), clipped
 
 
 def _stable_sample_visible(context: Any, catalog: list[dict[str, Any]], *,
@@ -398,20 +467,34 @@ def _stable_sample_visible(context: Any, catalog: list[dict[str, Any]], *,
             inventory_evidence.update(
                 confirmed_records=[inventory["confirmed"][key]
                                    for key in sorted(inventory["confirmed"])],
+                identity_observations=inventory.get("identity_observations", []),
+                unresolved_identities=[{key: value for key, value in debt.items()
+                                        if key != "previous"}
+                                       for debt in inventory.get("identity_pending", [])],
                 current_epoch_seen_classes={card["class"]
                                             for card, _ in inventory["seen"].values()})
         return frame, cards, stable, clipped
     state: list[dict[str, Any] | None] = [None]
+    identity: dict[str, Any] = {}
+    def identity_evidence():
+        if inventory_evidence is not None:
+            inventory_evidence.update(
+                identity_observations=identity.get("identity_observations", []),
+                unresolved_identities=[{key: value for key, value in debt.items()
+                                        if key != "previous"}
+                                       for debt in identity.get("identity_pending", [])])
     frame, cards, stable, clipped = _sample_visible(
         context, catalog, attempts=attempts, interval=interval,
-        target_id=target_id, target_state=state)
+        target_id=target_id, target_state=state, identity_state=identity)
+    identity_evidence()
     if frame is None or stable:
         return frame, cards, stable, clipped
     seen = any(row["vehicle"]["id"] == target_id for row in cards)
     time.sleep(interval)
     frame, cards, stable, clipped = _sample_visible(
         context, catalog, attempts=attempts, interval=interval,
-        target_id=target_id, target_state=state)
+        target_id=target_id, target_state=state, identity_state=identity)
+    identity_evidence()
     if seen and stable and not any(row["vehicle"]["id"] == target_id
                                    for row in cards):
         return frame, cards, False, clipped
@@ -578,6 +661,8 @@ def _finish_target(context: Any, card: dict[str, Any], page: int,
                    expected_performance: int | None,
                    expected_stars: int | None,
                    verify_list_detail_rating: bool = True) -> dict[str, Any]:
+    if card.get("prefix_of_longer_title") or card.get("inventory_only"):
+        return _result("target_temporarily_unreadable", page, vehicles)
     if not _click(context, *card["target"]):
         return _result("card_click_failed", page, vehicles)
     detail = _detail(context, target_id, catalog)
@@ -649,7 +734,7 @@ def _try_target(context: Any, card: dict[str, Any], page: int,
                 verify_list_detail_rating: bool = True,
                 attempts: int = 2) -> dict[str, Any]:
     """Reacquire a card after a moving list opens a neighbouring detail."""
-    if card.get("inventory_only"):
+    if card.get("inventory_only") or card.get("prefix_of_longer_title"):
         return _result("target_temporarily_unreadable", page, vehicles)
     current = card
     last: dict[str, Any] | None = None
@@ -694,21 +779,24 @@ def assign_visible(context: Any, target_id: str, catalog: list[dict[str, Any]], 
     frame = _wait_selection_frame(context)
     if frame is None:
         return _result("not_duel_selection", 0, [])
+    evidence: dict[str, Any] = {}
     sampled_frame, cards, stable, clipped = _stable_sample_visible(
-        context, catalog, attempts=3, target_id=target_id)
+        context, catalog, attempts=3, target_id=target_id, inventory_evidence=evidence)
     if sampled_frame is None:
-        return _result("not_duel_selection", 0, [])
+        return _result("not_duel_selection", 0, [], **evidence)
     if not stable:
-        return _result("page_ocr_unverified", 0, [])
+        return _result("page_ocr_unverified", 0, [], **evidence)
     card = next((row for row in cards if row["vehicle"]["id"] == target_id), None)
     if card is None:
         # A target that is only there as the clipped right-edge card is not
         # visible: this path never re-positions, so its geometry stays unused.
         extra = {"clipped_target": clipped[0]} if clipped else {}
-        return _result("target_not_visible", 0, cards, **extra)
-    return _try_target(context, card, 0, cards, target_id, catalog, choose=True,
-                       expected_performance=expected_performance,
-                       expected_stars=expected_stars)
+        return _result("target_not_visible", 0, cards, **extra, **evidence)
+    result = _try_target(context, card, 0, cards, target_id, catalog, choose=True,
+                         expected_performance=expected_performance,
+                         expected_stars=expected_stars)
+    result.update(evidence)
+    return result
 
 
 def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
@@ -753,11 +841,21 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
     if page_hint is not None and (type(page_hint) is not int or not 1 <= page_hint <= max_pages):
         raise ValueError("page_hint must be within the scan page limit")
     sampling_notes: list[dict[str, Any]] = []
+    identity_observations: list[dict[str, Any]] = []
+    unresolved_identities: list[dict[str, Any]] = []
 
     def finish(status: str, pages: int, vehicles: list[dict[str, Any]],
                **extra: Any) -> dict[str, Any]:
         return _result(status, pages, vehicles,
-                       sampling_notes=list(sampling_notes), **extra)
+                       sampling_notes=list(sampling_notes),
+                       identity_observations=list(identity_observations),
+                       unresolved_identities=list(unresolved_identities), **extra)
+
+    def collect_identity(evidence, page):
+        identity_observations.extend({**note, "page": page}
+                                     for note in evidence.get("identity_observations", []))
+        unresolved_identities[:] = [{**note, "page": page}
+                                   for note in evidence.get("unresolved_identities", [])]
 
     frame = _wait_selection_frame(context)
     if frame is None:
@@ -786,8 +884,8 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
         frame, cards, stable, clipped = _stable_sample_visible(
             context, catalog, target_id=target_id,
             sampling_notes=page_notes if target_id is None else None,
-            **({"inventory_evidence": inventory_evidence}
-               if target_id is None else {}))
+            inventory_evidence=inventory_evidence)
+        collect_identity(inventory_evidence, page)
         sampling_notes.extend({**note, "page": page} for note in page_notes)
         page_notes.clear()
         if frame is None:
@@ -861,6 +959,8 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
                 result["fast_forward_swipes"] = fast_forward
                 result["edge_repositions"] = edge_repositions
                 result["sampling_notes"] = list(sampling_notes)
+                result["identity_observations"] = list(identity_observations)
+                result["unresolved_identities"] = list(unresolved_identities)
                 if result["status"] != "target_temporarily_unreadable":
                     return result
             for row in clipped:
@@ -906,8 +1006,8 @@ def scan(context: Any, vehicle_class: str, catalog: list[dict[str, Any]], *,
             frame, cards, stable, clipped = _stable_sample_visible(
                 context, catalog, target_id=target_id,
                 sampling_notes=page_notes if target_id is None else None,
-                **({"inventory_evidence": inventory_evidence}
-                   if target_id is None else {}))
+                inventory_evidence=inventory_evidence)
+            collect_identity(inventory_evidence, page)
             sampling_notes.extend({**note, "page": page} for note in page_notes)
             page_notes.clear()
             if frame is None:
