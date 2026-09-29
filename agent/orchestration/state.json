@@ -1,7 +1,17 @@
 {
   "version": 1,
   "global_garage_observation_task": {
-    "phase": "05AK_B1_root_fixed_ready_for_independent_review_relay",
+    "phase": "05AK_B_reviewed_root_tightened_merged_locally",
+    "main_checkout_tests": {"observation": 71, "plan": 34, "screen": 62, "skipped": 0, "exit": 0, "hashes_match": true},
+    "source_commit": "5165d850d9498906e5326b63a53c4cff24d7f676",
+    "merge_commit": "bf9715c65a4eba58a37ce443c255fdf07d6471d6",
+    "closeout_report": "MA9-evidence/20260929-05AK-B-observation/closeout/report.md",
+    "independent_review_status": "PASS_offline_scope_on_review_hashes_with_F_BR1_P2",
+    "independent_review_report": "MA9-evidence/20260929-05AK-B-observation/review/review.md",
+    "post_review_root_fix": "F-BR1 per-channel median deviation guard; only narrows empty-control verdicts; original independent review not a signoff on final hashes",
+    "closeout_tests": {"observation": 71, "observation_skipped": 0, "observation_exit": 0, "independent_probe_replayed_by_root": 34, "probe_exit": 0, "agent": 673, "agent_skipped": 1, "agent_exit": 0, "tools_not_rerun": true, "schema_not_run": true},
+    "final_hashes": {"module": "83939fbd21c3247c75ca74e02b9dbe4b5e64babe63048926cfefb2986ae900fe", "tests": "b78e65b432f813dfc80ee17a5c84a1092f9cfd9248023bd37816623578221f81"},
+    "commit_merge_approval": "user_explicit_authorization_after_auto_review_rejection_2026_09_29; local_commit_and_merge_completed; no_push",
     "latest_root_review": "MA9-evidence/20260929-05AK-B-observation/root-b1/review.md",
     "independent_review_prompt": "agent/orchestration/prompts/05AK-BR-observation-review.md",
     "final_root_tests": {"observation": 70, "plan": 34, "screen": 62, "agent": 672, "agent_skipped": 1, "agent_exit": 0, "tools": 42, "tools_errors": 1, "tools_skipped": 2, "tools_exit": 1},
@@ -34,9 +44,10 @@
     "device_authorized": false,
     "push_authorized": false,
     "implementation_started": true,
-    "accepted": false,
-    "merged": false,
-    "next": "User relays 05AK-BR to a fresh independent GLM5.3 context; readonly review of final hashes. Do not issue a second owner repair. Not yet accepted or merged; tools baseline remains red."
+    "accepted": true,
+    "merged": true,
+    "accepted_scope": "offline Observation adapter only; independent PASS on reviewed version followed by root-only monotone F-BR1 tightening and verification; no device acceptance",
+    "next": "05AK-B closed locally. No active owner/reviewer. Await next user instruction before sampling/executor/navigation work; preserve known calibration and tools baseline gaps."
   },
   "updated_at": "2026-09-27T15:09:44+00:00",
   "policy": "external-user-relay-root-contained",
@@ -2568,12 +2579,12 @@
     "active_external_reviewer": null,
     "native_subagents_enabled": false,
     "new_task_created": false,
-    "completed_latest": "05AK-A pure planner committed and locally merged after Qwen3.8Max PASS",
-    "next_proposed": "05AK-B1 verified with root minimal corner/owned guards; 05AK-BR independent readonly review prompt ready for user relay. Not accepted or merged; see global_garage_observation_task",
+    "completed_latest": "05AK-B offline observation adapter independently reviewed, root narrowed F-BR1, committed and merged locally; main checkout tests verified",
+    "next_proposed": "05AK-B completed and locally merged after explicit user authorization; no active owner/reviewer. Await next user instruction, do not repeat 05AK-B/B1/BR. No device or push authorization.",
     "restore_action": "read current handoff, selected state fields and lanes; verify actual Git; report before new dispatch",
     "push_authorized": false,
     "device_authorized": false,
-    "merge_before_handoff_metadata": "35a2b9ea38b1cde3083f98caa47778123f765f2f",
+    "merge_before_handoff_metadata": "bf9715c65a4eba58a37ce443c255fdf07d6471d6",
     "head_note": "Final handoff metadata commit is intentionally not self-referenced; use actual Git HEAD or archive final-state.json."
   }
 }

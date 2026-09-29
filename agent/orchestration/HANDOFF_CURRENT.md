@@ -1,15 +1,15 @@
 # MA9 总控当前交接
-更新：2026-09-29，05AK-A已验收并本地合入；05AK-B1已复核，总控补修装饰角mask及已拥有off保守护栏，05AK-BR待人工中转独立复核，未最终验收/合入。本文件不是设备或推送授权。
+更新：2026-09-29，用户明确授权后05AK-B已本地提交合入。独立离线PASS后F-BR1由总控增加逐通道偏差护栏；71定向/34独立探针重放/673 agent（1skip）均exit0。实现5165d850d9498906e5326b63a53c4cff24d7f676，合并bf9715c65a4eba58a37ce443c255fdf07d6471d6；仅离线范围验收，见state.global_garage_observation_task和closeout/report.md。本文件不是设备或推送授权。
 
 ## 恢复顺序与当前停点
 1. 先读本文件，再读state.json当前的model_dispatch、global_garage_observation_task、global_garage_prepare_task、global_garage_readonly_task、allocator_integration_task、garage_allocation_policy、context_handoff及agent/lanes.yaml。
 2. 核对实际git status/HEAD/worktree/远端追踪。state中base_head、旧模型字段和历史next仅作历史，不重复执行旧提示词。
-3. 05AK-A已结束，当前没有活跃外部owner/reviewer，没有待等待的原生agent。05AK-B两个交付文件在lane未跟踪。B1一次返修已用完，总控发现并修正角mask遗漏，同时仅在适配器内收紧已拥有off；05AJ共享文件未改。最终定向70/34/62项exit0、agent672/1skip exit0；tools42/1error/2skip exit1仍为已知CAR_STAR_RULES基线。报告见MA9-evidence/20260929-05AK-B-observation/root-b1/review.md；下一步prompts/05AK-BR-observation-review.md待人工中转GLM5.3独立全新上下文，不再派owner第二轮返修。lane基点仍为5e0c53afeca2b8072dc60cd6b36fd26d09d3dad7，不自行同步。
+3. 05AK-A/B/B1/BR均已结束，无活跃owner/reviewer，不重复派发旧提示词。B已本地合入；B1及总控角mask/owned-off护栏已核验，BR后颜色护栏由总控验证，05AJ共享源码未改。tools保留root-b1的42/1error/2skip exit1基线证据，本次不重跑。最新HEAD以实际Git为准；下一步等待用户指令，不自动派活、接执行器或操作设备。
 4. 旧长交接及本次压缩前state/入口提示词已归档至MA9-evidence/20260929-clean-controller-handoff/，按需要读，不默认全量加载。
 
 ## Git与目录
 - 根E:/hzz/work/MA9，分支main；实现lane为E:/hzz/work/MA9/MA9-worktrees/duel-scan，分支lane/duel-scan。
-- 最新实现提交ba78e8a539d531f897a7da49b3ba5d5689c472e0；main合并提交35a2b9ea38b1cde3083f98caa47778123f765f2f。总控随后提交本交接元数据，并将干净lane快进到同一main。最终准确HEAD见实际Git或归档目录final-state.json，不在本提交中自引用自身SHA。
+- 最新实现提交5165d850d9498906e5326b63a53c4cff24d7f676；main合并提交bf9715c65a4eba58a37ce443c255fdf07d6471d6。总控随后提交本交接元数据，并将干净lane快进到同一main。最终准确HEAD见实际Git；本轮证据在MA9-evidence/20260929-05AK-B-observation/closeout/，不在本提交中自引用自身SHA。
 - origin=https://github.com/Testiphi/MA9.git。本地origin/main仍eb5fbd196da4cb4e9b39d3054b3ac149499158cf；这是此前已推送业务/双语README基点。本次未联网重验服务器、未获新的推送请求、未推送。
 - main有用户未跟踪captures/.workbuddy，保留且不stage。合格阶段自动精确本地提交；不强推，不清理用户文件。
 - 契约A=bd9a535336750d8fae3799f20d321498e21f5b00、B=ab13bf9ec91f916754aa0910bd1138e2f038d0a5，本轮祖先检查均exit0；只复用，不重冻。
@@ -61,6 +61,6 @@
 - tools基线红项仍开放：CAR_STAR_RULES/index_anchor_missing。tools42项1error/2skip，在无05AJ新模块的main上定向4项也同错（1error/1skip）。日志05AJ-name-geometry/logs/{tools-tests.log,allocator-main-baseline.log}。不能改上游、绕过兼容闸门、声称全套绿灯或完整verify_default通过。
 - 首页赛区V/IV和五图真槽号已实现；旧只读session已消费，只能历史回放。过去五车实机assigned/同槽返回未开赛，不等于新策略自动五槽验收。不得让用户重跑旧采集或清空已有五车。
 
-## 下一步（提示词已准备，待人工中转）
-先做05AK-B只读Observation适配器：将真实原生帧/OCR/控件证据转成规划器的page、owned_filter、other_filters_clear、at_d_start，并由调用方真实采样回执绑定session_id/frame_id。重点是其他筛选确实清空与D最左端锚点，不靠顶部D按钮、固定车型名单、catalog反推等级或重复文件假装新帧。
+## 后续边界（05AK-B已完成，不重派）
+05AK-B只读Observation适配器已完成，将原生帧/OCR/控件证据转成page、owned_filter、other_filters_clear、at_d_start；session_id/frame_id及同帧OCR真实性仍由未来真实采样调用方保证。其他筛选及D最左端按有限原图校准，不靠顶部D按钮、固定车型名单或catalog反推等级。独立复核后仅总控收紧F-BR1，不能称最终新哈希经reviewer再次签字。
 该阶段先离线验证，不调用点击、不接执行器、不扩成全库存/详情补星/账号导入。主页面入口与输入执行器后续单独接线，真正涉及输入前集中交GLM审边界。现有规划器不负责验证调用方伪造State/Observation，不得当认证层使用。
