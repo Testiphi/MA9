@@ -3,7 +3,7 @@
   "global_garage_live_observation_task": {
     "phase": "05AK_C_prompt_prepared_awaiting_user_relay",
     "authority": "user_confirm_push_and_prepare_live_entry_2026_09_29",
-    "owner_candidate": "GLM5.3 platform_default external_user_relay",
+    "owner_candidate": "DeepSeek v4.1flash platform_default external_user_relay",
     "active_owner": null,
     "active_reviewer": null,
     "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
@@ -18,7 +18,7 @@
     "agent_device_authorized": false,
     "implementation_started": false,
     "review_required": "independent sampling and input-boundary review before user live run",
-    "next": "User relays prompt to GLM5.3; root verifies delivery then prepares independent review. User operates device only after entry is ready."
+    "next": "User relays prompt to DeepSeek v4.1flash; root verifies delivery and selects independent review using cost-first policy. Escalate to GLM5.3 or Qwen3.8Max only for poor results or long/complex work. No agent device operation."
   },
   "last_verified_push": {
     "remote": "https://github.com/Testiphi/MA9.git",
@@ -2228,16 +2228,16 @@
     "transport": "external_user_relay",
     "owner": "DeepSeek v4.1flash",
     "owner_effort": "platform_default",
-    "routine_review": "Qwen3.8Max_bounded_auxiliary_candidate",
-    "critical_review": "GLM5.3",
-    "mechanical": "DeepSeek_v4.1flash_narrow_pure_tasks_only",
+    "routine_review": "DeepSeek v4.1flash independent fresh context",
+    "critical_review": "DeepSeek_first_independent_context; GLM5.3_or_Qwen3.8Max_on_poor_results_or_long_tasks",
+    "mechanical": "DeepSeek_v4.1flash_default_cost_first",
     "user_relay_required": true,
     "user_device_operator": true,
     "parallel_writers_per_lane": 1,
     "native_subagents_enabled": false,
     "child_may_spawn_agents": false,
     "cost_basis": "user reports DeepSeek low cost, Qwen free, GLM higher cost/rate limits; no independent capability ranking",
-    "budget_policy": "bounded prompts, scripts for mechanical work, one repair then orchestrator triage, GLM final critical review only",
+    "budget_policy": "latest_user_2026_09_29: DeepSeek v4.1flash first for bounded implementation and independent review; split long tasks when useful; poor results or long/complex work may escalate to GLM5.3 or Qwen3.8Max; no automatic premium review or repeated failed retries",
     "current_orchestrator_model": "gpt-6-astra",
     "current_orchestrator_effort": "medium",
     "speed_preference": "standard"

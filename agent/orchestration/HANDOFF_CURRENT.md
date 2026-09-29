@@ -1,4 +1,5 @@
 # MA9 总控当前交接
+最新成本政策（覆盖下文旧模型分工）：用户要求尽量首选DeepSeek v4.1flash；效果不佳或遇到长任务/复杂阻塞再考虑GLM5.3或Qwen3.8Max。05AK-C当前owner候选已改为DeepSeek，尚未启动。保留验证与独立上下文要求，不默认高级模型终审，不无限返修。
 最新推进：main已推送至https://github.com/Testiphi/MA9.git，git ls-remote在线核验9b29bd9015bd081a2b66f04bdab3d5b94a6b0583，exit0。用户要求准备实机入口，05AK-C只读诊断CLI包已准备待人工中转GLM5.3，尚未实现/运行；见state.global_garage_live_observation_task。开发和总控仍不得连接或操作设备；用户在实现及独立复核后手动启动验证。
 更新：2026-09-29，用户明确授权后05AK-B已本地提交合入。独立离线PASS后F-BR1由总控增加逐通道偏差护栏；71定向/34独立探针重放/673 agent（1skip）均exit0。实现5165d850d9498906e5326b63a53c4cff24d7f676，合并bf9715c65a4eba58a37ce443c255fdf07d6471d6；仅离线范围验收，见state.global_garage_observation_task和closeout/report.md。本文件不是设备或推送授权。
 

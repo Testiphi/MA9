@@ -46,9 +46,9 @@ orchestration_policy:
     selection_pilot_scope: external_relay_pure_function_no_repository_writes
     implementation: deepseek
     implementation_effort: null
-    independent_review: qwen_max
+    independent_review: deepseek
     review_effort: null
-    critical_independent_review: glm
+    critical_independent_review: deepseek
     mechanical_tasks: deepseek
     mechanical_effort: null
     authority: latest_user_external_relay_2026_09_27
@@ -57,8 +57,8 @@ orchestration_policy:
     complex_effort: null
     escalation: one_bounded_repair_then_orchestrator_triage
     notes: >
-      按用户提供的成本和单题实测：DeepSeek仅清楚边界的小函数/机械实现；Qwen3.8Max有界辅助审查候选；Flash排队暂不用。
-      GLM5.3仅关键识别/输入安全/同步边界终审，避免常驻和重复全审。不是未经验证的能力排名。
+      2026-09-29用户最新成本政策：实现与独立复核尽量首选DeepSeek v4.1flash，不再限于小型纯逻辑，也不默认配GLM终审。
+      效果不佳或遇到长任务/复杂阻塞才考虑GLM5.3或Qwen3.8Max；先保留结果和最小反例，由总控决定，不无限返修。以下旧型号分工仅为历史，不覆盖本条。
       外部平台档位未指定，使用平台默认并如实记录，不编造high/max支持。历史模型字段不支配新派工。
       2026-09-28用户允许试用其他外部模型并提供倍率；先以同题小测试比较免费Qwen与MiniMax M3(0.26)，不预设能力排名。
       GLM5.3(0.78)保留关键复核；Kimi K3(1.83)候选备用；DeepSeek高峰0.13/闲时0.06，05AJ不再继续返修。
