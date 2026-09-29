@@ -1,7 +1,11 @@
 {
   "version": 1,
   "global_garage_live_observation_task": {
-    "phase": "05AK_C_root_review_requires_bounded_repair1",
+    "phase": "05AK_C1_root_fixed_pending_independent_review_relay",
+    "latest_root_review": "MA9-evidence/20260929-05AK-C-live-observation/root-c1/review.md",
+    "review_prompt": "agent/orchestration/prompts/05AK-CR-live-entry-review.md",
+    "latest_root_tests": {"tool": 55, "adapter_regressions": 167, "skipped": 0, "exit": 0},
+    "review_hashes": {"tool": "2b96a612f908522056fbdbd9529a3aa9f180ea556374cc424c3efc48adbde417", "test": "4cb983b376be29bfac02d44db9de8051c49f88cb70002af6b19d7d343bc477d4", "doc": "e3441039fc0ae0e47d4be647c36644c956f9cac9bf7c1228f27d964e647f5d70"},
     "root_review": "MA9-evidence/20260929-05AK-C-live-observation/root/review.md",
     "repair_prompt": "agent/orchestration/prompts/05AK-C1-live-entry-repair.md",
     "repair_round": 1,
@@ -25,7 +29,7 @@
     "agent_device_authorized": false,
     "implementation_started": true,
     "review_required": "independent sampling and input-boundary review before user live run",
-    "next": "User relays 05AK-C1 to original DeepSeek owner for one bounded repair. Keep current serial pace because fixes share one entry; independent review after root verification, same model allowed. No live run yet."
+    "next": "05AK-C1 closed; root added connection-stage deadline gates and persisted cleanup failures. Relay 05AK-CR to a fresh independent DeepSeek context, readonly. No second owner retry, no live run or merge yet."
   },
   "last_verified_push": {
     "remote": "https://github.com/Testiphi/MA9.git",
@@ -2615,7 +2619,7 @@
     "native_subagents_enabled": false,
     "new_task_created": false,
     "completed_latest": "05AK-B offline observation adapter independently reviewed, root narrowed F-BR1, committed and merged locally; main checkout tests verified",
-    "next_proposed": "05AK-C delivered but root probes found lifecycle/deadline/default-path defects; 05AK-C1 one bounded DeepSeek repair prepared. No live verification until repaired and independently reviewed.",
+    "next_proposed": "05AK-C1 verified, root fixed two residual boundary issues; 05AK-CR independent DeepSeek review prepared. No active owner/reviewer and no live run/merge yet.",
     "restore_action": "read current handoff, selected state fields and lanes; verify actual Git; report before new dispatch",
     "push_authorized": false,
     "device_authorized": false,
