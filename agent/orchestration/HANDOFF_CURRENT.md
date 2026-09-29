@@ -1,5 +1,5 @@
 # MA9 总控当前交接
-更新：2026-09-28，05AJ返修未验收，准备低成本外部模型同题筛选。本文件不是设备操作授权。优先读本文件、state.json当前字段、lanes.yaml，再核对实际Git；不要从旧聊天或旧提示词重复派活。
+更新：2026-09-29，05AJ当前页只读解析已终审并本地合入。本文件不是设备操作授权。优先读本文件、state.json当前字段、lanes.yaml，再核对实际Git；不要从旧聊天或旧提示词重复派活。
 
 ## 最新模型选型试验
 - 用户回传的是DeepSeek v4.1flash、MiniMaxM3、Qwen3.8Max三份答卷；Qwen Flash排队超20分钟暂不用。总控已实际执行：原47例为47/47、46/47、47/47；回传后另列6例为6/6、2/6、4/6，不倒改原成绩。结果见MA9-evidence/20260928-model-pilot/results-report.md及grading-results.json。本轮测试结束，不补考。
@@ -9,15 +9,15 @@
 - 先由用户把MA9-evidence/20260928-model-pilot/common-prompt.md原样给Qwen和MiniMax两个全新对话，平台默认设置；纯函数答题不访问仓库、不写生产文件。总控预先保存47个用例（9个正例），尚无模型答卷或成绩，不得声称已比较出优胜者。
 - 实际扣费可见时记录，不可见则未知。总成本同时考虑总控核验/返工；不让免费模型无限重试。GLM保留关键复核，Kimi暂不进入首轮；05AJ两文件未验收且保持原样。
 
-## 当前05AJ（优先于下方历史阶段）
-- repair1已回传，47项定向测试由总控重跑exit0，但仍有几何不确定却unique、低置信度状态判owned、星级总槽数硬编码6、OCR兜底误判页面及缩图不缩OCR等问题，未验收。唯一外部返修已用完，转总控诊断，不再派DeepSeek或GLM。详见05AJ证据目录root-repair1-review.md；两个新文件原样保留，未提交合入。
-- 05AJ初稿已回传，lane仍在b1ed86f且仅两个未跟踪新文件。总控重跑29项测试exit0，但独立探针证实错误星级、fuzzy前缀绕过、徽标ROI/置信度漏门禁、截断确认及暗卡漏检等问题，REQUEST_CHANGES。repair1-prompt.md位于05AJ证据目录，待用户交原DeepSeek完成唯一一次有界返修；暂不进入GLM。state.global_garage_readonly_task记录当前状态。
-- 用户已补齐13张全局车库截图（其中一对重复；12张1280×720、一张2420×1668状态参考），05AI报告及05AJ input-manifest.json定位原图，不重复索要。
-- 下一席为DeepSeek v4.1flash平台默认档位，用户中转；完整提示词agent/orchestration/prompts/05AJ-global-garage-readonly.md。目前等待用户中转，未启动原生模型或用户新任务。
-- lane已快进到b1ed86fab405e902e04967f2aa51928c484444eb且tracked clean。仅允许新建global_garage_screen.py及test_global_garage_screen.py；不修改已有运行时、05AG门禁或账号profile。完成后总控核验，再安排GLM独立只读终审。
-- 全局车库全名静态显示、每卡有独立等级；入口位置任意；等级按钮不能稳定导航；真正变更已拥有过滤会回D起点。默认顺序不保证当前性能分递增；面板外无法识别开关状态。
-- 用户明确：已拥有开启后不显示可解锁未拥有车辆；若观察矛盾，不能记为拥有。粉色倒计时只是活动时间，不判拥有/资格；遮星先未知。升星就绪继续排除自动配车，不解锁/升星。
-- 05AJ只做离线当前页解析，不导航、不点击、不翻页、不读取详情、不写账号。真实OCR、人工转录和合成测试分开报告；iPad参考图不作为16:9几何正例。
+## 当前05AJ：已本地合入，后续不重复派发
+- GLM5.3平台默认档独立只读终审PASS，原待审哈希MATCH。总控后置F1只收紧：Ford GT MK II/MK IV、Glickenhaus 003S/007S等同级等长一字差车型不能直接unique。F2-F4低优先级观察保留。
+- lane实现提交b6e54dfb589dcf3783a671aae4e5f2252d77a915；main合并提交0d56f41f0c6957b6d41e242441c11157f38e26e8。仅global_garage_screen.py和test_global_garage_screen.py，已由新文件转为正式跟踪文件。随后提交本交接元数据，实际HEAD以Git为准。
+- 当前验收范围为1280×720离线当前页观察，不含导航/翻页/详情/账号写入。真实Lykan/918正例、漏后缀负例和暗卡边框均有证据；小字漏读仍未知，数字星级全部未知。
+- 最终定向62项、agent568项(1skip)exit0；后置守卫全部冻结截图重放无新确认/换车，原正例保留。tools42项1error/2skip（CAR_STAR_RULES缺失）在main基线复现，仍为独立红项；schema未重跑，不宣称完整verify_default通过。
+- 无controller离线OCR已经用11张唯一原尺寸截图实际验证；未加载pipeline、未连接设备。13个截图文件含一对重复和一张iPad参考图，不重复索要。
+- 收口证据MA9-evidence/20260929-05AJ-closeout/；终审报告在MA9-evidence/20260928-05AJ-name-geometry/review/review.md。当前无活跃owner/reviewer；不再派DeepSeek返修或等待GLM旧任务。
+- 用户规则继续有效：全局车名不滚动、每卡独立等级；入口位置任意、等级按钮非稳定起点、切换已拥有回D起点；默认顺序不保证当前性能单调；仅面板可辨筛选状态；已拥有开启后不显示可解锁未拥有车；活动横幅不判拥有/资格，可能遮星；升星就绪仍排除配车。
+- 后续全局导航/筛选连续性、星级与完整账号导入需分别处理。本轮未操作设备、未推送。
 
 ## 最新05AG状态（覆盖下方旧阶段描述）
 - DeepSeek已交付初稿及唯一一次返修；总控确认重复前缀仍会被登记后，按用户“继续下一阶段”接手运行时门禁。不要再次派DeepSeek返修。

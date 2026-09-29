@@ -2312,26 +2312,89 @@
     "runtime_execution_enabled": false
   },
   "global_garage_readonly_task": {
-    "phase": "05AJ_repair1_reviewed_not_accepted_root_triage",
+    "phase": "05AJ_GLM_reviewed_current_page_parser_merged_locally",
     "authority": "user_proceed_next_after_global_garage_samples_2026_09_28",
     "owner": "DeepSeek v4.1flash platform_default external_user_relay",
     "active_owner": null,
-    "writer_reserved": "orchestrator_triage_no_further_DeepSeek_repair",
+    "writer_reserved": null,
     "repair_round": 1,
     "repair1_root_review": "E:/hzz/work/MA9/MA9-evidence/20260928-05AJ-global-garage-readonly/root-repair1-review.md",
-    "repair1_tests": {"run": 47, "exit": 0, "root_repeated": true},
-    "remaining_findings": ["uncertain geometry still unique", "low-confidence upgrade banner becomes owned", "six total star slots hardcoded without slot evidence", "isolated low-confidence OCR bypasses page gate", "resized pixels retain unscaled OCR coordinates", "same-class full-name completeness remains unfinished"],
+    "repair1_tests": {
+      "run": 47,
+      "exit": 0,
+      "root_repeated": true
+    },
+    "root_takeover_evidence": "E:/hzz/work/MA9/MA9-evidence/20260928-05AJ-root-takeover",
+    "root_takeover_tests": {
+      "targeted": 52,
+      "agent_full": 558,
+      "agent_skipped": 1,
+      "exit": 0
+    },
+    "latest_evidence": "E:/hzz/work/MA9/MA9-evidence/20260928-05AJ-name-geometry",
+    "latest_review_prompt": "E:/hzz/work/MA9/MA9-evidence/20260928-05AJ-name-geometry/GLM-review-prompt.md",
+    "latest_review_status": "GLM_PASS_root_added_monotone_F1_guard_verified",
+    "latest_tests": {
+      "targeted": 62,
+      "agent_full": 568,
+      "agent_skipped": 1,
+      "agent_exit": 0,
+      "tools_run": 42,
+      "tools_errors": 1,
+      "tools_skipped": 2,
+      "tools_exit": 1
+    },
+    "tools_baseline_issue": "allocator test CAR_STAR_RULES index_anchor_missing reproduced on main without 05AJ module; no allocator or external-source edits",
+    "static_name_evidence": "real Lykan and 918 prefix positives plus omitted-suffix-with-same-box and typo negatives passed; limited two-line ASCII glyph-count/coverage heuristic pending independent review",
+    "dark_geometry": "paired top/bottom borders now recover F5 dark card; brand OCR still missing so identity stays unknown",
+    "actual_ocr": {
+      "verified": true,
+      "controller_created": false,
+      "pipeline_bundle_loaded": false,
+      "unique_native_images": 11,
+      "exit": 0
+    },
+    "root_gate_findings_resolved": [
+      "uncertain geometry vetoes unique",
+      "invalid confidence cannot establish state",
+      "numeric stars withheld without total-slot evidence",
+      "isolated OCR cannot promote page",
+      "non-native sizes rejected"
+    ],
+    "remaining_findings": [
+      "numeric stars intentionally unknown",
+      "small text and unsupported typography may remain unresolved",
+      "same-class one-character siblings now withheld",
+      "F2-F4 low-priority review observations retained",
+      "navigation and filter continuity not implemented",
+      "allocator baseline test failure remains open"
+    ],
     "root_review": "E:/hzz/work/MA9/MA9-evidence/20260928-05AJ-global-garage-readonly/root-review.md",
     "repair_prompt": "E:/hzz/work/MA9/MA9-evidence/20260928-05AJ-global-garage-readonly/repair1-prompt.md",
-    "initial_delivery_tests": {"run": 29, "exit": 0, "root_repeated": true},
-    "blocking_findings": ["false six-star readings on real three-star cards", "fuzzy prefix ambiguity bypass", "badge ROI and confidence ignored", "clipped card unique identity", "gray frame falsely classified as filter off", "dark and edge cards silently omitted", "field ROI and comma performance parsing incomplete"],
+    "initial_delivery_tests": {
+      "run": 29,
+      "exit": 0,
+      "root_repeated": true
+    },
+    "blocking_findings": [
+      "false six-star readings on real three-star cards",
+      "fuzzy prefix ambiguity bypass",
+      "badge ROI and confidence ignored",
+      "clipped card unique identity",
+      "gray frame falsely classified as filter off",
+      "dark and edge cards silently omitted",
+      "field ROI and comma performance parsing incomplete"
+    ],
     "reviewer": "GLM5.3 independent_readonly_after_root_verification",
     "active_reviewer": null,
     "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
     "branch": "lane/duel-scan",
     "base_head": "b1ed86fab405e902e04967f2aa51928c484444eb",
     "owns": [],
-    "owns_new": ["agent/ma9_agent/global_garage_screen.py", "agent/tests/test_global_garage_screen.py"],
+    "owns_new": [
+      "agent/ma9_agent/global_garage_screen.py",
+      "agent/tests/test_global_garage_screen.py"
+    ],
     "owns_generated": [],
     "scope": "1280x720 current-page offline image/OCR parser; no navigation, controller, profile, integration or UI wiring",
     "prompt": "agent/orchestration/prompts/05AJ-global-garage-readonly.md",
@@ -2351,7 +2414,14 @@
       "activity_banner_may_occlude_stars": true,
       "owned_filter_hides_unlock_ready_unowned": true
     },
-    "next": "Root takes over diagnosis after the single DeepSeek repair. No further DeepSeek retry or GLM review yet. Two untracked files remain unaccepted; no device or account writes."
+    "next": "No active external task. Parser merged locally; next bounded stage may address global-garage navigation/filter continuity or star evidence. No new push/device authorization.",
+    "review_report": "E:/hzz/work/MA9/MA9-evidence/20260928-05AJ-name-geometry/review/review.md",
+    "closeout_evidence": "E:/hzz/work/MA9/MA9-evidence/20260929-05AJ-closeout",
+    "source_commit": "b6e54dfb589dcf3783a671aae4e5f2252d77a915",
+    "merge_commit": "0d56f41f0c6957b6d41e242441c11157f38e26e8",
+    "committed": true,
+    "merged": true,
+    "accepted_scope": "native_1280x720_current_page_offline_observer_only_no_navigation_or_account_writes"
   },
   "runtime_association_task": {
     "phase": "05AG_GLM_reviewed_gate_merged_locally",
