@@ -1,7 +1,14 @@
 {
   "version": 1,
   "global_garage_live_observation_task": {
-    "phase": "05AK_C_prompt_prepared_awaiting_user_relay",
+    "phase": "05AK_C_root_review_requires_bounded_repair1",
+    "root_review": "MA9-evidence/20260929-05AK-C-live-observation/root/review.md",
+    "repair_prompt": "agent/orchestration/prompts/05AK-C1-live-entry-repair.md",
+    "repair_round": 1,
+    "root_tests": {"tool": 31, "adapter_regressions": 167, "skipped": 0, "exit": 0},
+    "root_findings": ["F-C1 connect cancel/errors escape without summary", "F-C2 last-frame deadline can report success", "F-C3 default output outside agreed evidence directory"],
+    "accepted": false,
+    "merged": false,
     "authority": "user_confirm_push_and_prepare_live_entry_2026_09_29",
     "owner_candidate": "DeepSeek v4.1flash platform_default external_user_relay",
     "active_owner": null,
@@ -16,9 +23,9 @@
     "owns_generated": [],
     "scope": "standalone user-launched readonly capture/OCR/Observation diagnostic CLI; no planner receipts, ready claim, inputs or profile writes",
     "agent_device_authorized": false,
-    "implementation_started": false,
+    "implementation_started": true,
     "review_required": "independent sampling and input-boundary review before user live run",
-    "next": "User relays prompt to DeepSeek v4.1flash; root verifies delivery and selects independent review using cost-first policy. Escalate to GLM5.3 or Qwen3.8Max only for poor results or long/complex work. No agent device operation."
+    "next": "User relays 05AK-C1 to original DeepSeek owner for one bounded repair. Keep current serial pace because fixes share one entry; independent review after root verification, same model allowed. No live run yet."
   },
   "last_verified_push": {
     "remote": "https://github.com/Testiphi/MA9.git",
@@ -80,7 +87,8 @@
   "policy": "external-user-relay-root-contained",
   "contract_commit": "bd9a535336750d8fae3799f20d321498e21f5b00",
   "contract_metadata_commit": "ab13bf9ec91f916754aa0910bd1138e2f038d0a5",
-  "active_owner_limit": 1,
+  "active_owner_limit": null,
+  "external_parallel_policy": "user_allows_two_or_more_noninterfering_external_DeepSeek_tasks; one writer per file/disjoint scope; same model permitted with independent contexts; split poor-performing tasks before escalating; no forced parallelism; native subagents remain disabled",
   "device_operator": "user",
   "device_authorized": false,
   "lanes": {
@@ -2607,7 +2615,7 @@
     "native_subagents_enabled": false,
     "new_task_created": false,
     "completed_latest": "05AK-B offline observation adapter independently reviewed, root narrowed F-BR1, committed and merged locally; main checkout tests verified",
-    "next_proposed": "05AK-C readonly live observation CLI prompt ready for user relay. Main through9b29bd9 pushed and remote verified; no agent device execution authorized.",
+    "next_proposed": "05AK-C delivered but root probes found lifecycle/deadline/default-path defects; 05AK-C1 one bounded DeepSeek repair prepared. No live verification until repaired and independently reviewed.",
     "restore_action": "read current handoff, selected state fields and lanes; verify actual Git; report before new dispatch",
     "push_authorized": false,
     "device_authorized": false,

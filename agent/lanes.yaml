@@ -37,7 +37,8 @@ orchestration_policy:
   concurrency: >
     用户最新要求改为外部模型人工中转；总控提供填好的提示词，用户粘贴到外部新对话并回传结果。
     不再调用原生子智能体，除非用户再次明确恢复；外部子席也不得派下级。
-    一个写入owner，reviewer只读且独立上下文；总控核对实际Git和证据后验收。
+    用户允许两个及以上互不干扰的外部DeepSeek任务并行；同一文件/重叠范围只允许一个写入owner，reviewer只读且独立上下文，可用相同模型。
+    表现不佳时先考虑任务拆分；无必要不强行并行，仍由用户人工中转，不恢复原生子模型。总控核对实际Git和证据后验收。
   active_model_policy:
     allowed_external_models: [deepseek, qwen_flash, qwen_max, glm, minimax, kimi]
     selection_pilot: [deepseek, minimax, qwen_max]
@@ -87,6 +88,7 @@ orchestration_files:
     - agent/orchestration/prompts/05AK-B1-observation-repair.md
     - agent/orchestration/prompts/05AK-BR-observation-review.md
     - agent/orchestration/prompts/05AK-C-live-observation-entry.md
+    - agent/orchestration/prompts/05AK-C1-live-entry-repair.md
     - agent/orchestration/HANDOFF_CURRENT.md
     - agent/orchestration/prompts/01-nav.md
     - agent/orchestration/prompts/02-build.md
