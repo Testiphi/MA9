@@ -1,4 +1,5 @@
 # MA9 总控当前交接
+最新推进：main已推送至https://github.com/Testiphi/MA9.git，git ls-remote在线核验9b29bd9015bd081a2b66f04bdab3d5b94a6b0583，exit0。用户要求准备实机入口，05AK-C只读诊断CLI包已准备待人工中转GLM5.3，尚未实现/运行；见state.global_garage_live_observation_task。开发和总控仍不得连接或操作设备；用户在实现及独立复核后手动启动验证。
 更新：2026-09-29，用户明确授权后05AK-B已本地提交合入。独立离线PASS后F-BR1由总控增加逐通道偏差护栏；71定向/34独立探针重放/673 agent（1skip）均exit0。实现5165d850d9498906e5326b63a53c4cff24d7f676，合并bf9715c65a4eba58a37ce443c255fdf07d6471d6；仅离线范围验收，见state.global_garage_observation_task和closeout/report.md。本文件不是设备或推送授权。
 
 ## 恢复顺序与当前停点
@@ -10,7 +11,7 @@
 ## Git与目录
 - 根E:/hzz/work/MA9，分支main；实现lane为E:/hzz/work/MA9/MA9-worktrees/duel-scan，分支lane/duel-scan。
 - 最新实现提交5165d850d9498906e5326b63a53c4cff24d7f676；main合并提交bf9715c65a4eba58a37ce443c255fdf07d6471d6。总控随后提交本交接元数据，并将干净lane快进到同一main。最终准确HEAD见实际Git；本轮证据在MA9-evidence/20260929-05AK-B-observation/closeout/，不在本提交中自引用自身SHA。
-- origin=https://github.com/Testiphi/MA9.git。本地origin/main仍eb5fbd196da4cb4e9b39d3054b3ac149499158cf；这是此前已推送业务/双语README基点。本次未联网重验服务器、未获新的推送请求、未推送。
+- origin=https://github.com/Testiphi/MA9.git。main已推送并在线核验为9b29bd9015bd081a2b66f04bdab3d5b94a6b0583；05AK-C编排准备是随后本地变更，未推送。
 - main有用户未跟踪captures/.workbuddy，保留且不stage。合格阶段自动精确本地提交；不强推，不清理用户文件。
 - 契约A=bd9a535336750d8fae3799f20d321498e21f5b00、B=ab13bf9ec91f916754aa0910bd1138e2f038d0a5，本轮祖先检查均exit0；只复用，不重冻。
 

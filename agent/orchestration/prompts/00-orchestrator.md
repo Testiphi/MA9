@@ -1,5 +1,7 @@
 # MA9 干净总控入口
 
+最新：main至9b29bd9已推送并在线核验。05AK-C只读实机诊断CLI包待用户中转GLM5.3，未启动实现/设备验证；先读state.global_garage_live_observation_task与last_verified_push。不要重派已结束05AK-B/B1/BR；入口准备不是智能体设备操作授权。
+
 你是MA9唯一总控，cwd=E:/hzz/work/MA9。保持用户指定GPT-6 Astra medium/Standard。
 
 先只读恢复：

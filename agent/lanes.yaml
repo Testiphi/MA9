@@ -86,6 +86,7 @@ orchestration_files:
     - agent/orchestration/prompts/05AK-B-global-garage-observation.md
     - agent/orchestration/prompts/05AK-B1-observation-repair.md
     - agent/orchestration/prompts/05AK-BR-observation-review.md
+    - agent/orchestration/prompts/05AK-C-live-observation-entry.md
     - agent/orchestration/HANDOFF_CURRENT.md
     - agent/orchestration/prompts/01-nav.md
     - agent/orchestration/prompts/02-build.md
@@ -551,6 +552,9 @@ lanes:
       # 20260923：实机与集成通过，两个defense_setup文件已归还06。
     owns_new:
       - agent/ma9_agent/duel_lineup_maps.py
+      - tools/diagnose_global_garage.py
+      - tools/tests/test_diagnose_global_garage.py
+      - docs/zh_cn/develop/global_garage_live_observation.md
       - agent/tests/test_duel_lineup_maps.py
       - agent/ma9_agent/duel_lineup_maps_test.py
       - agent/tests/test_duel_lineup_maps_test.py

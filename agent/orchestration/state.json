@@ -1,5 +1,32 @@
 {
   "version": 1,
+  "global_garage_live_observation_task": {
+    "phase": "05AK_C_prompt_prepared_awaiting_user_relay",
+    "authority": "user_confirm_push_and_prepare_live_entry_2026_09_29",
+    "owner_candidate": "GLM5.3 platform_default external_user_relay",
+    "active_owner": null,
+    "active_reviewer": null,
+    "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
+    "branch": "lane/duel-scan",
+    "base_head": "9b29bd9015bd081a2b66f04bdab3d5b94a6b0583",
+    "prompt": "agent/orchestration/prompts/05AK-C-live-observation-entry.md",
+    "evidence": "MA9-evidence/20260929-05AK-C-live-observation",
+    "owns": [],
+    "owns_new": ["tools/diagnose_global_garage.py", "tools/tests/test_diagnose_global_garage.py", "docs/zh_cn/develop/global_garage_live_observation.md"],
+    "owns_generated": [],
+    "scope": "standalone user-launched readonly capture/OCR/Observation diagnostic CLI; no planner receipts, ready claim, inputs or profile writes",
+    "agent_device_authorized": false,
+    "implementation_started": false,
+    "review_required": "independent sampling and input-boundary review before user live run",
+    "next": "User relays prompt to GLM5.3; root verifies delivery then prepares independent review. User operates device only after entry is ready."
+  },
+  "last_verified_push": {
+    "remote": "https://github.com/Testiphi/MA9.git",
+    "branch": "main",
+    "sha": "9b29bd9015bd081a2b66f04bdab3d5b94a6b0583",
+    "method": "git push origin main and git ls-remote origin refs/heads/main, both exit0",
+    "authority": "user_explicit_destination_and_pending_history_confirmation_2026_09_29"
+  },
   "global_garage_observation_task": {
     "phase": "05AK_B_reviewed_root_tightened_merged_locally",
     "main_checkout_tests": {"observation": 71, "plan": 34, "screen": 62, "skipped": 0, "exit": 0, "hashes_match": true},
@@ -2580,7 +2607,7 @@
     "native_subagents_enabled": false,
     "new_task_created": false,
     "completed_latest": "05AK-B offline observation adapter independently reviewed, root narrowed F-BR1, committed and merged locally; main checkout tests verified",
-    "next_proposed": "05AK-B completed and locally merged after explicit user authorization; no active owner/reviewer. Await next user instruction, do not repeat 05AK-B/B1/BR. No device or push authorization.",
+    "next_proposed": "05AK-C readonly live observation CLI prompt ready for user relay. Main through9b29bd9 pushed and remote verified; no agent device execution authorized.",
     "restore_action": "read current handoff, selected state fields and lanes; verify actual Git; report before new dispatch",
     "push_authorized": false,
     "device_authorized": false,
