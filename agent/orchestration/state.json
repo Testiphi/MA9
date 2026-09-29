@@ -2312,18 +2312,39 @@
     "runtime_execution_enabled": false
   },
   "global_garage_prepare_task": {
-    "phase": "05AK_A_pure_planner_prompt_ready_awaiting_user_relay",
+    "phase": "05AK_A_QwenMax_reviewed_pure_planner_merged_locally",
     "authority": "user_continue_next_2026_09_29_and_filter_timing_confirmations",
     "owner": "DeepSeek v4.1flash platform_default external_user_relay",
     "active_owner": null,
-    "writer_reserved": "DeepSeek_via_user_relay",
+    "writer_reserved": null,
     "active_reviewer": null,
-    "review_plan": "root_verifies_pure_transition_traces_then_bounded_independent_review; GLM_required_before_future_input_executor_integration",
+    "review_plan": "Qwen3.8Max_platform_default_readonly_pure_planner_review; GLM_required_before_future_input_executor_integration",
+    "review_prompt": "E:/hzz/work/MA9/MA9-evidence/20260929-05AK-prepare-plan/Qwen-review-prompt.md",
+    "root_report": "E:/hzz/work/MA9/MA9-evidence/20260929-05AK-prepare-plan/root-report.md",
+    "owner_tests": {
+      "run": 31,
+      "exit": 0
+    },
+    "root_tests": {
+      "targeted": 34,
+      "agent_full": 602,
+      "agent_skipped": 1,
+      "exit": 0,
+      "oracle_assertions": 945
+    },
+    "root_fixes": [
+      "fresh other-page observation blocks every nonterminal phase",
+      "event64 cannot issue actions",
+      "unrepresentable integer clocks block instead of raising"
+    ],
     "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
     "branch": "lane/duel-scan",
     "base_head": "f821077118e4ecfcfec4197e14c35b20f48b88dd",
     "owns": [],
-    "owns_new": ["agent/ma9_agent/global_garage_prepare_plan.py", "agent/tests/test_global_garage_prepare_plan.py"],
+    "owns_new": [
+      "agent/ma9_agent/global_garage_prepare_plan.py",
+      "agent/tests/test_global_garage_prepare_plan.py"
+    ],
     "owns_generated": [],
     "prompt": "agent/orchestration/prompts/05AK-global-garage-prepare-plan.md",
     "evidence": "E:/hzz/work/MA9/MA9-evidence/20260929-05AK-prepare-plan",
@@ -2335,7 +2356,19 @@
     },
     "device_authorized": false,
     "push_authorized": false,
-    "next": "User relays prompt to fresh DeepSeek conversation. No existing-module edits or live execution. Return pure planner for root verification."
+    "next": "No active owner/reviewer. Clean root should verify current files/Git, then propose 05AK-B read-only Observation adapter as a separate task; do not dispatch old prompts or execute device actions.",
+    "review_status": "PASS_manifest_matched_no_post_review_code_changes",
+    "review_report": "E:/hzz/work/MA9/MA9-evidence/20260929-05AK-prepare-plan/review/review.md",
+    "source_commit": "ba78e8a539d531f897a7da49b3ba5d5689c472e0",
+    "merge_commit": "35a2b9ea38b1cde3083f98caa47778123f765f2f",
+    "committed": true,
+    "merged": true,
+    "accepted_scope": "pure planning only; ready is not screen verification, execution authorization or account ownership proof",
+    "independent_review_tests": {
+      "targeted": 34,
+      "independent_probe_groups": 26,
+      "exit": 0
+    }
   },
   "global_garage_readonly_task": {
     "phase": "05AJ_GLM_reviewed_current_page_parser_merged_locally",
@@ -2489,10 +2522,20 @@
   "native_subagents_enabled": false,
   "context_handoff": {
     "recommended": "new_orchestrator_conversation",
-    "reason": "many completed recognition/data/sync stages; compact current handoff avoids replaying stale tasks",
+    "updated": "2026-09-29",
     "path": "agent/orchestration/HANDOFF_CURRENT.md",
-    "native_agents": "all completed, no active writer",
-    "external_tasks_issued": true,
-    "new_task_created": false
+    "entry_prompt": "agent/orchestration/prompts/00-orchestrator.md",
+    "archive": "MA9-evidence/20260929-clean-controller-handoff",
+    "active_external_owner": null,
+    "active_external_reviewer": null,
+    "native_subagents_enabled": false,
+    "new_task_created": false,
+    "completed_latest": "05AK-A pure planner committed and locally merged after Qwen3.8Max PASS",
+    "next_proposed": "05AK-B read-only adapter from actual frame/OCR/control observations to planner Observation; not issued",
+    "restore_action": "read current handoff, selected state fields and lanes; verify actual Git; report before new dispatch",
+    "push_authorized": false,
+    "device_authorized": false,
+    "merge_before_handoff_metadata": "35a2b9ea38b1cde3083f98caa47778123f765f2f",
+    "head_note": "Final handoff metadata commit is intentionally not self-referenced; use actual Git HEAD or archive final-state.json."
   }
 }

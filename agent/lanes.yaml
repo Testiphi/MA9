@@ -535,6 +535,8 @@ lanes:
       - agent/ma9_agent/duel_vehicle_screen.py
       - agent/ma9_agent/global_garage_screen.py
       - agent/tests/test_global_garage_screen.py
+      - agent/ma9_agent/global_garage_prepare_plan.py
+      - agent/tests/test_global_garage_prepare_plan.py
       - assets/resource/pipeline/duel_slot_navigation.json
       - assets/resource/pipeline/duel_runtime.json
       - assets/resource/pipeline/duel_navigation.json
@@ -544,8 +546,6 @@ lanes:
       # 20260923：实机与集成通过，两个defense_setup文件已归还06。
     owns_new:
       - agent/ma9_agent/duel_lineup_maps.py
-      - agent/ma9_agent/global_garage_prepare_plan.py
-      - agent/tests/test_global_garage_prepare_plan.py
       - agent/tests/test_duel_lineup_maps.py
       - agent/ma9_agent/duel_lineup_maps_test.py
       - agent/tests/test_duel_lineup_maps_test.py
