@@ -82,6 +82,7 @@ orchestration_files:
     - agent/orchestration/migration_20260923.md
     - agent/orchestration/prompts/00-orchestrator.md
     - agent/orchestration/prompts/05AJ-global-garage-readonly.md
+    - agent/orchestration/prompts/05AK-global-garage-prepare-plan.md
     - agent/orchestration/HANDOFF_CURRENT.md
     - agent/orchestration/prompts/01-nav.md
     - agent/orchestration/prompts/02-build.md
@@ -543,6 +544,8 @@ lanes:
       # 20260923：实机与集成通过，两个defense_setup文件已归还06。
     owns_new:
       - agent/ma9_agent/duel_lineup_maps.py
+      - agent/ma9_agent/global_garage_prepare_plan.py
+      - agent/tests/test_global_garage_prepare_plan.py
       - agent/tests/test_duel_lineup_maps.py
       - agent/ma9_agent/duel_lineup_maps_test.py
       - agent/tests/test_duel_lineup_maps_test.py

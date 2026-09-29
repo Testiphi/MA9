@@ -2311,6 +2311,32 @@
     "source_engine_changed": false,
     "runtime_execution_enabled": false
   },
+  "global_garage_prepare_task": {
+    "phase": "05AK_A_pure_planner_prompt_ready_awaiting_user_relay",
+    "authority": "user_continue_next_2026_09_29_and_filter_timing_confirmations",
+    "owner": "DeepSeek v4.1flash platform_default external_user_relay",
+    "active_owner": null,
+    "writer_reserved": "DeepSeek_via_user_relay",
+    "active_reviewer": null,
+    "review_plan": "root_verifies_pure_transition_traces_then_bounded_independent_review; GLM_required_before_future_input_executor_integration",
+    "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
+    "branch": "lane/duel-scan",
+    "base_head": "f821077118e4ecfcfec4197e14c35b20f48b88dd",
+    "owns": [],
+    "owns_new": ["agent/ma9_agent/global_garage_prepare_plan.py", "agent/tests/test_global_garage_prepare_plan.py"],
+    "owns_generated": [],
+    "prompt": "agent/orchestration/prompts/05AK-global-garage-prepare-plan.md",
+    "evidence": "E:/hzz/work/MA9/MA9-evidence/20260929-05AK-prepare-plan",
+    "scope": "pure FSM from caller-supplied observations and action receipts; intents only, no OCR/coordinates/controller/navigation execution/profile",
+    "user_confirmed_filter_semantics": {
+      "changes_apply_only_on_done": true,
+      "applied_changes_reset_to_D_start": true,
+      "close_without_changes_preserves_position": true
+    },
+    "device_authorized": false,
+    "push_authorized": false,
+    "next": "User relays prompt to fresh DeepSeek conversation. No existing-module edits or live execution. Return pure planner for root verification."
+  },
   "global_garage_readonly_task": {
     "phase": "05AJ_GLM_reviewed_current_page_parser_merged_locally",
     "authority": "user_proceed_next_after_global_garage_samples_2026_09_28",

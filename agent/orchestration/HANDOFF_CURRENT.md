@@ -1,5 +1,11 @@
 # MA9 总控当前交接
-更新：2026-09-29，05AJ当前页只读解析已终审并本地合入。本文件不是设备操作授权。优先读本文件、state.json当前字段、lanes.yaml，再核对实际Git；不要从旧聊天或旧提示词重复派活。
+更新：2026-09-29，05AK-A过滤准备纯状态机任务已准备。本文件不是设备操作授权。优先读本文件、state.json当前字段、lanes.yaml，再核对实际Git；不要从旧聊天或旧提示词重复派活。
+
+## 当前05AK-A：纯状态机，等待用户中转
+- 完整提示词agent/orchestration/prompts/05AK-global-garage-prepare-plan.md，模型DeepSeek v4.1flash平台默认。lane已快进至f821077118e4ecfcfec4197e14c35b20f48b88dd且tracked clean；仅允许两个新文件global_garage_prepare_plan.py及对应test文件。
+- 本阶段从已在全局车库列表开始，只处理调用方已验证观察与动作回执，输出open_filter/toggle_owned/apply_filter意图，不读图、不调用OCR、不带坐标、不执行输入、不写账号。主页入口/观察适配器/执行器另做，不把FSM就绪当设备授权。
+- 用户新确认：改勾选后必须点“完成”才应用并重置D起点；只开面板查看不改选项再点完成会保持位置。初始on须真实off提交再on提交，不能在同一面板关开净不变；最终重新打开核验on、无改动关闭后用两次新鲜D起点观察才规划就绪。
+- 单owner，不启动原生子模型。用户回传后总控核验输入序列/异常/超时等，再安排有界独立审查。当前无活跃reviewer，不重跑05AJ或启动设备。
 
 ## 最新模型选型试验
 - 用户回传的是DeepSeek v4.1flash、MiniMaxM3、Qwen3.8Max三份答卷；Qwen Flash排队超20分钟暂不用。总控已实际执行：原47例为47/47、46/47、47/47；回传后另列6例为6/6、2/6、4/6，不倒改原成绩。结果见MA9-evidence/20260928-model-pilot/results-report.md及grading-results.json。本轮测试结束，不补考。
