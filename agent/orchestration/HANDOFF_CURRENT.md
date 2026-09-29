@@ -1,10 +1,10 @@
 # MA9 总控当前交接
-更新：2026-09-29，05AK-A已验收并本地合入，干净总控恢复版。本文件不是设备或推送授权。
+更新：2026-09-29，05AK-A已验收并本地合入；用户已要求开始下一步，05AK-B提示词已准备待人工中转。本文件不是设备或推送授权。
 
 ## 恢复顺序与当前停点
-1. 先读本文件，再读state.json当前的model_dispatch、global_garage_prepare_task、global_garage_readonly_task、allocator_integration_task、garage_allocation_policy、context_handoff及agent/lanes.yaml。
+1. 先读本文件，再读state.json当前的model_dispatch、global_garage_observation_task、global_garage_prepare_task、global_garage_readonly_task、allocator_integration_task、garage_allocation_policy、context_handoff及agent/lanes.yaml。
 2. 核对实际git status/HEAD/worktree/远端追踪。state中base_head、旧模型字段和历史next仅作历史，不重复执行旧提示词。
-3. 05AK-A已结束，当前没有活跃外部owner/reviewer，没有待等待的原生agent。05AK-B尚未派发；本轮只恢复并简要报告，再按用户下一条指令继续。不要自动创建新对话。
+3. 05AK-A已结束，当前没有活跃外部owner/reviewer，没有待等待的原生agent。05AK-B提示词已准备，见state.global_garage_observation_task和prompts/05AK-B-global-garage-observation.md；待用户中转至GLM5.3全新对话，未启动实现。不要自动创建新对话。lane基点仍为5e0c53afeca2b8072dc60cd6b36fd26d09d3dad7，不因根编排元数据更新而自行同步。
 4. 旧长交接及本次压缩前state/入口提示词已归档至MA9-evidence/20260929-clean-controller-handoff/，按需要读，不默认全量加载。
 
 ## Git与目录
@@ -61,6 +61,6 @@
 - tools基线红项仍开放：CAR_STAR_RULES/index_anchor_missing。tools42项1error/2skip，在无05AJ新模块的main上定向4项也同错（1error/1skip）。日志05AJ-name-geometry/logs/{tools-tests.log,allocator-main-baseline.log}。不能改上游、绕过兼容闸门、声称全套绿灯或完整verify_default通过。
 - 首页赛区V/IV和五图真槽号已实现；旧只读session已消费，只能历史回放。过去五车实机assigned/同槽返回未开赛，不等于新策略自动五槽验收。不得让用户重跑旧采集或清空已有五车。
 
-## 建议下一步（尚未派发）
+## 下一步（提示词已准备，待人工中转）
 先做05AK-B只读Observation适配器：将真实原生帧/OCR/控件证据转成规划器的page、owned_filter、other_filters_clear、at_d_start，并由调用方真实采样回执绑定session_id/frame_id。重点是其他筛选确实清空与D最左端锚点，不靠顶部D按钮、固定车型名单、catalog反推等级或重复文件假装新帧。
 该阶段先离线验证，不调用点击、不接执行器、不扩成全库存/详情补星/账号导入。主页面入口与输入执行器后续单独接线，真正涉及输入前集中交GLM审边界。现有规划器不负责验证调用方伪造State/Observation，不得当认证层使用。
