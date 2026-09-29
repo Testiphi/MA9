@@ -1,7 +1,12 @@
 {
   "version": 1,
   "global_garage_observation_task": {
-    "phase": "05AK_B_prompt_prepared_awaiting_user_relay",
+    "phase": "05AK_B_root_review_requires_bounded_repair1",
+    "root_review": "MA9-evidence/20260929-05AK-B-observation/root/review.md",
+    "repair_prompt": "agent/orchestration/prompts/05AK-B1-observation-repair.md",
+    "repair_round": 1,
+    "root_tests": {"observation": 53, "plan": 34, "screen": 62, "exit": 0},
+    "root_blockers": ["invalid OCR may establish clear", "nonempty control may read unchecked", "fixture root breaks in main checkout", "image input guard incomplete"],
     "authority": "user_start_next_2026_09_29",
     "owner_candidate": "GLM5.3 platform_default external_user_relay",
     "selection_reason": "bounded critical visual evidence; DS remains narrow pure logic only",
@@ -23,8 +28,10 @@
     "scope": "offline native-frame Observation adapter; other-filter controls and D-start geometry; no acquisition or executor",
     "device_authorized": false,
     "push_authorized": false,
-    "implementation_started": false,
-    "next": "User relays prepared prompt to external fresh GLM5.3 chat; root verifies actual returned files and evidence before independent review. Do not dispatch old prompts."
+    "implementation_started": true,
+    "accepted": false,
+    "merged": false,
+    "next": "User relays 05AK-B1 bounded repair to GLM5.3 owner; preserve initial delivery and root evidence. Root rechecks before independent critical review. No active external reviewer."
   },
   "updated_at": "2026-09-27T15:09:44+00:00",
   "policy": "external-user-relay-root-contained",
@@ -2557,7 +2564,7 @@
     "native_subagents_enabled": false,
     "new_task_created": false,
     "completed_latest": "05AK-A pure planner committed and locally merged after Qwen3.8Max PASS",
-    "next_proposed": "05AK-B prompt prepared after user start-next instruction; awaiting user relay to GLM5.3, no active external owner; see global_garage_observation_task",
+    "next_proposed": "05AK-B delivered, root reproduced four findings; 05AK-B1 repair prompt prepared awaiting user relay. Not accepted or merged; see global_garage_observation_task",
     "restore_action": "read current handoff, selected state fields and lanes; verify actual Git; report before new dispatch",
     "push_authorized": false,
     "device_authorized": false,
