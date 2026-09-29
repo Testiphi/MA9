@@ -1,5 +1,5 @@
 # MA9 干净总控入口
-最新停点：05AK-C1已回传，总控复核并补修连接预算门/清理异常后工具55+适配器167项exit0；05AK-CR待用户中转DeepSeek独立新上下文只读复核，未验收/合入，禁止运行live。见state最新哈希及本包root-c1/review.md。允许互不干扰的外部DeepSeek任务并行，同模型独立上下文复核可行，按文件范围单写入；表现差先考虑拆分，不强行并行，原生子模型仍禁用。
+最新停点：05AK-CR独立离线PASS已回传，总控后置修P3报告取消缺口，58工具+167回归exit0。三文件未跟踪/未合入/未实机，建议用户核对ADB路径与地址后静止页面2帧首跑，智能体不运行live。见state最终哈希及本包closeout/report.md；无活跃owner/reviewer，不重派C/C1/CR。外部DeepSeek可按不重叠范围并行，同模型独立上下文可复核；不强行并行，原生子模型仍禁用。
 最新成本政策优先：05AK-C及后续实现/独立复核尽量首选DeepSeek v4.1flash；效果不佳或长任务再考虑GLM5.3/Qwen3.8Max。下文旧GLM默认和DS仅小型纯逻辑限制已被用户覆盖；05AK-C尚未启动，使用已更新的提示词。
 
 最新：main至9b29bd9已推送并在线核验。05AK-C只读实机诊断CLI包待用户中转GLM5.3，未启动实现/设备验证；先读state.global_garage_live_observation_task与last_verified_push。不要重派已结束05AK-B/B1/BR；入口准备不是智能体设备操作授权。

@@ -1,7 +1,14 @@
 {
   "version": 1,
   "global_garage_live_observation_task": {
-    "phase": "05AK_C1_root_fixed_pending_independent_review_relay",
+    "phase": "05AK_CR_pass_root_p3_fixed_ready_for_user_smoke_run",
+    "independent_review_status": "PASS_limited_offline_scope_two_P3_no_blockers",
+    "independent_review_report": "MA9-evidence/20260929-05AK-C-live-observation/review/review.md",
+    "closeout_report": "MA9-evidence/20260929-05AK-C-live-observation/closeout/report.md",
+    "closeout_tests": {"tool": 58, "adapter_regressions": 167, "skipped": 0, "exit": 0},
+    "final_hashes": {"tool": "bbe83f75be92834d436d2f18cacc98acca13ec543a3c02fa66d369c958301eed", "test": "4921b09a5bca3e469524d89bf258ae8d238631a8336d6c21c34dbc8ff5640af0", "doc": "db269da12e363967d086d373aaf6646721895351f2f5b20d8d4d546433ebb714"},
+    "live_run_executed": false,
+    "post_review_changes": "root fixed P3 report-write interrupts with bounded cancelled-summary attempts and 3 regressions; no independent re-signoff on final hashes",
     "latest_root_review": "MA9-evidence/20260929-05AK-C-live-observation/root-c1/review.md",
     "review_prompt": "agent/orchestration/prompts/05AK-CR-live-entry-review.md",
     "latest_root_tests": {"tool": 55, "adapter_regressions": 167, "skipped": 0, "exit": 0},
@@ -29,7 +36,7 @@
     "agent_device_authorized": false,
     "implementation_started": true,
     "review_required": "independent sampling and input-boundary review before user live run",
-    "next": "05AK-C1 closed; root added connection-stage deadline gates and persisted cleanup failures. Relay 05AK-CR to a fresh independent DeepSeek context, readonly. No second owner retry, no live run or merge yet."
+    "next": "C/C1/CR closed. Recommend user-operated stationary 2-frame smoke run after user verifies adb path/address/native size; only then manual filter sequence. Agent does not connect. Three source files remain untracked; merge requires user decision."
   },
   "last_verified_push": {
     "remote": "https://github.com/Testiphi/MA9.git",
@@ -2619,7 +2626,7 @@
     "native_subagents_enabled": false,
     "new_task_created": false,
     "completed_latest": "05AK-B offline observation adapter independently reviewed, root narrowed F-BR1, committed and merged locally; main checkout tests verified",
-    "next_proposed": "05AK-C1 verified, root fixed two residual boundary issues; 05AK-CR independent DeepSeek review prepared. No active owner/reviewer and no live run/merge yet.",
+    "next_proposed": "05AK-CR PASS received, root P3 report interrupts fixed,58+167 tests exit0. Ready for user-operated 2-frame first smoke run with verified adb path/address; no live/merge yet, no active owner/reviewer.",
     "restore_action": "read current handoff, selected state fields and lanes; verify actual Git; report before new dispatch",
     "push_authorized": false,
     "device_authorized": false,

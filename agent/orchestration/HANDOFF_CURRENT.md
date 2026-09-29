@@ -1,5 +1,5 @@
 # MA9 总控当前交接
-最新停点：05AK-C1一次返修已完成，总控复跑53工具+167回归exit0；补修连接阶段预算门及清理异常持久化后工具55项exit0。仅原三文件仍未跟踪，尚未验收/合入。05AK-CR待人工中转DeepSeek全新独立上下文只读复核，见本包root-c1/review.md与state最新哈希；无活跃owner/reviewer，未启动live/设备操作，不再派C1第二轮。此前“尚未实现”描述为历史。
+最新停点：05AK-CR独立DeepSeek离线PASS已回传，0阻断/2P3；总控补齐两处报告写入取消窗口后58工具+167回归exit0。见本包closeout/report.md及state最终哈希；原三文件仍未跟踪，未合入/未实机。建议用户核对ADB路径/地址/1280x720后手动静止页2帧首跑，再做筛选序列。无活跃owner/reviewer，不重派C/C1/CR，智能体不得连接设备。此前“尚未实现”描述为历史。
 最新调度补充：允许两个及以上互不干扰的外部DeepSeek任务并行，独立复核可同模型但独立上下文；同文件/重叠范围仍单写入owner。效果差先考虑拆分，不强行并行、不恢复原生子模型。本次修复集中于同一入口，保持串行。
 最新成本政策（覆盖下文旧模型分工）：用户要求尽量首选DeepSeek v4.1flash；效果不佳或遇到长任务/复杂阻塞再考虑GLM5.3或Qwen3.8Max。05AK-C当前owner候选已改为DeepSeek，尚未启动。保留验证与独立上下文要求，不默认高级模型终审，不无限返修。
 最新推进：main已推送至https://github.com/Testiphi/MA9.git，git ls-remote在线核验9b29bd9015bd081a2b66f04bdab3d5b94a6b0583，exit0。用户要求准备实机入口，05AK-C只读诊断CLI包已准备待人工中转GLM5.3，尚未实现/运行；见state.global_garage_live_observation_task。开发和总控仍不得连接或操作设备；用户在实现及独立复核后手动启动验证。
