@@ -1,10 +1,10 @@
 # MA9 总控当前交接
-更新：2026-09-29，05AK-A已验收并本地合入；05AK-B已回传，总控定向149项通过但独立探针发现F1–F4，05AK-B1待人工中转返修，未验收/合入。本文件不是设备或推送授权。
+更新：2026-09-29，05AK-A已验收并本地合入；05AK-B1已复核，总控补修装饰角mask及已拥有off保守护栏，05AK-BR待人工中转独立复核，未最终验收/合入。本文件不是设备或推送授权。
 
 ## 恢复顺序与当前停点
 1. 先读本文件，再读state.json当前的model_dispatch、global_garage_observation_task、global_garage_prepare_task、global_garage_readonly_task、allocator_integration_task、garage_allocation_policy、context_handoff及agent/lanes.yaml。
 2. 核对实际git status/HEAD/worktree/远端追踪。state中base_head、旧模型字段和历史next仅作历史，不重复执行旧提示词。
-3. 05AK-A已结束，当前没有活跃外部owner/reviewer，没有待等待的原生agent。05AK-B两个交付文件在lane未跟踪，哈希匹配，总控已复跑53/34/62项exit0。独立探针发现OCR验证、空控件误判、测试路径和图像入口缺口，报告见MA9-evidence/20260929-05AK-B-observation/root/review.md；下一步仅prompts/05AK-B1-observation-repair.md一次有界返修，待用户中转原GLM5.3 owner。不要自动创建新对话。lane基点仍为5e0c53afeca2b8072dc60cd6b36fd26d09d3dad7，不因根编排元数据更新而自行同步。
+3. 05AK-A已结束，当前没有活跃外部owner/reviewer，没有待等待的原生agent。05AK-B两个交付文件在lane未跟踪。B1一次返修已用完，总控发现并修正角mask遗漏，同时仅在适配器内收紧已拥有off；05AJ共享文件未改。最终定向70/34/62项exit0、agent672/1skip exit0；tools42/1error/2skip exit1仍为已知CAR_STAR_RULES基线。报告见MA9-evidence/20260929-05AK-B-observation/root-b1/review.md；下一步prompts/05AK-BR-observation-review.md待人工中转GLM5.3独立全新上下文，不再派owner第二轮返修。lane基点仍为5e0c53afeca2b8072dc60cd6b36fd26d09d3dad7，不自行同步。
 4. 旧长交接及本次压缩前state/入口提示词已归档至MA9-evidence/20260929-clean-controller-handoff/，按需要读，不默认全量加载。
 
 ## Git与目录

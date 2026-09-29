@@ -7,7 +7,7 @@
 2. agent/orchestration/state.json的context_handoff、model_dispatch、global_garage_observation_task、global_garage_prepare_task、global_garage_readonly_task、allocator_integration_task、garage_allocation_policy；其他历史字段按需读。
 3. agent/lanes.yaml及实际git status/HEAD/worktree/远端追踪。
 
-05AK-A纯规划器与05AJ当前页观察器均已独立复核、本地提交合入。没有活跃owner/reviewer，不等待旧agent、不重复任何已结束提示词。05AK-B已交付但总控探针发现F1–F4，尚未验收/合入；05AK-B1一次有界返修包待人工中转原GLM5.3 owner，见state.global_garage_observation_task与root/review.md。恢复后先简要报告，按用户下一条指令推进。
+05AK-A纯规划器与05AJ当前页观察器均已独立复核、本地提交合入。没有活跃owner/reviewer，不等待旧agent、不重复任何已结束提示词。05AK-B1一次返修已完成，总控补修角mask与适配器owned-off护栏；最终70/34/62定向及agent672/1skip exit0，tools仍为已知基线红项。05AK-BR独立只读复核包待人工中转GLM5.3全新上下文，尚未最终验收/合入；见state.global_garage_observation_task与root-b1/review.md。恢复后先简要报告，按用户下一条指令推进。
 
 仅外部人工中转，不spawn/followup原生子模型，不自动创建用户任务。DS只做清楚的小型纯逻辑；Qwen3.8Max有界辅助审查（不是免费Flash）；GLM集中关键视觉/输入/同步终审，其他候选见当前state。一个写入owner，reviewer独立只读。
 

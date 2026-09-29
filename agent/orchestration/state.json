@@ -1,12 +1,17 @@
 {
   "version": 1,
   "global_garage_observation_task": {
-    "phase": "05AK_B_root_review_requires_bounded_repair1",
+    "phase": "05AK_B1_root_fixed_ready_for_independent_review_relay",
+    "latest_root_review": "MA9-evidence/20260929-05AK-B-observation/root-b1/review.md",
+    "independent_review_prompt": "agent/orchestration/prompts/05AK-BR-observation-review.md",
+    "final_root_tests": {"observation": 70, "plan": 34, "screen": 62, "agent": 672, "agent_skipped": 1, "agent_exit": 0, "tools": 42, "tools_errors": 1, "tools_skipped": 2, "tools_exit": 1},
+    "review_hashes": {"module": "10eb6ccf064563104ec13d148c6746b7d1254ee3626c0866ae90e87655db69a5", "tests": "a9b5efb980bcc3499bc9bfc494a60405397f4ebab29e16b610f913f9ab3bbb5d"},
     "root_review": "MA9-evidence/20260929-05AK-B-observation/root/review.md",
     "repair_prompt": "agent/orchestration/prompts/05AK-B1-observation-repair.md",
     "repair_round": 1,
     "root_tests": {"observation": 53, "plan": 34, "screen": 62, "exit": 0},
-    "root_blockers": ["invalid OCR may establish clear", "nonempty control may read unchecked", "fixture root breaks in main checkout", "image input guard incomplete"],
+    "root_blockers": [],
+    "resolved_root_findings": ["F1/F3/F4 verified after B1", "F2 corner masking fixed by root", "owned off narrowed to unknown on unverified interior within adapter only"],
     "authority": "user_start_next_2026_09_29",
     "owner_candidate": "GLM5.3 platform_default external_user_relay",
     "selection_reason": "bounded critical visual evidence; DS remains narrow pure logic only",
@@ -31,7 +36,7 @@
     "implementation_started": true,
     "accepted": false,
     "merged": false,
-    "next": "User relays 05AK-B1 bounded repair to GLM5.3 owner; preserve initial delivery and root evidence. Root rechecks before independent critical review. No active external reviewer."
+    "next": "User relays 05AK-BR to a fresh independent GLM5.3 context; readonly review of final hashes. Do not issue a second owner repair. Not yet accepted or merged; tools baseline remains red."
   },
   "updated_at": "2026-09-27T15:09:44+00:00",
   "policy": "external-user-relay-root-contained",
@@ -2564,7 +2569,7 @@
     "native_subagents_enabled": false,
     "new_task_created": false,
     "completed_latest": "05AK-A pure planner committed and locally merged after Qwen3.8Max PASS",
-    "next_proposed": "05AK-B delivered, root reproduced four findings; 05AK-B1 repair prompt prepared awaiting user relay. Not accepted or merged; see global_garage_observation_task",
+    "next_proposed": "05AK-B1 verified with root minimal corner/owned guards; 05AK-BR independent readonly review prompt ready for user relay. Not accepted or merged; see global_garage_observation_task",
     "restore_action": "read current handoff, selected state fields and lanes; verify actual Git; report before new dispatch",
     "push_authorized": false,
     "device_authorized": false,
