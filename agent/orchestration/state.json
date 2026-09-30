@@ -14,21 +14,24 @@
     "push_authority": "user_explicit_publish_existing_updates_to_GitHub_20260930; source_tests_docs_only_no_private_evidence"
   },
   "global_garage_closed_loop_task": {
-    "phase": "05AN_offline_interop_PASS_source_branch_pushed_docs_and_main_wait_explicit_approval",
+    "phase": "05AN_offline_interop_PASS_full_progress_published_main_live_MFA_integration_pending",
     "publication": {
-      "branch": "codex/garage-filter-progress",
+      "branch": "main",
+      "full_review_branch": "codex/garage-filter-progress",
       "source_commit": "439420dfcbd17c0317617afd6d960e3e876f2fb4",
       "local_main_unchanged": "fd4021c19c8bc37868c5476fdf4c87fdbfcd1988",
       "remote_main_last_verified": "9b29bd9015bd081a2b66f04bdab3d5b94a6b0583",
-      "main_merge": "automatic_approval_review_rejected_requires_explicit_user_approval",
+      "main_merge": "user_explicitly_approved_complete_snapshot_and_main_merge; fast_forward_completed",
       "scope": "source_tests_docs_only_no_screenshots_workbuddy_private_evidence_or_binaries",
-      "push": "source_only_branch_verified_pushed_complete_docs_snapshot_local_only",
+      "push": "complete_source_docs_snapshot_pushed_and_remote_main_verified",
       "published_source_branch": "codex/garage-filter-source",
       "published_source_sha": "439420dfcbd17c0317617afd6d960e3e876f2fb4",
       "published_source_url": "https://github.com/Testiphi/MA9/tree/codex/garage-filter-source",
       "full_local_review_snapshot": "58614b5a62a36add6f71b623af5c7ba81536b612",
-      "documentation_push": "automatic_review_rejected_pending_explicit_approval_for_27_metadata_files_with_local_paths",
-      "remote_main_after_push": "9b29bd9015bd081a2b66f04bdab3d5b94a6b0583"
+      "documentation_push": "explicitly_approved_and_published;32metadata_docs_including5earlier_unpushed",
+      "remote_main_after_push": "4f3b9b086f7ccfaa81bddef02af2d9ec8736b0cf",
+      "delivery_delta_file_count": 51,
+      "receipt_metadata_note": "subsequent docs-only receipt commit is intentionally not self-referenced; actual latest HEAD/remote verified separately"
     },
     "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
     "branch": "lane/duel-scan",
