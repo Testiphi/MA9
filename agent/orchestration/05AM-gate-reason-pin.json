@@ -1,0 +1,28 @@
+{
+  "version": "05AM-G-interface-v1",
+  "status": "independent_offline_PASS_root_key_count_corrected_no_source_change",
+  "source_sha256": "2c31807544720818738bd4beed7df3576580661ea40c07e21d2e2b70cfc58f3d",
+  "signature": "validate_seam_snapshot(snapshot, /)",
+  "blocked_reasons": [
+    "capture_time_not_monotonic", "controller_info_missing_field",
+    "controller_info_not_mapping", "controller_methods_not_pinned",
+    "controller_type_not_whitelisted", "invalid_capture_timestamp",
+    "invalid_frame_id", "invalid_session_id", "libraries_not_mapping",
+    "library_entry_not_mapping", "library_field_missing",
+    "library_identity_mismatch", "library_path_invalid", "library_role_missing",
+    "library_sha256_invalid", "library_version_mismatch",
+    "missing_snapshot_field", "processed_frame_dtype_unexpected",
+    "processed_frame_not_ndarray", "processed_frame_shape_unexpected",
+    "raw_resolution_not_expected", "scale_arithmetic_inconsistent",
+    "screenshot_options_missing_field", "screenshot_options_not_mapping",
+    "short_side_not_expected", "snapshot_not_mapping",
+    "unknown_controller_info_key", "unknown_library_field",
+    "unknown_library_role", "unknown_screenshot_option_key",
+    "unknown_snapshot_key", "use_raw_size_not_false"
+  ],
+  "matched_reason": "seam_snapshot_consistent",
+  "input_authorized": false,
+  "runtime_features_observed": false,
+  "snapshot_key_count": 9,
+  "reason_policy": "all blocked stops; unknown future reason never grants input; diagnostics only"
+}

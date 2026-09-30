@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-30",
+  "phase": "prepared_not_dispatched",
+  "root_head": "fd4021c19c8bc37868c5476fdf4c87fdbfcd1988",
+  "lane_head": "9b29bd9015bd081a2b66f04bdab3d5b94a6b0583",
+  "checks": {
+    "json_yaml_parse_exit": 0,
+    "current_model_metadata": "gpt-6.1-sol medium/standard",
+    "cd_six_sha256_match_ledger": true,
+    "lane_only_original_six_untracked": true,
+    "ownership_disjoint": true,
+    "new_business_modules_absent": true,
+    "ledger_section48_and_artifact_links": true,
+    "git_diff_check_exit": 0
+  },
+  "artifact_sha256": {
+    "agent/orchestration/05AL-contract.md": "bfc83e36d8253f7e9e7ec59346684cdd4cac182408492e78ab1edc45484626d9",
+    "agent/orchestration/prompts/05AL-A-click-executor.md": "d9bc8ae923daadbb950cd21d65d44846816dc0d618c9d87be3707cf02e651c5e",
+    "agent/orchestration/prompts/05AL-B-prepare-loop.md": "1c0af288f56451533f93c030c4053ae3b621026f19e603341ea806f5adeac687",
+    "agent/orchestration/prompts/05AL-R-independent-review.md": "d2bf973e33feea5192510f488caf421dcbbfbf153cae0439d9c2288aacec5668"
+  },
+  "local_runtime": "Python3.14.4 maafw5.13.0; metadata and source reads only",
+  "framework_source": "https://github.com/MaaXYZ/MaaFramework/blob/v5.13.0/source/MaaFramework/Controller/ControllerAgent.cpp#L969",
+  "target_mfa_binary_version_verified": false,
+  "business_tests_rerun": false,
+  "device_executed": false,
+  "remote_checked": false,
+  "business_source_changed": false,
+  "committed_or_pushed": false,
+  "report_write_note": "First verifier passed assertions, then failed creating MA9-evidence/20260930-05AL with WinError5; read-only verifier rerun exited0. Report saved in existing orchestration directory; no escalation or device work."
+}

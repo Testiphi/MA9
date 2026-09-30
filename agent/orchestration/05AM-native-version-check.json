@@ -1,0 +1,27 @@
+{
+  "date": "2026-09-30",
+  "scope": "offline DLL metadata exports and file hashes; no controller/resource/tasker creation or device connection",
+  "query_method": "ctypes.WinDLL absolute path, explicit dependency directory, MaaVersion() c_char_p; only version export invoked",
+  "command_exit": 0,
+  "framework_files": [
+    "E:/hzz/work/MA9/deps/bin/MaaFramework.dll",
+    "E:/hzz/work/MA9/.venv/Lib/site-packages/maa/bin/MaaFramework.dll",
+    "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-global-garage-2frame-scaled/MA9-preview/runtimes/win-x64/native/MaaFramework.dll"
+  ],
+  "framework_all_identical": true,
+  "framework_size": 2554880,
+  "framework_sha256": "d4503d525561a7be46d7b2a5e64f3288f5b3ba7aaefaf36ab44f7ce4c04cffae",
+  "MaaVersion_all": "v5.13.0",
+  "adb_control_unit_files": [
+    "E:/hzz/work/MA9/deps/bin/MaaAdbControlUnit.dll",
+    "E:/hzz/work/MA9/MA9-worktrees/duel-scan/build/user-test-global-garage-2frame-scaled/MA9-preview/runtimes/win-x64/native/MaaAdbControlUnit.dll"
+  ],
+  "adb_control_unit_all_identical": true,
+  "adb_control_unit_sha256": "c452078257b121048c8f3ebd6c35c609e421e81438a29385058f4ebdab0cfe94",
+  "adb_export_version_queried": false,
+  "load_stderr": "Package native directory emitted PluginMgr failed-to-load plugins directory messages; MaaVersion returned normally. Not treated as package runtime smoke-test PASS.",
+  "windows_version_resource": "R1 independently reports absent; not rechecked because exported version is available",
+  "scope_limit": "Known root/SDK/old readonly-package binaries only. New input package not built, DLL path mapping through MFA AgentServer not yet validated. Version export and hash are identity evidence, not cryptographic official release attestation.",
+  "NoScalingTouchPoints_verified": false,
+  "device_clicks_released": false
+}

@@ -1,5 +1,5 @@
 # MA9 多智能体 lane 清单
-# 消费者：编排层（GPT-6 Astra，默认 medium）。派活时逐行读取，不要凭记忆。
+# 消费者：唯一编排层（用户指定 GPT-6.1 Sol，medium/Standard）。旧Astra固定要求由2026-09-30用户指令覆盖。
 # 规则与理由：docs/zh_cn/develop/multi_agent_plan.md（赛道识别与策略挂载见第 5 节）
 # 契约签名草稿：docs/zh_cn/develop/contract_freeze_draft.md（赛道策略表接缝见第 6 节）
 #
@@ -17,7 +17,7 @@ device_serial: "127.0.0.1:16384"
 device_is_singleton: true
 
 orchestrator:
-  model: gpt-6-astra
+  model: gpt-6.1-sol
   effort_default: medium
   effort_high_for:
     - contract_freeze
@@ -25,6 +25,8 @@ orchestrator:
     - critical_merge
     - repeated_failure_diagnosis
   notes: >
+    2026-09-30用户换模优先：GPT-6.1 Sol medium/Standard为当前唯一总控，不自行升档。
+    下文历史Astra角色限制不覆盖此次换模；05AL仅外部DeepSeek人工中转，合同/边界见agent/orchestration/05AL-contract.md。
     编排层负责契约冻结、依赖调度、设备令牌、验收、合并与最终裁决。
     contract lane 由编排层亲自执行，不得派给普通子智能体。
 
@@ -66,7 +68,7 @@ orchestration_policy:
       单题原47例DeepSeek47、MiniMax46、QwenMax47；补充6例分别6、2、4，仅任务适配线索。QwenMax与DS/MiniMax分属不同额度池。
   reviewer_semantics: >
     lane 出现 reviewer 时，owner 验收通过后必须进行只读复核。reviewer 不修代码，
-    只提交问题清单；最终修复派回 owner，是否合入由 Astra 编排层裁决。
+    只提交问题清单；最终修复派回 owner，是否合入由当前唯一总控裁决。
 
 # 编排文件只有总控可写，不属于普通 lane 的隐式边界。
 orchestration_files:
@@ -193,9 +195,9 @@ support_roles:
 
 execution_transports:
   codex_direct:
-    models: [astra]
+    models: [gpt-6.1-sol]
     mode: orchestrator_only
-    notes: 总控维持用户指定GPT-6 Astra medium/Standard；不启动原生子模型或自动新建用户任务。
+    notes: 总控维持用户指定GPT-6.1 Sol medium/Standard；不启动原生子模型或自动新建用户任务。
   external_user_relay:
     models: [deepseek, qwen_flash, qwen_max, glm, minimax, kimi]
     mode: fresh_conversation_user_relay
@@ -555,6 +557,12 @@ lanes:
       # 20260923：实机与集成通过，两个defense_setup文件已归还06。
     owns_new:
       - agent/ma9_agent/duel_lineup_maps.py
+      - agent/global_garage_probe_main.py
+      - agent/ma9_agent/global_garage_mfa_probe.py
+      - agent/tests/test_global_garage_mfa_probe.py
+      - agent/global_garage_probe_main.py
+      - agent/ma9_agent/global_garage_mfa_probe.py
+      - agent/tests/test_global_garage_mfa_probe.py
       - tools/diagnose_global_garage.py
       - tools/tests/test_diagnose_global_garage.py
       - docs/zh_cn/develop/global_garage_live_observation.md
