@@ -1,4 +1,5 @@
 # MA9 干净总控入口
+发布结果覆盖：19文件source commit439420d已推送并核验到origin/codex/garage-filter-source，远端main仍9b29bd9。完整46文件源码+27总控/编排文档快照在本地codex/garage-filter-progress（58614b5起），文档外传/main合并均被自动审批拒绝，等待用户明确授权，不绕过。源分支成功发布不代表newMFA包或实机输入放行。
 发布边界最新覆盖：默认main合并被自动审批拒绝（用户发布授权未明确main合并、root有未提交编排）。已安全转至非默认codex/garage-filter-progress汇总源码commit439420d与总控文档；main保持原引用，待推分支后再请求用户明确main合并。不得绕过拒绝改写main或force push。当前工作目录checkout为发布分支，见state.publication及账本发布记录。
 最新覆盖（用户要求推送后）：N1/P1回传已核对；root选择fixture布局方案2，native44/739与未改写新producer→P→G通过，16拒绝命中。源代码/测试/进度文档准备提交并推GitHub（本次新授权），私有证据/截图/.workbuddy/DLL不纳入。仍为offline原型，修复版独立review/Agent内核身份采集/新MFA固定自动任务接线与隔离包/用户实机回执-新帧验证未完成，尚未全库采集。见账本第56节；不能因push而放行设备输入。
 最新覆盖（05AN-N/P回传后）：七文件与DLL/exeSHA已核对，N36/613总控fake重现exit0，P106证据复用；不是组合PASS。Ntoken字符串与P整数冲突、raw为常量非观测，准备v1.1一次有界N1/P1（同owner范围、可并行）。仅加只读GetResolution第9 API，P额外核Utils/Client pin，必须真实N core fixture→P→G互通后再独立审；不得先发半成品实机包。见账本55节及05AN-NP-delivery-triage.md。无活跃席/设备输入/插件部署/推送/记忆整理。

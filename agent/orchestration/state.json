@@ -14,7 +14,7 @@
     "push_authority": "user_explicit_publish_existing_updates_to_GitHub_20260930; source_tests_docs_only_no_private_evidence"
   },
   "global_garage_closed_loop_task": {
-    "phase": "05AN_offline_interop_PASS_nondefault_publication_branch_prepared_main_merge_needs_approval",
+    "phase": "05AN_offline_interop_PASS_source_branch_pushed_docs_and_main_wait_explicit_approval",
     "publication": {
       "branch": "codex/garage-filter-progress",
       "source_commit": "439420dfcbd17c0317617afd6d960e3e876f2fb4",
@@ -22,7 +22,13 @@
       "remote_main_last_verified": "9b29bd9015bd081a2b66f04bdab3d5b94a6b0583",
       "main_merge": "automatic_approval_review_rejected_requires_explicit_user_approval",
       "scope": "source_tests_docs_only_no_screenshots_workbuddy_private_evidence_or_binaries",
-      "push": "prepared"
+      "push": "source_only_branch_verified_pushed_complete_docs_snapshot_local_only",
+      "published_source_branch": "codex/garage-filter-source",
+      "published_source_sha": "439420dfcbd17c0317617afd6d960e3e876f2fb4",
+      "published_source_url": "https://github.com/Testiphi/MA9/tree/codex/garage-filter-source",
+      "full_local_review_snapshot": "58614b5a62a36add6f71b623af5c7ba81536b612",
+      "documentation_push": "automatic_review_rejected_pending_explicit_approval_for_27_metadata_files_with_local_paths",
+      "remote_main_after_push": "9b29bd9015bd081a2b66f04bdab3d5b94a6b0583"
     },
     "worktree": "E:/hzz/work/MA9/MA9-worktrees/duel-scan",
     "branch": "lane/duel-scan",
