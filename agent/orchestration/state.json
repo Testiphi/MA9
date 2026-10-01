@@ -1,5 +1,24 @@
 {
   "version": 1,
+  "ci_test_isolation_fix": {
+    "date": "2026-10-01",
+    "branch": "codex/ci-test-isolation",
+    "source_commit": "3d8fc9085c844a846db189168623cd2a14aa337c",
+    "failed_run": "https://github.com/Testiphi/MA9/actions/runs/36747032076",
+    "failed_step": "Test Agent runtime core",
+    "cause": "two offline test cases asserted global sys.modules excludes maa; other legitimate suites import SDK during unittest discovery",
+    "change": "delete2invalid_processwide_checks_and1redundant_AST_check;5insertions41deletions;runtime_code_unchanged",
+    "local_tests": {"preloaded_SDK_sentinel_checks": 9, "gate": 81, "reader": 109, "exit": 0},
+    "ci_check_run": "https://github.com/Testiphi/MA9/actions/runs/36798620289",
+    "ci_check": "success;1000tests;45skips;JSONSchema_pass",
+    "ci_install_run": "https://github.com/Testiphi/MA9/actions/runs/36798620302",
+    "ci_install": "success",
+    "main_integrated": false,
+    "main_publication": "automatic_review_rejected_prior_snapshot_authority_not_extended;await_explicit_user_approval",
+    "user_engineering_policy": "prefer removal/replacement over additive fallback; concrete failure/contract tests only; dynamic edge cases wait for bounded live evidence; no needless review/full-suite loops",
+    "orchestrator_entry_cleanup": "replace stacked historical overrides with one current entry; history retained in ledger",
+    "device_executed": false
+  },
   "current_authority_20260930": {
     "orchestrator_model": "gpt-6.1-sol",
     "effort": "medium",

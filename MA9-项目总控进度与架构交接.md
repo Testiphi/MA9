@@ -1,7 +1,7 @@
 # MA9 项目总控进度与架构交接
 
 > **最新交接：2026-09-30，切换总控至GPT-6.1 Sol。** 推荐中档/Standard，用户自行新开对话选择；旧文“唯一Astra总控”已被这次明确换模意图覆盖，不是禁止Sol接手的规则。本文仍为主要进度账本。
-> **当前停点（完整发布已批准完成）**：用户明确批准完整快照发布并合入main后，51文件交付快照4f3b9b0已推并远端核验成功，root checkout main；此前待批准记录为历史。离线布局/互通PASS不等于实机放行。全库识别前仍停在新MFA自动过滤准备任务的接线/隔离包/真实回执-新帧验证，见第五十七节；没有设备输入或全库采集，私有证据/二进制未外传。
+> **当前停点（2026-10-01 CI修复）**：main发布后install成功，check两条全局sys.modules断言误报。修复分支3d8fc90删除2错误测试+1重复测试，GitHub check1000项及schema/install均通过；业务代码未改，待收口到main。用户要求减少fallback/冗余检查，当前总控入口已重写为单一有效版本，旧覆盖历史留账本。全库前仍需新MFA自动过滤任务接线/隔离包/真实回执-新帧验证；无设备输入。
 > **低成本恢复顺序**：只先读本页顶部速览与第四十五至四十七节，再核对实际Git和指定源码；第三十六至四十四节按需查实机证据。第一至四十四节保留历史，不要整篇重读或重派结束任务。本次已核对根/lane HEAD、变更清单、六文件SHA与构建manifest，未重跑测试、未联网重验Git远端、未启动设备、未提交/推送。
 
 ## 最新状态速览（本对话前面已核验，本次未重测）
@@ -1542,3 +1542,23 @@ native44用例/739断言0失败exit0；真实core生成的新fixture不改写字
 此前源码分支codex/garage-filter-source仍为439420dfcbd17c0317617afd6d960e3e876f2fb4；完整发布不依赖它替代main。root现checkout main，tracked工作在发布后为clean；用户截图/.workbuddy、OCR/运行证据、private账本备份、DLL/exe/obj等留本机，未加入发布增量。此节只补真实发布收据，不改源码/测试/部署或重复验收；随后docs-only收据提交不自引用自身SHA，最终HEAD/远端另核。
 
 当前全库识别前的唯一停点：新MFA固定自动过滤准备任务的真实集成闭环。离线部件及N→P→G fake互通已具备；修复版独立复核、Agent本进程内核模块身份、宿主见证/冻结帧与planner/executor接线、新隔离包验证、用户MFA运行真实job回执和后效新帧仍需完成。之后才进入全库有界翻页/去重/终止与库存汇总。人工6次采样不重复、设备1920×1080不改、只允许三筛选动作；发布GitHub不是设备操作或全库采集许可。
+
+## 五十八、CI新增回归定位与减少冗余检查（2026-10-01）
+
+### 58.1 实际失败位置
+
+用户指出上一轮GitHub run fail。已读取main2f539d6对应check36747032076 job109995709468日志：maa-checker/pip成功，Agent1003测试2失败45skip，schema被前置失败跳过；同SHA install36747032081成功。4f3b9b0对应install也成功；原9b29bd9 check成功。因此这次是新增测试回归，不是安装包构建失败，也不是tools CAR_STAR_RULES旧基线。
+
+两处失败为test_mfa_coordinate_seam_gate.ZeroInputClosureTest.test_no_device_sdk_entered_sys_modules和test_mfa_host_witness_reader.TestStaticGuarantees.test_no_sdk_module_is_loaded_by_consuming。其他套件在发现阶段合法导入maa，这两条却断言全进程sys.modules不存在SDK；隔离定向会绿、整套会红。总控用无DLL的maa占位模块复现2/2同样失败，无设备调用。
+
+### 58.2 最小修复与结果
+
+不加subprocess/fallback/新防御层，删除上述2无效测试，并删G中已被精确import closure覆盖的重复检查及无用FORBIDDEN_ROOTS集合。两测试文件共5行新增/41行删除，业务代码未改；本地SDK已存在的9条余留静态检查通过，G81项/P109项exit0。修复commit3d8fc9085c844a846db189168623cd2a14aa337c，分支codex/ci-test-isolation。
+
+GitHub该commit的check36798620289成功，Agent1000项45skip、schema成功；install36798620302成功。未改CI筛选/跳过失败检查，也未重跑旧235/tools/红基线/人工采样。本轮远端整套Agent重跑是为验证跨suite污染这一实际回归，不是无变化重复全量。
+
+### 58.3 用户最新工程取舍
+
+后续优先删除/修改失效旧实现，而不是不断叠fallback；校验与测试只围绕真实失败、输入去重/超时/新帧等关键合同，动态时序和适配边界留待有界实机证据，不为猜测不停扩合同/审查。替换旧路径时查调用后同步删除不再使用的代码/测试；旧只读入口仍复用的采样/OCR核心不能未经确认破坏。
+
+本轮已将00-orchestrator.md中的多层“最新覆盖”、旧Astra要求、已解除审批和旧未完成停点改写成一份当前入口，删34旧行、写19有效行，历史仍在本文，不再让启动指令同时声称互相冲突的当前状态。没有整理个人memory、连接设备/改新包或扩大采集。实机主线停点仍为新MFA自动过滤准备闭环接线。
