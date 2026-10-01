@@ -4,8 +4,8 @@ Everything here is offline and synthetic: a temporary directory plays the
 controlled ``<plugin_dir>/witness`` tree, a fake monotonic clock is injected, and
 no SDK, DLL, controller, emulator, capture, OCR or click exists anywhere in the
 path.  The module under test has no device binding at all -- the "no device"
-claim is evidenced by an AST walk over the delivered source plus a runtime
-``sys.modules`` check, never by a grep.
+claim is evidenced by an AST walk over the delivered source and its namespace.
+Process-wide ``sys.modules`` can already contain an SDK used by another suite.
 
 Two deliberate choices of evidence:
 
@@ -1822,13 +1822,6 @@ class TestStaticGuarantees(_ReaderTestCase):
             "ctypes",
         ):
             self.assertFalse(hasattr(reader_mod, name), name)
-
-    def test_no_sdk_module_is_loaded_by_consuming(self):
-        self.assertCollected(self.consume())
-        self.assertNotIn("maa", sys.modules)
-        self.assertNotIn("maafw", sys.modules)
-        self.assertNotIn("global_garage_prepare_loop", sys.modules)
-        self.assertNotIn("global_garage_prepare_executor", sys.modules)
 
     def test_no_loop_or_executor_is_reachable_from_the_module(self):
         for node in ast.walk(self.tree):

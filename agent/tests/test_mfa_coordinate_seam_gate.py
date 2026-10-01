@@ -13,14 +13,11 @@ Two deliberate choices of evidence:
   (``CONTRACT``) instead of being read from the gate.  If they were read back
   from the gate, weakening a pin in the module would silently rewrite the test's
   own expectation and the counterexample would keep passing;
-* the "no device capability" claim is evidenced three ways: an AST walk proving
+* the "no device capability" claim is evidenced by an AST walk proving
   the module's import closure is exactly ``__future__``/``collections``/
   ``math``/``re``/``numpy``, a namespace check that no device or IO symbol is
-  bound, and a runtime ``sys.modules`` check for the SDK.  Crucially ``ctypes``
-  is **not** asserted at runtime: importing ``numpy`` alone already puts
-  ``ctypes`` into ``sys.modules``, so such an assertion could only ever fail for
-  the wrong reason.  Reachability of ``ctypes`` is therefore covered by the
-  closure walk, which is a property of *this* file.
+  bound. Process-wide ``sys.modules`` is shared with other suites and is not
+  evidence of what this module imports.
 """
 from __future__ import annotations
 
@@ -847,22 +844,6 @@ class SignatureExpansionTest(unittest.TestCase):
 
 class ZeroInputClosureTest(unittest.TestCase):
     ALLOWED_ROOTS = {"__future__", "collections", "math", "re", "numpy"}
-    FORBIDDEN_ROOTS = {
-        "maa",
-        "maafw",
-        "ctypes",
-        "os",
-        "io",
-        "pathlib",
-        "subprocess",
-        "socket",
-        "shutil",
-        "glob",
-        "multiprocessing",
-        "threading",
-        "psutil",
-        "win32",
-    }
     FORBIDDEN_CALLS = {"open", "eval", "exec", "compile", "__import__", "input"}
 
     @classmethod
@@ -883,9 +864,6 @@ class ZeroInputClosureTest(unittest.TestCase):
     def test_import_closure_is_exactly_the_offline_set(self):
         roots = self._imported_roots()
         self.assertEqual(roots, self.ALLOWED_ROOTS)
-
-    def test_no_device_or_io_module_is_imported(self):
-        self.assertEqual(self._imported_roots() & self.FORBIDDEN_ROOTS, set())
 
     def test_no_forbidden_builtin_is_called(self):
         called = {
@@ -911,13 +889,6 @@ class ZeroInputClosureTest(unittest.TestCase):
             "controller",
         ):
             self.assertFalse(hasattr(gate, name), name)
-
-    def test_no_device_sdk_entered_sys_modules(self):
-        # ctypes is deliberately absent from this assertion: importing numpy
-        # already places ctypes in sys.modules, so a runtime check for it could
-        # only fail for the wrong reason.  It is covered by the closure test.
-        self.assertNotIn("maa", sys.modules)
-        self.assertNotIn("maafw", sys.modules)
 
     def test_no_bypass_switch_is_ever_bound_or_accepted(self):
         # The module *docstring* names the banned switches on purpose, so a grep
