@@ -56,22 +56,18 @@ def off_chain():
     return [O(1, G), R(1),
             O(2, P, owned=plan.OFF, clear=True), R(2),
             O(3, P, owned=plan.ON, clear=True), R(3),
-            O(4, G), R(4),
+            O(4, G, d=True), R(4),
             O(5, P, owned=plan.ON, clear=True), R(5),
             O(6, G, d=True), O(7, G, d=True)]
 
 
 def on_chain():
-    """Initial-on chain: real off commit, on commit, reopen verification, two D frames."""
+    """Initial-on chain: preserve selection, commit, verify, two D frames."""
     return [O(1, G), R(1),
             O(2, P, owned=plan.ON, clear=True), R(2),
-            O(3, P, owned=plan.OFF, clear=True), R(3),
-            O(4, G), R(4),
-            O(5, P, owned=plan.OFF, clear=True), R(5),
-            O(6, P, owned=plan.ON, clear=True), R(6),
-            O(7, G), R(7),
-            O(8, P, owned=plan.ON, clear=True), R(8),
-            O(9, G, d=True), O(10, G, d=True)]
+            O(3, G, d=True), R(3),
+            O(4, P, owned=plan.ON, clear=True), R(4),
+            O(5, G, d=True), O(6, G, d=True)]
 
 
 class FullChainTest(unittest.TestCase):
@@ -87,24 +83,60 @@ class FullChainTest(unittest.TestCase):
         toggles = [s for s, d in out if d.intent == plan.TOGGLE_OWNED]
         self.assertEqual([s.toggle_target for s in toggles], [plan.ON])
 
-    def test_initial_on_chain_has_two_real_commits(self):
+    def test_initial_on_preserves_selection_and_commits_before_verification(self):
         out = run(on_chain())
-        self.assertEqual(intents(out), [plan.OPEN_FILTER, plan.TOGGLE_OWNED, plan.APPLY_FILTER,
-                                        plan.OPEN_FILTER, plan.TOGGLE_OWNED, plan.APPLY_FILTER,
-                                        plan.OPEN_FILTER, plan.APPLY_FILTER])
+        self.assertEqual(intents(out), [plan.OPEN_FILTER, plan.APPLY_FILTER,
+                                       plan.OPEN_FILTER, plan.APPLY_FILTER])
         self.assertEqual(last(out).kind, plan.READY)
-        ids = [d.action_id for _, d in out if d.kind == plan.ACTION]
-        self.assertEqual(ids, [1, 2, 3, 4, 5, 6, 7, 8])
-        self.assertEqual(len(ids), len(set(ids)))
-        toggles = [s for s, d in out if d.intent == plan.TOGGLE_OWNED]
-        self.assertEqual([s.toggle_target for s in toggles], [plan.OFF, plan.ON])
+        self.assertEqual([d.action_id for _, d in out if d.kind == plan.ACTION], [1, 2, 3, 4])
+        commit_state = out[3][0]
+        self.assertEqual(commit_state.toggle_target, plan.ON)
+        self.assertEqual(commit_state.commit_kind, plan.ON)
+        self.assertNotIn(plan.TOGGLE_OWNED, intents(out))
+        self.assertEqual(last(run(on_chain()[:3])).intent, plan.APPLY_FILTER)
+        self.assertEqual(last(run(on_chain()[:4])).kind, plan.WAIT)
 
     def test_initial_on_position_arbitrary_is_ignored(self):
         trace = on_chain()
         trace[0] = O(1, G, d=False)          # entry not at D start; still opens the filter
-        trace[12] = O(7, G, d=None)          # reopen happens away from a stable D start
         self.assertEqual(intents(run(trace)), intents(run(on_chain())))
         self.assertEqual(last(run(trace)).kind, plan.READY)
+
+    def test_after_apply_reopens_from_confirmed_garage_without_d_requirement(self):
+        prefix = off_chain()[:6]
+        delayed = [O(4, G, d=False), O(5, G, d=None),
+                   O(5, G, d=True), O(3, G, d=True), O(6, G, d=True)]
+        out = run(prefix + delayed)
+        self.assertEqual(out[len(prefix) + 1][1].intent, plan.OPEN_FILTER)
+        self.assertTrue(all(d.kind == plan.WAIT for _, d in out[len(prefix) + 2:]))
+        self.assertEqual(intents(out), [plan.OPEN_FILTER, plan.TOGGLE_OWNED,
+                                       plan.APPLY_FILTER, plan.OPEN_FILTER])
+        self.assertEqual(out[len(prefix) + 1][1].action_id, 4)
+
+    def test_on_in_c_verifies_selection_before_bounded_navigation(self):
+        trace = on_chain()[:8]
+        trace[0], trace[4] = O(1, G, d=False), O(3, G, d=False)
+        out = run(trace + [O(5, G, d=False), R(5), O(6, G, d=False),
+                           R(6), O(7, U), O(8, G, d=None),
+                           O(9, G, d=True), O(10, G, d=True)])
+        self.assertEqual(intents(out), [plan.OPEN_FILTER, plan.APPLY_FILTER,
+            plan.OPEN_FILTER, plan.APPLY_FILTER, plan.JUMP_D_SECTION, plan.SWIPE_TO_ORIGIN])
+        self.assertEqual(last(out).kind, plan.READY)
+        self.assertEqual(out[11][1].kind, plan.ACTION)  # shortcut receipt is not ready
+        self.assertEqual(out[-3][1].reason, "d_start_unknown")
+
+    def test_navigation_limit_and_failed_receipt_stop_without_repeat(self):
+        prefix = on_chain()[:8]
+        trace = prefix + [O(5, G, d=False), R(5)]
+        for index in range(plan.MAX_ORIGIN_SWIPES):
+            trace += [O(6 + index, G, d=False), R(6 + index)]
+        out = run(trace + [O(18, G, d=False), O(19, G, d=True)])
+        self.assertEqual(last(out).reason, "navigation_budget_exhausted")
+        self.assertEqual(intents(out).count(plan.JUMP_D_SECTION), 1)
+        self.assertEqual(intents(out).count(plan.SWIPE_TO_ORIGIN), 12)
+        failed = run(prefix + [O(5, G, d=False), R(5, ok=False), O(6, G, d=False)])
+        self.assertEqual(last(failed).reason, "action_failed")
+        self.assertEqual(intents(failed).count(plan.JUMP_D_SECTION), 1)
 
     def test_reproducible_two_runs_match(self):
         first, second = run(off_chain()), run(off_chain())
@@ -134,7 +166,7 @@ class IncompleteChainTest(unittest.TestCase):
 class BlockedChainTest(unittest.TestCase):
     def test_reopen_verify_off_blocks(self):
         out = run([O(1, G), R(1), O(2, P, owned=plan.OFF, clear=True), R(2),
-                   O(3, P, owned=plan.ON, clear=True), R(3), O(4, G), R(4),
+                   O(3, P, owned=plan.ON, clear=True), R(3), O(4, G, d=True), R(4),
                    O(5, P, owned=plan.OFF, clear=True)])
         self.assertEqual(last(out).kind, plan.BLOCKED)
         self.assertEqual(last(out).reason, "owned_filter_verify_failed")

@@ -105,27 +105,23 @@ def blank_frame(value=50):
 def off_chain():
     """Initial OFF: garage list, panel(off), panel(on), list, panel(on), D, D."""
     frames = [list_frame(), panel_frame(), panel_frame(checked="owned"),
-              list_frame(card_x=120), panel_frame(checked="owned"),
+              list_frame(), panel_frame(checked="owned"),
               list_frame(), list_frame()]
     texts = [[], PANEL_OCR, PANEL_OCR, [], PANEL_OCR, [], []]
     return frames, texts
 
 
 def on_chain():
-    """Initial ON: garage list, panel(on), panel(off), list, panel(off),
-    panel(on), list, panel(on), D, D."""
-    frames = [list_frame(), panel_frame(checked="owned"), panel_frame(),
-              list_frame(card_x=120), panel_frame(),
-              panel_frame(checked="owned"), list_frame(card_x=120),
+    """Initial ON: list, selected panel, committed D, verify panel, D, D."""
+    frames = [list_frame(), panel_frame(checked="owned"), list_frame(),
               panel_frame(checked="owned"), list_frame(), list_frame()]
-    texts = [[], PANEL_OCR, PANEL_OCR, [], PANEL_OCR, PANEL_OCR, [], PANEL_OCR, [], []]
+    texts = [[], PANEL_OCR, [], PANEL_OCR, [], []]
     return frames, texts
 
 
 EXPECTED_OFF = [plan.OPEN_FILTER, plan.TOGGLE_OWNED, plan.APPLY_FILTER,
                 plan.OPEN_FILTER, plan.APPLY_FILTER]
-EXPECTED_ON = [plan.OPEN_FILTER, plan.TOGGLE_OWNED, plan.APPLY_FILTER,
-               plan.OPEN_FILTER, plan.TOGGLE_OWNED, plan.APPLY_FILTER,
+EXPECTED_ON = [plan.OPEN_FILTER, plan.APPLY_FILTER,
                plan.OPEN_FILTER, plan.APPLY_FILTER]
 
 
@@ -371,6 +367,37 @@ def reasons_of(report):
 class OfflineChainTest(unittest.TestCase):
     """The two complete chains, driven only by real synthetic frames."""
 
+    def test_on_c_unknown_shortcut_still_non_start_then_swipe_and_two_fresh_d(self):
+        c = list_frame(card_x=30, badge_letter="C")
+        frames = [c, panel_frame(checked="owned"), c, panel_frame(checked="owned"),
+                  blank_frame(), c, c, blank_frame(), list_frame(), list_frame()]
+        harness = Harness(frames, [[], PANEL_OCR, [], PANEL_OCR, [], [], [], [], [], []])
+        report = harness.run()
+        self.assertEqual(report["status"], loop.RUN_READY)
+        self.assertEqual(intents_of(harness), EXPECTED_ON + [plan.JUMP_D_SECTION, plan.SWIPE_TO_ORIGIN])
+        self.assertEqual(report["d_confirm_frames"], [9, 10])
+        for attempt in report["input_attempts"]:
+            next_frames = [f for f in report["frames"] if f["frame_id"] > attempt["frame_id"]]
+            self.assertTrue(next_frames)
+            self.assertLess(attempt["completed_at"], next_frames[0]["capture_started_at"])
+
+    def test_navigation_other_page_stops_and_foreign_receipt_never_confirms(self):
+        c = list_frame(card_x=30, badge_letter="C")
+        prefix = [c, panel_frame(checked="owned"), c, panel_frame(checked="owned"), c]
+        texts = [[], PANEL_OCR, [], PANEL_OCR, [], []]
+        other = c.copy()
+        other[86:142, 100:1216] = 18  # positive home/other, not an unknown transition
+        harness = Harness(prefix + [other], texts)
+        report = harness.run()
+        self.assertEqual(report["reason"], "page_left_garage_flow")
+        self.assertEqual(intents_of(harness), EXPECTED_ON + [plan.JUMP_D_SECTION])
+        harness = Harness(prefix + [list_frame()], texts,
+                          steps=[{}, {}, {}, {}, {"receipt_session_id": "foreign"}])
+        report = harness.run()
+        self.assertEqual(report["status"], loop.RUN_BLOCKED)
+        self.assertNotEqual(report["reason"], "d_start_stable_two_frames")
+        self.assertEqual(len(harness.executor.calls), 5)
+
     def test_initial_off_chain_five_inputs_then_ready(self):
         frames, texts = off_chain()
         harness = Harness(frames, texts)
@@ -390,18 +417,18 @@ class OfflineChainTest(unittest.TestCase):
         self.assertFalse(report["live_executed"])
         self.assertFalse(report["starts_race"])
 
-    def test_initial_on_chain_eight_inputs_then_ready(self):
+    def test_initial_on_chain_four_inputs_then_ready(self):
         frames, texts = on_chain()
         harness = Harness(frames, texts)
         report = harness.run()
 
         self.assertEqual(report["status"], loop.RUN_READY)
         self.assertEqual(intents_of(harness), EXPECTED_ON)
-        self.assertEqual(action_ids_of(harness), [1, 2, 3, 4, 5, 6, 7, 8])
-        self.assertEqual(report["input_attempt_count"], 8)
-        self.assertEqual(report["frames_captured"], 10)
+        self.assertEqual(action_ids_of(harness), [1, 2, 3, 4])
+        self.assertEqual(report["input_attempt_count"], 4)
+        self.assertEqual(report["frames_captured"], 6)
         self.assertEqual(report["planner_terminal"]["consecutive_d_start"], 2)
-        self.assertEqual(report["d_confirm_frames"], [9, 10])
+        self.assertEqual(report["d_confirm_frames"], [5, 6])
 
     def test_factory_is_called_once_with_the_session_deadline(self):
         frames, texts = off_chain()
@@ -573,23 +600,18 @@ class WaitingAndConflictTest(unittest.TestCase):
         self.assertEqual(report["reason"], "foreign_session")
         self.assertEqual(report["input_attempt_count"], 0)
 
-    def test_owned_prior_conflict_blocks_without_a_new_input(self):
-        # initial ON is committed to OFF, then the reopened panel already shows
-        # ON where the planner expects the off commit to have landed.
-        frames = [list_frame(), panel_frame(checked="owned"), panel_frame(),
-                  list_frame(card_x=120), panel_frame(checked="owned")]
-        texts = [[], PANEL_OCR, PANEL_OCR, [], PANEL_OCR]
-        harness = Harness(frames, texts)
+    def test_initial_on_commit_not_persisted_blocks_without_closing(self):
+        frames = [list_frame(), panel_frame(checked="owned"), list_frame(), panel_frame()]
+        harness = Harness(frames, [[], PANEL_OCR, [], PANEL_OCR])
         report = harness.run()
-
         self.assertEqual(report["status"], loop.RUN_BLOCKED)
-        self.assertEqual(report["reason"], "owned_filter_state_unexpected")
-        self.assertEqual(intents_of(harness), EXPECTED_ON[:3] + [plan.OPEN_FILTER])
-        self.assertEqual(len(harness.executor.calls), 4)
+        self.assertEqual(report["reason"], "owned_filter_verify_failed")
+        self.assertEqual(intents_of(harness), EXPECTED_ON[:3])
+        self.assertEqual(len(harness.executor.calls), 3)
 
     def test_verify_reopening_off_blocks(self):
         frames = [list_frame(), panel_frame(), panel_frame(checked="owned"),
-                  list_frame(card_x=120), panel_frame()]
+                  list_frame(), panel_frame()]
         texts = [[], PANEL_OCR, PANEL_OCR, [], PANEL_OCR]
         harness = Harness(frames, texts)
         report = harness.run()

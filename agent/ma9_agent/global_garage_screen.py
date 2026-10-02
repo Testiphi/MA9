@@ -440,6 +440,64 @@ def _class_observation(items: Sequence[dict[str, Any]], box: Sequence[int]) -> d
             "confidence": best["confidence"], "box": best["box"], "tokens": tokens}
 
 
+
+def _pixel_d_badge(frame: np.ndarray, box: Sequence[int]) -> dict[str, Any]:
+    """Read only a white D on the card's red square, independently of OCR.
+
+    Uses the section-marker reader's single-component/enclosed-counter test
+    with reversed ink polarity, plus a straight left stem to reject round O.
+    Unsupported letters remain unknown; this is not a font classifier.
+    """
+    left, top, right, bottom = _field_roi(box, "badge")
+    patch = frame[top:bottom, left:right]
+    result: dict[str, Any] = {"value": None, "source": "pixel_badge",
+                              "confidence": None, "box": None, "evidence": {}}
+    if patch.size == 0:
+        return result
+    hsv = cv2.cvtColor(patch, cv2.COLOR_BGR2HSV)
+    red = (((hsv[:, :, 0] < 10) | (hsv[:, :, 0] > 165))
+           & (hsv[:, :, 1] > 130) & (hsv[:, :, 2] > 130)).astype(np.uint8)
+    _, _, stats, _ = cv2.connectedComponentsWithStats(red, 8)
+    squares = [(int(x), int(y), int(w), int(h)) for x, y, w, h, area in stats[1:]
+               if 17 <= w <= 25 and 17 <= h <= 25 and abs(w-h) <= 3
+               and area / (w*h) >= .5]
+    if len(squares) != 1:
+        result["evidence"] = {"reason": "red_badge_square_unverified"}
+        return result
+    x, y, w, h = squares[0]
+    glyph = (patch[y:y+h, x:x+w].min(axis=2) > 180).astype(np.uint8)
+    count, labels, stats, _ = cv2.connectedComponentsWithStats(glyph, 8)
+    parts = [i for i in range(1, count) if stats[i][4] >= 8]
+    if len(parts) != 1:
+        result["evidence"] = {"reason": "white_glyph_not_single_component"}
+        return result
+    gx, gy, gw, gh, _ = map(int, stats[parts[0]])
+    if not (8 <= gw <= 15 and 11 <= gh <= 18 and gx >= 2 and gy >= 2
+            and gx+gw < w and gy+gh < h):
+        result["evidence"] = {"reason": "white_glyph_bounds_unverified"}
+        return result
+    ink = (labels == parts[0]).astype(np.uint8)
+    n, _, holes, _ = cv2.connectedComponentsWithStats(1-ink, 8)
+    counters = [tuple(map(int, v)) for v in holes[1:]
+                if v[0] > 0 and v[1] > 0 and v[0]+v[2] < w and v[1]+v[3] < h
+                and v[4] >= 8]
+    # An antialiased cap can protrude one pixel left of the vertical stem.
+    # Require an uninterrupted full-height column, rather than averaging that
+    # protrusion with the actual stem. Round O and broken stems do not qualify.
+    stem_columns = ink[gy:gy+gh, gx:gx+2].mean(axis=0)
+    stem_offset = int(np.argmax(stem_columns))
+    stem = float(stem_columns[stem_offset])
+    ratio = counters[0][3] / gh if len(counters) == 1 else None
+    valid = len(counters) == 1 and ratio >= .6 and stem == 1.0
+    result["evidence"] = {"reason": "single_tall_counter_and_straight_left_stem",
+                          "red_square": [left+x, top+y, w, h],
+                          "glyph_box": [gx, gy, gw, gh], "counter_count": len(counters),
+                          "counter_height_ratio": ratio, "left_stem_fraction": stem,
+                          "left_stem_column_offset": stem_offset}
+    if valid:
+        result.update(value="D", box=[left+x, top+y, w, h])
+    return result
+
 def _explicit_state(texts: Sequence[str]) -> tuple[str, list[str]]:
     joined = " ".join(texts)
     flags = []
@@ -568,7 +626,7 @@ def resolve_identity(observed_name: str, class_value: str | None,
 
 
 def _complete_name_pixels(frame: np.ndarray, names: Sequence[dict[str, Any]],
-                           box: Sequence[int]) -> dict[str, Any]:
+                           box: Sequence[int], *, brand_min_confidence: float = .9) -> dict[str, Any]:
     """Conservative completeness check for a two-line static name panel.
 
     This verifies a narrow layout, not arbitrary OCR accuracy: one brand line,
@@ -578,9 +636,11 @@ def _complete_name_pixels(frame: np.ndarray, names: Sequence[dict[str, Any]],
     Unsupported typography/line splitting stays unresolved.
     """
     result: dict[str, Any] = {"complete": False, "reason": "unsupported_name_layout"}
-    if len(names) != 2 or not all(_trusted(item, .9) for item in names):
+    if len(names) != 2:
         return result
     brand, model = sorted(names, key=lambda item: item["box"][1])
+    if not _trusted(brand, brand_min_confidence) or not _trusted(model, .9):
+        return result
     if not re.fullmatch(r"[A-Za-z0-9 ]+", str(model["text"])):
         return result
     expected = len(_key(model["text"]))
@@ -636,6 +696,62 @@ def _complete_name_pixels(frame: np.ndarray, names: Sequence[dict[str, Any]],
                   reason="model_glyph_count_and_coverage", expected_glyphs=expected,
                   checks=checks, panel=[x0 + px, y0 + py, pw, ph])
     return result
+
+
+def _low_brand_identity(frame: np.ndarray, names: Sequence[dict[str, Any]],
+                        box: Sequence[int], class_value: str | None,
+                        catalog: Sequence[dict[str, Any]]) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
+    """A weak first line can only corroborate a complete, unique model suffix.
+
+    The catalog has no brand field. Enumerate every title word boundary rather
+    than asserting that its first word is a brand. The unmatched title prefix
+    is only a compatibility check; it never replaces the observed first line.
+    Colliding, near or extending model suffixes are rejected across all classes.
+    """
+    if len(names) != 2:
+        return None, None
+    brand, model = sorted(names, key=lambda item: item["box"][1])
+    if not (_trusted(brand, .6) and not _trusted(brand, .7) and _trusted(model, .9)):
+        return None, None
+    evidence = _complete_name_pixels(frame, names, box, brand_min_confidence=.6)
+    if not evidence["complete"]:
+        return None, evidence
+    model_key = _key(str(model["text"]))
+    matches = []
+    nearby = set()
+    for row in catalog:
+        words = str(row.get("title", "")).split()
+        for boundary in range(1, len(words)):
+            suffix = _key(" ".join(words[boundary:]))
+            if not suffix:
+                continue
+            if suffix == model_key:
+                matches.append((row, _key(" ".join(words[:boundary]))))
+            elif (suffix.startswith(model_key) or model_key.startswith(suffix)
+                  or SequenceMatcher(None, model_key, suffix).ratio() >= NAME_MIN_RATIO):
+                nearby.add(row["id"])
+    if len(matches) != 1 or nearby:
+        evidence["identity_gate"] = "model_suffix_not_unique_or_has_nearby_titles"
+        return None, evidence
+    row, prefix = matches[0]
+    brand_key = _key(str(brand["text"]))
+    if (len(prefix) < 5 or len(prefix) != len(brand_key)
+            or sum(a != b for a, b in zip(prefix, brand_key)) > 2
+            or SequenceMatcher(None, brand_key, prefix).ratio() < .6):
+        evidence["identity_gate"] = "low_confidence_brand_incompatible"
+        return None, evidence
+    identity = resolve_identity(f"{brand['text']} {model['text']}", class_value, catalog)
+    if identity["status"] != "unique" or identity["candidate"]["id"] != row["id"]:
+        evidence["identity_gate"] = "full_title_or_class_not_confirmed"
+        return None, evidence
+    confidence = min(float(brand["confidence"]), float(model["confidence"]), identity["confidence"])
+    basis = "exact_model_with_brand_corroboration"
+    identity.update(basis=basis, confidence=confidence)
+    identity["candidate"].update(basis=basis, confidence=confidence)
+    evidence.update(identity_gate="passed", observed_brand=str(brand["text"]),
+                    brand_confidence=float(brand["confidence"]),
+                    observed_model=str(model["text"]), model_confidence=float(model["confidence"]))
+    return identity, evidence
 
 
 def _read_stars(frame: np.ndarray, box: Sequence[int]) -> tuple[tuple[int, int] | None, str | None]:
@@ -749,8 +865,23 @@ def read_card(image: np.ndarray, ocr: Sequence[dict[str, Any]],
     name_text = [str(item["text"]) for item in order]
     name_boxes = [list(item["box"]) for item in order]
     class_observation = _class_observation(items, box)
+    if class_observation["source"] == "none":
+        pixel_badge = _pixel_d_badge(frame, box)
+        if pixel_badge["value"] is not None:
+            class_observation = pixel_badge
     identity = resolve_identity(" ".join(name_text), class_observation["value"], catalog)
     name_evidence = None
+    if identity["status"] != "unique" and not clipped_left and not clipped_right and not geometry_uncertain:
+        raw_names = [item for item in items if _trusted(item, .6)
+                     and re.search(r"[A-Za-z0-9]{2}", str(item.get("text", "")))
+                     and _inside(item, _field_roi(box, "name"))]
+        low_identity, name_evidence = _low_brand_identity(
+            frame, raw_names, box, class_observation["value"], catalog)
+        if low_identity is not None:
+            identity = low_identity
+            order = sorted(raw_names, key=lambda item: (item["box"][1], item["box"][0]))
+            name_text = [str(item["text"]) for item in order]
+            name_boxes = [list(item["box"]) for item in order]
     if ("name_is_prefix_of_longer_title" in identity["reasons"]
             and not clipped_left and not clipped_right and not geometry_uncertain):
         name_evidence = _complete_name_pixels(frame, order, box)

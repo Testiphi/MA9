@@ -99,13 +99,14 @@ std::string dirname_of(const std::string& path)
     return path.substr(0, p);
 }
 
-bool read_whole_file_w(const std::wstring& path, std::vector<uint8_t>& out)
+bool read_whole_file_w(const std::wstring& path, std::vector<uint8_t>& out,
+                       LONGLONG max_bytes = 256LL * 1024 * 1024)
 {
     HANDLE h = ::CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr,
                              OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (h == INVALID_HANDLE_VALUE) return false;
     LARGE_INTEGER sz {};
-    if (!::GetFileSizeEx(h, &sz) || sz.QuadPart <= 0 || sz.QuadPart > (LONGLONG)(256LL * 1024 * 1024)) {
+    if (!::GetFileSizeEx(h, &sz) || sz.QuadPart <= 0 || sz.QuadPart > max_bytes) {
         ::CloseHandle(h);
         return false;
     }
@@ -312,7 +313,8 @@ public:
     bool read_file(const std::string& path, std::string& out, std::string& reason) override
     {
         std::vector<uint8_t> bytes;
-        if (!read_whole_file_w(utf8_to_wide(path), bytes)) {
+        // Fs reads only small activation/binding metadata, never module images.
+        if (!read_whole_file_w(utf8_to_wide(path), bytes, 16384)) {
             reason = "read_failed";
             return false;
         }
@@ -499,6 +501,7 @@ struct PluginState
     bool permanent_fail = false;
     uint64_t last_attempt_qpc = 0;
     uint64_t freq = 0;
+    std::wstring activation_path;
 
     std::unique_ptr<WinClock> clock;
     std::unique_ptr<WinModuleProbe> probe;
@@ -512,6 +515,23 @@ struct PluginState
         std::lock_guard<std::mutex> lock(m);
         if (ready) return true;
         if (permanent_fail) return false;
+
+        if (activation_path.empty()) {
+            wchar_t path[MAX_PATH * 4] = {};
+            DWORD length = ::GetModuleFileNameW(g_self_module, path,
+                                               (DWORD)(sizeof(path) / sizeof(path[0])));
+            if (!length || length >= sizeof(path) / sizeof(path[0])) return false;
+            activation_path = utf8_to_wide(dirname_of(wide_to_utf8(std::wstring(path, length)))
+                                           + "/witness/active_request.json");
+        }
+        DWORD attributes = ::GetFileAttributesW(activation_path.c_str());
+        if (attributes == INVALID_FILE_ATTRIBUTES) {
+            // Absence must not consume the retry instant: the first callback
+            // after an atomic activation write gets an immediate attempt.
+            if (::GetLastError() == ERROR_FILE_NOT_FOUND || ::GetLastError() == ERROR_PATH_NOT_FOUND)
+                last_attempt_qpc = 0;
+            return false;
+        }
 
         if (freq == 0) {
             LARGE_INTEGER f {};

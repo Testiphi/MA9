@@ -652,6 +652,69 @@ class StaticNameAndDarkBorderTest(unittest.TestCase):
                              and not b["geometry_uncertain"] for b in boxes))
 
 
+class LowBrandModelEvidenceTest(unittest.TestCase):
+    @staticmethod
+    def _scene():
+        image = frame(PAGE_GARAGE_LIST)
+        x, y, w, _ = CARD
+        left, top = x + w - 126, y + 110
+        cv2.rectangle(image, (left, top), (left + 105, top + 33), (245, 245, 245), -1)
+        # Fourteen separate model glyphs, drawn independently from injected OCR.
+        for offset in range(14):
+            cv2.putText(image, "H", (left + 7 + offset * 6, top + 26),
+                        cv2.FONT_HERSHEY_SIMPLEX, .25, (20, 20, 20), 1, cv2.LINE_AA)
+        rows = [item("DO06E", [left + 5, top + 1, 33, 11], .651142),
+                item("CHALLENGER SRT8", [left + 5, top + 15, 96, 13], .959318),
+                badge_item(CARD, "D", .99)]
+        catalog = [{"id": "car", "title": "Dodge Challenger SRT8", "class": "D"}]
+        return image, rows, catalog
+
+    def test_low_brand_is_corroboration_with_confidence_cap_and_raw_text(self):
+        image, rows, catalog = self._scene()
+        card = read_card(image, rows, catalog, CARD)
+        self.assertEqual(card["identity_status"], "unique")
+        self.assertEqual(card["candidate"]["basis"], "exact_model_with_brand_corroboration")
+        self.assertEqual(card["candidate"]["confidence"], .651142)
+        self.assertEqual(card["name_text"], ["DO06E", "CHALLENGER SRT8"])
+        self.assertTrue(card["name_completeness_evidence"]["complete"])
+
+    def test_wrong_brand_same_model_other_brand_near_model_and_prefix_are_unresolved(self):
+        for case in ("wrong_brand", "other_brand", "near_model", "longer_model"):
+            with self.subTest(case=case):
+                image, rows, catalog = self._scene()
+                if case == "wrong_brand":
+                    rows[0]["text"] = "HONDA"
+                else:
+                    title = {"other_brand": "Honda Challenger SRT8",
+                             "near_model": "Dodge Challenger SRT9",
+                             "longer_model": "Dodge Challenger SRT8 Edition"}[case]
+                    catalog.append({"id": "other", "title": title, "class": "C"})
+                card = read_card(image, rows, catalog, CARD)
+                self.assertNotEqual(card["identity_status"], "unique")
+                self.assertIsNone(card["candidate"])
+
+    def test_class_geometry_missing_brand_and_incomplete_model_cannot_confirm(self):
+        for case in ("class", "clipped", "uncertain", "missing_brand", "pixel_suffix", "model_confidence"):
+            with self.subTest(case=case):
+                image, rows, catalog = self._scene()
+                kwargs = {}
+                if case == "class":
+                    rows[-1]["text"] = "C"
+                elif case == "clipped":
+                    kwargs["clipped_right"] = True
+                elif case == "uncertain":
+                    kwargs["geometry_uncertain"] = True
+                elif case == "missing_brand":
+                    rows.pop(0)
+                elif case == "pixel_suffix":
+                    rows[1]["text"] = "CHALLENGER SRT"
+                else:
+                    rows[1]["confidence"] = .8
+                card = read_card(image, rows, catalog, CARD, **kwargs)
+                self.assertNotEqual(card["identity_status"], "unique")
+                self.assertIsNone(card["candidate"])
+
+
 class SimilarSiblingGuardTest(unittest.TestCase):
     def test_exact_same_class_one_letter_siblings_stay_ambiguous(self):
         for first, second, grade in (("Glickenhaus 003S", "Glickenhaus 007S", "A"),
@@ -685,6 +748,78 @@ class SimilarSiblingGuardTest(unittest.TestCase):
         result = resolve_identity("Maker BASE", "S", catalog)
         self.assertEqual(result["status"], "ambiguous")
         self.assertNotIn("candidate", result)
+
+
+class CardPixelBadgeTest(unittest.TestCase):
+    @staticmethod
+    def _scene(letter="D", hole=True):
+        image = frame(PAGE_GARAGE_LIST)
+        x, y, w, _ = CARD
+        left, top = x+w-118, y+89
+        image[top:top+20, left:left+21] = (65, 0, 230)
+        # Independent small badge typography; no OCR-generated pixels.
+        if letter == "D":
+            image[top+4:top+17, left+5:left+15] = 245
+            image[top+4:top+6, left+14] = (65, 0, 230)
+            image[top+16, left+14] = (65, 0, 230)
+            if hole:
+                image[top+6:top+15, left+8:left+13] = (65, 0, 230)
+        else:
+            cv2.putText(image, letter, (left+3, top+17), cv2.FONT_HERSHEY_SIMPLEX,
+                        .5, (245, 245, 245), 2)
+        return image
+
+    def test_low_confidence_d_has_independent_badge_evidence(self):
+        catalog = [{"id": "bmw", "title": "BMW Z4 LCI E89", "class": "D"}]
+        rows = [name_item(CARD, "BMW Z4 LCI E89"), badge_item(CARD, "D", .542415)]
+        card = read_page(self._scene(), rows, catalog, card_boxes=[CARD])["cards"][0]
+        self.assertEqual(card["candidate"]["id"], "bmw")
+        self.assertEqual(card["class_observation"]["source"], "pixel_badge")
+        self.assertIsNone(card["class_observation"]["confidence"])
+        clipped = read_card(self._scene(), rows, catalog, CARD, clipped_right=True)
+        self.assertIsNone(clipped["candidate"])
+
+    def test_antialiased_cap_keeps_the_uninterrupted_vertical_stem(self):
+        image = self._scene()
+        left, top = CARD[0]+CARD[2]-118, CARD[1]+89
+        # A faint cap protrudes left, while the actual stem is one white column.
+        image[top+4:top+17, left+5] = (65, 0, 230)
+        image[top+5, left+5] = 181
+        image[top+6:top+15, left+7] = (65, 0, 230)
+        catalog = [{"id": "ktm", "title": "KTM X-BOW GTX", "class": "D"}]
+        rows = [name_item(CARD, "KTM X-BOW GTX"), badge_item(CARD, "□", .360813)]
+        card = read_card(image, rows, catalog, CARD)
+        self.assertEqual(card["candidate"]["id"], "ktm")
+        self.assertEqual(card["class_observation"]["evidence"]["left_stem_column_offset"], 1)
+        # Break only the geometric straight stem, leaving the enclosed counter
+        # intact by stepping the ink one column left at that row.
+        image[top+10, left+6] = (65, 0, 230)
+        image[top+9:top+12, left+5] = 245
+        self.assertIsNone(read_card(image, rows, catalog, CARD)["candidate"])
+
+    def test_independent_d_excludes_cross_class_longer_title(self):
+        catalog = [{"id": "base", "title": "Nissan 370Z NISMO", "class": "D"},
+                   {"id": "long", "title": "Nissan 370Z NISMO Edition", "class": "C"}]
+        rows = [name_item(CARD, "NISSAN 370ZNISM0"), badge_item(CARD, "D", .459462)]
+        card = read_card(self._scene(), rows, catalog, CARD)
+        self.assertEqual(card["candidate"]["id"], "base")
+        self.assertEqual(card["identity_basis"], "fuzzy_full_name")
+        self.assertIn("class_badge_excluded_differently_classed_siblings", card["identity_reasons"])
+        catalog[1]["class"] = "D"
+        self.assertIsNone(read_card(self._scene(), rows, catalog, CARD)["candidate"])
+
+    def test_background_missing_counter_and_non_d_cannot_supply_class(self):
+        catalog = [{"id": "base", "title": "Maker BASE", "class": "D"}]
+        rows = [name_item(CARD, "MAKER BASE")]
+        for image in (frame(PAGE_GARAGE_LIST), self._scene(hole=False), self._scene("B"),
+                      self._scene("O")):
+            card = read_card(image, rows, catalog, CARD)
+            self.assertIsNone(card["class_observation"]["value"])
+            self.assertIsNone(card["candidate"])
+        for badges in ([badge_item(CARD, "C")], [badge_item(CARD, "C"), badge_item(CARD, "D")]):
+            card = read_card(self._scene(), rows+badges, catalog, CARD)
+            self.assertIsNone(card["candidate"])
+            self.assertEqual(card["class_observation"]["source"], "ocr_badge")
 
 
 if __name__ == "__main__":

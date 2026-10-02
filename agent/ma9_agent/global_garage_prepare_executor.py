@@ -2,11 +2,13 @@
 
 Scope
 -----
-Three operating actions only -- ``open_filter`` (tap the filter funnel on the
+Five operating actions only -- ``open_filter`` (tap the filter funnel on the
 garage list), ``toggle_owned`` (tap the ``已拥有`` checkbox on the filter
 panel) and ``apply_filter`` (tap the lime ``完成`` button) -- and the session
-must already start inside the global garage list.  There is no entry
-navigation, level jump, swipe, vehicle detail, unlock, star-up, car pick,
+must already start inside the global garage list. After filter verification,
+``jump_d_section`` taps one fixed D shortcut and ``swipe_to_origin`` performs
+bounded rightward drags inside the list. There is no entry navigation,
+vehicle detail, unlock, star-up, car pick,
 race start, inventory/account write, and no arbitrary-coordinate or node
 interface.
 
@@ -47,7 +49,8 @@ workspace, measured 05AL-A; probes archived under
   (measured BGR ``(18.8, 247.2, 191.8)``, lime fraction 0.979 on *both* real
   panels against a maximum of 0.067 over every non-panel frame).  The label's
   whole OCR box ``[177, 586, 64, 37]`` lies inside the button, so the same
-  frame must supply both the fill and the label;
+  frame must supply both the fill and exactly one label wholly inside the
+  button. Labels outside that target ROI do not participate in uniqueness;
 * the checkbox cell is the shared, already-calibrated ``CHECKBOX_ROI``
   ``(314, 188, 47, 48)``; this module re-reads its pixels and additionally
   demands an empty interior before it will accept an ``off`` verdict, and
@@ -58,7 +61,7 @@ clock)
 
 * absolute session deadline (exactly at the deadline is already too late), a
   3 s per-job ceiling clipped to that deadline, 0.02 s polling, and a frame age
-  of at most 1.0 s measured from ``capture_started_at`` to the moment before
+  strictly below 3.0 s measured from ``capture_started_at`` to the moment before
   submission.  ``job.wait`` is never called and no in-flight native action is
   claimed to be cancellable;
 * an attempt is registered for ``(session_id, action_id)`` *before*
@@ -92,6 +95,10 @@ from .global_garage_prepare_plan import (
     OPEN_FILTER,
     State,
     TOGGLE_OWNED,
+    JUMP_D_SECTION,
+    SWIPE_TO_ORIGIN,
+    MAX_D_JUMPS,
+    MAX_ORIGIN_SWIPES,
 )
 from .global_garage_screen import (
     CHECKBOX_ROI,
@@ -102,7 +109,7 @@ from .global_garage_screen import (
 )
 
 #: Intents this executor will ever issue.
-INTENTS = (OPEN_FILTER, TOGGLE_OWNED, APPLY_FILTER)
+INTENTS = (OPEN_FILTER, TOGGLE_OWNED, APPLY_FILTER, JUMP_D_SECTION, SWIPE_TO_ORIGIN)
 #: Sample provenance values accepted by this layer.
 SUPPORTED_SOURCE = ("mfa_context", "fake")
 
@@ -113,7 +120,7 @@ SAMPLE_KEYS = ("session_id", "frame_id", "capture_started_at", "captured_at",
 #: Poll interval, per-job ceiling and maximum accepted frame age.
 POLL_S = 0.02
 JOB_TIMEOUT_S = 3.0
-MAX_FRAME_AGE_S = 1.0
+MAX_FRAME_AGE_S = 3.0
 # Fault containment if an injected clock/sleeper stops advancing. This is a
 # poll limit, not evidence that native time has elapsed or a job was cancelled.
 MAX_JOB_POLLS = math.ceil(JOB_TIMEOUT_S / POLL_S) + 2
@@ -124,6 +131,12 @@ FRAME_WIDTH, FRAME_HEIGHT = 1280, 720
 #: Calibrated control regions on the native 1280x720 processed frame.
 FILTER_BUTTON_ROI = (1161, 87, 54, 53)
 DONE_BUTTON_ROI = (58, 563, 303, 82)
+# Fixed top navigation tile; its D glyph may be dark or selected gray.
+D_BUTTON_ROI = (732, 87, 54, 53)
+# Both points lie inside the established first card row, away from the
+# sidebar/header/bottom controls. Rightward drag moves toward global left.
+LIST_SWIPE_ROI = (240, 250, 900, 150)
+ORIGIN_SWIPE = (260, 360, 1100, 360, 350)  # SDK milliseconds; no manual scaling
 
 #: Filter-tile structural gate (see module docstring for the measurements).
 TILE_MIN_BRIGHTNESS = 170.0
@@ -162,6 +175,62 @@ _BLOCKED, _TIMEOUT, _CANCELLED, _INDETERMINATE = "blocked", "timeout", "cancelle
 # --------------------------------------------------------------------------- #
 # small typed helpers
 # --------------------------------------------------------------------------- #
+def _top_d_button_evidence(image: np.ndarray) -> tuple[str | None, dict[str, Any]]:
+    """Confirm only the fixed white navigation tile and its D topology.
+
+    Relative contrast accepts the selected gray D without relaxing the shared
+    badge reader. A straight full-height left stem and curved right edge
+    distinguish D from a single-counter O; the tiny colored alert is excluded.
+    This proves the control's pixels, not whether a selected tile is clickable.
+    """
+    x, y, w, h = D_BUTTON_ROI
+    tile = image[y:y+h, x:x+w]
+    gray = cv2.cvtColor(tile, cv2.COLOR_BGR2GRAY)
+    # Absolute chroma tolerates the calibrated blue-gray dark ink, whose
+    # HSV saturation is high solely because its intensity is low.
+    neutral = np.ptp(tile.astype(np.int16), axis=2) <= 40
+    white = neutral & (gray >= 230)
+    # The established small colored alert occupies the top-right corner.
+    borders = (white[:5, :36], white[-5:, :], white[:, :5], white[18:, -5:])
+    background = float(np.median(gray))
+    evidence = {"background_gray": background,
+                "white_fraction": round(float(white.mean()), 3),
+                "white_border_fractions": [round(float(b.mean()), 3) for b in borders]}
+    if background < 230 or white.mean() < .60 or any(b.mean() < .80 for b in borders):
+        return None, {**evidence, "letter": None, "reason": "white_tile_not_confirmed"}
+    mask = (neutral & (gray < background - 65)).astype(np.uint8)
+    count, labels, stats, _ = cv2.connectedComponentsWithStats(mask, 8)
+    parts = [i for i in range(1, count) if stats[i, 4] >= 20]
+    evidence.update(parts=len(parts), ink_fraction=round(float(mask.mean()), 3),
+                    contrast_threshold=background - 65)
+    if len(parts) != 1:
+        return None, {**evidence, "letter": None, "reason": "glyph_not_a_single_component"}
+    i = parts[0]
+    gx, gy, gw, gh, area = (int(v) for v in stats[i])
+    evidence["glyph_box"] = [gx, gy, gw, gh]
+    if not (9 <= gx <= 19 and 5 <= gy <= 14 and 22 <= gw <= 31
+            and 29 <= gh <= 39 and .10 <= area / (w*h) <= .35):
+        return None, {**evidence, "letter": None, "reason": "glyph_geometry_unsupported"}
+    glyph = (labels == i).astype(np.uint8)
+    n, _, holes, _ = cv2.connectedComponentsWithStats(1 - glyph, 8)
+    enclosed = [a for a in holes[1:] if a[4] >= 12 and a[0] > 0 and a[1] > 0
+                and a[0]+a[2] < w and a[1]+a[3] < h]
+    evidence["counter_count"] = len(enclosed)
+    if len(enclosed) != 1 or enclosed[0][3] / gh < .50:
+        return None, {**evidence, "letter": None, "reason": "single_tall_counter_not_confirmed"}
+    crop = glyph[gy:gy+gh, gx:gx+gw]
+    left_stem = float(crop[:, :2].mean())
+    right_edges = np.array([np.flatnonzero(row)[-1] for row in crop])
+    mid_right = float(np.median(right_edges[gh//3:2*gh//3]))
+    end_right = float(np.mean([right_edges[0], right_edges[-1]]))
+    evidence.update(left_stem_fraction=round(left_stem, 3),
+                    right_arc_depth=round(mid_right - end_right, 3),
+                    hole_height_ratio=round(float(enclosed[0][3] / gh), 3))
+    if left_stem < .90 or mid_right - end_right < 3:
+        return None, {**evidence, "letter": None, "reason": "d_stem_and_arc_not_confirmed"}
+    return "D", {**evidence, "letter": "D", "reason": "white_tile_and_d_topology_confirmed"}
+
+
 def _plain_int(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool)
 
@@ -300,7 +369,7 @@ def _filter_button_evidence(frame: np.ndarray) -> tuple[bool, str, dict[str, Any
 
 def _done_button_evidence(frame: np.ndarray,
                           items: list[dict[str, Any]]) -> tuple[bool, str, dict[str, Any]]:
-    """Lime fill plus the same-frame ``完成`` label inside the calibrated button."""
+    """Lime fill plus one same-frame ``完成`` label wholly inside the button."""
     left, top, width, height = DONE_BUTTON_ROI
     patch = frame[top:top + height, left:left + width]
     hsv = cv2.cvtColor(patch, cv2.COLOR_BGR2HSV)
@@ -313,15 +382,16 @@ def _done_button_evidence(frame: np.ndarray,
         "aspect": round(width / height, 2),
         "mean_bgr": [round(float(v), 1) for v in patch.reshape(-1, 3).mean(axis=0)],
         "labels": [_label_evidence(item) for item in labels],
+        "label_uniqueness_scope": "target_button_roi",
     }
     bound = [item for item in labels if _box_inside(item["box"], DONE_BUTTON_ROI)]
     evidence["labels_bound"] = len(bound)
     if evidence["lime_fraction"] < DONE_MIN_LIME_FRACTION:
         return False, "done_button_fill_not_confirmed", evidence
-    if len(labels) != 1:
-        return False, "done_button_label_ambiguous", evidence
     if not bound:
         return False, "done_button_label_not_bound", evidence
+    if len(bound) != 1:
+        return False, "done_button_label_ambiguous", evidence
     return True, "done_button_lime_fill_and_label_confirmed", evidence
 
 
@@ -634,14 +704,23 @@ class ClickExecutor:
                       "submitted_at": submitted_at, "source": source,
                       "target_roi": list(gate_evidence["target_roi"]),
                       "result": "pending"}
+            operation = "post_swipe" if intent == SWIPE_TO_ORIGIN else "post_click"
+            record["operation"] = operation
+            if intent == SWIPE_TO_ORIGIN:
+                record.update(x=ORIGIN_SWIPE[0], y=ORIGIN_SWIPE[1],
+                              end_x=ORIGIN_SWIPE[2], end_y=ORIGIN_SWIPE[3],
+                              duration_ms=ORIGIN_SWIPE[4])
             self.calls.append(record)
             try:
-                job = self._controller.post_click(target[0], target[1])
+                if intent == SWIPE_TO_ORIGIN:
+                    job = self._controller.post_swipe(*ORIGIN_SWIPE)
+                else:
+                    job = self._controller.post_click(target[0], target[1])
             except Exception as error:                       # noqa: BLE001 - audited
                 record["result"] = "raised"
                 record["error"] = type(error).__name__
                 return self._stop(_INDETERMINATE,
-                                  f"post_click_raised:{type(error).__name__}",
+                                  f"{operation}_raised:{type(error).__name__}",
                                   action_id=action_id, intent=intent, issued=True,
                                   submitted_at=submitted_at,
                                   pre_frame_id=pre_frame_id)
@@ -665,6 +744,34 @@ class ClickExecutor:
               ocr: Any, observation: Any) -> tuple[bool, str, dict[str, Any]]:
         """Intent-specific verification of this frame; returns (ok, reason, evidence)."""
         items, rejected = _sanitize_items(ocr)
+        if intent in (JUMP_D_SECTION, SWIPE_TO_ORIGIN):
+            if (state.phase != "await_navigation_receipt" or state.open_purpose != "verify"
+                    or state.toggle_target != ON or state.commit_kind != ON):
+                return False, "navigation_outside_verified_filter_phase", {}
+            if (not _plain_int(state.d_jumps_used) or not _plain_int(state.origin_swipes_used)
+                    or not 1 <= state.d_jumps_used <= MAX_D_JUMPS
+                    or not 0 <= state.origin_swipes_used <= MAX_ORIGIN_SWIPES
+                    or (intent == SWIPE_TO_ORIGIN and state.origin_swipes_used < 1)
+                    or (intent == JUMP_D_SECTION and state.origin_swipes_used != 0)):
+                return False, "navigation_counter_invalid", {}
+            if observation.page != GARAGE_LIST or observation.at_d_start is not False:
+                return False, "navigation_requires_garage_non_start", {}
+            measured = observe(image, items, session_id=observation.session_id,
+                               frame_id=observation.frame_id)
+            if measured.observation.page != GARAGE_LIST or measured.observation.at_d_start is not False:
+                return False, "navigation_non_start_not_confirmed_by_pixels", {}
+            ok, reason, evidence = _filter_button_evidence(image)
+            if not ok:
+                return False, reason, evidence
+            x, y, w, h = D_BUTTON_ROI
+            tile_mean = float(cv2.cvtColor(image[y:y+h, x:x+w], cv2.COLOR_BGR2GRAY).mean())
+            letter, glyph = _top_d_button_evidence(image)
+            evidence.update(d_button_brightness=tile_mean, d_button_glyph=glyph,
+                            non_start_evidence=measured.diagnostics.get("at_d_start"),
+                            target_roi=list(D_BUTTON_ROI if intent == JUMP_D_SECTION else LIST_SWIPE_ROI))
+            if tile_mean < TILE_MIN_BRIGHTNESS or letter != "D":
+                return False, "top_d_button_not_confirmed", evidence
+            return True, "garage_navigation_controls_confirmed", evidence
         if intent == OPEN_FILTER:
             classified = classify_page(image)
             if observation.page != GARAGE_LIST:
@@ -825,4 +932,5 @@ __all__ = [
     "POLL_S", "JOB_TIMEOUT_S", "MAX_FRAME_AGE_S",
     "FRAME_WIDTH", "FRAME_HEIGHT", "FILTER_BUTTON_ROI", "DONE_BUTTON_ROI",
     "CHECKBOX_ROI",
+    "D_BUTTON_ROI", "LIST_SWIPE_ROI", "ORIGIN_SWIPE",
 ]

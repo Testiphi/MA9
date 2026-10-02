@@ -22,6 +22,8 @@ _PAGES = (GARAGE_LIST, FILTER_PANEL, UNKNOWN_PAGE, OTHER_PAGE)
 ON, OFF, UNKNOWN_FILTER = "on", "off", "unknown"
 _OWNED = (ON, OFF, UNKNOWN_FILTER)
 OPEN_FILTER, TOGGLE_OWNED, APPLY_FILTER = "open_filter", "toggle_owned", "apply_filter"
+JUMP_D_SECTION, SWIPE_TO_ORIGIN = "jump_d_section", "swipe_to_origin"
+MAX_D_JUMPS, MAX_ORIGIN_SWIPES = 1, 12
 WAIT, ACTION, READY, BLOCKED = "wait", "action", "ready", "blocked"
 
 _P_INIT = "await_garage_list_initial"
@@ -33,15 +35,17 @@ _P_APPLY_ACK = "await_apply_filter_receipt"
 _P_GARAGE_APPLY = "await_garage_list_after_apply"
 _P_CLOSE_ACK = "await_close_receipt"
 _P_D_START = "await_two_d_start_frames"
+_P_NAV_ACK = "await_navigation_receipt"
 _P_READY, _P_BLOCKED = READY, BLOCKED
-_PURPOSE_FIRST, _PURPOSE_ON_COMMIT, _PURPOSE_VERIFY = "first", "on_commit", "verify"
-_COMMIT_ON, _COMMIT_RESET = "on", "reset"
+_PURPOSE_FIRST, _PURPOSE_VERIFY = "first", "verify"
+_COMMIT_ON = "on"
 
 MAX_EVENTS, MAX_SECONDS = 64, 30.0
 _WAIT_WHILE_ACKING = {_P_OPEN_ACK: "awaiting_open_filter_receipt",
                       _P_TOGGLE_ACK: "awaiting_toggle_receipt",
                       _P_APPLY_ACK: "awaiting_apply_filter_receipt",
-                      _P_CLOSE_ACK: "awaiting_close_receipt"}
+                      _P_CLOSE_ACK: "awaiting_close_receipt",
+                      _P_NAV_ACK: "awaiting_navigation_receipt"}
 
 
 @dataclass(frozen=True)
@@ -90,6 +94,8 @@ class State:
     commit_kind: str | None
     consecutive_d_start: int
     terminal_reason: str | None
+    d_jumps_used: int = 0
+    origin_swipes_used: int = 0
 
 
 def _wait(reason):
@@ -238,17 +244,18 @@ def _panel_decision(state, event):
             return _issue(state, APPLY_FILTER, _P_APPLY_ACK)
         return state, _wait("owned_filter_unknown" if owned == UNKNOWN_FILTER else "awaiting_toggle_reflection")
     purpose = state.open_purpose
-    if purpose in (_PURPOSE_FIRST, _PURPOSE_ON_COMMIT) and owned in (ON, OFF):
-        if purpose == _PURPOSE_ON_COMMIT and owned == ON:  # the off commit must have landed first
-            return _terminal(state, _P_BLOCKED, "owned_filter_state_unexpected"), _blocked("owned_filter_state_unexpected")
-        target, commit = (ON, _COMMIT_ON) if owned == OFF else (OFF, _COMMIT_RESET)
-        return _issue(state, TOGGLE_OWNED, _P_TOGGLE_ACK, toggle_target=target, commit_kind=commit)
+    if purpose == _PURPOSE_FIRST and owned in (ON, OFF):
+        if owned == ON:
+            return _issue(state, APPLY_FILTER, _P_APPLY_ACK,
+                          toggle_target=ON, commit_kind=_COMMIT_ON)
+        return _issue(state, TOGGLE_OWNED, _P_TOGGLE_ACK,
+                      toggle_target=ON, commit_kind=_COMMIT_ON)
     if purpose == _PURPOSE_VERIFY:
         if owned == ON:                                    # verified on: close without changing anything
             return _issue(state, APPLY_FILTER, _P_CLOSE_ACK)
         if owned == OFF:
             return _terminal(state, _P_BLOCKED, "owned_filter_verify_failed"), _blocked("owned_filter_verify_failed")
-    if purpose not in (_PURPOSE_FIRST, _PURPOSE_ON_COMMIT, _PURPOSE_VERIFY):
+    if purpose not in (_PURPOSE_FIRST, _PURPOSE_VERIFY):
         return _terminal(state, _P_BLOCKED, "internal_purpose"), _blocked("internal_purpose")
     return state, _wait("owned_filter_unknown")
 
@@ -256,8 +263,6 @@ def _panel_decision(state, event):
 def _garage_after_apply(state, event):
     if event.page != GARAGE_LIST:
         return state, _wait("awaiting_garage_list_after_apply")
-    if state.commit_kind == _COMMIT_RESET:                 # off committed: reopen for the on-commit
-        return _issue(state, OPEN_FILTER, _P_OPEN_ACK, open_purpose=_PURPOSE_ON_COMMIT)
     if state.commit_kind == _COMMIT_ON:                    # on committed: reopen to verify it
         return _issue(state, OPEN_FILTER, _P_OPEN_ACK, open_purpose=_PURPOSE_VERIFY)
     return _terminal(state, _P_BLOCKED, "internal_commit_kind"), _blocked("internal_commit_kind")
@@ -270,8 +275,18 @@ def _d_start_decision(state, event):
             if state.consecutive_d_start >= 2:             # two distinct fresh frames at D start
                 return _terminal(state, _P_READY, "d_start_stable_two_frames"), _ready()
             return state, _wait("awaiting_second_d_start_frame")
-        reason = "not_at_d_start" if event.at_d_start is False else "d_start_unknown"
-        return replace(state, consecutive_d_start=0), _wait(reason)
+        state = replace(state, consecutive_d_start=0)
+        if event.at_d_start is None:
+            return state, _wait("d_start_unknown")
+        # The D shortcut is a hint, never an origin receipt. Each navigation
+        # must finish and a new observation must explicitly show non-start.
+        if state.d_jumps_used < MAX_D_JUMPS:
+            return _issue(state, JUMP_D_SECTION, _P_NAV_ACK,
+                          d_jumps_used=state.d_jumps_used + 1)
+        if state.origin_swipes_used < MAX_ORIGIN_SWIPES:
+            return _issue(state, SWIPE_TO_ORIGIN, _P_NAV_ACK,
+                          origin_swipes_used=state.origin_swipes_used + 1)
+        return _terminal(state, _P_BLOCKED, "navigation_budget_exhausted"), _blocked("navigation_budget_exhausted")
     if event.page == OTHER_PAGE:
         return _terminal(state, _P_BLOCKED, "page_left_garage_flow"), _blocked("page_left_garage_flow")
     return replace(state, consecutive_d_start=0), _wait("transition_observation")
@@ -283,7 +298,8 @@ def _on_result(state, event):
     if not event.ok:
         return _terminal(state, _P_BLOCKED, "action_failed"), _blocked("action_failed")
     next_phase = {_P_OPEN_ACK: _P_PANEL, _P_TOGGLE_ACK: _P_PANEL_TOGGLE,
-                  _P_APPLY_ACK: _P_GARAGE_APPLY, _P_CLOSE_ACK: _P_D_START}.get(state.phase)
+                  _P_APPLY_ACK: _P_GARAGE_APPLY, _P_CLOSE_ACK: _P_D_START,
+                  _P_NAV_ACK: _P_D_START}.get(state.phase)
     if next_phase is None:
         return _terminal(state, _P_BLOCKED, "receipt_in_unexpected_phase"), _blocked("receipt_in_unexpected_phase")
     return replace(state, phase=next_phase, pending_action_id=None, pending_intent=None), _wait("receipt_accepted")
@@ -292,4 +308,5 @@ def _on_result(state, event):
 __all__ = ["Observation", "ActionResult", "Decision", "State", "start", "step",
            "GARAGE_LIST", "FILTER_PANEL", "UNKNOWN_PAGE", "OTHER_PAGE",
            "ON", "OFF", "UNKNOWN_FILTER", "OPEN_FILTER", "TOGGLE_OWNED", "APPLY_FILTER",
+           "JUMP_D_SECTION", "SWIPE_TO_ORIGIN", "MAX_D_JUMPS", "MAX_ORIGIN_SWIPES",
            "WAIT", "ACTION", "READY", "BLOCKED", "MAX_EVENTS", "MAX_SECONDS"]

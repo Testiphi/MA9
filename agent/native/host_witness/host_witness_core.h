@@ -55,6 +55,7 @@ constexpr const char* kStartingMessage  = "Controller.Action.Starting";
 constexpr const char* kFailedMessage    = "Controller.Action.Failed";
 constexpr const char* kScreencapAction  = "screencap";
 constexpr const char* kActivationFile   = "active_request.json";
+constexpr const char* kSourceBindingPrefix = "source_binding.";
 constexpr const char* kInstanceFile     = "instance.json";
 constexpr const char* kErrorFileNoId    = "error.json";
 constexpr const char* kFrameSuffix      = ".frame.bgr";
@@ -299,6 +300,7 @@ private:
     // Caller must already hold mutex_. on_controller_event() runs under the same
     // lock, so the public reload must not re-enter it (non-recursive mutex).
     Status reload_activation_request_locked();
+    Status refresh_source_binding_locked();
     Status fail_closed(const std::string& code, const std::string& detail, int64_t ctrl_id = 0,
                        const std::string& uuid = {});
     Status write_error_artifact(const std::string& code, const std::string& detail, int64_t ctrl_id,
@@ -322,15 +324,20 @@ private:
 
     Request request_ {};
     bool request_loaded_ = false;
-    // Host-side reload rate limit. The previous formulation keyed off the
-    // *expired window* rather than the last attempt, so elapsed time only grew
-    // and every out-of-window event re-read the activation file. This is a real
-    // 1 Hz bound on activation-file reads.
+    // Bad activation reads are limited to 1 Hz. Valid small activations are
+    // checked on each capture callback to detect immediate new-id replacement.
     uint64_t last_reload_qpc_ = 0;
+    bool activation_reload_failed_ = false;
+    std::set<std::string> retired_request_ids_;
 
     uint64_t event_seq_ = 0;
     uint64_t frames_committed_ = 0;
     std::set<int64_t> committed_jobs_;
+    // Bounded by the unchanged 64 committed-frame budget. Values originate
+    // solely in this host's callbacks, never in agent JSON or audit tokens.
+    std::map<int64_t, uintptr_t> committed_sources_;
+    int64_t bootstrap_ctrl_id_ = 0;
+    std::optional<uintptr_t> bound_source_;
     // v1.1: a job attempt is registered BEFORE the frame/event is written, so a
     // job that fails for any reason is never silently rewritten. Superset of
     // committed_jobs_.

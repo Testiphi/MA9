@@ -236,6 +236,7 @@ class FakeController:
         self.raise_on_click = raise_on_click
         self.no_scaling_touch_points = no_scaling_touch_points
         self.click_args: list[tuple[int, int]] = []
+        self.swipe_args: list[tuple[int, ...]] = []
         self.device_points: list[tuple[int, int]] = []
         self.jobs: list[FakeJob] = []
         self.unexpected: list[str] = []
@@ -262,6 +263,15 @@ class FakeController:
             raise AttributeError(name)
         self.unexpected.append(name)
         raise AttributeError(name)
+
+    def post_swipe(self, x1, y1, x2, y2, duration):
+        self.swipe_args.append((x1, y1, x2, y2, duration))
+        if self.raise_on_click:
+            raise RuntimeError("injected post_swipe failure")
+        job = FakeJob(self.clock, self.job_id, mode=self.mode,
+                      terminal_name=self.terminal_name, delay=self.delay)
+        self.jobs.append(job)
+        return job
 
 
 def make_executor(controller, clock, *, deadline: float | None = None,
@@ -908,7 +918,7 @@ class DedupTest(unittest.TestCase):
         executor = make_executor(controller, clock)
         image = synthetic_list("funnel")
         state, decision, observation = drive_to_open(image, [])
-        stale = make_sample(clock, 1, image, [], observation, capture_age=1.0)
+        stale = make_sample(clock, 1, image, [], observation, capture_age=3.0)
         first = executor.execute(state, decision, stale)
         self.assertEqual(first["status"], "blocked")
         self.assertEqual(first["reason"], "frame_stale")
@@ -1014,15 +1024,15 @@ class TimingTest(unittest.TestCase):
         state, decision, observation = drive_to_open(image, [])
         return clock, controller, executor, image, state, decision, observation
 
-    def test_frame_age_below_one_second_is_accepted(self):
+    def test_frame_age_below_three_seconds_is_accepted(self):
         clock, controller, executor, image, state, decision, observation = self._setup()
-        sample = make_sample(clock, 1, image, [], observation, capture_age=0.949)
+        sample = make_sample(clock, 1, image, [], observation, capture_age=2.949)
         outcome = executor.execute(state, decision, sample)
         self.assertEqual(outcome["status"], "succeeded")
 
-    def test_frame_age_exactly_one_second_is_rejected(self):
+    def test_frame_age_exactly_three_seconds_is_rejected(self):
         clock, controller, executor, image, state, decision, observation = self._setup()
-        sample = make_sample(clock, 1, image, [], observation, capture_age=0.95)
+        sample = make_sample(clock, 1, image, [], observation, capture_age=2.95)
         outcome = executor.execute(state, decision, sample)
         self.assertEqual(outcome["reason"], "frame_stale")
         self.assertEqual(controller.click_args, [])
@@ -1054,7 +1064,7 @@ class TimingTest(unittest.TestCase):
 
         def slow_gate(*args):
             result = gate(*args)
-            clock.advance(1.0)
+            clock.advance(3.0)
             return result
 
         with patch.object(executor, "_gate", side_effect=slow_gate):
@@ -1265,19 +1275,26 @@ class ReviewRegressionTest(unittest.TestCase):
         self.assertTrue(executor.stopped)
         self.assertEqual(controller.click_args, [])
 
-    def test_duplicate_done_labels_inside_or_outside_button_block_input(self):
-        for box in ([700, 300, 64, 37], [178, 587, 64, 37]):
+    def test_done_uniqueness_is_scoped_to_target_button(self):
+        for box, expected in (([700, 300, 64, 37], "succeeded"),
+                              ([178, 587, 64, 37], "done_button_label_ambiguous"),
+                              (None, "done_button_label_not_bound")):
             with self.subTest(box=box):
                 clock = FakeClock()
                 controller = FakeController(clock)
                 executor = make_executor(controller, clock)
-                labels = PANEL_LABELS + [ocr_item("完成", box, 1.0)]
+                labels = (PANEL_LABELS + [ocr_item("完成", box, 1.0)] if box is not None
+                          else [item for item in PANEL_LABELS if item["text"] != "完成"])
                 off, on = synthetic_panel("off"), synthetic_panel("on")
                 chain = drive_panel_chain(off, labels, on, labels, synthetic_list(), [])
                 sample = make_sample(clock, 3, on, labels, chain["on_obs"])
                 outcome = executor.execute(chain["apply_state"], chain["apply"], sample)
-                self.assertEqual(outcome["reason"], "done_button_label_ambiguous")
-                self.assertEqual(controller.click_args, [])
+                if expected == "succeeded":
+                    self.assertEqual(outcome["status"], expected)
+                    self.assertEqual(controller.click_args, [DONE_TARGET])
+                else:
+                    self.assertEqual(outcome["reason"], expected)
+                    self.assertEqual(controller.click_args, [])
 
     def test_forged_clear_claim_cannot_override_active_filter_pixels(self):
         clock = FakeClock()
@@ -1306,6 +1323,129 @@ class ReviewRegressionTest(unittest.TestCase):
         self.assertIsNone(outcome["receipt"])
         executor.execute(state, decision, sample)
         self.assertEqual(len(controller.click_args), 1)
+
+
+def top_navigation_tile(kind: str, gray: int = 115) -> np.ndarray:
+    """Small structural probes, never device captures."""
+    image = np.zeros((720, 1280, 3), dtype=np.uint8)
+    x, y, w, h = ex.D_BUTTON_ROI
+    tile = image[y:y+h, x:x+w]
+    tile[:] = 255 if kind != "missing_tile" else 70
+    color = (gray, gray, gray)
+    if kind in ("D", "missing_tile"):
+        cv2.fillPoly(tile, [np.array([(14, 9), (32, 9), (39, 16),
+                                    (39, 36), (32, 43), (14, 43)])], color)
+        cv2.fillPoly(tile, [np.array([(21, 16), (29, 16), (32, 20),
+                                    (32, 32), (29, 36), (21, 36)])], (255, 255, 255))
+    elif kind in ("O", "C"):
+        cv2.ellipse(tile, (27, 26), (13, 17), 0, 0, 360, color, -1)
+        cv2.ellipse(tile, (27, 26), (6, 10), 0, 0, 360, (255, 255, 255), -1)
+        if kind == "C":
+            tile[20:33, 28:] = 255
+    elif kind == "reflection":
+        tile[9:44, 14:40] = 220
+    return image
+
+
+class TopNavigationGlyphTest(unittest.TestCase):
+    def test_gray_and_dark_d_require_the_same_topology(self):
+        for gray in (115, 40):
+            with self.subTest(gray=gray):
+                letter, evidence = ex._top_d_button_evidence(top_navigation_tile("D", gray))
+                self.assertEqual(letter, "D")
+                self.assertGreaterEqual(evidence["left_stem_fraction"], .90)
+                self.assertGreaterEqual(evidence["right_arc_depth"], 3)
+
+    def test_blank_o_c_missing_tile_and_reflection_fail_closed(self):
+        for kind in ("blank", "O", "C", "missing_tile", "reflection"):
+            with self.subTest(kind=kind):
+                self.assertIsNone(ex._top_d_button_evidence(top_navigation_tile(kind))[0])
+
+
+@unittest.skipUnless(HAVE_CAPTURES, "real garage calibration samples unavailable")
+class BoundedNavigationTest(unittest.TestCase):
+    def pending(self, image, clock, swipe=False):
+        observed = observe(image, fid=1)
+        self.assertIs(observed.observation.at_d_start, False)
+        state, _ = plan.start(SID, START - .2)
+        state = replace(state, phase="await_two_d_start_frames", open_purpose="verify",
+                        toggle_target=plan.ON, commit_kind=plan.ON,
+                        d_jumps_used=1 if swipe else 0)
+        state, decision = plan.step(state, observed.observation, START - .1)
+        return state, decision, make_sample(clock, 1, image, [], observed)
+
+    def test_real_d_shortcut_and_swipe_have_fixed_distinct_calls(self):
+        image = real_frame("刚进入全局车库_随机位置.png")
+        for swipe in (False, True):
+            with self.subTest(swipe=swipe):
+                clock = FakeClock()
+                controller = FakeController(clock)
+                executor = make_executor(controller, clock)
+                state, decision, sample = self.pending(image, clock, swipe)
+                outcome = executor.execute(state, decision, sample)
+                self.assertEqual(outcome["status"], "succeeded")
+                self.assertTrue(outcome["receipt"].ok)
+                self.assertEqual(controller.swipe_args, [ex.ORIGIN_SWIPE] if swipe else [])
+                self.assertEqual(controller.click_args, [] if swipe else [(759, 113)])
+                self.assertEqual(executor.calls[0]["operation"], "post_swipe" if swipe else "post_click")
+                self.assertEqual(controller.jobs[0].wait_calls, 0)
+
+    def test_synthetic_non_d_controls_issue_no_native_action(self):
+        base = real_frame("刚进入全局车库_随机位置.png")
+        x, y, w, h = ex.D_BUTTON_ROI
+        for kind in ("blank", "O", "C", "missing_tile", "reflection"):
+            with self.subTest(kind=kind):
+                clock = FakeClock()
+                controller = FakeController(clock)
+                executor = make_executor(controller, clock)
+                state, decision, sample = self.pending(base, clock)
+                image = base.copy()
+                image[y:y+h, x:x+w] = top_navigation_tile(kind)[y:y+h, x:x+w]
+                sample["image"] = image
+                outcome = executor.execute(state, decision, sample)
+                self.assertEqual(outcome["reason"], "top_d_button_not_confirmed")
+                self.assertEqual(controller.click_args + controller.swipe_args, [])
+                self.assertIsNone(outcome["receipt"])
+
+    def test_swipe_failure_timeout_and_raise_are_never_reposted(self):
+        image = real_frame("刚进入全局车库_随机位置.png")
+        for options, expected in (({"terminal_name": "failed"}, "failed"),
+                                  ({"mode": "pending"}, "timeout"),
+                                  ({"raise_on_click": True}, "indeterminate")):
+            with self.subTest(options=options):
+                clock = FakeClock()
+                controller = FakeController(clock, **options)
+                executor = make_executor(controller, clock)
+                state, decision, sample = self.pending(image, clock, True)
+                outcome = executor.execute(state, decision, sample)
+                self.assertEqual(outcome["status"], expected)
+                executor.execute(state, decision, sample)
+                self.assertEqual(controller.swipe_args, [ex.ORIGIN_SWIPE])
+                self.assertEqual(controller.click_args, [])
+                if expected != "failed":
+                    self.assertIsNone(outcome["receipt"])
+
+    def test_navigation_remeasures_d_button_non_start_and_mask(self):
+        base = real_frame("刚进入全局车库_随机位置.png")
+        for kind in ("top_c", "panel", "actual_d_start", "claimed_unknown"):
+            with self.subTest(kind=kind):
+                clock = FakeClock()
+                controller = FakeController(clock)
+                executor = make_executor(controller, clock)
+                state, decision, sample = self.pending(base, clock, True)
+                if kind == "top_c":
+                    image = base.copy()
+                    x, y, w, h = ex.D_BUTTON_ROI
+                    image[y:y+h, x:x+w] = base[y:y+h, 791:791+w]
+                    sample["image"] = image
+                elif kind == "panel":
+                    sample["image"] = real_frame("筛选面板_已拥有开启.png")
+                elif kind == "actual_d_start":
+                    sample["image"] = real_frame("切换已拥有后_D级最左端.png")
+                else:
+                    sample["observed"] = forged_observation(sample["observed"], at_d_start=None)
+                self.assertEqual(executor.execute(state, decision, sample)["status"], "blocked")
+                self.assertEqual(controller.click_args + controller.swipe_args, [])
 
 
 if __name__ == "__main__":                                   # pragma: no cover

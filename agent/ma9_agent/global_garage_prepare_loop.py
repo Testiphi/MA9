@@ -127,7 +127,8 @@ OUTCOME_STATUSES = ("succeeded", "failed", "blocked", "timeout", "cancelled",
 OUTCOME_KEYS = ("status", "reason", "session_id", "action_id", "intent", "issued",
                 "job_id", "job_status", "submitted_at", "completed_at", "receipt",
                 "pre_frame_id")
-ALLOWED_INTENTS = (plan.OPEN_FILTER, plan.TOGGLE_OWNED, plan.APPLY_FILTER)
+ALLOWED_INTENTS = (plan.OPEN_FILTER, plan.TOGGLE_OWNED, plan.APPLY_FILTER,
+                   plan.JUMP_D_SECTION, plan.SWIPE_TO_ORIGIN)
 #: Outcome statuses that stop the session without a further step or capture.
 STOPPING_OUTCOMES = (RUN_BLOCKED, RUN_TIMEOUT, RUN_CANCELLED, RUN_INDETERMINATE)
 #: Outcome statuses whose issued job may be left unconfirmed for audit.

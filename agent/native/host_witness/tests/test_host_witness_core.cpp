@@ -162,6 +162,7 @@ struct FakeFs : Fs
     std::string activation_path;
     std::string activation_text;
     bool activation_read_fails = false;
+    bool activation_present = true;
 
     std::set<std::string> dirs;
     std::map<std::string, std::string> files;      // stored content
@@ -216,7 +217,7 @@ struct FakeFs : Fs
     {
         ops.push_back("read:" + path);
         if (path == activation_path) {
-            if (activation_read_fails) {
+            if (activation_read_fails || !activation_present) {
                 reason = "read_failed";
                 return false;
             }
@@ -231,7 +232,10 @@ struct FakeFs : Fs
         out = it->second;
         return true;
     }
-    bool file_exists(const std::string& path) override { return files.count(path) > 0; }
+    bool file_exists(const std::string& path) override
+    {
+        return path == activation_path ? activation_present : files.count(path) > 0;
+    }
 
     std::size_t count_ops(const std::string& prefix) const
     {
@@ -414,6 +418,128 @@ struct Harness
     std::string frame_path(int64_t id) const { return instance_dir() + "/" + i64_to_dec(id) + kFrameSuffix; }
     std::string event_path(int64_t id) const { return instance_dir() + "/" + i64_to_dec(id) + kEventSuffix; }
 };
+
+static void bind_source(Harness& h, int64_t job,
+                        const std::string& request = "00112233445566778899aabbccddeeff")
+{
+    h.fs.files[h.root + "/" + kSourceBindingPrefix + request + ".json"] =
+        "{\"session_id\":\"sess-05an-n\",\"request_id\":\"" + request
+        + "\",\"bootstrap_ctrl_id\":" + i64_to_dec(job) + "}";
+}
+
+TEST(source_binding_first_preview_then_own_and_delayed_publish)
+{
+    Harness h;
+    CHECK(h.init().ok);
+    auto preview = (void*)(uintptr_t)0x111;
+    auto own = (void*)(uintptr_t)0x222;
+    CHECK(h.engine->on_controller_event(preview, kSucceededMessage, make_event(345, kUuid).c_str()).kind
+          == EventOutcome::Kind::Committed);
+    CHECK(h.engine->on_controller_event(own, kSucceededMessage, make_event(346, kUuid).c_str()).kind
+          == EventOutcome::Kind::Committed);
+    bind_source(h, 346); // post returned after its callback; first callback was preview
+    const int freezes = h.images.cached_calls;
+    for (int64_t job = 347; job < 410; ++job) {
+        CHECK(h.engine->on_controller_event(preview, kSucceededMessage, make_event(job, kUuid).c_str()).reason
+              == "other_controller_source");
+    }
+    CHECK(h.images.cached_calls == freezes);
+    CHECK(h.engine->frames_committed() == 2);
+    CHECK(h.engine->attempted_jobs() == 2);
+    CHECK(h.engine->on_controller_event(own, kSucceededMessage, make_event(410, kUuid).c_str()).kind
+          == EventOutcome::Kind::Committed);
+}
+
+TEST(source_binding_failed_bootstrap_never_retried)
+{
+    Harness h;
+    CHECK(h.init().ok);
+    h.images.cached_ok = false;
+    CHECK(h.engine->on_controller_event((void*)0x222, kSucceededMessage, make_event(346, kUuid).c_str()).reason
+          == "cached_image_failed");
+    h.images.cached_ok = true;
+    bind_source(h, 346);
+    CHECK(h.engine->on_controller_event((void*)0x222, kSucceededMessage, make_event(346, kUuid).c_str()).reason
+          == "source_binding_bootstrap_not_committed");
+    CHECK(h.images.cached_calls == 1);
+    CHECK(h.engine->request_invalidated());
+}
+
+TEST(source_binding_wrong_id_schema_and_revocation)
+{
+    for (const std::string& bad : {std::string("{}"),
+         std::string("{\"session_id\":\"sess-05an-n\",\"request_id\":\"wrong\",\"bootstrap_ctrl_id\":1}"),
+         std::string("{\"session_id\":\"sess-05an-n\",\"request_id\":\"00112233445566778899aabbccddeeff\",\"bootstrap_ctrl_id\":true}")}) {
+        Harness h;
+        CHECK(h.init().ok);
+        h.fs.files[h.root + "/" + kSourceBindingPrefix + "00112233445566778899aabbccddeeff.json"] = bad;
+        CHECK(h.engine->on_controller_event((void*)0x222, kSucceededMessage, make_event(1, kUuid).c_str()).kind
+              == EventOutcome::Kind::Blocked);
+        CHECK(h.images.cached_calls == 0);
+        CHECK(h.engine->request_invalidated());
+    }
+    Harness h;
+    CHECK(h.init().ok);
+    bind_source(h, 999); // nonexistent id cannot infer the callback handle
+    CHECK(h.engine->on_controller_event((void*)0x222, kSucceededMessage, make_event(1, kUuid).c_str()).reason
+          == "source_binding_bootstrap_not_committed");
+    CHECK(h.images.cached_calls == 0);
+    Harness revoked;
+    CHECK(revoked.init().ok);
+    CHECK(revoked.engine->on_controller_event((void*)0x222, kSucceededMessage, make_event(1, kUuid).c_str()).kind
+          == EventOutcome::Kind::Committed);
+    bind_source(revoked, 1);
+    CHECK(revoked.engine->on_controller_event((void*)0x111, kSucceededMessage, make_event(2, kUuid).c_str()).reason
+          == "other_controller_source");
+    revoked.fs.files.erase(revoked.root + "/" + kSourceBindingPrefix + "00112233445566778899aabbccddeeff.json");
+    CHECK(revoked.engine->on_controller_event((void*)0x222, kSucceededMessage, make_event(3, kUuid).c_str()).reason
+          == "source_binding_revoked");
+    CHECK(revoked.engine->request_invalidated());
+    CHECK(h.engine->request_invalidated());
+    const std::string next(32, 'a');
+    h.fs.activation_text = make_request(999000, 1029000, 1000000, kUuid, next);
+    CHECK(h.engine->on_controller_event((void*)0x333, kSucceededMessage, make_event(3, kUuid).c_str()).kind
+          == EventOutcome::Kind::Committed);
+    CHECK(h.engine->frames_committed() == 1);
+    h.fs.activation_text = make_request(999000, 1029000, 1000000, kUuid);
+    CHECK(h.engine->on_controller_event((void*)0x222, kSucceededMessage, make_event(4, kUuid).c_str()).reason
+          == "request_id_retired");
+}
+
+TEST(source_binding_keeps_total_budget_and_same_controller_preview_cost)
+{
+    Harness h;
+    CHECK(h.init().ok);
+    CHECK(h.engine->on_controller_event((void*)0x222, kSucceededMessage, make_event(1, kUuid).c_str()).kind
+          == EventOutcome::Kind::Committed);
+    bind_source(h, 1);
+    for (int64_t job = 2; job <= 64; ++job)
+        CHECK(h.engine->on_controller_event((void*)0x222, kSucceededMessage, make_event(job, kUuid).c_str()).kind
+              == EventOutcome::Kind::Committed);
+    CHECK(h.engine->on_controller_event((void*)0x111, kSucceededMessage, make_event(65, kUuid).c_str()).reason
+          == "other_controller_source");
+    CHECK(h.engine->on_controller_event((void*)0x222, kSucceededMessage, make_event(66, kUuid).c_str()).reason
+          == "frame_budget_exhausted");
+    CHECK(h.images.cached_calls == 64);
+}
+
+TEST(source_binding_cannot_switch_committed_controller)
+{
+    Harness h;
+    CHECK(h.init().ok);
+    CHECK(h.engine->on_controller_event((void*)0x111, kSucceededMessage, make_event(1, kUuid).c_str()).kind
+          == EventOutcome::Kind::Committed);
+    CHECK(h.engine->on_controller_event((void*)0x222, kSucceededMessage, make_event(2, kUuid).c_str()).kind
+          == EventOutcome::Kind::Committed);
+    bind_source(h, 2);
+    CHECK(h.engine->on_controller_event((void*)0x111, kSucceededMessage, make_event(3, kUuid).c_str()).reason
+          == "other_controller_source");
+    bind_source(h, 1);
+    CHECK(h.engine->on_controller_event((void*)0x111, kSucceededMessage, make_event(4, kUuid).c_str()).reason
+          == "source_binding_immutable_violation");
+    CHECK(h.engine->request_invalidated());
+    CHECK(h.images.cached_calls == 2);
+}
 
 // ============================================================================
 // 01 sha256
@@ -1221,7 +1347,7 @@ TEST(engine_reload_after_window)
     h3.fs.activation_text = make_request(4900000, 5900000, 1000000, kUuid);   // same request_id
     EventOutcome ext = h3.engine->on_controller_event((void*)1, kSucceededMessage, make_event(805, kUuid).c_str());
     CHECK_MSG(ext.kind == EventOutcome::Kind::Skipped, ext.reason.c_str());
-    CHECK_MSG(ext.reason == "after_window", ext.reason.c_str());
+    CHECK_MSG(ext.reason == "request_id_immutable_violation", ext.reason.c_str());
     CHECK(h3.engine->request_invalidated());
     CHECK(h3.engine->frames_committed() == 1);   // NOT extended
     CHECK(h3.fs.files.count(h3.event_path(805)) == 0);
@@ -1233,7 +1359,7 @@ TEST(engine_reload_after_window)
     h2.fs.activation_read_fails = true;
     EventOutcome o2 = h2.engine->on_controller_event((void*)1, kSucceededMessage, make_event(803, kUuid).c_str());
     CHECK(o2.kind == EventOutcome::Kind::Skipped);
-    CHECK_MSG(o2.reason == "after_window", o2.reason.c_str());
+    CHECK_MSG(o2.reason == "activation_read_failed", o2.reason.c_str());
 }
 
 TEST(engine_window_drift_guard)
@@ -1306,7 +1432,7 @@ TEST(engine_reload_is_bounded)
         EventOutcome o =
             h.engine->on_controller_event((void*)1, kSucceededMessage, make_event(910 + i, kUuid).c_str());
         CHECK(o.kind == EventOutcome::Kind::Skipped);
-        CHECK_MSG(o.reason == "after_window", o.reason.c_str());
+        CHECK_MSG(i == 0 ? o.reason.rfind("request_", 0) == 0 : o.reason == "activation_retry_throttled", o.reason.c_str());
         delta = h.fs.count_ops("read:") - reads0;
     }
     CHECK_MSG(delta == 1, ("activation reads within one host second = " + std::to_string(delta)).c_str());
@@ -1318,6 +1444,41 @@ TEST(engine_reload_is_bounded)
     CHECK_MSG(h.fs.count_ops("read:") - reads0 == 2,
               std::to_string(h.fs.count_ops("read:") - reads0).c_str());
     CHECK(h.engine->frames_committed() == 1);   // nothing frozen outside the window
+}
+
+TEST(engine_activation_revocation_and_immediate_replacement)
+{
+    Harness h;
+    CHECK(h.init().ok);
+    h.clock.t = 1000000;
+    auto event = [&](int64_t id, const char* action = "screencap") {
+        return h.engine->on_controller_event((void*)1, kSucceededMessage,
+                                             make_event(id, kUuid, action).c_str());
+    };
+    CHECK(event(950).kind == EventOutcome::Kind::Committed);
+    const std::string old_request = h.fs.activation_text;
+    h.fs.activation_present = false;
+    const std::size_t writes = h.fs.count_ops("write:");
+    CHECK(event(951, "click").reason == "activation_revoked");
+    CHECK(event(952).reason == "activation_revoked");
+    CHECK(h.fs.count_ops("write:") == writes);
+    h.fs.activation_present = true;
+    CHECK(event(953).reason == "request_invalidated");
+    CHECK(h.fs.count_ops("write:") == writes);
+
+    h.fs.activation_text = make_request(999000, 1029000, 1000000, kUuid,
+                                        "ffeeddccbbaa99887766554433221100");
+    CHECK(event(954).kind == EventOutcome::Kind::Committed);
+    CHECK(h.engine->frames_committed() == 1);
+    // No missing observation occurs between these atomic new-id replacements.
+    h.fs.activation_text = make_request(999000, 1029000, 1000000, kUuid,
+                                        "abcdef0123456789abcdef0123456789");
+    CHECK(event(955).kind == EventOutcome::Kind::Committed);
+    CHECK(h.engine->frames_committed() == 1);
+    const std::size_t after_new = h.fs.count_ops("write:");
+    h.fs.activation_text = old_request;
+    CHECK(event(956).reason == "request_id_retired");
+    CHECK(h.fs.count_ops("write:") == after_new);
 }
 
 // ============================================================================
@@ -1524,15 +1685,15 @@ TEST(engine_same_request_id_is_immutable)
     h.clock.t = 1500000;
     EventOutcome outside = h.engine->on_controller_event((void*)1, kSucceededMessage, make_event(732, kUuid).c_str());
     CHECK(outside.kind == EventOutcome::Kind::Skipped);
-    CHECK_MSG(outside.reason == "after_window", outside.reason.c_str());
+    CHECK_MSG(outside.reason == "request_id_immutable_violation", outside.reason.c_str());
     CHECK(h.fs.files.count(h.event_path(732)) == 0);
 
     // and an event INSIDE the original window is refused as well: the request is
     // permanently dead, not merely shortened
     h.clock.t = 1000000;
     EventOutcome o = h.engine->on_controller_event((void*)1, kSucceededMessage, make_event(733, kUuid).c_str());
-    CHECK(o.kind == EventOutcome::Kind::Blocked);
-    CHECK_MSG(o.reason == "request_invalidated", o.reason.c_str());
+    CHECK(o.kind == EventOutcome::Kind::Skipped);
+    CHECK_MSG(o.reason == "request_id_immutable_violation", o.reason.c_str());
     CHECK(h.fs.files.count(h.event_path(733)) == 0);
     CHECK(h.engine->frames_committed() == 1);
 
@@ -1581,7 +1742,7 @@ TEST(engine_write_failure_invalidates_request)
     // the request is permanently dead: even an in-window event is refused, and
     // a different job is not frozen either
     EventOutcome o2 = h.engine->on_controller_event((void*)1, kSucceededMessage, make_event(742, kUuid).c_str());
-    CHECK(o2.kind == EventOutcome::Kind::Blocked);
+    CHECK(o2.kind == EventOutcome::Kind::Skipped);
     CHECK_MSG(o2.reason == "request_invalidated", o2.reason.c_str());
     CHECK(h.fs.files.count(h.frame_path(742)) == 0);
     CHECK(h.engine->frames_committed() == 0);

@@ -878,14 +878,53 @@ Status Engine::reload_activation_request_locked()
         }
         return Status::Ok();   // unchanged: nothing to adopt, no window extension
     }
+    if (retired_request_ids_.count(req->request_id))
+        return Status::Fail("request_id_retired");
+    retired_request_ids_.insert(request_.request_id);
     // A genuinely new request_id starts a new window. The previous logical
     // session is NOT restored, and per-request counters restart.
     frames_committed_ = 0;
     committed_jobs_.clear();
+    committed_sources_.clear();
+    bootstrap_ctrl_id_ = 0;
+    bound_source_.reset();
     attempted_jobs_.clear();
     request_invalidated_ = false;
     request_ = *req;
     request_loaded_ = true;
+    return Status::Ok();
+}
+
+Status Engine::refresh_source_binding_locked()
+{
+    const std::string path = cfg_.witness_root + "/" + kSourceBindingPrefix + request_.request_id + ".json";
+    if (!fs_.file_exists(path)) {
+        return bootstrap_ctrl_id_ == 0 ? Status::Ok() : Status::Fail("source_binding_revoked");
+    }
+    std::string text, reason;
+    if (!fs_.read_file(path, text, reason)) return Status::Fail("source_binding_read_failed");
+    if (text.size() > 16384) return Status::Fail("source_binding_schema_invalid");
+    auto scan = scan_top_level(text);
+    auto session = json_str(scan, "session_id");
+    auto request = json_str(scan, "request_id");
+    auto job = json_int(scan, "bootstrap_ctrl_id");
+    if (!scan.ok || scan.size() != 3 || !session || !request || !job || *job <= 0)
+        return Status::Fail("source_binding_schema_invalid");
+    if (*session != request_.session_id || *request != request_.request_id)
+        return Status::Fail("source_binding_scope_mismatch");
+    if (bootstrap_ctrl_id_ != 0 && bootstrap_ctrl_id_ != *job)
+        return Status::Fail("source_binding_immutable_violation");
+    bootstrap_ctrl_id_ = *job;
+    const auto found = committed_sources_.find(*job);
+    if (found != committed_sources_.end()) {
+        bound_source_ = found->second;
+    }
+    else {
+        return Status::Fail("source_binding_bootstrap_not_committed");
+    }
+    // The agent publishes only after consuming the real bootstrap's frozen
+    // event. No unknown id may authorize a callback handle, even if its numeric
+    // value happens to match a future job.
     return Status::Ok();
 }
 
@@ -1083,6 +1122,17 @@ EventOutcome Engine::on_controller_event(void* controller_handle, const char* me
         out.reason = "message_not_succeeded";   // overwhelmingly the common case
         return out;
     }
+    const std::string activation = cfg_.witness_root + "/" + kActivationFile;
+    if (!fs_.file_exists(activation)) {
+        request_invalidated_ = true;
+        committed_sources_.clear();
+        bootstrap_ctrl_id_ = 0;
+        bound_source_.reset();
+        activation_reload_failed_ = false;
+        last_reload_qpc_ = 0;
+        out.reason = "activation_revoked";
+        return out;
+    }
     if (details_json == nullptr) {
         out.kind = EventOutcome::Kind::Blocked;
         fail_closed("null_details", "", 0, {});
@@ -1101,6 +1151,21 @@ EventOutcome Engine::on_controller_event(void* controller_handle, const char* me
 
     if (fields->action != kScreencapAction) {
         out.reason = "action_not_screencap";
+        return out;
+    }
+    uint64_t now = clock_.qpc();
+    if (activation_reload_failed_ && last_reload_qpc_ != 0
+        && now - last_reload_qpc_ < cfg_.expected_qpc_frequency) {
+        out.reason = "activation_retry_throttled";
+        return out;
+    }
+    // Valid requests are small and read on this callback, so an atomic new-id
+    // replacement is seen even when no event observed the missing interval.
+    last_reload_qpc_ = now;
+    Status activation_status = reload_activation_request_locked();
+    activation_reload_failed_ = !activation_status.ok;
+    if (!activation_status.ok) {
+        out.reason = activation_status.reason;
         return out;
     }
     if (fields->ctrl_id <= 0) {
@@ -1124,35 +1189,13 @@ EventOutcome Engine::on_controller_event(void* controller_handle, const char* me
         return out;
     }
 
-    uint64_t now = clock_.qpc();
     if (now < request_.after_qpc) {
         out.reason = "before_window";
         return out;
     }
     if (now > request_.before_qpc) {
-        // Bounded: at most one activation-file read per host second, measured
-        // from the previous ATTEMPT (not from the window close, which would
-        // make the bound grow without limit).
-        const bool may_reload =
-            (last_reload_qpc_ == 0) || (now - last_reload_qpc_) >= cfg_.expected_qpc_frequency;
-        if (may_reload) {
-            last_reload_qpc_ = now;
-            Status r = reload_activation_request_locked();
-            (void)r;
-            now = clock_.qpc();
-            if (now < request_.after_qpc || now > request_.before_qpc) {
-                out.reason = "after_window";
-                return out;
-            }
-            if (fields->uuid != request_.controller_uuid) {
-                out.reason = "other_controller_uuid";
-                return out;
-            }
-        }
-        else {
-            out.reason = "after_window";
-            return out;
-        }
+        out.reason = "after_window";
+        return out;
     }
 
     // A cached module hash must never stand in for the identity of a *different*
@@ -1169,9 +1212,20 @@ EventOutcome Engine::on_controller_event(void* controller_handle, const char* me
     // v1.1: an I/O write failure permanently invalidates the active request.
     // The same request_id is never revived; only a genuinely new id opens a window.
     if (request_invalidated_) {
-        out.kind = EventOutcome::Kind::Blocked;
-        fail_closed("request_invalidated", "", fields->ctrl_id, fields->uuid);
         out.reason = "request_invalidated";
+        return out;
+    }
+
+    Status binding = refresh_source_binding_locked();
+    if (!binding.ok) {
+        request_invalidated_ = true;
+        out.kind = EventOutcome::Kind::Blocked;
+        fail_closed(binding.reason, "", fields->ctrl_id, fields->uuid);
+        out.reason = binding.reason;
+        return out;
+    }
+    if (bound_source_ && *bound_source_ != (uintptr_t)controller_handle) {
+        out.reason = "other_controller_source";
         return out;
     }
 
@@ -1326,6 +1380,7 @@ EventOutcome Engine::on_controller_event(void* controller_handle, const char* me
     event_seq_ = seq;
     frames_committed_ += 1;
     committed_jobs_.insert(fields->ctrl_id);
+    committed_sources_.emplace(fields->ctrl_id, (uintptr_t)controller_handle);
 
     out.kind = EventOutcome::Kind::Committed;
     out.reason.clear();
