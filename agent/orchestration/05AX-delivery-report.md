@@ -1,0 +1,9 @@
+# 05AX 顶部灰D控件离线交付
+
+仅executor/test窄修固定D控件，白tile边界/低饱和相对contrast+单高孔/左直stem/右弧替换旧通用深色glyph此调用。深D与真实灰D同一核验路径，空白/O/C/B/缺tile/反光零post；没有去门禁或blindclick。planner、导航额度、回执/新帧、车型识别和采集范围不变，保留05AW KTM修复。
+
+72executor定向一次exit0，真实失败frame11离线10probe exit0；假导航回执不能证明灰按钮真实可点击/会定位。下一用户当前车库中段一次运行新两页任务验证回D及KTM，不需重新六采样。
+
+新包MA9-evidence/20261002-05AX-gray-D-control/package/MA9-preview，旧05AW及失败日志保留。builder4/编译/schema静态exit0，裸Agent无参exit2；根复核24source/389package hash零不符。Manifest7a117665891e629ed43b944a6d788c228d8e7a350afc87cf8d964a2cfee9a48d；receipt6c45ce44d38d77a9e911747b7dbbd8ed07072574d5eaffea842bcaf0493b7bd5。Agent0df490ba98c0ae626a851387a19d41ad92c58f30d35fda4102c9f798f3474f98；GUI cbc526325341177499d64df5158684b0e1af9af98a2fdc99a9fd6e97e2b35e3e。Native05AR复用未重编/加载。
+
+证据implementation/implementation-report.txt、suite.log、offline-frame-gate.*及build/fullreceipt.json。未MFA/设备/全量重跑/推送/memory修改；离线PASS不称新包自动实机通过。

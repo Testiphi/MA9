@@ -1,0 +1,20 @@
+# 05AR 当前独立双控制器预览隔离交付收据
+
+2026-10-02用户授权保留预览并修来源隔离。上一05AQ真实failed：task6帧+同UUID另一controller58帧耗尽native64，非D误判/ready；旧现场保留。主对话Sol medium编排，单Sol medium owner改native4/wrapper/test/main，Luna low顺序编译native及改builder/test/docs，无额外审查席。HEAD8127abc/codex/garage-filter-mfa，源码本地未提交推送。
+
+固定witness/source_binding.<request_idlowerhex32>.json3键session_id/request_id/bootstrap_ctrl_id。实际首task screenshotjob冻结Pcollected/Gmatched/ID相符后写，native自己该scope成功committed map导出callback handle，绝不按首回调、外pointer或audit token授权。绑定前候选占原64总额、不reset；后续外controller在freeze/attempt/quota前跳过。原active8/event22/P/G及3input intents、D起点前置、3sinput/1sfrozen/3sjob/30s64events保持。仅独立双controller模式；同controller预览仍会占额度。无线程/补截图/强制ack，绑定由后续callback读取。
+
+请求分文件旧残留不污染newscope，原失败job不可重发/retired IDs保留；严格schema/坏scope/未知未commitjob/换源/撤销不放行。wrapper cleanup先active再ownbinding，保留替换请求；中文明确未ready/未完成D级列表起点确认及可信本job/request原生error审计。MFA队列顶栏“全部完成”并未修改，不能当任务成功。
+
+最终7源SHA见implementation/source-freeze.json：native_host24b84b56...afce197、headerb55abb24...39cee6c、core2425aff3...df7bda6、coreteste260b1e3...a53ce4b、wrapperf49869c1...4492011、wrappertest488268ac...62cb1c、mainc7b6468f...993b40f，state保存完整值。builderee03234e71bb49779fa0fea08710cb63b4f95952cc390f6a061920bff20cc232；buildertest9caf4729ced2f5370ec5b5991b9972273c930698121a8f945e334ab79798ce3b；doc3a1774176f7fba6e3ec1bd8655fcc5616949d0138133d4816b43ab2361f66525。
+
+真实离线验证：wrapper最终9tests0/syntax/diffcheck0；native改后唯一一次50cases926checks0（包含5个来源/竞态/生命周期聚焦cases），PE AMD64/3exports/Kernel32Advapi32/9readonlyAPI references静态PASS，DLL未加载。builder4tests0/PyInstaller0/Agent无参2预期，15source/388packagehash/schema/pin/helper/privacy静态验收0。没有重跑旧102plan/66executor/P/G/CI1000、native旧fixture红基线/六人工。错误审计不授予input，actorcapability仍固定三操作。
+
+新包E:/hzz/work/MA9/MA9-evidence/20261002-05AR-capture-affinity/package/MA9-preview。
+新插件SHA3f408fa38e7616a0eaef73a6a2aba6e0eae57c6b3a80a8e086cdea81b5e20967。
+manifest SHA8a0792654fd0b063df7f2a8702a311ac8f5b05574eefd3aa692ba765a64f1ce1。
+Agent exe SHA4803873ed66cd73724c7968449ec10a6081f81287b1757dd4d955f4c2aa5a618。
+GUI exe SHAcbc526325341177499d64df5158684b0e1af9af98a2fdc99a9fd6e97e2b35e3e。
+build/fullreceipt.json SHAa9df0f8e4e7c9202f5fdbba83eb24a3b6a1e769a3225e968ad2279e3d2947669。Native日志build/native/build_host_witness.log、test_host_witness_core.log，wrapper日志implementation/wrapper-tests-pinned.log；机械构建具体命令和exit在fullreceipt。总控回读manifest/receipt及15source、固定pin/单task、旧failed summary保留和diffcheck0。
+
+下一用户关旧开新，可保持实时预览开验证已观察独立双controller模式；原设备1920×1080/列表页/唯任务选，优先ON8步，回传summary/切换等待/预览状态。Bootstrap少量预览可能占原额度，不保证每请求完整64taskframes；同controller模式或新UI冻结场景无通用承诺。新绑定/性能尚未实机验。代理未启动MFA/ADB、连接/输入设备、加载插件、改memory或自行推送，无全库采集/升星解锁开赛。

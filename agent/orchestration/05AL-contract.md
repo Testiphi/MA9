@@ -1,6 +1,12 @@
-# 05AL 有界过滤准备合同 v1（2026-09-30）
+# 05AL 有界车库准备合同 v3（2026-10-02，05AT有界起点定位）
 
-状态：总控准备完成，待用户人工中转实现；无活跃 owner/reviewer，未连接设备。唯一总控按用户指定 GPT-6.1 Sol medium/Standard；模型声明不是 UI 设置变更证明。此合同是新增适配层的开发接口，不重冻结既有共享契约。当前文件边界登记以本合同为准。
+状态：v1已用于05AL离线签字；2026-10-02用户依据实测帧龄2.21–2.31秒明确授权v2：三筛选操作提交前帧龄上限3秒，列表免OCR、面板必要控件ROI OCR，完成标签唯一性限定目标按钮ROI。历史报告对应v1，不修改其签字证据；v2实施文件边界以state.global_garage_filter_ocr_task为准。唯一总控GPT-6.1 Sol medium/Standard仅编排，medium子代理改代码、low编译。未由智能体连接或操作设备，此次不重冻结既有共享契约。
+
+v2.1：用户在初始off实机ready但出现切换卡顿后授权05AQ“开始收口”。提交筛选后的两种commit（OFF重置/ON提交）仅在本次新Observation为garage_list且at_d_start is True时重开筛选；False/None留原阶段等新帧，重复/旧frame不触发，预算及末尾双D确认不变。D起点为预期列表布局证据，不声称能证明所有隐性UI冻结结束。当前单owner Sol low改planner与必要测试fixture，顺序Luna low打包，范围以state.global_garage_refresh_ready_task为准。
+
+v2.2覆盖旧初始ON重置语义：用户在旧ON8技术ready后明确拒绝多余取消勾选并授权“开始修改”。初始ON保持勾选，直接apply当前ON（state.toggle_target=ON、commit_kind=ON供真实executor核验）→等待新garage_list+DstartTrue→重开verifyON→apply关闭→末双D，总4input O,A,O,A；初始OFF原5input O,T,A,O,A不变。删除仅服务旧OFF重置的私有reset/on_commit分支及对应测试，不保留备用v2/fallback；State公开结构、三intent和预算不扩。旧v1/旧8input实机证据只对应历史版本。范围以state.global_garage_preserve_owned_task为准，source_affinity仍按05AR小补充。
+
+v3用户明确授权“允许增加有界回起点定位”。v2.2 ON提交不改选项保持原位置，不能等D作为筛选阶段前置。现拆阶段：筛选保持ON提交→确认garage_list返回即可重开核验ON→关闭；之后独立定位，已D直接两新帧ready、否则固定D区提示跳转至多1次，随后向起点右滑至多12次。shortcut不证明起点，unknown/动画等新帧，OTHER/失败/超时/上限停止，不反选或增加预算。新增intent仅jump_d_section/swipe_to_origin，RootWindow保持1280×720坐标，D按钮ROI(732,87,54,53)、swipe(260,360)→(1100,360)/350ms由owner现图校准/本地SDK核，实机效果待验证；硬编码参数非用户可调。最后现有D徽标/分隔点线/首列对齐及连续2独立capture才ready，D布局非所有冻结活性证明。当前精确候选文件范围state.global_garage_bounded_origin_task，旧3意图/旧D前置签字范围仅历史。
 
 ## 基点与 C/D 保留
 
@@ -21,11 +27,11 @@ C 的 CLI/测试/文档与 D 的 MFA包装/Agent/测试作为两组保留交付�
 
 ## 能力与预算
 
-起点必须是全局车库列表，只有 `open_filter / toggle_owned / apply_filter`。没有入口导航、等级跳转、滑动、车辆详情、解锁、升星、选车、开赛、库存/账号写入或任意坐标/节点接口。设备保留1920×1080，截图设置 `raw_size=False, short_side=720`，处理帧必须1280×720 BGR uint8；保存、OCR、observe、点击核验使用同一处理帧。
+起点必须是全局车库列表，当前授权五个intent：`open_filter / toggle_owned / apply_filter / jump_d_section / swipe_to_origin`。新导航仅回D起点：固定D提示点位至多1、向起点滑动至多12，无其他等级/任意导航/详情/解锁/升星/选车/开赛/库存写入或全库采集，不接任意坐标/节点。设备保留1920×1080，截图设置 `raw_size=False, short_side=720`，处理帧必须1280×720 BGR uint8；保存、OCR、observe、输入核验同一处理帧，坐标由框架转一次不手工乘1.5。
 
 复用 `global_garage_prepare_plan.start/step` 及 `global_garage_prepare_observation.observe`，不改它们或screen。Decision.executable仍False；仅固定新入口的能力与窄executor负责执行，不篡改Decision授权字段。
 
-单session绝对截止 `started_at+30.0`；调用预算计入同一30秒。64事件沿用现有step：第64次调用即blocked，不假设能处理完64个有效事件。每次capture/OCR/observe/execute前后检查截止、取消和时钟倒退；不延长冷启动预算。固定采样间隔0.1秒，点击job最长等待3秒并截于全局截止，轮询0.02秒；帧从capture开始到提交点击最大年龄1.0秒（>=1.0拒绝）。这些新适配层限制仅可收紧，实际太紧须报告测量与最小变更，不自行增限。
+单session绝对截止 `started_at+30.0`；调用预算计入同一30秒。64事件沿用现有step：第64次调用即blocked，不假设能处理完64个有效事件。每次capture/OCR/observe/execute前后检查截止、取消和时钟倒退；不延长冷启动预算。固定采样间隔0.1秒，点击job最长等待3秒并截于全局截止，轮询0.02秒；三筛选intent从capture开始到提交点击最大帧龄3.0秒（>=3.0拒绝），提交前仍复验。此值由2026-10-02用户依据实测明确授权从1.0修订，不是MFA硬限制，未扩到其他输入场景。wrapper冻结payload获取截止仍为capture开始后1秒，与OCR后提交帧龄是不同阶段。其他预算不变，后续测量须报最小变更，不自行再增限。
 
 ## 小接口（A/B互不依赖对方模块导入）
 
@@ -50,7 +56,7 @@ run_prepare(*, session_id, capture, ocr, executor_factory, monotonic, sleep,
 
 B入口立即记录started_at并start，deadline=started_at+30；executor的deadline须一致，集成以工厂/闭包在该时间点创建实例，不提前启动另一套时钟。executor_factory是唯一正式注入形式，B只调用一次，测试也传工厂；随后只调用所得实例.execute。不得同时支持实例/工厂两种动态模式。
 
-`Outcome`固定键：`status: succeeded|failed|blocked|timeout|cancelled|indeterminate, reason: str, session_id, action_id, intent, issued: bool, job_id: int|None, job_status: str|None, submitted_at: float|None, completed_at: float|None, receipt: plan.ActionResult|None, pre_frame_id: int`。receipt仅在真实post_click所得job明确终结success/failure时构造，ok等于真实终结结果；未提交、post抛错、invalid ID、timeout/取消/状态查询失败均无receipt。issued表示已进入post_click调用，调用抛错也要issued=True及结果不明。迟到终结可留真实receipt用于审计，status必须timeout或cancelled；B不再step，不再capture或输入。job_id和时间是审计字段，不替代结果。
+`Outcome`固定键：`status: succeeded|failed|blocked|timeout|cancelled|indeterminate, reason: str, session_id, action_id, intent, issued: bool, job_id: int|None, job_status: str|None, submitted_at: float|None, completed_at: float|None, receipt: plan.ActionResult|None, pre_frame_id: int`。receipt仅在真实post_click或授权导航post_swipe所得job明确success/failure时构造，ok等于真实终结结果；未提交、post抛错、invalid ID、timeout/取消/状态查询失败均无receipt。issued表示已进入对应post调用，抛错也要issued=True及结果不明；导航不是模拟click回执。迟到终结可留真实receipt审计，status必须timeout或cancelled；B不再step/capture/输入。job_id和时间是审计字段。
 
 B每条emit至少带session、递增seq、monotonic时间、kind（sample/decision/input_attempt/receipt/stop）、phase、原因及frame/action关联；不得记录ndarray对象。最终report含status/reason、planner终态、events_used、trace、input_attempts、未确定job、starts_race=False、live_executed/source说明。Fake输入轨迹只能标offline；实际帧与OCR的哈希/落盘绑定由后续MFA包装保全，报告不能凭fake写live。
 
@@ -64,13 +70,15 @@ A检查state.session_id、pending_action_id/pending_intent与decision一致、de
 | toggle_owned | filter_panel，other_filters_clear=True；owned已知且与state.toggle_target相反，owned标签与复用CHECKBOX_ROI对应 | CHECKBOX_ROI安全中心 |
 | apply_filter | filter_panel，other_filters_clear=True；普通提交owned=state.toggle_target，verify关闭owned=ON；完成按钮得到同帧标签与按钮几何核验 | A内部固定完成控件ROI安全中心 |
 
-仅全局garage_list判定不足以证明筛选按钮存在；仅“完成”OCR也不足以证明按钮。A使用现有本机图校准筛选/完成ROI，记录来源、像素/标签门禁与反例，未知则blocked。不修改已有识别器。框外、错误长宽比、NaN/非法OCR、重复或越界按钮标签、遮罩/丢控件不得输入。panel unknown状态交B有界等待，已发decision时核验失败直接停止，不重新发同action。
+仅全局garage_list判定不足以证明筛选按钮存在；仅“完成”OCR也不足以证明按钮。A使用现有本机图校准筛选/完成ROI，未知则blocked。不修改既有screen/Observation。apply_filter要求完成按钮固定ROI内恰一条合格同帧“完成”标签、lime填充、正确面板及other_filters_clear像素核验；目标ROI内重复/缺失、仅框外标签、NaN/非法OCR、遮罩/丢控件不得输入。按钮ROI外的另一“完成”不再独立阻断，不宣称验证全屏唯一标签。固定ROI宽高比不是动态帧判据。panel unknown交B有界等待，已发decision核验失败直接停止，不重新发同action。
 
-通过核验后在post_click **之前**将(session, action_id)标为已尝试；包括post抛异常、job失败/超时均不可重试。单session只允许一个在途job。重复action、重入或跨session请求直接blocked且零新post调用；适配器停止后永久锁住，不重建实例逃逸去重。
+05AP OCR限定：像素classify_page确认garage_list时可传空OCR，打开筛选与D起点依现有像素判据；filter_panel只OCR经既有校准帧核验的控件区域，返回boxes维持1280×720处理帧坐标，与本次image绑定。未知页面不靠省略OCR伪造已知状态。不得把旧OCR复用给新帧，不以重新标时间戳延长帧龄，不增暖机/重试fallback。
+
+通过核验后在对应post_click/post_swipe **之前**将(session, action_id)标为已尝试；包括post抛异常、job失败/超时均不可重试。单session只允许一个在途job。重复action、重入或跨session直接blocked且零新post；停止后永久锁住，不重建逃逸去重。五intent输入均适用同一capture_started至提交3秒帧龄、提交前复验及3秒job上限。State新增最小导航计数d_jumps_used/origin_swipes_used，允许范围0..1/0..12；导航仅筛选已核验ON并关闭后、真实像素garage且Dfalse可发，unknown等待、已D不再导航。输出clicks只实际click、navigation单列jump/swipe，不能把swipe叫点击。
 
 job成功是输入回执，不证明页面/owned/D起点。B仅把按时且绑定当前pending的receipt传step，再启动**回执完成之后**的下一capture，既有缓存、在途旧capture或手工赋新frame_id均不得确认后效。采样期间不并发输入。unknown页面/字段有界wait；other页面、其他筛选明确非默认或显式矛盾阻断。toggle后明确仍原状态允许现有规划器wait，不补点；重新提交后状态违背规划器期望则按现有blocked语义。
 
-动作标准轨迹（O=open_filter,T=toggle_owned,A=apply_filter）：初始off `O,T,A,O,A`（5次）；初始on `O,T,A,O,T,A,O,A`（8次，先off提交再on提交）。两条都重开核验ON、不改设置关闭，之后两次独立新采样D起点才ready；每个动作之间都须真实回执及规划器要求的新观察。不能见D直接ready；相同像素的两次真实capture可算两帧，复制缓存不能算。
+当前v3标准筛选段（O=open_filter,T=toggle_owned,A=apply_filter）：初始OFF O,T,A,O,A（5次），初始ON O,A,O,A（4次，不反选）。提交后确认回garage即可重开核验ON/关闭，不等选项未变时不会发生的自动D重置；关闭后独立D定位至多J1/S12，J不当起点证明，最终连续2独立新Dcapture才ready。每动作后真实receipt再fresh观察，相同像素的独立capture可算两帧但不证明UI活性，缓存复制不可算。旧ON8轨迹仅v1历史证据，不作当前执行分支。
 
 ## 坐标证据与限制
 

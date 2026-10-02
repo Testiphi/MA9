@@ -1,0 +1,20 @@
+# 05AO-repair1：首跑真实故障的一次窄修收据
+
+2026-10-01，GPT-6.1 Sol medium主对话仅编排；medium实现、low编译、独立medium只读复核。初版用户session537f73eead6546659d12ffca857a25d2为failed/witness_event_missing，截图job100002009回执成功却没有宿主冻结文件，0帧/0输入；后续GUI预览吃满64frame。原包/日志/N1DLL保持。
+
+修复现有代码：native缺activation不消耗首次初始化限频；有效请求出现立即尝试，坏文件1Hz。Succeeded先检查撤销，缺文件不freeze/error；每截图有效8key可即时辨新ID、旧退休ID拒复活、同ID八字段不可变锁保留，原Engine不重建。wrapper finally仅自身session/request匹配清理，换请求保留、清理失败诊断不吞终态。8key协议及所有预算未扩，不补post/借预览帧，不新建fallback/helper框架。
+
+固定MFA2.12.0源码commit7cb1e4042fe35c9710d51d63cba737e7f56ec5f6确认UI.LiveView.EnableLiveView缺key默认true，当前实例“设置→运行设置→实时视图”关闭才阻预览timer新PostScreencap。false不取消在途/其他截图，不是全来源排他；代理不写用户config。固定源码与本机版本/hash证据见repair1/build/mfa_live_view_official_sources.json。
+
+新包：E:/hzz/work/MA9/MA9-evidence/20261001-05AO-repair1/package/MA9-preview。
+manifest SHA e057a21c72ff27bdef6e8c9cf1d6f69adf4b413665a89746ccc29a0a5a331e15，388文件/10源码SHA回读一致。
+Agent exe SHA c14e747a6c5ad87f3bcd54934ffe7754c840b6fc93e0850e9e416084b5a9b021。
+新host_witness.dll SHA 12869378e3da70975bf968dc4632c3eadaccf0692193c37476a9f817a16c1e19，249856B。
+
+native四SHA及wrapper/test SHA在state.repair1_source_frozen；builder62f9f89d77ec8bbc185a794ef7e6448b593a68b1271e645ec3658322dfd4204c，buildertest461abdf11b0db38eb3ef313b6d2936d81e4ee3563f023dc34eaaaa68b3851c9a，doc8381c7879360a7bfe593cb1366902635f76744ad4e721bfaca52489f1882fb7a。HEAD仍8127abc5cada1c0185b0232b07815be0fb2920cd，分支codex/garage-filter-mfa；源码本地未提交推送。
+
+真实执行：wrapper6tests/11场景exit0；low使用现有build_host_witness.ps1在新目录编译并跑native45cases/752checks，0失败exit0；9只读API/AMD64 PE/3官方导出静态PASS；builder4tests exit0；PyInstaller build0；无参Agent2预期；包schema/pin/来源/隐私/helper/manifest验收0。总控回读相关日志并核新manifest/唯一task/源pin、初版failed summary保留exit0。独立medium不重复suite，静态无剩余P1/P2；Windows PluginState启动分支未动态运行。
+
+完整构建收据：MA9-evidence/20261001-05AO-repair1/build/package_receipt.json，SHA1e8319f85257f89abef993a7161934985f01b5b24a09757c82e5d8c1bfdb8a1c。证据implementation/integration-suite.txt、build/builder_tests.log、pyinstaller_build.log、no_args.log、package_validation.log；native构建与PE探针的精确日志路径以package_receipt记录为准。旧包manifest108493e0...89b4c85d未变。
+
+下一用户idle关闭当前实例实时视图，再连接原设备，从全局车库列表启动唯一任务一次，回传debug/global_garage_prepare/<session>/summary.json及关键帧。任务只三筛选操作，设备1920×1080/框架短边720不改；实机修复尚待验证。代理未运行MFA/ADB、连接/输入设备或加载witness，未改memory，未重复六次人工采样。成功后才另一初始状态及全库分页。

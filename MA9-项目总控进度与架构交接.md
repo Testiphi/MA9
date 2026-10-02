@@ -1,7 +1,7 @@
 # MA9 项目总控进度与架构交接
 
 > **最新交接：2026-09-30，切换总控至GPT-6.1 Sol。** 推荐中档/Standard，用户自行新开对话选择；旧文“唯一Astra总控”已被这次明确换模意图覆盖，不是禁止Sol接手的规则。本文仍为主要进度账本。
-> **当前停点（2026-10-01 CI修复）**：main发布后install成功，check两条全局sys.modules断言误报。修复分支3d8fc90删除2错误测试+1重复测试，GitHub check1000项及schema/install均通过；业务代码未改，待收口到main。用户要求减少fallback/冗余检查，当前总控入口已重写为单一有效版本，旧覆盖历史留账本。全库前仍需新MFA自动过滤任务接线/隔离包/真实回执-新帧验证；无设备输入。
+> **当前停点（2026-10-02 05AZ品牌型号窄修离线交付待实机）**：OFF非D两次5input/7.82s与6.02s ready，ON已D4input/3.78s无nav ready，ON非D两次有限hint+右swipe最终双新D ready；真实回执/后效顺序/源额度正常、request/binding清理。仅当前手机/双controller模式和已测位置，不代表全部起点/冻结。准备冻结，不重复六采样；05AU独立相邻两页入口已离线交付，12+4定向绿、23源/389包hash吻合，仅一次前滑/采集16帧/全任务30秒，repair1实机12.21s/6帧/1前滑 collected，双页新车型+Camaro重叠成立，4唯一车型、7未决卡片观察；下一识别覆盖率，不扩全库、不push，见76。
 > **低成本恢复顺序**：只先读本页顶部速览与第四十五至四十七节，再核对实际Git和指定源码；第三十六至四十四节按需查实机证据。第一至四十四节保留历史，不要整篇重读或重派结束任务。本次已核对根/lane HEAD、变更清单、六文件SHA与构建manifest，未重跑测试、未联网重验Git远端、未启动设备、未提交/推送。
 
 ## 最新状态速览（本对话前面已核验，本次未重测）
@@ -15,11 +15,11 @@
 | 05AK-B Observation适配器 | 已独立复核、总控补修、本地合入；随main至9b29bd9已推送 | 真实会话来源已认证、输入执行器已实现 |
 | 05AK-C/C1/CR只读诊断入口 | CLI核心独立离线PASS，总控补P3后58工具+167回归exit0；已供D包装复用 | CLI独立live命令已实机运行、最终后置修复哈希被reviewer重新签字 |
 | 05AK-D新MFA测试包 | scaled包235离线测试及验包通过；6次用户任务/12帧成功，列表/off/on/D起点/重开on/关闭仍D已核验 | 自动点击/同一session规划事务通过；新MFA薄包装已外部独立终审或已合入 |
-| 当前唯一优先事项 | N1/P1+布局修正后真实core fake产物互通PASS；发布已有offline更新，随后独立review/新MFA接线与用户实机验证，见第五十六节 | push等于实机成功、全库已采集或新包已可点击 |
+| 当前唯一优先事项 | 05AT当前OFF/ON/已D/非D主要路径用户ready，准备收口；下一仅相邻2页方案，见73 | 所有位置/预览模式/极限均保证或全库已采集 |
 | 分配器/普通档 | 原14套离线方案保留；分配器另有基线红项未解决 | tools全绿、完整verify_default通过或14套已实机执行 |
-| Git本轮实核 | 根fd4021c19c8bc37868c5476fdf4c87fdbfcd1988，3个编排文件未提交修改；lane9b29bd9、C/D六文件未跟踪；本文也未跟踪；本地origin/main=9b29bd9 | 远端本轮联网复验、根已clean、C/D已提交合入 |
-| 活跃任务 | 无活跃owner/reviewer，B/C旧席全部结束；下一自动闭环任务尚未派发 | 等待旧agent或再发相同整包任务 |
-| 成本与并行 | 尽量首选DeepSeek v4.1flash；互不干扰的多个外部任务可并行，复核可同模型独立上下文 | 同文件并行写入、强制换高级模型、恢复原生子模型 |
+| Git本轮实核 | 根main与lane codex/garage-filter-mfa均8127abc；保留根准备修改，六目标路径开工不存在；旧源码已发布 | 根已clean、此次新源码已提交或本轮联网刷新远端 |
+| 活跃任务 | repair1代理已收尾，待用户按关闭实时视图前置重跑 | 已实机成功、子席自行操作设备 |
+| 成本与并行 | 用户因DS限流临时恢复原生Sol medium/low，主对话只编排 | 同文件并行写入、强制换高级模型、自动新聊天 |
 
 本文是顺序维护的项目账本，不是运行程序读取的配置，也不是设备授权。既要保存历史，又要让最新覆盖表唯一明确；不可把追加历史当成另一套并行“当前状态”。
 
@@ -1562,3 +1562,327 @@ GitHub该commit的check36798620289成功，Agent1000项45skip、schema成功；i
 后续优先删除/修改失效旧实现，而不是不断叠fallback；校验与测试只围绕真实失败、输入去重/超时/新帧等关键合同，动态时序和适配边界留待有界实机证据，不为猜测不停扩合同/审查。替换旧路径时查调用后同步删除不再使用的代码/测试；旧只读入口仍复用的采样/OCR核心不能未经确认破坏。
 
 本轮已将00-orchestrator.md中的多层“最新覆盖”、旧Astra要求、已解除审批和旧未完成停点改写成一份当前入口，删34旧行、写19有效行，历史仍在本文，不再让启动指令同时声称互相冲突的当前状态。没有整理个人memory、连接设备/改新包或扩大采集。实机主线停点仍为新MFA自动过滤准备闭环接线。
+
+## 五十九、CI修复获确认发布与下一前置：MFA自动过滤准备集成（2026-10-01）
+
+用户确认推送后，五文件快照8127abc5cada1c0185b0232b07815be0fb2920cd已fast-forward main并正常push，远端refs/heads/main核验同SHA，exit0；前次“待main批准”为历史，不再等待。业务代码未改，修复代码1000测试/schema/install成功证据沿用，不手动重复整套。root checkout main；原duel-scan worktree干净后从该main准备新短期branch codex/garage-filter-mfa，旧lane439420d引用/ignored构建与私有证据均保留，未新建worktree或聊天。
+
+下一处理方向确定为**新MFA自动过滤准备的最小集成包**，不是全库翻页或新增识别算法。一个DeepSeek v4.1flash owner复用planner/Observation/ClickExecutor/run_prepare/host_witness/WitnessReader，Agent本进程身份读取直接内联新wrapper，补新固定CustomAction/单任务pipeline/interface与独立Agent/隔离包。Native现成DLL34ebab7b...46897已再次只读核SHA，复用合格交付字节，不为重编译换pin。原只读包/默认生产入口/shared assets不改。
+
+完整人工中转提示词[05AO-M-mfa-filter-loop.md](agent/orchestration/prompts/05AO-M-mfa-filter-loop.md)，6个新增文件边界已在state登记；新包仅MA9-evidence/20261001-05AO-mfa-filter/package/MA9-preview。提示词未派发、无活跃owner。无需再为SDK身份/采样/打包分别开子任务，不增加大合同/完整失败矩阵或新的fallback框架；只测off/on关键组合轨迹、真实job失败停止、回执后新capture、缺身份/帧不输入、single-task/no-race及私有文件不复制。
+
+流程仍只open_filter/toggle_owned/apply_filter；原30秒/64事件、720短边、3秒job/1秒新鲜度、动作去重不放宽。OCR/capture实际时序缺口留首次实机测量后最小修，不为猜测反复造测试。owner只离线实现/验包，不能替用户连接/运行；总控验包后用户在全局车库列表首跑一个明确初始状态，回传summary和关键帧即可，不重复6次人工诊断。首跑成功再覆盖另一起始状态，之后才进入全库有界翻页/去重/终止与库存汇总。
+
+本轮未编译/部署新包、连接/操作设备、解锁升星开赛/全库采集、修改个人memory；用户要求减少冗余/收口旧代码继续约束后续实现。tools旧红项保持开放，CI本次真正两测试误报已修，不混淆。
+
+## 六十、DS限流后的临时原生子代理接续（2026-10-01）
+
+用户明确授权本轮直接使用Codex子代理，GPT-6.1 Sol medium实现、low编译，主对话仍只编排。此指令覆盖此前禁止原生子模型及DeepSeek人工中转的当前调度，未授权创建新聊天、子席再派下级或连接设备。现有接口/预算/三操作边界保持。
+
+开工实核：root保留第59节准备产生的3份tracked修改与05AO未跟踪提示词；原worktree为codex/garage-filter-mfa，tracked及untracked源码状态干净，六个05AO目标路径全部不存在。未在准备分支发现DS所述部分源码，不因此删除其他目录的文件或旧证据。
+
+已派/root/mfa_integration（Sol medium，独立上下文）写三个Agent入口/接线/测试文件；/root/mfa_package（Sol low，独立上下文）写builder/测试/首跑文档三个文件。双方只读既有组件，不改默认入口、旧只读包、共享pipeline或native源码；证据分implementation/build，唯一新包仍MA9-evidence/20261001-05AO-mfa-filter/package/MA9-preview。固定包marker为.ma9-global-garage-prepare-root，manifest为global_garage_prepare_manifest.json，避免旧包根定位混淆。编译复用N1固定DLL字节，不重建换pin。
+
+验收仅新增接线/包配置必要检查，沿用同版旧测试证据；不重复全量或六次采样。当前实施/构建尚未完成，实机点击未验收；完成后总控核验交付包再由用户首跑，之后才能讨论全库翻页。未提交或推送此次进行中的源码，未修改memory。
+
+实施中新增窄发现：总控指出AgentServer模式SDK的_framework=None为正常状态，身份从已加载_agent_server自身取版本/路径/hash，medium已修；截图pending轮询沿用152次预算。独立medium只读复核发现builder按扩展名复制libs会漏MaaAgentBinary的无扩展名触控后端与.so，交low修显式白名单。与此同时medium报告新测试文件被外部630行15用例版本替换，与当前wrapper接口不匹配；最新混合现场suite失败，先前fake通过不能覆盖新字节。已暂停编译/冲突测试写入，保留版本，询问用户外部DS是否已停止；待确认再由唯一owner整合可复用的真实WitnessReader假宿主夹具，不堆叠两套接口。
+
+用户随后明确回复“DS已停止，可以整合”，medium恢复该测试唯一写入权。原外部文件逐字节备份在implementation/conflict/，保留真实Reader组合夹具并对齐当前接口；构建等待源码稳定。另为首次实机诊断补具体身份/截图失败原因，不改旧loop或叠fallback。
+
+整合后medium冻结3文件：main 7a504303...fd41f9a、wrapper e9b9686b...131e1a8ba、test 744b8607...d959175a，完整SHA在state。定向suite 5测试/10执行场景、exit0；真实Reader文件协议+G+loop+observer+executor的fake off/on自然ready，5/8输入与7/10capture。失败/超时/取消停止、缺身份/冻结帧零输入，未运行设备。low修触控依赖复制后4包测试exit0，已获稳定信号开始构建；中档独立只读窄复核收尾，不重复旧suite。
+
+最终交付：low实际PyInstaller build exit0，包schema/pin/隐私/388文件manifest回读及触控helper来源核验exit0；Agent无参启动exit2为预期（必须MFA提供socket），未运行MFA。manifest SHA108493e044f9d1b9bfb45a8f7274cf280eb7faf9d9f993547b1b6ec189b4c85d；exe SHA52cd2373d608397e16a03150570b2e9dce922ef97b39429d67a3576432ed3d4f。独立中档静态复核PASS、六SHA一致、无剩余阻断，未重复suite；总控回读日志并核manifest/唯一任务/插件pin/源码一致、exit0。完整收据见agent/orchestration/05AO-delivery-report.md，唯一新包仍上述隔离路径。
+
+下一准确停点从“尚缺MFA薄包装”推进到“已有离线通过的新固定自动准备包，待用户实机验证”。用户开新包MFA连接原设备，从全局车库列表执行唯一自动筛选任务，首跑一个已记录off或on状态，回传debug/global_garage_prepare/<session>/summary.json及关键帧/实际结果。失败保留现场不补点；成功再覆盖另一起始状态，之后才全库有界翻页/去重/终止。智能体本轮未连接/操作设备、加载宿主witness、提交推送新源码或改memory；旧只读包/共享默认任务保持。
+
+## 六十一、05AO用户首跑1s结束：实际失败且零输入（2026-10-01）
+
+用户回传“用时1s已完成”，总控实际读summary session537f73eead6546659d12ffca857a25d2：status=failed、reason=capture_error:RuntimeError；diagnostics具体为frozen_frame:witness_event_missing；native job100002009、0保存帧/0sample/0点击/0issued，planner尚await_garage_list_initial。AgentServer实际路径/hash/version通过。GUI已完成只代表任务终止，不是过滤ready。
+
+medium只读核宿主实例：firstjob100002009的event/error均不存在，后续第一event是100002018、event_seq1、比request.after_qpc晚0.3662712s；后台MFA预览同uuid/action的新截图在约3.48s占满64frame，100002085起frame_budget_exhausted，任务失败后原request窗口仍未结束。插件已加载且宿主identity pin匹配；工具sandbox无法列实例目录经只读提权可正常读取，不能归咎运行Agent ACL。
+
+源码ensure_initialized初次缺激活失败时1s重试限频会直接丢callback，符合首job被吞、稍后预览job才初始化；另request未限定本任务job，预览竞争是实测缺口。旧loop summary elapsed0.008为缓存last_seen，实际CustomAction日志约1019ms，两者不得混写耗时。当前medium查最小native激活/请求job绑定修复，low只读查MFA已有后台预览关闭方式；尚未改业务源/包，不建议只固定sleep、扩大64/30s或补post，禁止预览帧替代首job证据。用户先不重复运行，全库翻页仍未到。
+
+随后总控登记一次repair1文件边界：medium唯一写native producer/core/header/test四份及wrapper/test两份；low唯一写builder/test/三步文档，编译新DLL及隔离修复包到MA9-evidence/20261001-05AO-repair1。原N1DLL/首跑包/日志不改，8key协议与P/G不扩。初始化前缺activation不消耗1Hz重试时刻；文件可见当次尝试，坏文件仍限频；wrapper只finally撤自身session/request匹配文件。native撤销必须失效缓存停收而非仅unlink，旧ID不得复活、新ID可立即开窗，不重建Engine抹去安全状态。Windows启动分支只静态核实，不能以core-only测试声称已动态执行；不为该断言新增helper框架。单固定任务串行清理假设明确，不加投机OS锁；新DLLpin由low报告、medium更新wrapper后freeze再构建新包。实时视图现成机制由low核固定版本，未核配置存取不能伪写appsettings；未解决采样隔离前不宣称可重跑。
+
+low已核本机MFAAvalonia.Core FileVersion2.12.0、ProductVersion锚commit7cb1e4042fe35c9710d51d63cba737e7f56ec5f6，官方同commit TaskQueueViewModel.cs/ConfigurationKeys.cs/InstanceConfiguration.cs及SettingsView/GameSettingsUserControl源码：运行设置→实时视图Toggle绑定当前实例EnableLiveView；缺key默认true，false分支不PostScreencap，仅清UI图，不能硬取消此前在途job。正式key UI.LiveView.EnableLiveView存于config/instances/{id}.json，不是appsettings。修复包文档要求用户idle时先关闭此开关，不替用户写账号实例配置、不宣称所有截图源排他。[固定源码](https://github.com/MaaXYZ/MFAAvalonia/blob/7cb1e4042fe35c9710d51d63cba737e7f56ec5f6/MFAAvalonia/ViewModels/Pages/TaskQueueViewModel.cs)。
+
+core撤销只检查missing还不足：如果用户关闭preview，两次run间没有callback观察缺失，原子换新ID需本次Succeeded重新读有效8key请求立即采用；坏文件失败读仍1Hz，保留同ID八字段不可变/旧ID失效锁。无新增协议字段/公开helper；此具体复跑接缝交medium同批修。low统一编译并跑改后core suite一次，medium只跑wrapper suite，独立medium只读复核不重复suite。
+
+repair1源已冻结：core存在性撤销前移Succeeded/details处理前，截图有效8key读即时辨新ID、坏读限频，retired ID拒复活且ready Engine不重建；wrapper finally仅自身匹配清理，换request不删、清理失败诊断不吞原终态。medium新6测试/11场景exit0；low编译并统一跑native45cases/752checks，0失败exit0，独立medium窄静态复核无剩余P1/P2。Windows启动分支未动态执行，不能标实机PASS。新DLL SHA12869378e3da70975bf968dc4632c3eadaccf0692193c37476a9f817a16c1e19（249856B），wrapper已同步新pin最终7e8313d5...837480f；完整六源SHA在state。low正在构建独立repair包，初版报告加历史警示，旧包/用户日志/N1插件保持原样。
+
+repair1最终包已交付：build0、builder4tests exit0、Agent无参2预期、验包0；388文件/10源SHA、native9只读API/3导出核验通过。manifest e057a21c72ff27bdef6e8c9cf1d6f69adf4b413665a89746ccc29a0a5a331e15；exe c14e747a6c5ad87f3bcd54934ffe7754c840b6fc93e0850e9e416084b5a9b021。原manifest108493e0...89b4c85d独立回读未变，初次failed summary保留；总控回读真实日志、新manifest/源码/唯一task/插件pin一致exit0。完整收据MA9-evidence/20261001-05AO-repair1/build/package_receipt.json，编排收据agent/orchestration/05AO-repair1-delivery-report.md；不再额外重复测试。
+
+下一用户只开repair1包，idle当前实例“设置→运行设置→实时视图”关闭，再连接原设备/停全局车库列表/启动唯一任务一次，回传新summary/关键帧/实际界面。false只阻该预览timer新截图，不能取消在途或证明全来源排他；此明确前置不可省略。真实Windows PluginState/本次过滤仍待用户验证，不声称自动实机PASS。未操作设备或Git推送，不重做六次人工采样，后续全库翻页仍须自然过滤流程先通过。
+
+repair1用户随后回传“直接0s结束”，只读实证为界面空队列：GUI日志10:52:52.830 selectedTasks=0[]、52.833任务数量0；当前唯一任务default_check=false/未启用，实时视图false已满足前置。Agent已真实启动v5.13.0、握手_StartUpResponse.actions含ma9_global_garage_prepare_owned并注册成功；无global_garage_prepare目录/summary/witness激活。两个native job100000461/462属于MFA内置截图测试，不能计作wrapper capture。此次未执行准备流程，不是ready或repair故障；只需勾选任务左侧开关再开始，无源码修或重新打包。low仅补用户文档勾选步骤，包/manifest/config均不动，未重跑测试或设备操作。
+
+用户再勾选运行回传“3s完成”，实际session090a3d9ef5654eef9440f489a16f8341为blocked/frame_stale，尚非ready。nativejob100000009→logical1真实冻结帧SHA7d956961...e1f3ae8d与sample一致，Readercollected/Gmatched、三实际角色路径/hash/版本及1920×1080→1280×720通过；garage_list/ownedunknown/initial_ownednull、planner到await_open_filter_receipt，issued0/clicks0。采集0.1337696s，拍完至decision2.1783055s，总帧龄尝试时2.3125786s≥1；OCR模型det217ms+rec231ms合约449ms，RecognitionTask约2.14s，不能只把剩余约1.68s都声称模型加载。请求文件已清理、宿主仅1event+1bgr+instance且无error，repair1激活/撤销此次实机接缝通过；整个过滤/真实点击尚未通过。
+
+medium只读复用已签字12帧字段和时序：旧同run列表首帧3.517s、次帧0.688s，其余热态约0.477–0.886s（capture/OCR/observe/save总时长），支持先核资源复用再一次手动热态probe。列表省略OCR不改已签字字段，但面板左ROI裁剪会隐藏框外duplicate完成（独立合成反例复现），因此不能直接缩ROI放行或把旧OCR给新帧。low正核固定MFA StopTask/Resource生命周期，当前仅只读诊断、不改源/包/预算、不自动重试、不重做六次人工采样。GUI队列completed/StopSUCCEEDED仍不代表CustomAction返回true。
+
+low核固定MFA commit7cb1e404...实际生命周期收口：正常Stop/FAILED仅清队列/cancel/Tasker.Stop().Wait，不Dispose Resource；GetTaskerAndBoolAsync在HasReusableMainTasker下保留原Tasker/Resource，Connected下连接任务直接返回；LoadTask仅pipeline元数据，无隐藏新Resource/SetTasker。新Resource只在InitializeMaaTasker路径创建。由此下一优先一次人工热态probe：保持当前窗口不退出，同实例/资源/设备、不重连，仍Connected、实时视图关闭、唯一任务选中，停全局车库手动新Start；不是智能体自动重试，不保证fullframeOCR<1s。此轮未修改业务源码/包/配置或重跑测试，先看真实热态再决定是否一次固定暖机或精确OCR优化。[固定源码Stop](https://github.com/MaaXYZ/MFAAvalonia/blob/7cb1e4042fe35c9710d51d63cba737e7f56ec5f6/MFAAvalonia/Extensions/MaaFW/MaaProcessor.cs#L3678)。
+
+## 六十二、实测帧龄瓶颈后的05AP有界修改（2026-10-02）
+
+用户本次要求先查日志不启动子代理，已遵守只读：最新sessionf9bafaed768b4af6a2ea64643229e77b，blocked/frame_stale，首job100000009冻结来源/G门禁通过、garage_list、0输入；采集0.1415202s、拍完至decision2.0701271s、尝试帧龄2.2121057s。日志OCR RecognitionTask2015ms，det222ms/rec230ms及ocrer453ms为加载，不能把余下识别耗时都说成冷加载；14:05新Resource/模型load说明这次不是已确认的热态对比，不再让用户盲目重复运行。
+
+1s为适配器自定保守值，不是MFA硬限制、原合同无实机耗时依据。用户看过建议后明确“开始修改吧”，覆盖此前只读日志阶段：三筛选操作点击前帧龄上限1→3秒（capture_started开始，>=3拒，post前复验）；像素确认列表页免OCR、面板只必要ROI；完成核验改目标按钮ROI内唯一标签+lime+正确panel及other_filters_clear像素，不要求全屏唯一。30s总预算/64events/3sjob/1s冻结payload获取、同帧绑定/去重/失败取消停止/回执后新capture不变。合同原地改v2并标历史v1签字范围；原报告/旧包/日志不改。
+
+root/main和lane/codex/garage-filter-mfa实核HEAD8127abc，保留现有native4 tracked修改及6个新增05AO文件。medium唯一写executor/test与wrapper/test四文件，low唯一写builder/test/docs三文件，主对话只编排/合同/账本/state；新证据MA9-evidence/20261002-05AP-filter-ocr，唯一新包其下package/MA9-preview，复用repair1 host_witness.dll SHA12869378e3da70975bf968dc4632c3eadaccf0692193c37476a9f817a16c1e19不重编或重跑native45/P/G/full1000/六采样。不改planner/loop/screen/Observation/默认生产或旧只读入口，不升级模型，不自行推送。
+
+medium已冻结四文件，executor4f842bef...4794faad、executor测试ddfcb7ea...15b8908c、wrapper840748cb...d8da30c2、wrapper测试e7e53a47...aace96ba（完整SHA在state/交付收据）。66 executor/6 wrapper定向suite分别2.596/1.843s、exit0，只各跑一次；fake off/on仍5/8输入7/10capture，列表无OCR/面板ROI测试通过。ROI(37,52,330,616)，官方v5.13.0 OCRer.cpp124-125结果框已有roi偏移，因此无二次加offset，来源片段/哈希保存implementation/ocr-coordinate-source.json；未知页面空OCR仍保持未知，不伪造列表放行。Done ROI外同字由阻断改为可通过，ROI内重复/缺标签/填色错/页面错仍拒，行为收紧到目标区域已明确披露，不继续声称全帧唯一。
+
+low builder4tests/schema/default_check=true exit0、三文件冻结待稳定信号；总控收到四源稳定后已许可构建，独立medium只读窄复核，不重复suite或添完整矩阵。新包默认勾选唯任务，用户仍确认实时视图off/全局车库列表/设备1920×1080保持。当前实施/验包尚未收口，实机OCR性能和真实输入仍需用户后续运行，智能体未启动MFA/设备或加载插件。
+
+最终交付：low build0、builder4tests0、无参Agent2预期、验包0；388文件/12源码SHA/schema/pin/隐私/helper来源完整，默认default_check=true，原AO/repair1两个manifest SHA保持未变。manifest83a72ef714798064a2c45157712666dcab79a4332378ff79b345110d320c39b8，Agent exe eec4821fd145efe998238afecead4b068db4ba0bd7e2f44046b5fb75a0f252c9，DLL仍repair1固定pin。总控回读真实日志/manifest并核12sourceSHA与当前源、唯一task/defaulttrue、DLLpin及旧failed summary保留，exit0。
+
+独立medium四SHA核对一致，无实际P1/P2；确认两次age检查均capture_started/>=3，Reader的1s仅冻结阶段、坐标无二次偏移、unknown/三intent/oldreadonly入口不变、Done范围外同字不冒充按钮。限制准确记录：FakeContext只assert ROI并返回原本就在ROI的标签，未模拟空间裁剪，因此不能证明真实ROI召回/耗时或3s一定足够；下一用户首跑测实效，不扩测返修。收据MA9-evidence/20261002-05AP-filter-ocr/build/package_receipt.json（bad03ba145d77e76e00d0dc70232d6b26e308ed28982d35eafba9fd9c8146eb7），编排收据agent/orchestration/05AP-delivery-report.md，完整7源SHA在state。
+
+阶段3代理收尾，未native重编/重跑旧suite/重复六采样/操作设备/Git推送。用户关闭旧MFA，开05AP新包，当前实例idle关实时视图、连接原设备/停全局车库、确认唯任务已选后运行一次，回传新summary/关键帧及界面实际变化。过滤自然ready/off-on通过后才全库有界翻页，不扩到赛车/解锁升星。
+
+## 六十三、05AP初始off实机ready、切换卡顿及成本政策（2026-10-02）
+
+用户报告完成并提醒切换卡顿，另要求子代理尽量最低成本且返工少。总控直接只读核summary/关键帧，无新增代理或设备动作：session7dc5f90d2bcc412a8cd24c183acc2810 ready/d_start_stable_two_frames、initialoff、6.9544s、22 capture/sample、27events、5成功输入O,T,A,O,A。末logical21/22独立nativejob100004545/546双D通过；所有click receipt_ok=true、后续capture严格晚于回执，active已删除。可记该次初始off自然事务实机PASS，不能扩大到on8步/所有卡顿/全库采集。
+
+各提交帧龄0.247/1.482/0.215/0.127/0.338s均<3；第一次panel冷OCR后toggle1.482s，新3s与ROI容纳此次负载。第二次open回执后8–18帧持续await_filter_panel、无重复输入，19面板on后才关闭；receipt到panel19capture2.577s、到close提交2.916s。7–16帧hash完全相同，但17才更新D列表、18转unknown、19panel，证明相同画面不等于加载结束。已有后效等待有效；garage_after_apply仅garage_list即reopen（本次frame7仍旧列表），未证明刷新完成/控件可交互，用户提醒成立。
+
+下一窄候选：提交筛选后确认预期列表刷新/D起点再重开；明确可见加载/遮罩时在原预算内等新帧。D起点或局部稳定也不能泛称应用活性证明，不凭hash稳定/固定sleep宣称解决所有冻结。当前仅记录候选，未改业务源/包或加guard框架/重试，on初始路径仍待验证，不跳全库翻页。
+
+成本政策写state/lanes/入口：机械构建/哈希/提取优先gpt-6-luna low，局部代码gpt-6.1-sol low；具体状态/坐标/native生命周期复杂跨模块才Sol medium，不自动high/max。已有有效上下文可省重读时复用；默认一owner，独立复核按实质新风险，窄上下文、不重复全量测试。总控仍Sol medium只编排，本次日志自己读不派席。已实际打开的[OpenAI Docs模型选择](https://developers.openai.com/api/docs/guides/model-selection)说明Luna成本效率优先、low适合范围清晰任务；不据此编造账户实际费用/每任务节省倍率。
+
+## 六十四、05AQ提交后列表就绪窄修收口（2026-10-02）
+
+用户授权“开始收口”：只在提交筛选后本次新garage_list且at_d_start is True时reopen，False/None留原阶段等新帧；不加sleep/hash稳定/字段/预算/fallback，末ready双D不动。D起点是预期布局证据，不保证所有隐性UI冻结已恢复可交互。合同v2.1标用户授权及该前置；既有05AP实机off通过、on8步仍未验证，不跳全库采集。
+
+开工核rootHEAD8127abc、lane/codex/garage-filter-mfa，保留原executor/native4修改及6新05AO文件。主对话仅编排，Sol low单owner /root/refresh_ready_fix仅改planner/test及loop/wrapper必要fixture四文件；未派独立复核，总控直接看3行diff/相关调用范围。/root/refresh_ready_package Luna low在源稳定后顺序机械改builder/test/docs及构建新隔离包，写范围不重叠，不并行重读业务；旧包/日志/固定DLL12869378...e19保留，不重编native或重跑旧suite/六采样。
+
+已冻结planner cf277c3a9f9a55bbad61dfd99753bd7f6b6ac99a1d18ab709b9f46bfd19d6d00、planner测试5c74f2804c5bde41e0fec3cde0110253c9ca460cbe0e7d68bca1257659235c4c、loop测试acaf8c90412c395275bb2978d80b23a89ff83953ae4d24fdea29eca8457a64fc、wrapper测试2c36c86ea8f3ef49986ff4756fb0929dbd7e285879ffcbda9d49e7a99a725b2b。新逻辑3行复用not_at_d_start/d_start_unknown reason，无额外helper/state；正常on/offfixture调整提交后Dtrue，入口任意位置仍合法。35plan+61loop+6wrapper共102测试，各一次exit0，gitdiffcheck0。单延迟序列coverFalse/None/重复旧frame等候→新Dtrue只发一次reopen，原等待/去重/OTHER阻断保留。
+
+纯planner回放旧22观察：原frame7 garage_list/Dfalse由OPEN变WAIT，8–20继续等，原frame21 Dtrue才规划action4 OPEN，frame22等待receipt；仅用原真实receipt1–3，无新input/capture或伪造后续receipt4/5。后半旧帧受原点击影响，因此回放只证新条件，不证修后时延或完整ready。证据MA9-evidence/20261002-05AQ-refresh-ready/implementation/existing-observation-replay.json、source-sha256.json和三个suite日志。
+
+当前Luna low在新输出MA9-evidence/20261002-05AQ-refresh-ready/package/MA9-preview构建，manifest新增planner/测试及改fixture来源，预算3s提交/1s冻结/3sjob/30s64、default_checked与实时视图关闭前置保持。尚未交付/实机，源码未提交推送，未连接操作设备或加载witness；验包后主要下一验证初始on8输入并记录切换等待，用户不重做六次采样。
+
+Luna low初版build0、builder4tests一次exit0、Agent无参2预期，15source/388fileSHA/schema/pin/helper/privacy验收PASS；总控回读fullreceipt并核15当前sourceSHA、唯一task/defaulttrue、固定DLL及旧05AP ready summary保留，exit0。原输出日志不覆盖。交付前仅将用户文档实现术语改为“提交后等待D起点再重开”的白话，避免与初始任意列表位置混淆；因为doc已列manifest.source_sha256，明确授权同步这份新包manifest/receipt的doc哈希并静态回验，不重编二进制或重跑测试。旧包/源码业务保持，最终SHA待元数据收口后登记。
+
+最终元数据收口：doc108b377bd47e48a927f9d448b2df633cc8b4b42eeaf055d86982bcede1a33940；manifest8f74d4c34c2ddd6551bde37c88b9d8de77780687cfc56e1ac36f04fe099d7fa6；fullreceipt3602744dd1610fff0448b7a0aa295bce46775cf21a5e739f3afdf5834708483b。15源/388file静态回验0，修订前后整个包filehash map相同、exe始终cbc526325341177499d64df5158684b0e1af9af98a2fdc99a9fd6e97e2b35e3e，无binary重编或suite重复；旧新metadata原件各一份备份build/metadata-before-documentation-amendment。总控回读当前manifest/receipt/hash与原输出结果一致、gitdiffcheck0。编排收据agent/orchestration/05AQ-delivery-report.md。
+
+两名低档owner已顺序收尾，主对话只编排/验收，未新增独立复核席。当前优先用户新05AQ包初始ON8输入验证（上一轮已自然保持ON），关闭旧MFA、idle实时视图off、原设备1920×1080/列表页/唯一任务已选，回传summary/关键帧和是否等待切换；不重做六采样，不扩全库采集。新D就绪条件仍非所有UI隐性冻结证明，实机效果尚未确认。未Git提交推送、设备操作、nativeDLL加载/重编或memory修改。
+
+## 六十五、05AQ实机未ready：等待中的采集失败被GUI完成字样掩盖（2026-10-02）
+
+用户报告未等到D起点就完成，总控直接只读核session329c6514325042d98d36680009c59e29，无新代理/设备动作：实际statusfailed/capture_error:RuntimeError，initialoff，3成功输入O/T/A、6帧/9planner events，phaseawait_garage_list_after_apply。第6帧pageunknown/Dnull且plannerWAIT awaiting_garage_list_after_apply，没有reopen或D确认/ready；新D门槛未被误放行。GUI队列约5s全部完成、Stop前SUCCEEDED，即使Agent stdout已明确failed，因此界面完成只能代表结束。
+
+失败具体证据：第7次任务采集job100000415 readerblocked/witness_event_missing；同ID原生error.json明确frame_budget_exhausted。宿主当前request共64event+29error，controller_token2533714669024对应任务6帧，另一token2533390767328对应58帧，UUID只有1（同物理设备的两控制器）；额外采集耗尽native64帧配额，与planner仅9事件的64events是不同计数器。七次Agent reverse截图请求包含6成功/1失败；不能借用其他controller帧或扩大预算掩盖来源问题。
+
+package/config各JSON未找到LiveView键，但这不足单独证明当时UI开关状态或额外采集的确切UI来源，不归咎用户未操作；实际另一个controller的58帧已逐事件核实。active_request已清理、应用15:08关闭，当前只保留日志。初始off的这次事务不记PASS，on8仍未验证；原05APoff真实ready证据维持其对应版本/前置范围。
+
+下一优先收口捕获来源亲和性/额度隔离（不能只按同设备UUID混计所有controller），并明确暴露任务failed而非仅队列完成。具体最小协议/界面实现尚未决定/写入，本轮未改业务源码、旧包、用户配置、预算或D条件，也未重跑测试/连接设备。先不让用户盲重复运行，不直接全库翻页。
+
+用户希望保留实时预览。可以通过采集层源绑定支持，不要求一律关闭：当前实际两controller同UUID，应用真实post_screencap job_id→对应已核冻结来源建立本任务controller亲和性，再在原生回调冻结/计数之前排除另一controller；预览继续显示，不用其帧确认任务。不能直接认领第一个同UUID回调（本次第一个100000345来自另一controller、任务首job100000346），也不能把当前audit-only controller_token变输入授权或放宽64/30s。若同一controller同时做预览与任务，还需job级分流及callback早于注册竞态处理，不能把当前双controller方案泛化为所有模式。现有包未实现，当前仅只读核接口/记录候选，无新代理/代码/设备操作。
+
+## 六十六、05AR当前双controller实时预览隔离交付（2026-10-02）
+
+用户明确“开始修”。Sol medium /root/capture_affinity_fix单owner跨native4/wrapper/test/main7文件，主对话只编排/小合同/少量静态核查；源码稳定后同一Luna low /root/refresh_ready_package顺序native与builder/test/docs3文件机械构建，无再派下级或独立重审。root/laneHEAD8127abc、原改动/旧包/用户日志保留，未stage/commit/push或设备动作。
+
+小合同agent/orchestration/05AR-source-affinity-contract.md：source_binding.<reqlowerhex32>.json严格3键session_id/request_id/bootstrap_ctrl_id，wrapper仅真实首task job冻结collected/Gmatched/frame_id相等后原子发布（OCR前），native从自身该请求committed job→callback handle记录解析，不接外pointer/token/GUI布尔，不认领首预览回调。绑定前少量候选仍占原64总commits、绑定后外controller在freeze/attempt/quota前跳过，不重算/reset或增加第二阶段额度；原8keysactive/22event/P/G不动。同controller同时预览仍会共享该源，不声称通用支持；native依后续callback读取，无新线程/补post/强制ack。
+
+绑定按请求文件隔离旧残留，严格scope/schema/未知bootstrap/换源/撤销严闭，retired IDs/失败job不可重发/newscope机制保留。cleanup先撤自己的active再清自己binding，替换他人请求保留，避免撤binding时仍active的无谓错误。原生error仅审计，wrapper补本job/request一致原生原因；main/wrapper中文未ready及未完成D级列表起点确认，不把D起点叫开赛按钮。MFA自身队列“全部完成”未改，仍须看本任务中文和summary真实status。
+
+最终wrapper9tests-pinned exit0、syntax/diffcheck0；准备版本因文件名/pin/cleanup语义修改做过必要验证，未伪称所有版本仅一次。Luna唯一native编译/core suite50cases926checks exit0（5新增来源/竞态/坏binding/撤销换域案例），PE AMD64恰3exports/Kernel32+Advapi32/9readonlyAPI静态通过，无DLL加载/fixture红基线或旧native再跑。新DLL SHA3f408fa38e7616a0eaef73a6a2aba6e0eae57c6b3a80a8e086cdea81b5e20967，medium核字节后更新pin再freeze7源；源码hash文件implementation/source-freeze.json，完整10源SHA也在state。
+
+新包MA9-evidence/20261002-05AR-capture-affinity/package/MA9-preview，builder4tests0/PyInstaller0/Agent无参2预期/静态验包0；15源码SHA/388fileSHA/schema/pin/helper/privacy一致、唯任务默认勾选。manifest8a0792654fd0b063df7f2a8702a311ac8f5b05574eefd3aa692ba765a64f1ce1；Agent exe4803873ed66cd73724c7968449ec10a6081f81287b1757dd4d955f4c2aa5a618；GUI exe仍cbc526325341177499d64df5158684b0e1af9af98a2fdc99a9fd6e97e2b35e3e；build/fullreceipt.json SHAa9df0f8e4e7c9202f5fdbba83eb24a3b6a1e769a3225e968ad2279e3d2947669。总控回读日志/receipt/15当前sourceSHA/单task/DLLpin与旧failed summary保留、diffcheck0，编排收据05AR-delivery-report.md。
+
+下一用户关旧开新05AR，可以保持实时预览开验证当前已观察独立双controller模式，原设备1920×1080/全局车库列表/唯任务选，优先初始ON8步，回传summary、预览与切换等待现象。不把“此前模式实测”说成“新绑定实机通过”，不承诺所有模式/完整64任务帧或MFA顶栏状态已修。预算3s输入/1s冻结/3sjob/30s64events及D前置未改，无全库采集/旧suite102/66/P/G/CI1000/六采样重跑，未改memory。
+
+## 六十七、05AR本次初始off实机ready与采集额度验证（2026-10-02）
+
+用户报告完成，总控直接只读核summary/本轮事件，无新增代理/测试/设备操作：session50e5c6b3bd394fb5aea607e0d9fdf2ab statusready/reasond_start_stable_two_frames，initialoff，7.8233s、5输入O/T/A/O/A全部succeeded/receipt_ok，24frame/sample、29events。末logical23/24分别native100000311/318独立captures，均Dtrue；其开始晚于最后apply回执19695.0023258，所有后效采样顺序符合合同。最大提交帧龄1.7576s<3，控制/ROI本次负载通过。
+
+切换前置本次实效：提交后frame7unknown，8–17garage_list但Dfalse，planner均WAIT not_at_d_start且没有reopen；frame18Dtrue才action4open，19还garageDtrue继续等panel、20unknown、21panel/on核验后action5关闭；22unknown后23/24双D才ready。只证明此运行路径，非所有冻结活性保证。
+
+源亲和本次bootstrap_ctrl_id100000071，native同request共26event、0error：任务controller24帧，另一controller只在预绑定070/072产生2候选；source_binding/active_request均已清理。任务nativeIDs从071到318且24截图/5点击中多处跨号，观测到后台来源存在而未像上轮累计58帧抢占额度；不以此声称所有UI模式均支持。24任务帧+2bootstrap仍计原64，未放宽任何budget。
+
+本次仍是初始off的5步，不是所期望ON8验证。下一同05AR无需重包，用户确认已拥有保持ON后回全局车库列表，手动再运行一次，实时预览可继续保持当前模式；返回summary/卡顿表现，on路径通过后冻结准备阶段，再规划只相邻2页的有界采集/去重/页尾。旧证据全部保留，无全量重测/六采样或自行push。
+
+## 六十八、旧ON8实机ready，但多余重置不合用户目标（2026-10-02）
+
+用户指出已勾选却先被取消/提交再勾选/提交。总控直接核最新sessionc488bb7d9b2c403fb07ee05db76d05b4：initialon、ready/d_start_stable_two_frames、11.6374s/8真实成功输入O/T/A/O/T/A/O/A、38新帧，末D37/38。panel4on→5off→21off→22on→35on，核实用户观察；native40=task38+bootstrap2/0error，request/binding清理。旧8技术完成，不能扩大为多余切换设计符合用户预期。
+
+源码firstON明确targetOFF/_COMMIT_RESET，off提交再_PURPOSE_ON_COMMIT转ON，是旧合同刻意强制规范化，非动作失控。准备已拥有只需确保最终ON已提交；即使初始ON只是未提交的勾选，也可直接applyON，无需反选。因此建议ON4：open→apply当前ON→新列表D等待→openverifyON→applyclose→双D；OFF5保留。删除obsolete reset/oncommit私有分支及相关测试，不叠可选v2/fallback，保留otherfilters/像素/标签/D/source/receipt/newframe/stop预算。
+
+当前仅方案记录，未改可执行合同/业务源码或包，无新代理/设备动作。旧签字/实机证据按对应版本保留，不继续让用户重复旧8、不将新ON4写成已通过；源隔离与等待机制的本次证据仍有效，完整库存采集尚未开始。
+
+## 六十九、05AS初始ON保留勾选修改（2026-10-02）
+
+用户明确“开始修改”，合同v2.2原地标覆盖旧8语义：ON保持，直接apply当前ON（设toggle_targetON/commitON以供真实executor）→新列表D等待→openverifyON→applyclose→双D，4输入；OFF原5保持。删_PURPOSE_ON_COMMIT/_COMMIT_RESET和重置分支，不在旁边加备用v2/fallback。State/签名、otherfiltersclear/像素标签/加载等待/D双帧/源绑定/超时去重预算不改；旧实机证据保留对应版本。
+
+root/laneHEAD8127abc、codex/garage-filter-mfa，保留所有已有修改/六新文件。Sol low单owner /root/preserve_owned_on仅planner/test与loop/wrapper必要fixture四文件，主对话看diff/维护合同状态，未额外派审查席。源冻结：planner8c9fd6b3821b815e978c0cda3801cbd8be8776741ed7339567dc0904f08d1ed1，planTestecdfba7bc7042662c62d89e0b03e2087a02ffcffb336e6620abdd953b9827b9b，loopTesta1c3444220120991dab6a6d2086b77fed96dac4769279212295db257df4f25d2，wrapperTest792f982424e7b9adfdd328d32bdf11d143972a448352270adaf663f0e25cf633。
+
+35plan/61loop/9wrapper共105测试，各一次exit0；fake ON4/6captures、OFF5/7captures，wrapper使用真实生产executor+fake job来源，未mock掉apply gate。旧reset冲突用例替换为ON提交后verify OFF阻断，不再断言反选必需；unknown/其他filter保持等待或阻断。implementation/三suite/verification.txt/source-sha256.json保存命令/退出；未设备/旧全量/六人工或推送。
+
+Luna low /root/refresh_ready_package源稳定后顺序唯一builder/test/docs打新包MA9-evidence/20261002-05AS-preserve-owned/package/MA9-preview，复用05AR DLL3f408fa3...b5e20967，不重编native。先冻结白话docs再签manifest，避免签后元数据重做；真实ON4/预览/卡顿实效仍待用户后续验证，当前构建中未交包。
+
+最终Luna builder4tests0/PyInstaller0/Agent无参2预期/schema/pin/helper/privacy+15源码/388文件SHA验包0；manifestc6daf229fb120c5838a1eb305fbe3126aaec319d35bb510dfff100a1616f51cb，Agent exe d679d730bd4b767f49faa225f5473872b318f50b83ca4acf28aad87906a526ee，GUI exe仍cbc526...2b35e3e，native原3f408...e20967未编或加载。build/fullreceipt.json SHA24fb55b7ea6f955bdf41823adeb74c0421454e911473494fc4e94abe2b7fe596；builder669bea0d...79263eabd/test7d86a9cc...309444c7/docab4212b5...53da6d61（完整SHA在state）。总控回读receipt/manifest15源与当前一致、单task/defaulttrue/DLLpin、原ON8 summary保留及diffcheck0。编排收据agent/orchestration/05AS-delivery-report.md，两个低档owner顺序结束，无额外重审。
+
+下一用户关闭旧MFA，开05AS新包，原设备1920×1080/全局车库列表/唯任务已选，预览可保持已观察独立双controller，优先初始ON确认不反选且4次真实输入后ready；回传summary/实际界面，新语义未实机验证，不重复旧8或六人工。加载/D/源隔离及所有预算不变、未设备动作/Git推送/memory改动，不开始全库翻页。
+
+## 七十、ON未改筛选不重置位置：分离过滤与D定位（2026-10-02）
+
+用户两次对比ON久等/OFF正常，总控直接只读核，无代理/代码/设备动作。ON session93f6ca590ee845f996c9615dc35ac8f0 blocked/event_budget_exhausted而非ready：16.3619s、62帧、64events、仅open+apply2成功，未重开verify/无双D；apply回执2.616s后frame7–62始终garage_list/Dfalse。初始/frame7/末62实际PNG均C级中段同卡片位置（Bowell/奔驰/Arash等C卡），非D算法误判，idle车动画导致hash变不表示列表移动。OFF sessione190584c66ea4f0dac29fd978d6edeb3 ready6.8097s、5成功input/23帧/28events、frame17Dtrue才reopen、末22/23双D，capture错误未报告。
+
+根因：未修改ON选项的apply不会重置位置；原账本24第3条已明确“只查看、不改再完成，位置保持”，第4条等级按钮固定跳转不保证级别起点。删除OFF重置时没有同时拆掉“每次提交都回D”的假设，是总控设计遗漏，不应继续让用户盲等/扩64或30s、恢复多余反选、降低D判据假ready。
+
+正确方向：筛选保持/提交/重开核验与D定位分成两个目的。ON4可保持勾选但任意位置下仅靠三筛选动作无法同时自动到D；需要独立有界导航（固定D区跳转只作提示、随后受控向起点滑动、新帧现有D徽标/分隔点线/首列对齐/末双D实证）。不给Dbutton点击后自动盖章ready，不选车/开赛/升星解锁或全库采集，保持720合同/已有source绑定/预算及超时停止。
+
+原用户明确只允许open_filter/toggle_owned/apply_filter，05AL合同能力节明文无等级跳转/滑动；因此新增定位能力不能自行悄悄加入。已用异步问题请求用户选择“允许有界回起点定位”或“暂只筛选核验”，具体导航动作与前置待授权后登记；本轮仅日志/关键帧/既有事实核对及总控记录，未改业务源/包/预算，不重复人工六采样。
+
+## 七十一、05AT筛选核验与有界D定位拆分授权（2026-10-02）
+
+用户明确答复“允许增加有界回起点定位”，仅放开固定D区提示跳转及受控回起点滑动，不选车/详情/解锁升星/开赛/全库采集或任意坐标。当前不再等ON未变自然回D：先保存并重开核验ON、关闭，再独立定位；若已D直接双新帧，不多导航。D快捷最多1次仅提示，后有限右向回起点滑动/每步真实job回执后新帧，unknown/动画等待、OTHER失败/预算尽停止；最终现有D字徽标/分隔点线/首列对齐及末2独立帧才ready，不凭clickedD/hash稳定/sleep盖章。
+
+主对话只编排，单Sol medium /root/bounded_d_position处理新增状态/intent与坐标gate跨模块复杂性，精确候选plan/executor/loop必要兼容/wrapper必要diagnostics及四tests；observer/screen/native/P/G只读，若有具体依赖要根登记才能扩。代码先短设计明确意图/校准/上限，再窄实现，原作用域已有源绑定与3sinput1sfrozen3sjob30s64不扩。规划jump上限1、swipe有限建议12，最终以owner校准报告登记，不能自动抬限；无需随机导航或新框架fallback。源稳定后Luna low顺序builder/test/docs新包MA9-evidence/20261002-05AT-bounded-origin/package/MA9-preview，AR DLL3f408fa3...e20967复用不重编。
+
+根/工作区现有修改与旧证据保持；source/body/UI动作实机验证仍用户执行，智能体不设备/MFA/ADB/插件加载/Git写或新聊天，不重做六采样。当前设计/实施中未交包，不把授予导航等同新导航已通过。新版能力与DTO合同待短设计成熟后同步，旧三intent协议仅历史范围。
+
+已接受短设计并冻结八候选文件，未扩observer/screen/native/P/G：jump_d_section最多1、swipe_to_origin最多12，D按钮ROI(732,87,54,53)九张真实garage图glyph校准（darkink约.206/1component/hole约.676）复用现_badge_letter；garage/funnel/observe真实Dfalse及计数/已verifyON相位门禁，拒面板遮罩或未知，swipe(260,360)→(1100,360)/350ms在行列表区、SDKpost_swipe签名本地核。两新State计数、Outcome/Sample键集不变；真实swipe job复用await/去重/deadline。summary新增initial_d_state/navigation，不把swipe当click。真实滑动方向/距离及12步覆盖范围尚未实机证明，不承诺任意落点均可成功。
+
+四改动suite各一次：37plan/69executor/63loop/10wrapper共179tests exit0/0skip、diffcheck0。关键ON-C滤波核验后jump仍false不能ready→swipe→双D、已D不多导航、unknown等待/OTHER和foreignreceipt停止、导航上限、按钮/遮罩/pixel_D假观测复测拒、swipe失败/超时/抛错不补，均离线fake真实executor链；无旧native/P/G/CI全量/六人工重跑。报告implementation/report.md/source-freeze.json/suite_receipt.json/navigation-calibration.json及四日志（完整八SHA入state，报告802ce559...48ade6/冻结0f3f2d4b...bdb5a/收据abfaa7af...41a1c/校准5ac4cc8f...419beea）。
+
+源停写后Luna low /root/refresh_ready_package顺序builder/test/docs与新05AT包，复用AR插件3f408...e20967不重编。根同步合同v3五intent、两stage、跳1/滑12、真实post_swipe回执/3s帧龄、currentON4/OFF5+可选导航，旧ON8/旧提交必D段只历史。当前机械构建中，待验包后用户优先ON且非D当前位置一次验证新导航，不去重做六采样或调用新设备连接。
+
+最终builder4tests0/PyInstaller0/Agent无参2预期，schema/pin/helper/privacy/16source（含productionloop及八冻结源）/388fileSHA回验0。交付前仅修可见interface/task名称“已拥有筛选与 D 起点准备（有界导航）”和用户文档说明（筛选已先核验，最后双D仅定位ready，不再多开面板）；同步新interface与manifest hash及sourcehash/receipt，未改业务八源或重编二进制/重复suite，旧metadata各一份在build/metadata-before-interface-copy。
+
+最终manifest7e3360a871f656ea2ffb0f80ca3d16cf14d087f98e17de621ff86bcd0e6f603c；Agent exe11e61ec7a5e90364174e6b73635720c8348d950a6f93c6f5ef957281485a90ad；GUI仍cbc526...35e3e；原AR插件3f408...e20967。fullreceipt SHA64b8fb7b17e8b75299dedc46e88575c0bd35c331a5b2afbec7ed6e30fcea4edb，builder2cb828b3...3263506/test3895e275...8271e07/docf2081326...becd7c6（完整在state），编排收据agent/orchestration/05AT-delivery-report.md。总控回读源码16SHA/单任务默认选/新任务名/限额与固定DLL/Agent/旧ON失败summary保留、diffcheck0，无原生/P/G/全CI/六采样重跑。
+
+下一用户关旧开新05AT，在原设备1920×1080的全局车库列表、已拥有ON且不在D起点位置执行一次，预览可保持当前独立双controller，回summary及真实跳转/滑动方向/卡顿/是否误入详情；不要只从已D位置测而漏导航。新手势方向/实际距离及12是否覆盖尚未实机，不保证所有freeze可交互，不能提前记PASS。智能体无设备/MFA/ADB/插件加载/账号写入/memory改动/Git推送或全库采集。
+
+## 七十二、05AT初始ON非D起点有界导航实机ready（2026-10-02）
+
+用户报告完成，总控直接只读核sessionc3ed7415bf9947ad8b4b24132d16f14c：statusready/d_start_stable_two_frames、initialON/initial_d_statefalse、8.8947s/19capture/sample/28events。筛选4次O,A,O,A，没有toggle_owned/取消勾选；独立导航action5 D区hint(759,113)1次，action6–9右swipe(260,360)→(1100,360)/350ms4次，均真实succeeded/receipt_ok。Dhint后frame12仍Dfalse不能ready，4swipe后16/17garageDunknown等新帧不再追加输入，18/19Dtrue才ready，未观察OTHER/详情页。
+
+末D18/19分别native100000722/730独立captures，开始23106.0825931/23106.3509129均晚于最后swipe回执23105.510835；所有action后首新帧晚于回执，最大提交帧龄1.9566s<3。总控实际查看末frame19：D徽标/点线/左首列上下完整对齐在预期位置，而非只引用布尔标签；本次方向/固定点位/四次移动回起点有效。此为本场景效果，不证明任意R位置或12次总能回到起点/所有卡顿交互保证。
+
+当前scope native21event=任务controller19+bootstrap另一controller2，0error，active_request/source_binding均删除，独立预览来源隔离和预算本次保持。无需改源/包/测试或新代理，本轮只有日志/末图核验和总控记账，无设备动作/Git写/memory更新，旧证据保留。
+
+下一补当前05AT初始OFF路径一次：之前OFF成功属于05AS/较旧stage，现在提交后筛选核验不等D、定位独立，不能直接当当前版OFF已测。只这一自然分支，不重六采样/旧全量；两当前路径ready后冻结准备入口，再提出只相邻两页有界采集/加载/去重/页尾方案，不自行扩全库。
+
+## 七十三、当前05AT ON/OFF主要路径实机收口（2026-10-02）
+
+用户表示OFF也测试，总控直接只读核当前同包四新summary，不让重复运行/派代理：9b5c6ae5e9f54e4eba1af90285630795初始off/非D ready7.819s、5input/23frames/双D22/23；091ecc5c6bda4ac88870501486155809初始off/非D ready6.0214s、5input/21frames/双D20/21。两条原O/T/A/O/A、无多余导航，所有真实receipt_ok成功、后续capture晚于回执、无原生错误。
+
+同版补充d210f3342f3e4716bfb3806f8f746c97初始on/已D ready3.7849s、4input/13frames、双D12/13且零导航；af51ecc04ffe40479775296aa881da75初始on/非D ready6.3828s、4筛选input+1hint+3swipes、18frames/双D17/18。连同72节ON非D1hint4swipes场景，主要起始分支均在当前manifest7e3360a8...6f603c包用户实机ready，不继承旧版OFF充数。根直接核命令成功，末active/source_binding清理；旧现场/哈希/代码不变，无新测试或设备动作。
+
+因此当前“已拥有筛选核验+有界回D准备”阶段按这些证据收口冻结，不再为同版已过路径例行复测/重做六人工/升级模型。仍只当前手机/MFA2.12.0独立双controller及已测布局位置；12导航极限、全部等级/位置/卡死/同controller预览不保证，后续新故障有实测再窄修，不抹除这些限制。
+
+下一只准备相邻两页的有界观察/车型识别/滑动后加载/重叠去重/页尾判据方案，复用有效planner/observer/executor/source-binding/导航证据，先验证两页而非全库。新采集任务尚未创建/执行，不在本轮发代理或设备输入/Git提交推送，不解锁升星/选车开赛或修改用户配置/memory。
+
+## 七十四、05AU相邻两页有界采集启动（2026-10-02）
+
+用户开始推进，准备阶段沿用73节已测版本并只读冻结。新独立入口直接复用准备；整个任务含准备30秒，新采集最多16帧及一次固定前滑。第一页两独立新帧重新确认D起点，第二页须稳定并同时有新完整唯一车型ID与共享完整唯一ID；裁切/歧义未决，不强行去重，不因无变化声称全库末尾。小合同为agent/orchestration/05AU-two-page-contract.md。
+
+一名/root/two_page_collect Sol medium负责三个新实现/测试文件，不改旧业务；待源码定向通过后/root/refresh_ready_package Luna low只做三个新构建/说明文件及隔离包。复用338条车型索引及05AR已验原生二进制，保留真实回执、新帧、来源绑定和清理顺序；不加载插件/连接设备/写账号库存，不重旧全量或六采样，不提交推送。当前实现中，未声称离线验收或两页实机通过。
+
+74节交付补记：三个实现与三个构建/说明新文件完成，准备八依赖SHA不变。12采集+4builder定向exit0，PyInstaller/schema验证exit0，裸Agent无参exit2；总控复核23source/389package hashes零不符及单入口、新marker，无旧marker。新包MA9-evidence/20261002-05AU-two-page/package/MA9-preview，manifest a97f6ce9...600299；收据与边界见agent/orchestration/05AU-delivery-report.md。滑动completed_at与第二页capture_started_at分开记录核验。下一只用户新包首次两页实机，420px跨度/重叠/加载/OCR尚未实测，不称全库完成。
+
+## 七十五、05AU首次实机停于车型索引加载（2026-10-02）
+
+用户完成后总控只读核bb1f06d82b3f44ceb3d6465085b1a462：stopped/invalid_vehicle_catalog_identity，6.8413s，prepare8e69148288864e849631129a1873ee93为ready，initialON/nonD、24events；新capture_attempts0、inputs空、pages空，没有前滑或新页OCR。GUI完成不能记两页PASS。
+
+实际原catalog338条内9条R级，旧parser CLASS_LABELS明确D/C/B/A/S/R，而新load_catalog只写五级，导致合法原数据全部拒。离线夹具遗漏真实catalog加载，23/389hash一致不能证明语义完整。原owner仅窄修wrapper/test，复用已有CLASS_LABELS或补R及一次真实索引加载回归；准备/parser/catalog/native只读，不扩fallback/同构测试，随后Luna顺序新repair1包保留原失败现场。不连接设备、不全量重跑、不push/memory。
+
+75节修复交付：wrapper允许合法R，新增直接加载实际338条catalog回归，13tests exit0，parser/prepare/catalog/main未改。repair1包builder4/编译/schema exit0、裸Agent exit2；根独立核23源/389文件hash零不符。输出MA9-evidence/20261002-05AU-two-page/repair1/package/MA9-preview，manifest541553ef...f28185、receipt d85687d7...0178f5，旧包/失败日志保留。文案R只说解除误拒，不保证实机OCR；文案改动仅metadata重签无二次编译。下一仅用户repair1一次两页实机，仍不称采集通过/全库结束，不复测旧准备/全量，不push。
+
+## 七十六、05AU repair1相邻两页实机有界通过（2026-10-02）
+
+用户完成后总控只读核session01bcd653ecec4aeaabc9cf589c0e18da：collected/two_pages_collected，12.212964s，prepare21211eda481647fa9f280cf43d9aa011 ready，新6captures、唯一一次前滑(1000,360)→(580,360)/350ms succeeded native100000563。回执完成26057.0795167，第二页最终确认frame5/6开始26058.426485/26059.0866324均严格晚于回执；frame3/4仍滑动后过渡，等待至5/6身份/几何稳定，不追加输入。第一页frame1/2新D像素证据true。
+
+共享完整唯一车型Chevrolet Camaro LT，新增Dodge Challenger SRT8和KTM X-Bow GTX；合并4 unique（另Mitsubishi Lancer Evolution），7条未决卡片观察（不是7辆独立车）。总控实际查看frame2/6，两页位置变化、Camaro重叠及两新增完整卡名成立。未决涉及BMW徽标未读、Nissan名称前缀判据、右边裁切，未强行并入库存。scope内原生error0、active/binding已清理。end_status not_proven、whole_inventory_complete false；一次前滑实测效果仅本手机布局位置，不扩大所有级别/全库。
+
+本轮只日志/图片核验及总控记账，无代理/业务源包改动/重跑测试/设备操作/push。下一优先复用本次真实frame/OCR改善完整卡片识别覆盖率，核等级徽标漏读和prefix保守条件，裁切仍留未决；不先扩全库、不重复准备实机或六采样。
+
+## 七十七、05AV完整卡片识别覆盖率改善启动（2026-10-02）
+
+用户开始改善，复用76节真实frame/OCR，无新设备采样。单Sol low owner /root/complete_card_identity只改global_garage_screen.py/test，先复现完整BMW等级徽标漏读与Nissan名称prefix未决的原因，不从D页/索引唯一性猜等级；沿用full-name像素完整性判据，真实裁切/更长同名歧义保持未决，不加OCR重试/fallback框架或同构测试。准备/采集/P/G/native/catalog只读，详05AV-card-identity-contract.md。
+
+仅parser定向与本次实帧离线probe，冻结后Luna low顺序新05AV包，原05AU/失败现场不覆盖。当前诊断实现中，不提前称识别覆盖改进或新包实机通过。不push/memory或扩全库。
+
+77节交付补记：真实原因为BMW/Nissan D徽标低OCR分，独立红底白D拓扑补等级；Nissan较长同名前缀另一class被原逻辑排除，未改prefix/full-name路径，撤回无必要放宽。65parser定向exit0、真实六帧合并4→6（BMW Z4/Nissan改善）；frame2/6未决观察7→4、裁切全保留，破坏孔/明确C/C+D均未决。无猜class/降OCR floor/通用字体库。
+
+Luna顺序05AV新包完成，builder4/编译/schema exit0，根复核24source/389package hash零不符。输出MA9-evidence/20261002-05AV-card-identity/package/MA9-preview，manifest b27a3690...b7a527，报告agent/orchestration/05AV-delivery-report.md；旧05AU包及实机现场保留，native未重编/加载。下一用户新包一次两页验证，当前是原实帧离线改进，不提前称新包实机、全部等级/全库覆盖。无旧全量/六采样重跑、设备/Gitpush/memory改动。
+
+## 七十八、05AV新版两页实机与徽标残差（2026-10-02）
+
+用户完成后总控只读核4a48cfe61bbc4b04934bf7809931e948：collected/two_pages_collected，13.4119645s/7captures/1forward，prepare ready。第一页3/4稳定，第二页6/7开始26817.4953361/26818.2852118晚于滑动真实回执26816.7157112；Camaro+Nissan2个重叠、Challenger新增。BMW和Nissan pixel_badge为D，目标漏识别改善实机成立。
+
+本次合并5unique，未决观察5（4裁切+1完整KTM），不能沿用旧六帧离线6结果当本次6。KTM OCR徽标为方框/.360813；原生720帧像素红方块20x20、glyph10x13、唯一高内孔比.769正确，但left_stem_fraction .53846被.9拒，实际查看frame7白D可见，缩放/抗锯齿导致窄判据不稳。不是名称prefix、catalog或导航问题；当前保留未决没有错误认车。剩余只本次KTM像素判据窄诊断，复用现frame，无新采样/全库扩权。
+
+末active/binding清理，诊断空。此轮未派代理/改源包/重跑测试/设备输入/push。准备与两页流程继续冻结，徽标完善的跨缩放覆盖仍有限。
+
+## 七十九、05AW KTM缩放D徽标窄修启动（2026-10-02）
+
+用户进行窄修，原Sol low owner只改screen/test，复用78节KTM实际帧及之前六帧，诊断左竖平均覆盖在抗锯齿下误拒，修几何承重条件，不整体降阈值。保持非D/O/破孔/非红、明确OCR冲突和裁切未决，名称/采集/准备/native只读。开工SHA与05AV冻结相符，根/laneHEAD8127abc不变。合同05AW-D-badge-contract.md，parser定向一次+真实回放，随后Luna顺序新包，旧05AV现场保留。不设备/全量/全库/push/memory。
+
+79节实现冻结：KTM glyph最左两列1/13与13/13，抗锯齿单点使边界左移。旧均值>=.9已替换为左两列中一列贯穿全高coverage1.0，保持白阈值/红方块/单高孔；记录offset。实际6/7恢复unique，旧六帧BMW/Nissan和原unique保持，全部裁切未决；66parser一次exit0、真实圆O/断竖/破孔/非红/C/C+D六反例未决。7raw帧union原本6（包含过渡KTM），不能写rawunion5→6；本次修的是accepted窗6/7漏读，旧summary不改/未重执行。源码冻结后Luna顺序新05AW包。
+
+79节打包交付：05AW新包package/MA9-preview已完成，builder4/编译/schema exit0，裸Agent exit2；根复核24source/389package hashes零不符。manifest2199a301...8ec13c、receipt51483198...5ed4cf，详05AW-delivery-report.md。旧05AV现场保留，native未重编/加载。下一仅用户新包一次两页看KTM，当前不声称新实机通过，不扩全库或重测准备。
+
+## 八十、05AW实机未进入新采集：顶部灰色D门禁（2026-10-02）
+
+用户完成后总控只读核62f7c08992ed43d88ec3d6cc2f9aba0f：stopped/prepare_not_ready，4.75685s、新captures0/forward0，KTM新判据未实机执行。prepare13d6ff72009f46e3a5784c184355da86 blocked/top_d_button_not_confirmed；ON筛选四次O/A/O/A真实receipt成功，Djump第五attempt issuedfalse，未发导航。末frame11 garage/nonDorigin，实图仍D级中段，顶部D灰色字形。
+
+直接复算Dtile亮度222.15>170，但旧_badge_letter深色mask ink0/parts0/letterNone，导致门禁拒灰色D。不能把GUI结束记KTM或两页通过，也不能直接盲点或去掉控件核验。新故障是旧导航入口对灰色选中D的支持缺口，下一窄诊断控件像素/导航阶段处理，KTM实机待恢复入口后验证。此轮无代理/源包修改/设备动作/测试重跑/push，失败现场保留。
+
+## 八十一、05AX顶部灰色D控件窄修启动（2026-10-02）
+
+用户修授权，单Sol low owner /root/gray_d_control只executor/test，复用80節frame11及原有效深色D，独立固定ROI/白tile/灰D拓扑核验不盲点、不改通用观察器/车型glyph，不整体降门槛。原Dhint+有界rightsweep后验保持，灰按钮点击效果待实机，不提前断言可点/不可点。开工HEAD8127abc、executor/test分别27dc8b1f.../d59450a7...与旧冻结相符；其余现有工作保留。
+
+合同05AX-gray-D-control-contract.md，executor定向一次+实际失败图probe，必要扩planner须先说明登记，不重旧全量/六采样。冻结后Luna顺序新05AX包，旧05AW现场/KTM离线修保留，不设备/DLLload/push/memory。
+
+81节实施冻结：顶部固定D专用helper以白tile/低饱和相对contrast统一读深灰字，字形尺寸、单高孔、左直stem、右弧确认，替换旧通用深色glyph调用；未改planner/navcap或observer。72executor定向一次exit0、真实灰D/深D接受及空白/O/C/缺tile/反光/实际C/B共10离线probe通过，失败frame灰D white.670/left.971/arc6.5。仅假输入回执离线证明门禁，无真实灰按钮可点击证据。executor/testSHA d0c4811b.../31c16502...，Luna顺序新05AX包。
+
+81节打包交付：05AX新相邻两页包完成，builder4/编译/schema exit0、裸Agent exit2；根核24source/389files零hash不符。manifest7a117665...ee9a48d/receipt6c45ce44...493b7bd5，详05AX-delivery-report.md。旧05AW现场与KTM窄修保留，native未重编/加载。下一用户从当前车库中段一次新包任务核灰D实际跳转/后验回起点以及KTM，不把离线控件成功当真实可点；原动作/预算/两页/720合同不改。
+
+## 八十二、05AX灰D导航与KTM实机通过（2026-10-02）
+
+用户完成后总控只读核c07badba462545d5b9030dd4aa2db35f collected，11.14783s/6capture/1forward。prepare09c5e49b21f344629de460032affe93f ON非Dorigin ready6.7036s/24events，4筛选input、Djump1、rightsweep2均真实成功，末16/17双D。灰D导航实际链路本场景有效，05AW KTM pixel修复此次进入最终采集unique，BMW/Nissan保持。
+
+第一页2/3确认、第二页5/6开始28470.0705002/28470.7565526晚于forward完成28469.3068877；Camaro+Nissan重叠，新增KTM，合并5unique/未决观察5（4裁切+完整Challenger）。原图查看第6帧：Dodge完整，OCR只读CHALLENGER SRT8(.96)，小字号DODGE品牌漏掉，故no_confident_catalog_match；不是新徽标或目录失败，不应按车型补猜品牌。下一集中改善静态名称区小品牌OCR，复用图片，避免单车型特例/多fallback/反复全量。
+
+末active/binding清理，诊断空；此轮未代理/源包改动/测试重跑/设备输入/push。这两处有界修复本场景收口，仍不称全等级/所有起点/全库正确，end_status not_proven。
+
+## 八十三、05AY通用静态名称区OCR改善启动（2026-10-02）
+
+用户继续推进，单Sol low owner /root/name_region_ocr先设计统一名称区小字识别，复用82节Dodge品牌漏读及之前有效实帧，不按车猜品牌/加fallback重试。候选owns collector wrapper/test，若紧凑helper或parserROI接口需要具体说明根登记。身份/class/prefix/crop门禁、准备/导航/native/P/G/catalog只读。
+
+允许项目已验证纯静态Resource OCR现PNG离线证据，不绑定Controller/设备，不host_witness加载，不安装依赖。只内存crop/resize及box逆映射回720，不改设备/点击合同、capture/swipe数量及30秒含准备预算。方案须兼顾原badge/fields读数，不为每卡多轮OCR拖预算；必须实OCR证明而非fake。合同05AY-name-OCR-contract.md；定向collector一次+少量例、冻结后Luna顺序新05AY包，旧现场保留，不全库/push/memory。
+
+83节实施冻结：保留全帧badge/fields OCR，每帧检测到的静态name ROI固定3x白隔离atlas一次补充并替换原区域词，跨cell/边界padding拒、box逆映回720，无按失败/车型分支或第三调用，不改parser。2x因DODGE漏字未采用；先前CHEVROLE身份退化说法经candidate.id复核撤回（basis/confidence变化误判），不作为真失败证据。最终现六帧静态Resource/Tasker未绑定Controller：DODGE5/6读出，合并6unique、4clipped未决、旧uniqueIDs保持。15collector定向绿，无其他套件重跑。
+
+两OCR合计首帧1.224s、后续.334–.844s；首两个稳定帧工作含sleep约1.658s，3s旧帧龄余约1.342s须容实际capture/gate/IO/parse/submit，尚未实机证，不放宽门禁。源SHA c2e1c4f3.../454aae00...冻结，Luna顺序新05AY包。
+
+83节打包交付：新05AY-name-OCR/package/MA9-preview完成，builder4/编译/schema exit0，root独立核24source/389files hash零不符，manifest ae34ce1a...7a7d78/receipt37a37e8c...d58f46。详05AY-delivery-report，旧05AX及失败现场保留，native未重编/加载。下一只用户新包一次两页核小brand及真实帧龄，未称新实机6/全库；未重复准备/旧全量、不push/memory。
+
+## 八十四、05AY实机流程预算通过但名称覆盖未达标（2026-10-02）
+
+用户完成后总控只读核7b1fbfd0b179447bb9c39b5e4c23ca2d collected，13.2358256s/5capture/1forward，prepare7084843a7f6e4b57bb1ca0f16571909d ready。第一页1/2、第二页4/5确认；后两开始29107.7436317/29108.6260675晚于滑动真实回执29106.7917098，最旧输入frame age2.09303<3，固定两OCR未触时间预算。BMW/Nissan/KTM保持，重叠Camaro/Nissan、新KTM。
+
+实际仍5unique/5未决观察（4裁切+完整Dodge），名称覆盖目标未达标，不把旧静态6写成本次6。实际frame4/5 OCR品牌DO06E/.651142 box760,338,33,13存在，型号CHALLENGER SRT8/.959318完整，但name confidence门禁丢品牌，导致no_confident_catalog_match。末实图DODGE小字明确；frame3过渡位置DODCE曾可unique，不可用过渡帧冒充稳定结果。问题由文字漏读收窄为低分品牌+完整型号证据裁定，不宜加更多OCR轮次/按车猜品牌/无条件降全局阈值。
+
+下一只设计这两层独立证据的有界匹配与同名/截断保护，复用现帧，不扩全库。末request/binding清理，本轮无代理/源包改动/新测试/设备输入/push，原预算与准备收口证据复用。
+
+## 八十五、05AZ低分品牌与完整型号裁定窄修启动（2026-10-02）
+
+用户开始修，单Sol low owner /root/brand_model_identity只screen/test，先查目录/CSV只有完整title无brand字段，不按第一word拆品牌。拟高分完整型号词边界suffix候选+低分品牌前缀相容证据，原观察DO06E保留，不回填DODGE，不猜catalog品牌或降低全局NAME门槛；同model跨品牌（含跨class）/近似model/更长prefix款保持未决，完整像素覆盖及独立class承重。支持brandfloor .6只用于[.6,.7)低分支持、model>=.9，不是新独立确认授权。新basis/confidence须如实不高于brand实测。
+
+合同05AZ-brand-model-contract.md，复用84节实际OCR及旧帧，parser定向一次/少量承重正反例，不新增OCR调用/设备采样/全量，collector/native/准备只读。开工screen105a19a1.../teste4ebee37...符合05AW冻结，保留现有工作；冻结后Luna新包旧05AY保留，不push/memory。
+
+85节来源更正（总控复核）：旧05AX原frame5/6 OCR实际有DODCE/.684971 box757,338,33,12，被原.7姓名门槛丢；总控82节原查询用了338<box.y，排除恰y338，故误报品牌完全漏读。文件mtime与PNG同现场，05AYprobe只写自身real-ocr，未见修改旧现场。历史『完全漏字』不可继续作为增OCR依据；旧DODCE低分与新DO06E/.651的同类误拒均由本次证据规则处理。实现报告输入全路径/hash锚定，不称原文件被污染。
+
+85节交付：低brand[.6,.7)+高分完整model/像素/class/suffix防歧义支持路径完成，原完整title.88/.05仍通过，basis与confidence cap如实。69parser绿、24原实帧回放仅对应Dodge改善，原unique/crop保持；05AY稳定4/5读数DO06E保留，cap.651142，未重执行旧summary。新05AZ-brand-model/package/MA9-preview完成，builder4/编译/schema exit0，根核24源389包hash零不符，manifest8b106891...84cc54/receipt1907527d...147e35，详05AZ-delivery-report。旧05AY现场保留，原OCR/预算不变，native无重编/加载。下一只用户新包一次两页核品牌型号结果，不扩全库。
+
+## 八十六、本地进度提交，05AZ实机延后（2026-10-02）
+
+用户先提交目前进度、实测晚点做。源码/测试/构建说明留codex/garage-filter-mfa做本地checkpoint，总控账本/合同/编排在main单独文档提交；不推送、不把待测业务合main，不启动测试/设备或旧全量。05AZ新包离线通过，用户尚未新实机，不记新两页6/全库PASS。下次从05AZ包一次任务继续。截图/配置/.workbuddy/原OCR日志/MA9-evidence及DLL/exe保留本地不stage，不删除。
+
+86节源码checkpoint已完成：codex/garage-filter-mfa b27b8e68e7507ffff315e7ad884280b6198951e7，24个精确源码/测试/构建说明文件，lane收尾clean，diff --cached --check通过。总控文档随后单独本地commit，截图/配置/.workbuddy及MA9-evidence未纳入，05AZ实机继续延后。

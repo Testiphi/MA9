@@ -1,0 +1,11 @@
+# 05AU 相邻两页采集离线交付（2026-10-02）
+
+独立新入口完成，准备05AT及旧包保持冻结。新增三个实现/测试文件和三个构建/说明文件，未修改旧准备源；一名Sol medium实现，Luna low顺序构建。12项采集定向与4项builder测试exit0，PyInstaller/schema/pin/privacy验包exit0；裸Agent无参数exit2为预期。没有设备/GUI/原生DLL加载、全量测试或Git提交推送。
+
+包：MA9-evidence/20261002-05AU-two-page/package/MA9-preview。唯一默认任务“全局车库_相邻两页采集”；新marker存在、旧prepare marker不存在。调用冻结准备后才采两页，整体含准备30秒，新阶段16帧、前滑至多一次。第一页新双帧确认D，第二页双帧晚于真实滑动回执完成时间，要求完整唯一ID新车型与重叠车型均存在。裁切/歧义留未决，未写账号库存；end_status恒not_proven，不将一次无进展当全库末尾。
+
+总控直接核新入口/marker、23项source hashes与389项包文件hashes，0不符。Manifest SHA256 a97f6ce93c022bd4fcf64da19955e5d04aab4be3a2d6557328361fd7be600299；fullreceipt SHA256 fdaab6ebbeaed7c8a8ba9fa9883757f0708ce235693ada8e8736434db4f525ad。GUI SHA cbc526325341177499d64df5158684b0e1af9af98a2fdc99a9fd6e97e2b35e3e，Agent SHA72c76050d89f84a8b437e22d08abcdbd49304f669737feb81dedc37bcf24ecff；沿用05AR native SHA3f408fa38e7616a0eaef73a6a2aba6e0eae57c6b3a80a8e086cdea81b5e20967，未重新编译。
+
+实施证据 implementation/report.md、source-sha256.json与tests.log；构建收据build/fullreceipt.json均在本轮05AU证据目录。车型索引338条45128B，身份与合同一致。同步调用不可硬取消，超时返回不再派发操作。
+
+仅离线PASS，下一由用户关闭旧MFA，运行新包一次，检查420px前滑实际重叠、加载卡顿、OCR及summary。当前没有两页实机PASS，没有全库/写库存许可。旧全量/六采样不重复。

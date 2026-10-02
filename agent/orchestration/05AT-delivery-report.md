@@ -1,0 +1,13 @@
+# 05AT 独立有界回D定位交付收据
+
+2026-10-02用户明确允许固定D提示跳转/受控回起点滑动，覆盖原only3filter意图。原因：ON未改选项完成保持C位置，原自然重置D假设错误；不恢复反选或加等待预算。主对话Sol medium编排，单Sol medium实现新状态/输入门禁与八相关文件，Luna low顺序三打包文档文件；HEAD8127abc/codex/garage-filter-mfa，旧改动/包/用户日志保留，无Git提交推送。
+
+两阶段：ON保持/OFF勾选提交→garage返回→重开核验ON/关闭（ON4/OFF5筛选输入），之后已D两fresh帧ready，否则jump_d_section至多1仅hint，再swipe_to_origin至多12，只有明确garage且Dfalse才动作，unknown/动画等新帧，OTHER/failed/timeout/上限停止。最终现有D字形/分隔点线/首列对齐和双独立capture才ready。固定DROI(732,87,54,53)九真实图glyph校准，复用observer helper；固定swipe(260,360)→(1100,360)/350ms，SDKpost_swipe签名/真实job/await/dedupe/时序复用，不任意点位或手写1.5缩放。State最小导航计数1/12，Outcome/Sample键集不变，loop必要5意图白名单、wrapper仅initial_d_state/click/navigation审计。
+
+八sourceSHA见implementation/source-freeze.json和state；plan746b95be...d6671db7、exec27dc8b1f...21175e5、loop77f212d9...3c671849、wrapper7d3e14c3...31139f5a及四tests冻结。37plan/69exec/63loop/10wrapper共179tests每suite一次0skip/exit0，包含ON-C独立定位、Dhint不足/上限/unknownOTHERforeignreceipt/遮罩假D/真实swipe失败超时不补、已D不多nav。报告/校准/收据及日志在implementation，实机手势效应未运行，不虚称方向/距离已验证。
+
+新包E:/hzz/work/MA9/MA9-evidence/20261002-05AT-bounded-origin/package/MA9-preview，任务名“已拥有筛选与 D 起点准备（有界导航）”。builder4tests0/PyInstaller0/Agent无参2预期/schema/pin/helper/privacy/16current sourceSHA及388fileSHA验包0。新增productionloop源hash审计；原生/P/G/screen/observer未改/未额外编译测试，复用AR witness3f408fa38e7616a0eaef73a6a2aba6e0eae57c6b3a80a8e086cdea81b5e20967。3sframeage1sfrozen3sjob30s64events和source binding原64physical commits保持，不全库/选车/详情/开赛升星解锁。
+
+manifest7e3360a871f656ea2ffb0f80ca3d16cf14d087f98e17de621ff86bcd0e6f603c；Agent exe11e61ec7a5e90364174e6b73635720c8348d950a6f93c6f5ef957281485a90ad；GUIcbc526325341177499d64df5158684b0e1af9af98a2fdc99a9fd6e97e2b35e3e；build/fullreceipt.json SHA64b8fb7b17e8b75299dedc46e88575c0bd35c331a5b2afbec7ed6e30fcea4edb。builder2cb828b38efd5de0e4afc441b9950c0ca3987311399c772e548d684863263506；test3895e2754acd93bcdd7799e9b22f668826ee956ff058e2bd53f04c4a48271e07；docf2081326f0db63e94eebd630490302a51183b7d451ce706623d45f98abecd7c6。交付前UI名称/白话说明元数据修正后静态回验，无binary重编/测试重复，旧metadata一份备份build/metadata-before-interface-copy。总控回读当前manifest/16source/单任务默认true/固定pin/新metadata、旧ONfailed summary保留及diffcheck0。
+
+用户下一关旧开新，原设备1920×1080/全局车库列表/唯任务选，初始ON且非D位置一次，预览可保持当前独立dualcontroller，返回summary/导航/卡顿/是否误入详情。方向/距离/12覆盖范围新实效尚未验，D布局非所有隐性冻结活性证明；MFA全部完成只队列结束，以实际ready/blocked为准。智能体未操作设备/MFA/ADB或加载插件，未改用户config/memory或旧证据，未跑全量CI或六人工重采。
