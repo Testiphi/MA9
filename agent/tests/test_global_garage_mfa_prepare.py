@@ -5,7 +5,6 @@ import struct
 import sys
 import tempfile
 import unittest
-import cv2
 import numpy as np
 from pathlib import Path
 from types import SimpleNamespace
@@ -14,9 +13,10 @@ from unittest.mock import patch, Mock
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ma9_agent import global_garage_mfa_prepare as wrapper
 from ma9_agent import global_garage_prepare_loop as loop
+from ma9_agent import global_garage_prepare_executor as executor
 from ma9_agent import mfa_host_witness_reader as reader
 from test_global_garage_prepare_executor import (
-    FakeClock, PANEL_LABELS, synthetic_list, synthetic_panel,
+    FakeClock, PANEL_LABELS, synthetic_list, synthetic_panel, top_navigation_tile,
 )
 from test_global_garage_prepare_loop import list_frame, EXPECTED_OFF, EXPECTED_ON
 
@@ -200,8 +200,9 @@ class IntegrationTest(unittest.TestCase):
                 if page == "C":
                     image[225:, :] = list_frame(card_x=30, badge_letter="C")[225:, :]
                 if bounded_navigation and page not in ("on", "off"):
-                    cv2.putText(image, "D", (739, 125), cv2.FONT_HERSHEY_SIMPLEX,
-                                1.1, (0, 0, 0), 3, cv2.LINE_AA)
+                    # Use the structural probe's full white tile and D topology.
+                    x, y, w, h = executor.D_BUTTON_ROI
+                    image[y:y+h, x:x+w] = top_navigation_tile("D")[y:y+h, x:x+w]
                 images.append(image)
             context.host = FakeHostWitness(plugin_dir, images,
                 drop_frame_at=1 if missing == "frame" else None, native_error=native_error)
@@ -336,7 +337,7 @@ class IntegrationTest(unittest.TestCase):
             return len(buffer.value)
         kernel = SimpleNamespace(GetModuleFileNameW=Mock(side_effect=path_from_handle))
         with patch.object(Library, "_agent_server", server), patch.object(Library, "_framework", None), \
-             patch.object(wrapper.ctypes, "WinDLL", return_value=kernel), \
+             patch.object(wrapper.ctypes, "WinDLL", return_value=kernel, create=True), \
              patch.object(Path, "read_bytes", return_value=bytes(data)), \
              patch.object(wrapper, "AGENT_SERVER_SHA256", digest):
             self.assertEqual(wrapper._agent_server_identity()["sha256"], digest)

@@ -635,10 +635,17 @@ class PlannerIntegrationTest(unittest.TestCase):
         state = drive_to_d_start()
         frame = real("仅拥有R级页面.png")
         state, decision = plan.step(state, observe(frame, fid=6).observation, 0.0)
-        self.assertEqual(decision.kind, plan.WAIT)
-        self.assertEqual(decision.reason, "not_at_d_start")
+        self.assertEqual(decision.kind, plan.ACTION)
+        self.assertEqual(decision.intent, plan.JUMP_D_SECTION)
+        self.assertFalse(decision.executable)
+        # A fresh observation can advance bounded navigation only after its
+        # synthetic caller receipt; identical pixels are not a stale frame id.
+        state, _ = plan.step(state, R(decision.action_id), 0.0)
         state, decision = plan.step(state, observe(frame, fid=7).observation, 0.0)
-        self.assertEqual(decision.kind, plan.WAIT)
+        self.assertEqual(decision.kind, plan.ACTION)
+        self.assertEqual(decision.intent, plan.SWIPE_TO_ORIGIN)
+        self.assertEqual(state.last_frame_id, 7)
+        self.assertFalse(decision.executable)
         self.assertNotEqual(decision.reason, "stale_frame_ignored")
 
 
